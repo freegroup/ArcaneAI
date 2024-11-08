@@ -1,8 +1,9 @@
 
 
 class Session():
-    def __init__(self, conversation_dir, state_engine, llm, tts, stt, jukebox, ws_token = None):
-        self.conversation_dir = conversation_dir
+    def __init__(self, map_name, map_dir, state_engine, llm, tts, stt, jukebox, ws_token = None):
+        self.map_dir = map_dir
+        self.map_name = map_name
         self.state_engine = state_engine
         self.llm = llm
         self.tts= tts

@@ -4,9 +4,8 @@ import json
 from typing import Dict, List
 
 class WebJukebox:
-    def __init__(self, sound_dir):
-        self.sound_dir= sound_dir
-
+    def __init__(self):
+        pass
     def play_sound(self, session, file_name, loop=True):
         """
         Play a sound from the given file path.

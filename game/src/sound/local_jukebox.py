@@ -20,8 +20,7 @@ class LocalJukebox:
         if not file_name or len(file_name)==0:
             return #silently
         
-        sound_dir = session.conversation_dir
-        file_path = f"{sound_dir}{file_name}"
+        file_path = f"{session.map_dir}/{session.map_name}/soundfx/{file_name}"
 
         try:
             if not os.path.isabs(file_path):

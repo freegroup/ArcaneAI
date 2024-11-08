@@ -58,7 +58,6 @@ async def save_file(file: UploadFile = File(...)):
 async def list_files() -> List[str]:
     """Listet alle JSON Dateien im definierten Verzeichnis auf"""
     try:
-        print(MAPS_FILE_DIR)
         files = [
             os.path.splitext(f)[0]  # Remove the suffix from each file
             for f in os.listdir(MAPS_FILE_DIR) 
