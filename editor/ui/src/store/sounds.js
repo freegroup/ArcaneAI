@@ -27,14 +27,15 @@ export default {
   actions: {
     async initialize({ dispatch }) {
       // Call fetchSounds to initialize the sound files on app start
-      await dispatch('fetchSounds');
+      //await dispatch('fetchSounds');
+      console.log(dispatch)
     },
 
-    async fetchSounds({ commit }) {
+    async fetchSounds({ commit }, mapName) {
       commit('SET_LOADING', true)
       commit('SET_ERROR', null)
       try {
-        const response = await axios.get(`${API_BASE_URL}/sounds/`)
+        const response = await axios.get(`${API_BASE_URL}/sounds/${mapName}`)
         const sortedFiles = response.data.sort((a, b) => a.localeCompare(b));
         
         commit('SET_FILES', sortedFiles);
@@ -45,11 +46,11 @@ export default {
       }
     },
 
-    async downloadSound({ commit }, fileName) {
+    async downloadSound({ commit },{mapName, soundName}) {
       commit('SET_LOADING', true);
       commit('SET_ERROR', null);
       try {
-        const response = await axios.get(`${API_BASE_URL}/sounds/${fileName}`, {
+        const response = await axios.get(`${API_BASE_URL}/sounds/${mapName}/${soundName}`, {
           responseType: 'blob',
         });
         
@@ -65,7 +66,6 @@ export default {
         commit('SET_LOADING', false);
       }
     },
-
   },
   getters: {
     files: (state) => state.files,

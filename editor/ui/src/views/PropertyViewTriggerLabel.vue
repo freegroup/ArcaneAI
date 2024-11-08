@@ -16,6 +16,8 @@
             :items="soundFiles"
             label="Sound Effect"
             density="compact"
+            :items-per-page="1000"
+            :list-props="{maxWidth:'350px', minWidth: '350px'}"
             outlined
           ></v-select>
           <v-btn icon size="small" @click="playSelectedSound">

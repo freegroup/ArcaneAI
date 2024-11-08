@@ -18,26 +18,23 @@ class SoundManager {
    */
   static async playSound(soundName) {
     if (!storeInstance) {
-      console.error("SoundManager: Vuex store not initialized.");
-      return;
+      console.error("SoundManager: Vuex store not initialized.")
+      return
     }
 
-    // Stop the current audio if it's playing
-    SoundManager.stopCurrentSound();
+    SoundManager.stopCurrentSound()
 
-    // Download sound and retrieve URL from Vuex store
-    await storeInstance.dispatch('sounds/downloadSound', soundName);
-    const soundUrl = storeInstance.getters['sounds/currentSoundUrl'];
+    const mapName = storeInstance.getters['maps/mapName']
+    await storeInstance.dispatch('sounds/downloadSound', {mapName, soundName})
+    const soundUrl = storeInstance.getters['sounds/currentSoundUrl']
 
     if (soundUrl) {
-      // Create a new audio instance and play it
-      SoundManager.currentAudio = new Audio(soundUrl);
-      SoundManager.currentAudio.play();
+      SoundManager.currentAudio = new Audio(soundUrl)
+      SoundManager.currentAudio.play()
 
-      // Clean up the audio instance when playback ends
       SoundManager.currentAudio.onended = () => {
-        URL.revokeObjectURL(soundUrl);
-        SoundManager.currentAudio = null;
+        URL.revokeObjectURL(soundUrl)
+        SoundManager.currentAudio = null
       };
     }
   }

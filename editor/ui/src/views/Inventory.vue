@@ -94,22 +94,22 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('conversations', ['conversationConfig']),
+    ...mapGetters('maps', ['mapConfig']),
     inventory: {
       get() {
         // Return inventory items as an array with key, value, and type
-        return this.conversationConfig.inventory || [];
+        return this.mapConfig.inventory || [];
       },
       set(value) {
-        this.updateConversationConfig({
-          ...this.conversationConfig,
+        this.updateMapConfig({
+          ...this.mapConfig,
           inventory: value,
         });
       },
     },
   },
   methods: {
-    ...mapActions('conversations', ['updateConversationConfig']),
+    ...mapActions('maps', ['updateMapConfig']),
     
     addItem() {
       if (this.newItem.key && this.newItem.value !== undefined) {
@@ -134,8 +134,8 @@ export default {
       });
       
       // Update Vuex store
-      this.updateConversationConfig({
-        ...this.conversationConfig,
+      this.updateMapConfig({
+        ...this.mapConfig,
         inventory: [...this.inventory],
       });
     },

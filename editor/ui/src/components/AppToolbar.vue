@@ -26,14 +26,14 @@ export default {
     };
   },
   methods: {
-    ...mapActions('conversations', ['saveConversation']),
+    ...mapActions('maps', ['saveMap']),
 
     openFileDialog() {
       this.filePickerDialog = true;
     },
     save() {
-      console.log("Save Document");
-      this.saveConversation();
+      console.log("Save Map");
+      this.saveMap();
     },
   },
 };

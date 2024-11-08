@@ -46,18 +46,18 @@
       };
     },
     created() {
-      // Call the namespaced initialize action from the conversations module
+      // Call the namespaced initialize action from the map module
       setTimeout(async () => {
-        this.initializeConversation();
+        this.initializeMap();
         this.initializeSounds()
-        await this.downloadConversation(this.$route.params.fileName || '');
+        await this.downloadMap(this.$route.params.fileName || '');
       }, 500);
     },
   
     methods: {
-      ...mapActions('conversations', {
-        initializeConversation: 'initialize',
-        downloadConversation: "downloadConversation"
+      ...mapActions('maps', {
+        initializeMap: 'initialize',
+        downloadMap: "downloadMap"
       }),
       ...mapActions('sounds', {
         initializeSounds: 'initialize'

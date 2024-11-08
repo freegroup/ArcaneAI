@@ -56,10 +56,10 @@ document.addEventListener("DOMContentLoaded",function () {
         const message = event.data;
 
         if (message.type === 'setDocument') {
-            const conversationJson = message.data;
+            const mapJson = message.data;
             var reader = new draw2d.io.json.Reader();
             app.view.clear();
-            reader.unmarshal(app.view, conversationJson);
+            reader.unmarshal(app.view, mapJson);
             console.log("setDocument")
             app.view.centerDocument()
         }

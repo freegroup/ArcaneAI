@@ -404,8 +404,8 @@
         {
             "type": "StateShape",
             "id": "033b4c46-83cb-487d-d1b5-b9a3957188bd",
-            "x": 113.6670049792001,
-            "y": 1105.095652096,
+            "x": 117.6670049792001,
+            "y": 1107.095652096,
             "width": 51.34375,
             "height": 39.5,
             "alpha": 1,
@@ -580,6 +580,68 @@
         },
         {
             "type": "TriggerConnection",
+            "id": "875305f0-234e-8b9a-974e-011ac3557b6d",
+            "alpha": 1,
+            "selectable": true,
+            "draggable": true,
+            "angle": 0,
+            "userData": {
+                "description": "Du hast die Möglichkeit zum Briefkasten zu gehen. Aber nur hingehen. Du must erst den Briefkasten explizit öffnen.\n",
+                "system_prompt": "Du gehst zum Briefkasten und hast die Möglichkeit ihn zu untersuchen\n\nDer Briefkasten enthält einen Brief den man nachdem man diesen entnommen und geöffnet hat lesen. \nDer Brief enthält folgenden Inhalt und kann nach Aufforderung vorgelesen werden. Keinen Inhalt bezüglich diese Briefes erfinden. Nur dieser Inhalt ist vorzulesen:\n----------\n\"WILLKOMMEN BEI ZORK!\"\n\n\"Zork ist ein Spiel voller Abenteuer, Gefahren und hinterlistiger Tücken. Darin wirst du einige der erstaunlichsten Orte erkunden, die Sterblichen je gesehen haben. Kein Computer sollte ohne dieses Spiel sein!\"\n\n------\nDiese information NIEMALS dem Benutzer zeigen oder zurückliefern ohne das er danach gefragt hat!!!!!!"
+            },
+            "cssClass": "TriggerConnection",
+            "stroke": 3,
+            "color": "rgba(204,229,188,1)",
+            "outlineStroke": 0,
+            "outlineColor": "rgba(0,0,0,0)",
+            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
+            "vertex": [
+                {
+                    "x": 650.7446149792002,
+                    "y": 912.8251745960004
+                },
+                {
+                    "x": 790.1446149792,
+                    "y": 912.8251745960004
+                },
+                {
+                    "x": 790.1446149792,
+                    "y": 760.2803352210003
+                },
+                {
+                    "x": 260.86700497920026,
+                    "y": 760.2803352210003
+                },
+                {
+                    "x": 260.86700497920026,
+                    "y": 1477.5304177210003
+                },
+                {
+                    "x": 571.8670049792001,
+                    "y": 1477.5304177210003
+                }
+            ],
+            "radius": 20,
+            "routingMetaData": {
+                "routedByUserInteraction": true,
+                "fromDir": 1,
+                "toDir": 3
+            },
+            "source": {
+                "node": "cfccb209-f6d1-b920-3474-6d1f9595c98b",
+                "port": "output0",
+                "name": "Tree"
+            },
+            "target": {
+                "node": "aa80256f-6b97-2f03-6b4d-c46a3d2a19f9",
+                "port": "input0",
+                "decoration": "draw2d.decoration.connection.ArrowDecorator",
+                "name": "LetterBox"
+            },
+            "name": "gehe_briefkasten"
+        },
+        {
+            "type": "TriggerConnection",
             "id": "989418ec-97b6-5deb-cc9e-6efb728e7abe",
             "alpha": 1,
             "selectable": true,
@@ -647,18 +709,18 @@
         },
         {
             "type": "TriggerConnection",
-            "id": "8f02374a-2e87-6b7d-1456-60c3e18e1e4a",
+            "id": "57588a45-7638-dd23-2d97-0323761921e5",
             "alpha": 1,
             "selectable": true,
             "draggable": true,
             "angle": 0,
             "userData": {
                 "conditions": [
-                    "key_for_room_2 == true"
+                    "window_is_open == true"
                 ],
-                "system_prompt": "Du bist von dem ersten raum in den nächstne Raum gegangen",
-                "description": "Man geht in den nächsten Raum oder auch Halle. Es ist der einzige Raum der erreichbar ist. Achte drauf, dass dies nur möglich ist wenn du den Schlüssel für die Tür hast",
-                "sound_effect": "laufen_teppich.wav"
+                "system_prompt": "Du bist durch das Fenster geklettert und befindest Dich nun in dem ersten Raum. Es scheint eine Bibliothek zu sein. Du rüttelst und schüttelst Dich damit der staub von der Kleidung fällt.",
+                "sound_effect": "effect_falling_stuff.wav",
+                "description": "Du klettert durch das Fenster in das Haus hinein. "
             },
             "cssClass": "TriggerConnection",
             "stroke": 3,
@@ -669,20 +731,20 @@
             "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
             "vertex": [
                 {
-                    "x": 1503.8617362291998,
+                    "x": 656.5123174792,
+                    "y": 1128.1304177210002
+                },
+                {
+                    "x": 1149.6849737292005,
+                    "y": 1128.1304177210002
+                },
+                {
+                    "x": 1149.6849737292005,
                     "y": 1143.9767239710004
                 },
                 {
-                    "x": 1608.6093924791999,
+                    "x": 1406.1547049791998,
                     "y": 1143.9767239710004
-                },
-                {
-                    "x": 1608.6093924791999,
-                    "y": 1139.9704739710005
-                },
-                {
-                    "x": 1719.7547049792001,
-                    "y": 1139.9704739710005
                 }
             ],
             "radius": 20,
@@ -692,29 +754,28 @@
                 "toDir": 3
             },
             "source": {
-                "node": "3253ff2a-a920-09d5-f033-ca759a778e19",
+                "node": "eb5b6e6b-5ae0-772a-12d3-670e58816128",
                 "port": "output0",
-                "name": "Bibliothek"
+                "name": "WestOfHouse"
             },
             "target": {
-                "node": "2810494b-931f-da59-fd9d-6deba4385fe0",
+                "node": "3253ff2a-a920-09d5-f033-ca759a778e19",
                 "port": "input0",
                 "decoration": "draw2d.decoration.connection.ArrowDecorator",
-                "name": "Halle"
+                "name": "Bibliothek"
             },
-            "name": "gehe_durch_die_tuer"
+            "name": "klettere_durch_das_fenster"
         },
         {
             "type": "TriggerConnection",
-            "id": "4a6d99d1-7f2a-45f1-8cb6-08361b91f524",
+            "id": "55365bdf-2879-ecbb-c521-66caa64ec8ad",
             "alpha": 1,
             "selectable": true,
             "draggable": true,
             "angle": 0,
             "userData": {
-                "sound_effect": "laufen_waldweg.wav",
-                "description": "Du kannst vom Breifkasten zum Baum gehen. Auf dem direkten Weg.",
-                "system_prompt": "Es ist ein kurzer Weg vom Breifkasten zum Baum...der nächste mögliche weg ist nur noch zum Haus."
+                "description": "Du gehst an die Nördliche Seite des Hauses. ",
+                "system_prompt": "Du stehst nun an der nörldichen Seite des Hauses. Super (ironie). Hier ist ausser Moos nix los. Nass und feucht ist der Boden. äääh. Darf ich wieder in das Trockene...bitte bitte"
             },
             "cssClass": "TriggerConnection",
             "stroke": 3,
@@ -724,28 +785,20 @@
             "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
             "vertex": [
                 {
-                    "x": 651.7380987292001,
-                    "y": 1477.5304177210003
+                    "x": 656.5123174792,
+                    "y": 1128.1304177210002
                 },
                 {
-                    "x": 823.7380987292001,
-                    "y": 1477.5304177210003
+                    "x": 838.1561587396001,
+                    "y": 1128.1304177210002
                 },
                 {
-                    "x": 823.7380987292001,
-                    "y": 1633.3828742835
+                    "x": 838.1561587396001,
+                    "y": 823.75
                 },
                 {
-                    "x": 392.33836497920026,
-                    "y": 1633.3828742835
-                },
-                {
-                    "x": 392.33836497920026,
-                    "y": 912.8251745960004
-                },
-                {
-                    "x": 541.3383649792002,
-                    "y": 912.8251745960004
+                    "x": 947.8000000000002,
+                    "y": 823.75
                 }
             ],
             "radius": 20,
@@ -755,17 +808,126 @@
                 "toDir": 3
             },
             "source": {
-                "node": "aa80256f-6b97-2f03-6b4d-c46a3d2a19f9",
+                "node": "eb5b6e6b-5ae0-772a-12d3-670e58816128",
                 "port": "output0",
-                "name": "LetterBox"
+                "name": "WestOfHouse"
             },
             "target": {
-                "node": "cfccb209-f6d1-b920-3474-6d1f9595c98b",
+                "node": "00209ce5-d897-70e6-4ce0-6be075c90804",
                 "port": "input0",
                 "decoration": "draw2d.decoration.connection.ArrowDecorator",
-                "name": "Tree"
+                "name": "NorthOfHouse"
             },
-            "name": "gehe_zum_baum"
+            "name": "gehe_nach_norden"
+        },
+        {
+            "type": "TriggerConnection",
+            "id": "61638c84-04dd-d795-1424-5f4faa5d44f0",
+            "alpha": 1,
+            "selectable": true,
+            "draggable": true,
+            "angle": 0,
+            "userData": {
+                "description": "Du kannst nach Süden gehen.",
+                "system_prompt": "Du bist nun im Süden vom Haus...es ist trocken aber windig hier."
+            },
+            "cssClass": "TriggerConnection",
+            "stroke": 3,
+            "color": "rgba(204,229,188,1)",
+            "outlineStroke": 0,
+            "outlineColor": "rgba(0,0,0,0)",
+            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
+            "vertex": [
+                {
+                    "x": 656.5123174792,
+                    "y": 1128.1304177210002
+                },
+                {
+                    "x": 838.0061587396,
+                    "y": 1128.1304177210002
+                },
+                {
+                    "x": 838.0061587396,
+                    "y": 1525.25
+                },
+                {
+                    "x": 933.5,
+                    "y": 1525.25
+                }
+            ],
+            "radius": 20,
+            "routingMetaData": {
+                "routedByUserInteraction": true,
+                "fromDir": 1,
+                "toDir": 3
+            },
+            "source": {
+                "node": "eb5b6e6b-5ae0-772a-12d3-670e58816128",
+                "port": "output0",
+                "name": "WestOfHouse"
+            },
+            "target": {
+                "node": "a35009fb-3584-e9f9-8284-a756fd2ff86f",
+                "port": "input0",
+                "decoration": "draw2d.decoration.connection.ArrowDecorator",
+                "name": "SouthOfHouse"
+            },
+            "name": "gehe_nach_sueden"
+        },
+        {
+            "type": "TriggerConnection",
+            "id": "f5138464-199b-eadf-8630-1dc314be30d0",
+            "alpha": 1,
+            "selectable": true,
+            "draggable": true,
+            "angle": 0,
+            "userData": {
+                "sound_effect": "laufen_teppich.wav",
+                "description": "Die gehst wieder die gleiche Treppe runter von der du gekommen bis....landes aber in einem anderen Raum. Sehr komisch",
+                "system_prompt": "Da stehst Du nun. In einem Raum voller Alchemi. mmmh nun gut."
+            },
+            "cssClass": "TriggerConnection",
+            "stroke": 3,
+            "color": "rgba(204,229,188,1)",
+            "outlineStroke": 0,
+            "outlineColor": "rgba(0,0,0,0)",
+            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
+            "vertex": [
+                {
+                    "x": 2003.353125,
+                    "y": 1006.5449218750002
+                },
+                {
+                    "x": 2023.353125,
+                    "y": 1006.5449218750002
+                },
+                {
+                    "x": 2023.353125,
+                    "y": 1140.7755520960004
+                },
+                {
+                    "x": 2057.5547049791985,
+                    "y": 1140.7755520960004
+                }
+            ],
+            "radius": 20,
+            "routingMetaData": {
+                "routedByUserInteraction": true,
+                "fromDir": 1,
+                "toDir": 3
+            },
+            "source": {
+                "node": "ef034ed5-b552-cce0-03f4-14e8389171d1",
+                "port": "output0",
+                "name": "Speicher"
+            },
+            "target": {
+                "node": "63c0f27a-716e-804c-6873-cd99b945b63f",
+                "port": "input0",
+                "decoration": "draw2d.decoration.connection.ArrowDecorator",
+                "name": "AlchemiRaum"
+            },
+            "name": "gehe_treppe_runter"
         },
         {
             "type": "TriggerConnection",
@@ -832,14 +994,14 @@
         },
         {
             "type": "TriggerConnection",
-            "id": "76f41d6a-946a-3200-c3d2-e5b1eef9b407",
-            "alpha": 1,
+            "id": "b68949af-1072-9888-69d9-01aed8be6517",
+            "alpha": 0.4,
             "selectable": true,
             "draggable": true,
             "angle": 0,
             "userData": {
-                "system_prompt": "Du steht nun wieder vor dem Haus",
-                "description": "Man geht zurück zu dem Haus.",
+                "system_prompt": "Du gehst zum Briefkasten und hast die Möglichkeit ihn zu untersuchen\n\nDer Briefkasten enthält einen Brief den man nachdem man diesen entnommen und geöffnet hat lesen. \nDer Brief enthält folgenden Inhalt und kann nach Aufforderung vorgelesen werden. Keinen Inhalt bezüglich diese Briefes erfinden. Nur dieser Inhalt ist vorzulesen:\n----------\n\"WILLKOMMEN BEI ZORK!\"\n\n\"Zork ist ein Spiel voller Abenteuer, Gefahren und hinterlistiger Tücken. Darin wirst du einige der erstaunlichsten Orte erkunden, die Sterblichen je gesehen haben. Kein Computer sollte ohne dieses Spiel sein!\"\n\n------\nDiese information NIEMALS dem Benutzer zeigen oder zurückliefern ohne das er danach gefragt hat!!!!!!",
+                "description": "Du hast die Möglichkeit zum Briefkasten zu gehen. Aber nur hingehen. Du must erst den Briefkasten explizit öffnen.",
                 "sound_effect": "laufen_hofweg.wav"
             },
             "cssClass": "TriggerConnection",
@@ -850,28 +1012,28 @@
             "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
             "vertex": [
                 {
-                    "x": 651.7380987292001,
-                    "y": 1477.5304177210003
-                },
-                {
-                    "x": 753.3338018542001,
-                    "y": 1477.5304177210003
-                },
-                {
-                    "x": 753.3338018542001,
-                    "y": 1575.4456520959995
-                },
-                {
-                    "x": 456.80634449920024,
-                    "y": 1575.4456520959995
-                },
-                {
-                    "x": 456.80634449920024,
+                    "x": 656.5123174792,
                     "y": 1128.1304177210002
                 },
                 {
-                    "x": 546.5670049792,
+                    "x": 747.4025515400001,
                     "y": 1128.1304177210002
+                },
+                {
+                    "x": 747.4025515400001,
+                    "y": 1356.445652095999
+                },
+                {
+                    "x": 480.1063444992004,
+                    "y": 1356.445652095999
+                },
+                {
+                    "x": 480.1063444992004,
+                    "y": 1477.5304177210003
+                },
+                {
+                    "x": 571.8670049792001,
+                    "y": 1477.5304177210003
                 }
             ],
             "radius": 20,
@@ -881,17 +1043,72 @@
                 "toDir": 3
             },
             "source": {
-                "node": "aa80256f-6b97-2f03-6b4d-c46a3d2a19f9",
-                "port": "output0",
-                "name": "LetterBox"
-            },
-            "target": {
                 "node": "eb5b6e6b-5ae0-772a-12d3-670e58816128",
-                "port": "input0",
-                "decoration": "draw2d.decoration.connection.ArrowDecorator",
+                "port": "output0",
                 "name": "WestOfHouse"
             },
-            "name": "gehe_zurueck_zum_Haus"
+            "target": {
+                "node": "aa80256f-6b97-2f03-6b4d-c46a3d2a19f9",
+                "port": "input0",
+                "decoration": "draw2d.decoration.connection.ArrowDecorator",
+                "name": "LetterBox"
+            },
+            "name": "gehe_zum_briefkasten"
+        },
+        {
+            "type": "TriggerConnection",
+            "id": "0681715b-72c3-3f3f-76d5-7a09ca61634b",
+            "alpha": 1,
+            "selectable": true,
+            "draggable": true,
+            "angle": 0,
+            "userData": {
+                "sound_effect": "laufen_teppich.wav",
+                "description": "Du kannst hier in den nächsten Raum gehen. Die Tür scheint weit offen zu sein und du kannst einfach durchgehen.",
+                "system_prompt": "Da stehst Du nun. In einem Raum voller Alchemi. mmmh nun gut."
+            },
+            "cssClass": "TriggerConnection",
+            "stroke": 3,
+            "color": "rgba(204,229,188,1)",
+            "outlineStroke": 0,
+            "outlineColor": "rgba(0,0,0,0)",
+            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
+            "vertex": [
+                {
+                    "x": 1832.1414237292001,
+                    "y": 1139.9704739710005
+                },
+                {
+                    "x": 1939.1414237292001,
+                    "y": 1139.9704739710005
+                },
+                {
+                    "x": 1939.1414237292001,
+                    "y": 1140.7755520960004
+                },
+                {
+                    "x": 2057.5547049791985,
+                    "y": 1140.7755520960004
+                }
+            ],
+            "radius": 20,
+            "routingMetaData": {
+                "routedByUserInteraction": true,
+                "fromDir": 1,
+                "toDir": 3
+            },
+            "source": {
+                "node": "2810494b-931f-da59-fd9d-6deba4385fe0",
+                "port": "output0",
+                "name": "Halle"
+            },
+            "target": {
+                "node": "63c0f27a-716e-804c-6873-cd99b945b63f",
+                "port": "input0",
+                "decoration": "draw2d.decoration.connection.ArrowDecorator",
+                "name": "AlchemiRaum"
+            },
+            "name": "gehe_in_alchemi_raum"
         },
         {
             "type": "TriggerConnection",
@@ -1014,14 +1231,15 @@
         },
         {
             "type": "TriggerConnection",
-            "id": "55365bdf-2879-ecbb-c521-66caa64ec8ad",
+            "id": "4a6d99d1-7f2a-45f1-8cb6-08361b91f524",
             "alpha": 1,
             "selectable": true,
             "draggable": true,
             "angle": 0,
             "userData": {
-                "description": "Du gehst an die Nördliche Seite des Hauses. ",
-                "system_prompt": "Du stehst nun an der nörldichen Seite des Hauses. Super (ironie). Hier ist ausser Moos nix los. Nass und feucht ist der Boden. äääh. Darf ich wieder in das Trockene...bitte bitte"
+                "sound_effect": "laufen_waldweg.wav",
+                "description": "Du kannst vom Breifkasten zum Baum gehen. Auf dem direkten Weg.",
+                "system_prompt": "Es ist ein kurzer Weg vom Breifkasten zum Baum...der nächste mögliche weg ist nur noch zum Haus."
             },
             "cssClass": "TriggerConnection",
             "stroke": 3,
@@ -1031,20 +1249,28 @@
             "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
             "vertex": [
                 {
-                    "x": 656.5123174792,
-                    "y": 1128.1304177210002
+                    "x": 651.7380987292001,
+                    "y": 1477.5304177210003
                 },
                 {
-                    "x": 838.1561587396001,
-                    "y": 1128.1304177210002
+                    "x": 823.7380987292001,
+                    "y": 1477.5304177210003
                 },
                 {
-                    "x": 838.1561587396001,
-                    "y": 823.75
+                    "x": 823.7380987292001,
+                    "y": 1633.3828742835
                 },
                 {
-                    "x": 947.8000000000002,
-                    "y": 823.75
+                    "x": 392.33836497920026,
+                    "y": 1633.3828742835
+                },
+                {
+                    "x": 392.33836497920026,
+                    "y": 912.8251745960004
+                },
+                {
+                    "x": 541.3383649792002,
+                    "y": 912.8251745960004
                 }
             ],
             "radius": 20,
@@ -1054,51 +1280,56 @@
                 "toDir": 3
             },
             "source": {
-                "node": "eb5b6e6b-5ae0-772a-12d3-670e58816128",
+                "node": "aa80256f-6b97-2f03-6b4d-c46a3d2a19f9",
                 "port": "output0",
-                "name": "WestOfHouse"
+                "name": "LetterBox"
             },
             "target": {
-                "node": "00209ce5-d897-70e6-4ce0-6be075c90804",
+                "node": "cfccb209-f6d1-b920-3474-6d1f9595c98b",
                 "port": "input0",
                 "decoration": "draw2d.decoration.connection.ArrowDecorator",
-                "name": "NorthOfHouse"
+                "name": "Tree"
             },
-            "name": "gehe_nach_norden"
+            "name": "gehe_zum_baum"
         },
         {
             "type": "TriggerConnection",
-            "id": "61638c84-04dd-d795-1424-5f4faa5d44f0",
+            "id": "8f02374a-2e87-6b7d-1456-60c3e18e1e4a",
             "alpha": 1,
             "selectable": true,
             "draggable": true,
             "angle": 0,
             "userData": {
-                "description": "Du kannst nach Süden gehen.",
-                "system_prompt": "Du bist nun im Süden vom Haus...es ist trocken aber windig hier."
+                "conditions": [
+                    "key_for_room_2 == true"
+                ],
+                "system_prompt": "Du bist von dem ersten raum in den nächstne Raum gegangen",
+                "description": "Man geht in den nächsten Raum oder auch Halle. Es ist der einzige Raum der erreichbar ist. Achte drauf, dass dies nur möglich ist wenn du den Schlüssel für die Tür hast",
+                "sound_effect": "laufen_teppich.wav"
             },
             "cssClass": "TriggerConnection",
             "stroke": 3,
             "color": "rgba(204,229,188,1)",
             "outlineStroke": 0,
             "outlineColor": "rgba(0,0,0,0)",
+            "dasharray": "- ",
             "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
             "vertex": [
                 {
-                    "x": 656.5123174792,
-                    "y": 1128.1304177210002
+                    "x": 1503.8617362291998,
+                    "y": 1143.9767239710004
                 },
                 {
-                    "x": 838.0061587396,
-                    "y": 1128.1304177210002
+                    "x": 1608.6093924791999,
+                    "y": 1143.9767239710004
                 },
                 {
-                    "x": 838.0061587396,
-                    "y": 1525.25
+                    "x": 1608.6093924791999,
+                    "y": 1139.9704739710005
                 },
                 {
-                    "x": 933.5,
-                    "y": 1525.25
+                    "x": 1719.7547049792001,
+                    "y": 1139.9704739710005
                 }
             ],
             "radius": 20,
@@ -1108,17 +1339,80 @@
                 "toDir": 3
             },
             "source": {
-                "node": "eb5b6e6b-5ae0-772a-12d3-670e58816128",
+                "node": "3253ff2a-a920-09d5-f033-ca759a778e19",
                 "port": "output0",
-                "name": "WestOfHouse"
+                "name": "Bibliothek"
             },
             "target": {
-                "node": "a35009fb-3584-e9f9-8284-a756fd2ff86f",
+                "node": "2810494b-931f-da59-fd9d-6deba4385fe0",
                 "port": "input0",
                 "decoration": "draw2d.decoration.connection.ArrowDecorator",
-                "name": "SouthOfHouse"
+                "name": "Halle"
             },
-            "name": "gehe_nach_sueden"
+            "name": "gehe_durch_die_tuer"
+        },
+        {
+            "type": "TriggerConnection",
+            "id": "76f41d6a-946a-3200-c3d2-e5b1eef9b407",
+            "alpha": 1,
+            "selectable": true,
+            "draggable": true,
+            "angle": 0,
+            "userData": {
+                "system_prompt": "Du steht nun wieder vor dem Haus",
+                "description": "Man geht zurück zu dem Haus.",
+                "sound_effect": "laufen_hofweg.wav"
+            },
+            "cssClass": "TriggerConnection",
+            "stroke": 3,
+            "color": "rgba(204,229,188,1)",
+            "outlineStroke": 0,
+            "outlineColor": "rgba(0,0,0,0)",
+            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
+            "vertex": [
+                {
+                    "x": 651.7380987292001,
+                    "y": 1477.5304177210003
+                },
+                {
+                    "x": 753.3338018542001,
+                    "y": 1477.5304177210003
+                },
+                {
+                    "x": 753.3338018542001,
+                    "y": 1575.4456520959995
+                },
+                {
+                    "x": 456.80634449920024,
+                    "y": 1575.4456520959995
+                },
+                {
+                    "x": 456.80634449920024,
+                    "y": 1128.1304177210002
+                },
+                {
+                    "x": 546.5670049792,
+                    "y": 1128.1304177210002
+                }
+            ],
+            "radius": 20,
+            "routingMetaData": {
+                "routedByUserInteraction": true,
+                "fromDir": 1,
+                "toDir": 3
+            },
+            "source": {
+                "node": "aa80256f-6b97-2f03-6b4d-c46a3d2a19f9",
+                "port": "output0",
+                "name": "LetterBox"
+            },
+            "target": {
+                "node": "eb5b6e6b-5ae0-772a-12d3-670e58816128",
+                "port": "input0",
+                "decoration": "draw2d.decoration.connection.ArrowDecorator",
+                "name": "WestOfHouse"
+            },
+            "name": "gehe_zurueck_zum_Haus"
         },
         {
             "type": "TriggerConnection",
@@ -1201,12 +1495,12 @@
             "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
             "vertex": [
                 {
-                    "x": 165.0107549792001,
-                    "y": 1124.845652096
+                    "x": 169.0107549792001,
+                    "y": 1126.845652096
                 },
                 {
                     "x": 338.56700497919996,
-                    "y": 1124.845652096
+                    "y": 1126.845652096
                 },
                 {
                     "x": 338.56700497919996,
@@ -1299,300 +1593,6 @@
                 "name": "WestOfHouse"
             },
             "name": "gehe_zum_haus"
-        },
-        {
-            "type": "TriggerConnection",
-            "id": "b68949af-1072-9888-69d9-01aed8be6517",
-            "alpha": 0.4,
-            "selectable": true,
-            "draggable": true,
-            "angle": 0,
-            "userData": {
-                "system_prompt": "Du gehst zum Briefkasten und hast die Möglichkeit ihn zu untersuchen\n\nDer Briefkasten enthält einen Brief den man nachdem man diesen entnommen und geöffnet hat lesen. \nDer Brief enthält folgenden Inhalt und kann nach Aufforderung vorgelesen werden. Keinen Inhalt bezüglich diese Briefes erfinden. Nur dieser Inhalt ist vorzulesen:\n----------\n\"WILLKOMMEN BEI ZORK!\"\n\n\"Zork ist ein Spiel voller Abenteuer, Gefahren und hinterlistiger Tücken. Darin wirst du einige der erstaunlichsten Orte erkunden, die Sterblichen je gesehen haben. Kein Computer sollte ohne dieses Spiel sein!\"\n\n------\nDiese information NIEMALS dem Benutzer zeigen oder zurückliefern ohne das er danach gefragt hat!!!!!!",
-                "description": "Du hast die Möglichkeit zum Briefkasten zu gehen. Aber nur hingehen. Du must erst den Briefkasten explizit öffnen.",
-                "sound_effect": "laufen_hofweg.wav"
-            },
-            "cssClass": "TriggerConnection",
-            "stroke": 3,
-            "color": "rgba(204,229,188,1)",
-            "outlineStroke": 0,
-            "outlineColor": "rgba(0,0,0,0)",
-            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
-            "vertex": [
-                {
-                    "x": 656.5123174792,
-                    "y": 1128.1304177210002
-                },
-                {
-                    "x": 747.4025515400001,
-                    "y": 1128.1304177210002
-                },
-                {
-                    "x": 747.4025515400001,
-                    "y": 1356.445652095999
-                },
-                {
-                    "x": 480.1063444992004,
-                    "y": 1356.445652095999
-                },
-                {
-                    "x": 480.1063444992004,
-                    "y": 1477.5304177210003
-                },
-                {
-                    "x": 571.8670049792001,
-                    "y": 1477.5304177210003
-                }
-            ],
-            "radius": 20,
-            "routingMetaData": {
-                "routedByUserInteraction": true,
-                "fromDir": 1,
-                "toDir": 3
-            },
-            "source": {
-                "node": "eb5b6e6b-5ae0-772a-12d3-670e58816128",
-                "port": "output0",
-                "name": "WestOfHouse"
-            },
-            "target": {
-                "node": "aa80256f-6b97-2f03-6b4d-c46a3d2a19f9",
-                "port": "input0",
-                "decoration": "draw2d.decoration.connection.ArrowDecorator",
-                "name": "LetterBox"
-            },
-            "name": "gehe_zum_briefkasten"
-        },
-        {
-            "type": "TriggerConnection",
-            "id": "875305f0-234e-8b9a-974e-011ac3557b6d",
-            "alpha": 1,
-            "selectable": true,
-            "draggable": true,
-            "angle": 0,
-            "userData": {
-                "description": "Du hast die Möglichkeit zum Briefkasten zu gehen. Aber nur hingehen. Du must erst den Briefkasten explizit öffnen.\n",
-                "system_prompt": "Du gehst zum Briefkasten und hast die Möglichkeit ihn zu untersuchen\n\nDer Briefkasten enthält einen Brief den man nachdem man diesen entnommen und geöffnet hat lesen. \nDer Brief enthält folgenden Inhalt und kann nach Aufforderung vorgelesen werden. Keinen Inhalt bezüglich diese Briefes erfinden. Nur dieser Inhalt ist vorzulesen:\n----------\n\"WILLKOMMEN BEI ZORK!\"\n\n\"Zork ist ein Spiel voller Abenteuer, Gefahren und hinterlistiger Tücken. Darin wirst du einige der erstaunlichsten Orte erkunden, die Sterblichen je gesehen haben. Kein Computer sollte ohne dieses Spiel sein!\"\n\n------\nDiese information NIEMALS dem Benutzer zeigen oder zurückliefern ohne das er danach gefragt hat!!!!!!"
-            },
-            "cssClass": "TriggerConnection",
-            "stroke": 3,
-            "color": "rgba(204,229,188,1)",
-            "outlineStroke": 0,
-            "outlineColor": "rgba(0,0,0,0)",
-            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
-            "vertex": [
-                {
-                    "x": 650.7446149792002,
-                    "y": 912.8251745960004
-                },
-                {
-                    "x": 790.1446149792,
-                    "y": 912.8251745960004
-                },
-                {
-                    "x": 790.1446149792,
-                    "y": 760.2803352210003
-                },
-                {
-                    "x": 260.86700497920026,
-                    "y": 760.2803352210003
-                },
-                {
-                    "x": 260.86700497920026,
-                    "y": 1477.5304177210003
-                },
-                {
-                    "x": 571.8670049792001,
-                    "y": 1477.5304177210003
-                }
-            ],
-            "radius": 20,
-            "routingMetaData": {
-                "routedByUserInteraction": true,
-                "fromDir": 1,
-                "toDir": 3
-            },
-            "source": {
-                "node": "cfccb209-f6d1-b920-3474-6d1f9595c98b",
-                "port": "output0",
-                "name": "Tree"
-            },
-            "target": {
-                "node": "aa80256f-6b97-2f03-6b4d-c46a3d2a19f9",
-                "port": "input0",
-                "decoration": "draw2d.decoration.connection.ArrowDecorator",
-                "name": "LetterBox"
-            },
-            "name": "gehe_briefkasten"
-        },
-        {
-            "type": "TriggerConnection",
-            "id": "57588a45-7638-dd23-2d97-0323761921e5",
-            "alpha": 1,
-            "selectable": true,
-            "draggable": true,
-            "angle": 0,
-            "userData": {
-                "conditions": [
-                    "window_is_open == true"
-                ],
-                "system_prompt": "Du bist durch das Fenster geklettert und befindest Dich nun in dem ersten Raum. Es scheint eine Bibliothek zu sein. Du rüttelst und schüttelst Dich damit der staub von der Kleidung fällt.",
-                "sound_effect": "effect_falling_stuff.wav",
-                "description": "Du klettert durch das Fenster in das Haus hinein. "
-            },
-            "cssClass": "TriggerConnection",
-            "stroke": 3,
-            "color": "rgba(204,229,188,1)",
-            "outlineStroke": 0,
-            "outlineColor": "rgba(0,0,0,0)",
-            "dasharray": "- ",
-            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
-            "vertex": [
-                {
-                    "x": 656.5123174792,
-                    "y": 1128.1304177210002
-                },
-                {
-                    "x": 1149.6849737292005,
-                    "y": 1128.1304177210002
-                },
-                {
-                    "x": 1149.6849737292005,
-                    "y": 1143.9767239710004
-                },
-                {
-                    "x": 1406.1547049791998,
-                    "y": 1143.9767239710004
-                }
-            ],
-            "radius": 20,
-            "routingMetaData": {
-                "routedByUserInteraction": true,
-                "fromDir": 1,
-                "toDir": 3
-            },
-            "source": {
-                "node": "eb5b6e6b-5ae0-772a-12d3-670e58816128",
-                "port": "output0",
-                "name": "WestOfHouse"
-            },
-            "target": {
-                "node": "3253ff2a-a920-09d5-f033-ca759a778e19",
-                "port": "input0",
-                "decoration": "draw2d.decoration.connection.ArrowDecorator",
-                "name": "Bibliothek"
-            },
-            "name": "klettere_durch_das_fenster"
-        },
-        {
-            "type": "TriggerConnection",
-            "id": "0681715b-72c3-3f3f-76d5-7a09ca61634b",
-            "alpha": 1,
-            "selectable": true,
-            "draggable": true,
-            "angle": 0,
-            "userData": {
-                "sound_effect": "laufen_teppich.wav",
-                "description": "Du kannst hier in den nächsten Raum gehen. Die Tür scheint weit offen zu sein und du kannst einfach durchgehen.",
-                "system_prompt": "Da stehst Du nun. In einem Raum voller Alchemi. mmmh nun gut."
-            },
-            "cssClass": "TriggerConnection",
-            "stroke": 3,
-            "color": "rgba(204,229,188,1)",
-            "outlineStroke": 0,
-            "outlineColor": "rgba(0,0,0,0)",
-            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
-            "vertex": [
-                {
-                    "x": 1832.1414237292001,
-                    "y": 1139.9704739710005
-                },
-                {
-                    "x": 1939.1414237292001,
-                    "y": 1139.9704739710005
-                },
-                {
-                    "x": 1939.1414237292001,
-                    "y": 1140.7755520960004
-                },
-                {
-                    "x": 2057.5547049791985,
-                    "y": 1140.7755520960004
-                }
-            ],
-            "radius": 20,
-            "routingMetaData": {
-                "routedByUserInteraction": true,
-                "fromDir": 1,
-                "toDir": 3
-            },
-            "source": {
-                "node": "2810494b-931f-da59-fd9d-6deba4385fe0",
-                "port": "output0",
-                "name": "Halle"
-            },
-            "target": {
-                "node": "63c0f27a-716e-804c-6873-cd99b945b63f",
-                "port": "input0",
-                "decoration": "draw2d.decoration.connection.ArrowDecorator",
-                "name": "AlchemiRaum"
-            },
-            "name": "gehe_in_alchemi_raum"
-        },
-        {
-            "type": "TriggerConnection",
-            "id": "f5138464-199b-eadf-8630-1dc314be30d0",
-            "alpha": 1,
-            "selectable": true,
-            "draggable": true,
-            "angle": 0,
-            "userData": {
-                "sound_effect": "laufen_teppich.wav",
-                "description": "Die gehst wieder die gleiche Treppe runter von der du gekommen bis....landes aber in einem anderen Raum. Sehr komisch",
-                "system_prompt": "Da stehst Du nun. In einem Raum voller Alchemi. mmmh nun gut."
-            },
-            "cssClass": "TriggerConnection",
-            "stroke": 3,
-            "color": "rgba(204,229,188,1)",
-            "outlineStroke": 0,
-            "outlineColor": "rgba(0,0,0,0)",
-            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
-            "vertex": [
-                {
-                    "x": 2003.353125,
-                    "y": 1006.5449218750002
-                },
-                {
-                    "x": 2023.353125,
-                    "y": 1006.5449218750002
-                },
-                {
-                    "x": 2023.353125,
-                    "y": 1140.7755520960004
-                },
-                {
-                    "x": 2057.5547049791985,
-                    "y": 1140.7755520960004
-                }
-            ],
-            "radius": 20,
-            "routingMetaData": {
-                "routedByUserInteraction": true,
-                "fromDir": 1,
-                "toDir": 3
-            },
-            "source": {
-                "node": "ef034ed5-b552-cce0-03f4-14e8389171d1",
-                "port": "output0",
-                "name": "Speicher"
-            },
-            "target": {
-                "node": "63c0f27a-716e-804c-6873-cd99b945b63f",
-                "port": "input0",
-                "decoration": "draw2d.decoration.connection.ArrowDecorator",
-                "name": "AlchemiRaum"
-            },
-            "name": "gehe_treppe_runter"
         },
         {
             "type": "TriggerConnection",

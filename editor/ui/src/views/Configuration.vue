@@ -17,20 +17,20 @@ import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'PropertyView',
   computed: {
-    ...mapGetters('conversations', ['conversationConfig']),
+    ...mapGetters('maps', ['mapConfig']),
     systemPrompt: {
       get() {
-        return this.conversationConfig.system_prompt;
+        return this.mapConfig.system_prompt;
       },
       set(value) {
         // Commit the updated system prompt to the store
-        this.updateConversationConfig({ ...this.conversationConfig, system_prompt: value });
+        this.updateMapConfig({ ...this.mapConfig, system_prompt: value });
       },
     },
     
   },
   methods: {
-    ...mapActions('conversations', ['updateConversationConfig']),
+    ...mapActions('maps', ['updateMapConfig']),
   },
 };
 </script>
