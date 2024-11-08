@@ -1,17 +1,17 @@
 <template>
     <v-dialog :model-value="dialog" max-width="400" @click:outside="closeDialog" @update:model-value="updateDialog">
       <v-card>
-        <v-card-title class="headline">Select a Conversation</v-card-title>
+        <v-card-title class="headline">Select a Map</v-card-title>
         <v-card-text>
           <div class="scrollable-list">
             <ul>
               <li
-                v-for="(conversation, index) in conversations"
+                v-for="(map, index) in maps"
                 :key="index"
-                @click="selectConversation(conversation)"
+                @click="selectMap(map)"
                 class="clickable-item"
               >
-                {{ conversation }}
+                {{ map }}
               </li>
             </ul>
           </div>
@@ -35,19 +35,19 @@
       },
     },
     computed: {
-      ...mapGetters('conversations', ['conversations']),
+      ...mapGetters('maps', ['maps']),
     },
     methods: {
-      ...mapActions('conversations', ['fetchConversations', 'downloadConversation']),
+      ...mapActions('maps', ['fetchMaps', 'downloadMap']),
   
-      async loadConversations() {
-        await this.fetchConversations();
+      async loadMaps() {
+        await this.fetchMaps();
       },
   
-      async selectConversation(conversation) {
-        // Download the selected conversation content and store it in Vuex
-        await this.downloadConversation(conversation);
-        this.$router.replace({ name: this.$route.name, params: { fileName: conversation } });
+      async selectMap(map) {
+        // Download the selected map content and store it in Vuex
+        await this.downloadMap(map);
+        this.$router.replace({ name: this.$route.name, params: { fileName: map } });
         this.$emit('update:dialog', false); // Close the dialog
       },
   
@@ -62,7 +62,7 @@
     watch: {
       dialog(value) {
         if (value) {
-          this.loadConversations(); // Load conversations when dialog opens
+          this.loadMaps(); // Load maps when dialog opens
         }
       },
     },

@@ -6,34 +6,34 @@ const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
 export default {
   namespaced: true,
   state: {
-    conversations: [],
-    conversationConfig: {
+    maps: [],
+    mapConfig: {
       system_prompt: "prompt",
       inventory: [],
     },
-    conversationDiagram: [],
-    conversationName: "unknown.json",
+    mapDiagram: [],
+    mapName: "unknown.json",
     loading: false,
     error: null
   },
   mutations: {
-    SET_CONVERSATIONS(state, conversations) {
-      state.conversations = conversations;
+    SET_MAPS(state, maps) {
+      state.maps = maps;
     },
-    SET_CONVERSATION_CONFIG(state, data) {
-      state.conversationConfig = data;
+    SET_MAP_CONFIG(state, data) {
+      state.mapConfig = data;
     },
     ADD_INVENTORY_ITEM(state, item) {
-      state.conversationConfig.inventory.push(item);
+      state.mapConfig.inventory.push(item);
     },
     UPDATE_INVENTORY_ITEM(state, { index, item }) {
-      state.conversationConfig.inventory.splice(index, 1, item);
+      state.mapConfig.inventory.splice(index, 1, item);
     },
     REMOVE_INVENTORY_ITEM(state, index) {
-      state.conversationConfig.inventory.splice(index, 1);
+      state.mapConfig.inventory.splice(index, 1);
     },
-    SET_CONVERSATION_DIAGRAM(state, data) {
-      state.conversationDiagram = data;
+    SET_MAP_DIAGRAM(state, data) {
+      state.mapDiagram = data;
     },
     SET_LOADING(state, isLoading) {
       state.loading = isLoading;
@@ -41,49 +41,51 @@ export default {
     SET_ERROR(state, error) {
       state.error = error;
     },
-    SET_CONVERSATION_NAME(state, newName) {
-      state.conversationName = newName;
+    SET_MAP_NAME(state, newName) {
+      state.mapName = newName;
     },
   },
   actions: {
     async initialize({ dispatch }) {
       try {
+        console.log(dispatch)
         //await dispatch('downloadConversation', 'zork.json');
         //await dispatch('downloadConversation', 'fsm_fun.json');
         //await dispatch('downloadConversation', 'fsm_techi.json');
       } catch (error) {
-        console.error('Failed to load default conversation:', error);
+        console.error('Failed to load default map:', error);
       }
     },
 
-    async fetchConversations({ commit }) {
+    async fetchMaps({ commit }) {
       commit('SET_LOADING', true);
       commit('SET_ERROR', null);
       try {
-        const response = await axios.get(`${API_BASE_URL}/conversations/`);
-        commit('SET_CONVERSATIONS', response.data);
+        const response = await axios.get(`${API_BASE_URL}/maps/`);
+        commit('SET_MAPS', response.data);
       } catch (error) {
-        commit('SET_ERROR', error.response?.data?.detail || 'Error fetching conversations');
+        commit('SET_ERROR', error.response?.data?.detail || 'Error fetching maps');
       } finally {
         commit('SET_LOADING', false);
       }
     },
 
-    async downloadConversation({ commit }, fileName) {
-      if( fileName===undefined || fileName.length===0){
+    async downloadMap({ commit, dispatch }, mapName) {
+      if( mapName===undefined || mapName.length===0){
         return // silently
       }
 
       commit('SET_LOADING', true);
       commit('SET_ERROR', null);
       try {
-        const response = await axios.get(`${API_BASE_URL}/conversations/${fileName}`, {
+        const response = await axios.get(`${API_BASE_URL}/maps/${mapName}`, {
           responseType: 'blob',
         });
-        const conversationData = JSON.parse(await response.data.text()); 
-        commit('SET_CONVERSATION_CONFIG', conversationData.config); 
-        commit('SET_CONVERSATION_DIAGRAM', conversationData.diagram); 
-        commit('SET_CONVERSATION_NAME', fileName);
+        const mapData = JSON.parse(await response.data.text()); 
+        commit('SET_MAP_CONFIG', mapData.config); 
+        commit('SET_MAP_DIAGRAM', mapData.diagram); 
+        commit('SET_MAP_NAME', mapName);
+        await dispatch('sounds/fetchSounds', mapName, { root: true });
       } catch (error) {
         commit('SET_ERROR', error.response?.data?.detail || 'Error downloading file');
         throw error;
@@ -92,8 +94,8 @@ export default {
       }
     },
 
-    async updateConversationConfig({ commit }, data) {
-      commit('SET_CONVERSATION_CONFIG', data);
+    async updateMapConfig({ commit }, data) {
+      commit('SET_MAP_CONFIG', data);
     },
     addInventoryItem({ commit }, item) {
       commit('ADD_INVENTORY_ITEM', item);
@@ -104,38 +106,38 @@ export default {
     removeInventoryItem({ commit }, index) {
       commit('REMOVE_INVENTORY_ITEM', index);
     },
-    async updateConversationDiagram({ commit }, data) {
-      commit('SET_CONVERSATION_DIAGRAM', data);
+    async updateMapDiagram({ commit }, data) {
+      commit('SET_MAP_DIAGRAM', data);
     },
 
-    async saveConversation({ commit, state }) {
+    async saveMap({ commit, state }) {
       commit('SET_LOADING', true);
       commit('SET_ERROR', null);
       try {
         const formattedJson = JSON.stringify({
-          "config": state.conversationConfig,
-          "diagram": state.conversationDiagram
+          "config": state.mapConfig,
+          "diagram": state.mapDiagram
         }, null, 4);
 
         let blob = new Blob([formattedJson], { type: 'application/json' });
         let formData = new FormData();
-        formData.append('file', blob, state.conversationName);
+        formData.append('file', blob, state.mapName + ".json");
 
         // Send POST request to backend
-        await axios.post(`${API_BASE_URL}/conversations/`, formData, {
+        await axios.post(`${API_BASE_URL}/maps/`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
 
         // Find the starting state shape
-        const startStateShape = state.conversationDiagram.find(
+        const startStateShape = state.mapDiagram.find(
           (shape) => shape.type === "StateShape" && shape.start === true
         );
         const startStateName = startStateShape ? startStateShape.name : null;
         
         // Prepare data for the YAML file
-        const stateShapes = state.conversationDiagram
+        const stateShapes = state.mapDiagram
           .filter((item) => item.type === "StateShape")
           .map((shape) => ({
             name: shape.name,
@@ -145,7 +147,7 @@ export default {
             },
           }));
 
-        const trans = state.conversationDiagram
+        const trans = state.mapDiagram
           .filter((shape) => shape.type === "StateShape" && shape.trigger && shape.trigger.length > 0)
           .flatMap((shape) => 
             shape.trigger.map((trigger) => ({
@@ -162,7 +164,7 @@ export default {
             }))
           );
 
-        const trans2 = state.conversationDiagram
+        const trans2 = state.mapDiagram
           .filter((item) => item.type === "TriggerConnection")
           .map((triggerConnection) => ({
             trigger: triggerConnection.name,
@@ -180,7 +182,7 @@ export default {
 
         // Transform inventory items to the specified object format
         const formattedInventory = {};
-        state.conversationConfig.inventory.forEach((item) => {
+        state.mapConfig.inventory.forEach((item) => {
           let formattedValue;
           if (item.type === 'boolean') {
             formattedValue = item.value === 'true' || item.value === true;
@@ -196,7 +198,7 @@ export default {
         let formatedYaml = yaml.dump({
           initial: startStateName,
           metadata: {
-            ...state.conversationConfig,
+            ...state.mapConfig,
             inventory: formattedInventory // Use the formatted inventory here
           },
           states: stateShapes,
@@ -204,8 +206,8 @@ export default {
           })
         blob = new Blob([formatedYaml], { type: 'application/json' });
         formData = new FormData();
-        formData.append('file', blob, state.conversationName.replace(".json", ".yaml"));
-        await axios.post(`${API_BASE_URL}/conversations/`, formData, {
+        formData.append('file', blob, state.mapName + ".yaml");
+        await axios.post(`${API_BASE_URL}/maps/`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -219,10 +221,10 @@ export default {
     },
   },
   getters: {
-    conversations: (state) => state.conversations,
-    conversationConfig: (state) => state.conversationConfig,
-    conversationDiagram: (state) => state.conversationDiagram,
-    conversationName: (state) => state.conversationName,
+    maps: (state) => state.maps,
+    mapConfig: (state) => state.mapConfig,
+    mapDiagram: (state) => state.mapDiagram,
+    mapName: (state) => state.mapName,
     isLoading: (state) => state.loading,
     error: (state) => state.error,
   },

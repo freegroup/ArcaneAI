@@ -49,32 +49,32 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('conversations', ['conversationDiagram', 'documentRequestTrigger', 'conversationName']),
+    ...mapGetters('maps', ['mapDiagram', 'documentRequestTrigger', 'mapName']),
     draw2dFrame() {
       return this.$refs.draw2dFrame;
     }
   },
   watch: {
-    conversationDiagram: {
-      handler(newConversationDiagram) {
+    mapDiagram: {
+      handler(newMapDiagram) {
         if(this.blocked){
           this.blocked = false;
           return
         }
 
-        if (newConversationDiagram && this.draw2dFrameContent) {
+        if (newMapDiagram && this.draw2dFrameContent) {
           const iframe = this.draw2dFrame.contentWindow;
-          iframe.postMessage({ type: 'setDocument', data: JSON.parse(JSON.stringify(newConversationDiagram)) }, '*');
+          iframe.postMessage({ type: 'setDocument', data: JSON.parse(JSON.stringify(newMapDiagram)) }, '*');
         }
       },
       immediate: true, // Immediately run the handler when component is created
     }
   },
   methods: {
-    ...mapActions('conversations', ['saveConversation', 'updateConversationDiagram']),
+    ...mapActions('maps', ['saveMap', 'updateMapDiagram']),
 
     async saveReceivedDocument() {
-      await this.saveConversation();
+      await this.saveMap();
     },
     updateDraw2dFrame() {
       // Check if the draw2dFrame ref is set
@@ -98,9 +98,9 @@ export default {
   mounted() {
     nextTick(() => {
       this.updateDraw2dFrame();
-      if (this.conversationDiagram && this.draw2dFrameContent) {  
+      if (this.mapDiagram && this.draw2dFrameContent) {  
         setTimeout(() => {
-          this.draw2dFrameContent.postMessage({ type: 'setDocument', data: JSON.parse(JSON.stringify(this.conversationDiagram)) }, '*');
+          this.draw2dFrameContent.postMessage({ type: 'setDocument', data: JSON.parse(JSON.stringify(this.mapDiagram)) }, '*');
         }, 500);
         
       }
@@ -119,7 +119,7 @@ export default {
       const message = event.data;
       if (message.type === 'updateDocumentData') {
         this.blocked = true
-        this.updateConversationDiagram(message.data)
+        this.updateMapDiagram(message.data)
       }
     });
   }

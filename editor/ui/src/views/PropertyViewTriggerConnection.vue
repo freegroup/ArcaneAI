@@ -16,6 +16,8 @@
             :items="soundFiles"
             label="Sound Effect"
             density="compact"
+            :items-per-page="1000"
+            :list-props="{maxWidth:'350px', minWidth: '350px'}"
             outlined
           ></v-select>
           <v-btn icon size="small" @click="playSelectedSound">
@@ -71,7 +73,7 @@
     </div>
   </template>
   
-  <script>
+<script>
   import SoundManager from '@/utils/SoundManager'
 
   import { mapGetters } from 'vuex';
@@ -158,17 +160,17 @@
       },
     },
     mounted() {
-        // Event listener for messages from the iframe
-        window.addEventListener('message', (event) => {
-            if (event.origin !== window.location.origin) return;
-            const message = event.data;
-            if (message.event === 'onSelect' && message.type == "TriggerConnection") {
-                this.jsonData = message.data
-            }
-            else if (message.event === 'onUnselect') {
-                this.jsonData = {}
-            }
-        });
+      // Event listener for messages from the iframe
+      window.addEventListener('message', (event) => {
+          if (event.origin !== window.location.origin) return;
+          const message = event.data;
+          if (message.event === 'onSelect' && message.type == "TriggerConnection") {
+              this.jsonData = message.data
+          }
+          else if (message.event === 'onUnselect') {
+              this.jsonData = {}
+          }
+      });
     }
   };
   </script>

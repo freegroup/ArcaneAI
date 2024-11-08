@@ -1,5 +1,4 @@
 import os
-import yaml
 from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -11,14 +10,12 @@ import uvicorn
 
 # Aktueller Dateipfad (__file__) und das src-Verzeichnis ermitteln
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(BASE_DIR)))
 
 # Verzeichnis für YAML-Dateien und statische Dateien definieren
-CONVERSATIONS_FILE_DIR = os.path.join(BASE_DIR, 'conversations')
+MAPS_FILE_DIR = os.path.join(PROJECT_DIR, 'maps')
 STATIC_FILES_DIR = os.path.join(BASE_DIR, 'static')
 
-
-# Stelle sicher, dass das conversations-Verzeichnis existiert
-os.makedirs(CONVERSATIONS_FILE_DIR, exist_ok=True)
 
 # FastAPI App initialisieren
 app = FastAPI()
@@ -48,48 +45,55 @@ class NoCacheMiddleware(BaseHTTPMiddleware):
 app.add_middleware(NoCacheMiddleware)
 
 
-
-# /api/v1/conversations route Gruppe
-@app.post("/api/v1/conversations/")
-async def save_yaml_file(file: UploadFile = File(...)):
-    """Speichert eine hochgeladene YAML-Datei im angegebenen Verzeichnis"""
-    file_location = os.path.join(CONVERSATIONS_FILE_DIR, file.filename)
+@app.post("/api/v1/maps/")
+async def save_file(file: UploadFile = File(...)):
+    """Speichert eine hochgeladene Datei im angegebenen Verzeichnis"""
+    file_location = os.path.join(MAPS_FILE_DIR, file.filename)
     with open(file_location, "wb") as f:
         f.write(await file.read())
     return {"message": f"Datei {file.filename} gespeichert"}
 
-@app.get("/api/v1/conversations/")
-async def list_yaml_files() -> List[str]:
-    """Listet alle YAML-Dateien im definierten Verzeichnis auf"""
+
+@app.get("/api/v1/maps/")
+async def list_files() -> List[str]:
+    """Listet alle JSON Dateien im definierten Verzeichnis auf"""
     try:
-        files = [f for f in os.listdir(CONVERSATIONS_FILE_DIR) if f.endswith(".json")]
+        print(MAPS_FILE_DIR)
+        files = [
+            os.path.splitext(f)[0]  # Remove the suffix from each file
+            for f in os.listdir(MAPS_FILE_DIR) 
+            if f.endswith(".json")
+        ]
         return files
     except FileNotFoundError:
-        raise HTTPException(status_code=500, detail="Verzeichnis nicht gefunden")
+        raise HTTPException(status_code=500, detail="Directory not found")
+    
 
-@app.get("/api/v1/conversations/{file_name}")
-async def get_yaml_file(file_name: str):
+@app.get("/api/v1/maps/{map_name}")
+async def get_file(map_name: str):
     """Lädt eine YAML-Datei anhand ihres Namens"""
-    file_location = os.path.join(CONVERSATIONS_FILE_DIR, file_name)
+    file_location = os.path.join(MAPS_FILE_DIR, map_name + ".json")
     if not os.path.exists(file_location):
         raise HTTPException(status_code=404, detail="Datei nicht gefunden")
     
     return FileResponse(file_location)
 
-@app.get("/api/v1/sounds/")
-async def list_sound_files() -> List[str]:
+
+@app.get("/api/v1/sounds/{map_name}")
+async def list_sound_files(map_name: str) -> List[str]:
     """Listet alle Sound-Dateien im definierten Verzeichnis auf"""
     try:
-        files = [f for f in os.listdir(CONVERSATIONS_FILE_DIR) if f.endswith((".mp3", ".wav"))]
+        sound_dir = os.path.join(MAPS_FILE_DIR, map_name, "soundfx")
+        files = [f for f in os.listdir(sound_dir) if f.endswith((".mp3", ".wav"))]
         return files
     except FileNotFoundError:
         raise HTTPException(status_code=500, detail="Verzeichnis nicht gefunden")
 
 
-@app.get("/api/v1/sounds/{file_name}")
-async def get_mp3_file(file_name: str):
+@app.get("/api/v1/sounds/{map_name}/{file_name}")
+async def get_mp3_file(map_name: str, file_name: str):
     """Lädt eine MP3-Datei anhand ihres Namens"""
-    file_location = os.path.join(CONVERSATIONS_FILE_DIR, file_name)
+    file_location = os.path.join(MAPS_FILE_DIR, map_name, "soundfx", file_name)
     if not os.path.exists(file_location):
         raise HTTPException(status_code=404, detail="Datei nicht gefunden")
     
@@ -98,7 +102,7 @@ async def get_mp3_file(file_name: str):
 
 
 # Static files für /editor - liefert Dateien aus dem src/static Verzeichnis
-app.mount("/editor", StaticFiles(directory=STATIC_FILES_DIR), name="static")
+#app.mount("/editor", StaticFiles(directory=STATIC_FILES_DIR), name="static")
 
 # Server direkt im Python-File starten
 if __name__ == "__main__":
