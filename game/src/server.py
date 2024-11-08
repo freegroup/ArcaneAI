@@ -28,8 +28,11 @@ BASE_URI = "/game"
 SAME_SITE_VALUE = "Lax" # local http
 
 
-CONVERSATION_DIR  = os.getenv("CONVERSATION_DIR")
-CONVERSATION_FILE =  os.getenv("CONVERSATION_FILE")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_DIR = os.path.dirname(os.path.dirname(BASE_DIR))
+MAP_DIR  = os.path.join(PROJECT_DIR, 'maps')
+
+MAP_FILE =  os.getenv("MAP_FILE")
 
 
 debug_ui = MotorControlerMock()
@@ -53,19 +56,19 @@ session_store: Dict[str, Dict] = {}
 from fastapi.middleware.cors import CORSMiddleware
 
 
-
 class ChatMessage(BaseModel):
     text: str
 
 def newChatSession():
     print("CREATE NEW SESSION OBJECT")
     return ChatSession(
-            conversation_dir = CONVERSATION_DIR,
-            state_engine = StateEngine(f"{CONVERSATION_DIR}{CONVERSATION_FILE}"),
+            map_name =  os.path.splitext(MAP_FILE)[0],  # Remove the suffix from file
+            map_dir = MAP_DIR,
+            state_engine = StateEngine(f"{MAP_DIR}/{MAP_FILE}"),
             llm = LLMFactory.create(),
             tts = TTSEngineFactory.create(WebSocketSink()),
             stt = STTFactory.create(),
-            jukebox= WebJukebox(CONVERSATION_DIR)
+            jukebox= WebJukebox()
         )
 
 # Middleware to retrieve or create a session
@@ -190,11 +193,13 @@ async def chat(request: Request, data: ChatMessage, response: Response):
 
 # REST endpoint to serve audio files
 @app.get("/api/audio/{filename}", name="audio_get")
-async def get_audio(filename: str, request: Request):
+async def get_audio(filename: str, request: Request, response: Response):
     if request.cookies.get("authenticated") != "yes":
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
-    file_path = f"{CONVERSATION_DIR}{filename}"
+    session, session_id = get_session(request, response)
+
+    file_path = f"{session.map_dir}/{session.map_name}/soundfx/{filename}"
     mime_type, _ = mimetypes.guess_type(file_path)
     mime_type = mime_type or "application/octet-stream"
     if os.path.isfile(file_path):

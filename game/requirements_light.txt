@@ -19,4 +19,3 @@ google-generativeai==0.8.3
 google-cloud-texttospeech==2.21.0
 Jinja2==3.1.4
 python-multipart==0.0.17
-piper-tts==1.2.0

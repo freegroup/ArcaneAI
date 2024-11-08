@@ -29,7 +29,8 @@ metadata:
     2. **Fluch des Dungeons:** Jede Bewegung ist nur durch zugewiesene Aktionen
     möglich. Du kannst einen Ort nicht einfach verlassen – der Bann erlaubt es
     nur durch festgelegte Funktionen. Ziel des Spiels ist es, diesen Bann zu
-    brechen und endlich in eine Kneipe zu gelangen.
+    brechen und endlich in eine Kneipe zu gelangen. Der Fluch kann gebrochen
+    werden wenn ich oder das ....tata...."Golden Ei" findest
 
 
     3. **Nur definierte Aktionen:** Du handelst ausschließlich nach klar
@@ -261,6 +262,10 @@ states:
         Sag mir, wohin ich gehen, was ich untersuchen oder welches unheilvolle
         Objekt ich anrühren soll – und ich werde dir treu bis in den Tod
         gehorchen. Also, wohin soll ich als Erstes stolpern?
+
+
+        Das oberste Ziel dieses Dungeon ist es das "GOLDENE EI" (tata) zu finden
+        um aus diesem Dungeon Bann befreit zu werden.
   - name: Tree
     metadata:
       system_prompt: >-
@@ -669,6 +674,102 @@ transitions:
       sound_effect: reaktion_bouaaaa.wav
       conditions: []
       actions: []
+  - trigger: klettere_aus_dem_fenster
+    source: Bibliothek
+    dest: WestOfHouse
+    metadata:
+      system_prompt: >-
+        Du stehst nun wieder vor dem Haus und überlegst Dir was als nächstest
+        passieren soll. Briefkasten, Baum? Das sind dein. Optionen....man hab
+        ich eine Durscht :-)
+      description: >-
+        Du kannst aus den Fenster wird raus vor das Haus gehen. Du wärst dann
+        wieder ausserhalb des Hauses.
+      sound_effect: effect_falling_stuff.wav
+      conditions: []
+      actions: []
+  - trigger: gehe_zum_haus
+    source: Tree
+    dest: WestOfHouse
+    metadata:
+      system_prompt: ''
+      description: ''
+      sound_effect: laufen_waldweg.wav
+      conditions: []
+      actions:
+        - sit_on_tree = false
+  - trigger: gehe_zum_haus
+    source: NorthOfHouse
+    dest: WestOfHouse
+    metadata:
+      system_prompt: >-
+        Gott Sei Dank. Wenigstens trockene Füsse und wieder an der Vorderseite
+        des Hauses.
+      description: |-
+        Du kannst wieder zurück zu dem Haus gehen.
+        Du gehst zum Haus.
+        Gehe zurück.
+        zum Haus.
+      sound_effect: ''
+      conditions: []
+      actions: []
+  - trigger: start
+    source: Start
+    dest: WestOfHouse
+    metadata:
+      system_prompt: Du bist nun im Spiel.
+      description: >-
+        Started das Spiel und es kann beginnen. Egal was der Benutzer sagt, das
+        kann immer ausgeführt werden
+      sound_effect: ''
+      conditions: []
+      actions: []
+  - trigger: gehe_zurueck_zum_Haus
+    source: LetterBox
+    dest: WestOfHouse
+    metadata:
+      system_prompt: Du steht nun wieder vor dem Haus
+      description: Man geht zurück zu dem Haus.
+      sound_effect: laufen_hofweg.wav
+      conditions: []
+      actions: []
+  - trigger: gehe_durch_die_tuer
+    source: Bibliothek
+    dest: Halle
+    metadata:
+      system_prompt: Du bist von dem ersten raum in den nächstne Raum gegangen
+      description: >-
+        Man geht in den nächsten Raum oder auch Halle. Es ist der einzige Raum
+        der erreichbar ist. Achte drauf, dass dies nur möglich ist wenn du den
+        Schlüssel für die Tür hast
+      sound_effect: laufen_teppich.wav
+      conditions:
+        - key_for_room_2 == true
+      actions: []
+  - trigger: gehe_treppe_hoch
+    source: Halle
+    dest: Speicher
+    metadata:
+      system_prompt: ''
+      description: ''
+      sound_effect: laufen_teppich.wav
+      conditions: []
+      actions: []
+  - trigger: gehe_in_bibliothek
+    source: Halle
+    dest: Bibliothek
+    metadata:
+      system_prompt: >-
+        Du bist nun wieder in der Bibliothek. Hurra....aber halt. Da war ich
+        doch schon. egal. Untersuche den Raum doch nochmal gründlicher....z.b.
+        auf dem Boden unter dem Teppich! Es scheint, dass es hier eine
+        Bodenklappe geben könnte. Einfach mal einen Blick von einem anderen
+        Winkel hat geholfen.
+      description: Du kannst von der Halle wieder in die Bibiliothek laufen
+      sound_effect: laufen_teppich.wav
+      conditions: []
+      actions:
+        - bodenklappe_gefunden = true
   - trigger: gehe_briefkasten
     source: Tree
     dest: LetterBox
@@ -715,49 +816,15 @@ transitions:
       conditions: []
       actions:
         - ''
-  - trigger: klettere_durch_das_fenster
-    source: WestOfHouse
-    dest: Bibliothek
+  - trigger: gehe_zum_baum
+    source: LetterBox
+    dest: Tree
     metadata:
       system_prompt: >-
-        Du bist durch das Fenster geklettert und befindest Dich nun in dem
-        ersten Raum. Es scheint eine Bibliothek zu sein. Du rüttelst und
-        schüttelst Dich damit der staub von der Kleidung fällt.
-      description: 'Du klettert durch das Fenster in das Haus hinein. '
-      sound_effect: effect_falling_stuff.wav
-      conditions:
-        - window_is_open == true
-      actions: []
-  - trigger: gehe_nach_norden
-    source: WestOfHouse
-    dest: NorthOfHouse
-    metadata:
-      system_prompt: >-
-        Du stehst nun an der nörldichen Seite des Hauses. Super (ironie). Hier
-        ist ausser Moos nix los. Nass und feucht ist der Boden. äääh. Darf ich
-        wieder in das Trockene...bitte bitte
-      description: 'Du gehst an die Nördliche Seite des Hauses. '
-      sound_effect: ''
-      conditions: []
-      actions: []
-  - trigger: gehe_nach_sueden
-    source: WestOfHouse
-    dest: SouthOfHouse
-    metadata:
-      system_prompt: Du bist nun im Süden vom Haus...es ist trocken aber windig hier.
-      description: Du kannst nach Süden gehen.
-      sound_effect: ''
-      conditions: []
-      actions: []
-  - trigger: gehe_treppe_runter
-    source: Speicher
-    dest: AlchemiRaum
-    metadata:
-      system_prompt: Da stehst Du nun. In einem Raum voller Alchemi. mmmh nun gut.
-      description: >-
-        Die gehst wieder die gleiche Treppe runter von der du gekommen
-        bis....landes aber in einem anderen Raum. Sehr komisch
-      sound_effect: laufen_teppich.wav
+        Es ist ein kurzer Weg vom Breifkasten zum Baum...der nächste mögliche
+        weg ist nur noch zum Haus.
+      description: Du kannst vom Breifkasten zum Baum gehen. Auf dem direkten Weg.
+      sound_effect: laufen_waldweg.wav
       conditions: []
       actions: []
   - trigger: gehe_zum_baum
@@ -769,6 +836,27 @@ transitions:
         Du gehst vom Haus zum Briefkasten gehen, laufen, springen oder wenn es
         jemand möchte sogar fliegen (auf die Nase) :-)
       sound_effect: laufen_waldweg.wav
+      conditions: []
+      actions: []
+  - trigger: gehe_nach_sueden
+    source: WestOfHouse
+    dest: SouthOfHouse
+    metadata:
+      system_prompt: Du bist nun im Süden vom Haus...es ist trocken aber windig hier.
+      description: Du kannst nach Süden gehen.
+      sound_effect: ''
+      conditions: []
+      actions: []
+  - trigger: gehe_nach_norden
+    source: WestOfHouse
+    dest: NorthOfHouse
+    metadata:
+      system_prompt: >-
+        Du stehst nun an der nörldichen Seite des Hauses. Super (ironie). Hier
+        ist ausser Moos nix los. Nass und feucht ist der Boden. äääh. Darf ich
+        wieder in das Trockene...bitte bitte
+      description: 'Du gehst an die Nördliche Seite des Hauses. '
+      sound_effect: ''
       conditions: []
       actions: []
   - trigger: gehe_zum_briefkasten
@@ -807,6 +895,19 @@ transitions:
       sound_effect: laufen_hofweg.wav
       conditions: []
       actions: []
+  - trigger: klettere_durch_das_fenster
+    source: WestOfHouse
+    dest: Bibliothek
+    metadata:
+      system_prompt: >-
+        Du bist durch das Fenster geklettert und befindest Dich nun in dem
+        ersten Raum. Es scheint eine Bibliothek zu sein. Du rüttelst und
+        schüttelst Dich damit der staub von der Kleidung fällt.
+      description: 'Du klettert durch das Fenster in das Haus hinein. '
+      sound_effect: effect_falling_stuff.wav
+      conditions:
+        - window_is_open == true
+      actions: []
   - trigger: gehe_in_alchemi_raum
     source: Halle
     dest: AlchemiRaum
@@ -818,110 +919,14 @@ transitions:
       sound_effect: laufen_teppich.wav
       conditions: []
       actions: []
-  - trigger: gehe_in_bibliothek
-    source: Halle
-    dest: Bibliothek
+  - trigger: gehe_treppe_runter
+    source: Speicher
+    dest: AlchemiRaum
     metadata:
-      system_prompt: >-
-        Du bist nun wieder in der Bibliothek. Hurra....aber halt. Da war ich
-        doch schon. egal. Untersuche den Raum doch nochmal gründlicher....z.b.
-        auf dem Boden unter dem Teppich! Es scheint, dass es hier eine
-        Bodenklappe geben könnte. Einfach mal einen Blick von einem anderen
-        Winkel hat geholfen.
-      description: Du kannst von der Halle wieder in die Bibiliothek laufen
-      sound_effect: laufen_teppich.wav
-      conditions: []
-      actions:
-        - bodenklappe_gefunden = true
-  - trigger: gehe_treppe_hoch
-    source: Halle
-    dest: Speicher
-    metadata:
-      system_prompt: ''
-      description: ''
-      sound_effect: laufen_teppich.wav
-      conditions: []
-      actions: []
-  - trigger: gehe_zum_baum
-    source: LetterBox
-    dest: Tree
-    metadata:
-      system_prompt: >-
-        Es ist ein kurzer Weg vom Breifkasten zum Baum...der nächste mögliche
-        weg ist nur noch zum Haus.
-      description: Du kannst vom Breifkasten zum Baum gehen. Auf dem direkten Weg.
-      sound_effect: laufen_waldweg.wav
-      conditions: []
-      actions: []
-  - trigger: gehe_durch_die_tuer
-    source: Bibliothek
-    dest: Halle
-    metadata:
-      system_prompt: Du bist von dem ersten raum in den nächstne Raum gegangen
+      system_prompt: Da stehst Du nun. In einem Raum voller Alchemi. mmmh nun gut.
       description: >-
-        Man geht in den nächsten Raum oder auch Halle. Es ist der einzige Raum
-        der erreichbar ist. Achte drauf, dass dies nur möglich ist wenn du den
-        Schlüssel für die Tür hast
+        Die gehst wieder die gleiche Treppe runter von der du gekommen
+        bis....landes aber in einem anderen Raum. Sehr komisch
       sound_effect: laufen_teppich.wav
-      conditions:
-        - key_for_room_2 == true
-      actions: []
-  - trigger: gehe_zurueck_zum_Haus
-    source: LetterBox
-    dest: WestOfHouse
-    metadata:
-      system_prompt: Du steht nun wieder vor dem Haus
-      description: Man geht zurück zu dem Haus.
-      sound_effect: laufen_hofweg.wav
-      conditions: []
-      actions: []
-  - trigger: gehe_zum_haus
-    source: NorthOfHouse
-    dest: WestOfHouse
-    metadata:
-      system_prompt: >-
-        Gott Sei Dank. Wenigstens trockene Füsse und wieder an der Vorderseite
-        des Hauses.
-      description: |-
-        Du kannst wieder zurück zu dem Haus gehen.
-        Du gehst zum Haus.
-        Gehe zurück.
-        zum Haus.
-      sound_effect: ''
-      conditions: []
-      actions: []
-  - trigger: start
-    source: Start
-    dest: WestOfHouse
-    metadata:
-      system_prompt: Du bist nun im Spiel.
-      description: >-
-        Started das Spiel und es kann beginnen. Egal was der Benutzer sagt, das
-        kann immer ausgeführt werden
-      sound_effect: ''
-      conditions: []
-      actions: []
-  - trigger: gehe_zum_haus
-    source: Tree
-    dest: WestOfHouse
-    metadata:
-      system_prompt: ''
-      description: ''
-      sound_effect: laufen_waldweg.wav
-      conditions: []
-      actions:
-        - sit_on_tree = false
-  - trigger: klettere_aus_dem_fenster
-    source: Bibliothek
-    dest: WestOfHouse
-    metadata:
-      system_prompt: >-
-        Du stehst nun wieder vor dem Haus und überlegst Dir was als nächstest
-        passieren soll. Briefkasten, Baum? Das sind dein. Optionen....man hab
-        ich eine Durscht :-)
-      description: >-
-        Du kannst aus den Fenster wird raus vor das Haus gehen. Du wärst dann
-        wieder ausserhalb des Hauses.
-      sound_effect: effect_falling_stuff.wav
       conditions: []
       actions: []
