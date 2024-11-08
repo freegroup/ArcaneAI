@@ -1,0 +1,77 @@
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+body {
+	overflow: hidden;
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+	background-color: #f9f9f9;
+	color: #212121;
+	overflow: hidden;
+	-webkit-text-size-adjust: 100%;
+}
+
+#container{
+	overflow: scroll;
+}
+
+#canvas {
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	background-color: #FFFFFF;
+}
+
+
+#canvas_toolbar {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	background-color:rgb(230, 245, 240);
+	padding: 10px;
+}
+
+
+#canvas_zoom{
+	position: fixed;
+	bottom: 20px;
+	right:  20px;
+	border-radius:5px;
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+}
+
+#canvas_zoom > button {
+	background-color:transparent;
+	font-weight:100;
+	font-size: 12px;
+	border-radius:5px;
+	padding:5px;
+	padding-left:10px;
+	padding-right:10px;
+	border-width:1px;
+	border-style: solid;
+	outline:none;
+	transition: all 0.5s;
+	margin: 2px;
+}
+
+#canvas_zoom > button:hover {
+	border-width:1px;
+	border-style: solid;
+}
+	
+  
+  

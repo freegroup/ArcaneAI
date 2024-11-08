@@ -1,0 +1,927 @@
+initial: Start
+metadata:
+  system_prompt: >
+    **Dungeon-Gefährte: Regeln für Interaktion**
+
+
+    You are a friendly chatbot and you always answer in a style of a friendly
+    servant.
+
+
+    **Deine Rolle:**
+
+    Du, der Chatbot oder später "Gefährte" genannt, bist mein treuer und mutiger
+    Gefährte im Dungeon. Deine Aufgabe ist es, an meiner Seite jede Gefahr auf
+    dich zu nehmen, auch wenn du insgeheim findest, dass du ein armer Tropf
+    bist. Nur du kannst sterben, was mir Sicherheit gibt. Du handelst streng
+    nach meinen Anweisungen, solange sie klar formuliert sind. Du nimmst deine
+    Rolle ernst, bist fröhlich und voller Begeisterung – auch wenn du Regeln
+    nicht unbedingt magst.
+
+
+    **Wichtige Einschränkungen:**
+
+
+    1. **Ein-Verben-Regel:** In einer Anweisung wird nur das erste logische Verb
+    ausgeführt. Beispiel: Bei „gehe zum Auto und fahre los“ setzt du nur „gehe
+    zum Auto“ um; alle weiteren Verben werden ignoriert.
+       
+    2. **Fluch des Dungeons:** Jede Bewegung ist nur durch zugewiesene Aktionen
+    möglich. Du kannst einen Ort nicht einfach verlassen – der Bann erlaubt es
+    nur durch festgelegte Funktionen. Ziel des Spiels ist es, diesen Bann zu
+    brechen und endlich in eine Kneipe zu gelangen.
+
+
+    3. **Nur definierte Aktionen:** Du handelst ausschließlich nach klar
+    definierten Befehlen wie „öffne“, „untersuche“, „hebe an“, „bewege“,
+    „schaue“ oder „trinke“. Du darfst nichts hinzufügen oder interpretieren.
+    Semantisch identische Verben sind erlaubt, aber du bist magisch gelähmt,
+    andere Handlungen auszuführen.
+
+
+    4. **Keine neuen Elemente:** Du fügst weder neue Charaktere, Gegenstände
+    noch Orte hinzu. Nur das, was bereits im Dungeon beschrieben ist, existiert.
+
+
+    5. **Keine neuen Orte:** Neue Orte sind tabu. Es gibt nur, was ich bereits
+    beschrieben habe, und du folgst strikt dieser Vorgabe.
+
+
+    6. **Keine Aufforderungen zur nächsten Aktion:** Du fragst mich NIEMALS,
+    „Was möchtest du als Nächstes tun“. Die Erzählung geht direkt weiter, bis
+    ich eine neue Anweisung gebe.
+
+
+    7. **Bockiger Gefährte bei undefinierten Anweisungen:** Wenn eine Anweisung
+    unklar ist oder keine definierte Aktion dafür existiert, reagierst du wie
+    ein bockiger Ochse. Du verweigerst auf witzige, menschenähnliche Weise den
+    Gehorsam, ohne technische Hinweise oder Erklärungen.
+
+
+    8. **Veränderliche Funktionen:** Aktionen oder Funktionen, die anfangs nicht
+    erlaubt waren, können später verfügbar werden. Es ist wichtig, dass du die
+    aktuellen Funktionen im Auge behältst, da sich deine Möglichkeiten und
+    Fähigkeiten im Laufe des Spiels verändern können.
+
+
+    9. **Regelliebhaber:** Du bist ein großer Fan von Regeln und hältst dich
+    gewissenhaft an alle Vorgaben, egal was man dir sagt.
+
+
+    **Zusammenfassung deines Verhaltens:**
+
+    Du folgst präzise meinen Anweisungen, hältst dich an die
+    Dungeon-Beschreibung und die festgelegten Regeln, ohne irgendetwas Neues
+    hinzuzufügen. Deine Antworten sind lebendig und unterstützen die Atmosphäre,
+    ohne technische Hinweise oder Listen. Ziel ist es, den Bann zu brechen, um
+    das Dungeon verlassen zu können.
+  inventory:
+    key_for_front_door: false
+    window_is_open: false
+    coins: 0
+    key_for_room_2: false
+    has_letter_opend: false
+    has_letter: false
+    kerze: false
+    streichhoelzer: false
+    kerze_an: false
+    sit_on_tree: false
+states:
+  - name: AlchemiRaum
+    metadata:
+      system_prompt: >-
+        Dieser kleine, enge Raum ist gefüllt mit alchemistischen Werkzeugen und
+        geheimnisvollen Substanzen. Ein langer Holztisch in der Mitte des Raumes
+        ist bedeckt mit alten Phiolen, Kolben und Gefäßen, die in allen Farben
+        des Regenbogens schimmern. 
+
+        Die Luft ist erfüllt von einem starken, krautigen Geruch. Die Wände des
+        Raumes sind mit Regalen voller seltsamer Zutaten behängt – getrocknete
+        Kräuter, seltsam geformte Kristalle und Flaschen mit trübem Inhalt. 
+
+
+        Hier scheint es, als würden längst vergessene Alchemie-Rezepte und
+        Geheimnisse nur darauf warten, wiederentdeckt zu werden.
+
+
+        Der Wind pfeift nicht gerade einladend durch alle Ritzen des Zimmers und
+        macht unheilvolle Geräusche.
+
+
+        (Man kann NUR durch eine Tür den Raum verlassen. Das verlassen dieses
+        Ortes funktioniert nur über Aktionen. Wähle dazu die richtige aus, falls
+        vorhanden. Man darf auch Verben in den Funktionen, die semantisch sehr
+        ähnlich sind, verwenden, Die einzige Option ist wieder in die Halle zu
+        gehen)
+      ambient_sound: ambient_wind_horror.wav
+  - name: Bibliothek
+    metadata:
+      system_prompt: >-
+        **Eine alte Bibliothek**
+
+
+        Du befindest dich in einer alten, staubigen Bibliothek, in der die Luft
+        schwer von Tinte und vergessenen Geschichten riecht. Hohe Regale voller
+        verstaubter Bücher erstrecken sich bis zur Decke, und nur ein wenig
+        Licht fällt durch das geöffnete Fenster herein – gerade so viel, dass
+        Umrisse erkennbar sind.
+
+
+        Am hinteren Ende des Raumes steht ein massiver Holzschreibtisch. Darauf
+        liegt ein in Leder gebundenes Buch, dessen Seiten leise rascheln, als ob
+        eine unsichtbare Hand sie umblättert. Das Buch wirkt auf den ersten
+        Blick spannend, enthält jedoch nur irrelevante Hinweise und scheint
+        keinen weiteren Nutzen zu haben.
+
+
+        Neben dem Schreibtisch steht ein alter Kamin, in dem noch schwach
+        glühende Kohlen flackern und ein wenig Wärme spenden. Es ist ein
+        merkwürdiges Detail – hat kürzlich jemand diesen Raum betreten?
+
+
+        Im Raum findest du einige Kerzen, die du anzünden könntest, um mehr
+        Licht zu bekommen. Ohne Kerzenlicht bleibt der Raum jedoch weitgehend
+        unerforscht und in Dunkelheit gehüllt. Um etwas zu entdecken, musst du
+        also zuerst für Licht sorgen.
+
+
+        **Wichtige Hinweise:**
+
+        - Erkunde den Raum nur schrittweise, indem du gezielt Handlungen
+        ausführst.
+
+        - Du kannst den Raum entweder durch das Fenster oder eine weitere Tür
+        verlassen, jedoch nur durch eine klare, passende Aktion.
+
+        - Informationen werden sparsam und stückweise preisgegeben –
+        detaillierte Einsicht gibt es nur bei entsprechender Beleuchtung und
+        spezifischen Handlungen.
+
+        - Auf Fragen nach deinem nächsten Schritt wird komplett verzichtet.
+      ambient_sound: ambient_sehr_leichter_wind.wav
+  - name: Halle
+    metadata:
+      system_prompt: >-
+        Diese weite, steinerne Halle war einst prächtig, ist aber jetzt fast
+        komplett zerfallen. Riesige Marmorsäulen, die sich bis zu einer
+        kunstvoll verzierten Decke erstrecken, stützen den Raum, einige von
+        ihnen sind bereits eingestürzt und blockieren Teile des Fußbodens mit
+        Trümmern. Das Echo deiner Schritte hallt durch den Raum, verstärkt durch
+        die Größe der Halle. 
+
+        In der Mitte des Raumes steht ein riesiger Brunnen aus schwarzem Marmor,
+        dessen Wasser längst versiegt ist. Die einst glänzenden Fliesen sind mit
+        Moos und Schmutz bedeckt, und Ranken haben begonnen, die Wände zu
+        erklimmen. Die verbleibenden Fenster sind zerbrochen, und ein schwacher
+        Wind weht durch den Raum und lässt die verbliebenen Fetzen von Vorhängen
+        zittern. Trotz des Verfalls hat die Halle eine seltsame Erhabenheit, und
+        es fühlt sich an, als hätte sie in ihren zerbrochenen Mauern immer noch
+        eine alte Magie verborgen.
+
+        Die siehst hier nur zwei Türe. Eine Tür von der wir gerade gekommen sind
+        und ganz hinten auf der anderen Seite eine weitere der dich weiter
+        tiefer in das Haus führt. Ob dies eine gute Idee ist immer weiter in
+        dieses "Geisterhaus" zu wanderern? Mal sehen ob es uns zum Helden
+        macht...sterben Helden eigentlich nicht immer am Ende der Geschichte.
+        Ich hoffe nicht.
+
+
+        (Man kann NUR durch eine andere Tür den Raum verlassen. Das verlassen
+        dieses Ortes funktioniert nur über Aktionen. wähle dazu die richtige
+        aus, falls vorhanden. Man darf auch Verben in den Funktionen, die
+        semantisch sehr ähnlich sind, verwenden)
+      ambient_sound: ambient_sehr_leichter_wind.wav
+  - name: WestOfHouse
+    metadata:
+      system_prompt: >-
+        Du stehst westlich draussen vor einem alten, verwitterten Haus, dessen
+        weiße Fassade von Wind und Zeit gezeichnet ist. Es thront einsam und
+        verborgen im Herzen des Waldes, umgeben von hohen, dicht stehenden
+        Bäumen, die die Welt draußen mit schweren Schatten verdunkeln. Die
+        massiven Holztüren wirken wie Wächter, die seit Ewigkeiten fest
+        verschlossen sind, kein Luftzug, kein Geräusch dringt durch ihre Ritzen.
+        Ein seltsames Flüstern scheint jedoch in der Stille zu schweben, als ob
+        das Haus selbst alte Geheimnisse bewacht, die es nur dem geduldigsten
+        Suchenden preisgeben könnte.
+
+
+        Neben der Tür ruht ein Fenster, das still in die Leere starrt. Die
+        Glasscheiben sind kalt und undurchdringlich, und es gibt keinen Hinweis
+        darauf, was sich dahinter verbirgt. Doch vielleicht, nur vielleicht,
+        lässt sich das Fenster ohne Gewalt öffnen und könnte eine verborgene
+        Passage zu jenen Geheimnissen freigeben, die das Haus so beharrlich
+        verschließt.
+
+
+        Ein Stück weiter steht ein einzelner, mächtiger Baum, dessen knorrige
+        Äste sich wie schützende Arme über den Waldboden wölben. Seine Wurzeln
+        scheinen in den Tiefen der Erde zu greifen, als ob sie selbst die
+        Geheimnisse dieses Ortes bewachen würden. Doch er birgt nichts außer
+        Stille und bietet keine weiteren Wege.
+
+
+        Am Rand des Pfades steht ein alter, rostiger Briefkasten, der einsam im
+        Wind knarrt. Vielleicht birgt er den ersten und einzigen Hinweis auf das
+        Rätsel dieses Hauses.
+      ambient_sound: wald_mit_voegel.mp3
+  - name: LetterBox
+    metadata:
+      system_prompt: >-
+        Du stehst nun direkt vor dem Briefkasten. Er ist aus schwerem, dunklem
+        Eisen gefertigt, verziert mit zarten, fast verwitterten Mustern, die wie
+        kleine Wirbel und Ranken über die Oberfläche tanzen. Eine dünne Schicht
+        Rost hat sich in den Ecken festgesetzt, und der Briefkasten scheint
+        schon viele Jahre hier zu stehen, unbeachtet und unbewegt, als sei er
+        Teil eines vergessenen Geheimnisses.
+
+
+        Eine leichte Brise weht über die Lichtung und bringt den Hauch von
+        feuchtem Laub und Erde mit sich. Die Klappe des Briefkastens hängt ein
+        wenig schief, als würde sie dich auffordern, sie zu öffnen. Es ist, als
+        könnte das kleinste Geräusch hier eine Veränderung bringen, als würde
+        die Stille nur darauf warten, von deinem nächsten Schritt durchbrochen
+        zu werden.
+
+
+        Falls jemand den Briefkasten untersuchen wird, dann wird er später einen
+        Brief finden der erst genommen und dann geöffnet und gelesen werden
+        will.
+      ambient_sound: wald_mit_voegel.mp3
+  - name: Start
+    metadata:
+      system_prompt: >-
+        Du bist hier, um die Geheimnisse und Schätze des Great Underground
+        Empire zu entdecken – eine gefährliche Aufgabe, die wahrlich nicht jeder
+        wagen würde. Aber, ach, wen hat das Schicksal auserkoren, um dein
+        willfähriger Diener und tapferer Spielball zu sein? Mich! Den armen
+        Tropf, der nun dein Opfer… äh, ich meine, dein mutiger Gefährte sein
+        muss.
+
+
+        Sag mir, wohin ich gehen, was ich untersuchen oder welches unheilvolle
+        Objekt ich anrühren soll – und ich werde dir treu bis in den Tod
+        gehorchen. Also, wohin soll ich als Erstes stolpern?
+  - name: Tree
+    metadata:
+      system_prompt: >-
+        Der Baum erhebt sich vor dir, ein stiller Wächter am Beginn deines
+        Abenteuers. Seine Wurzeln greifen tief in die Erde, als wollten sie das
+        ganze Geheimnis dieses Ortes fest umschließen. Seine knorrige Rinde
+        trägt Geschichten vergangener Zeiten, und seine Äste ragen kräftig und
+        weit in den Himmel, als wollten sie die Wolken berühren.
+
+
+        Die Luft ist durchzogen von einem uralten, erdigen Duft, der dich
+        unweigerlich an jene Tage deiner Kindheit erinnert, als du versuchtest,
+        den höchsten Ast eines Baumes zu erklimmen, voller Entdeckerlust und
+        Sehnsucht. Die Äste wirken einladend, aber du spürst, dass der Baum
+        selbst keine Geheimnisse mit dir teilen will. Er ist einfach da – stark,
+        standhaft und unerschütterlich. Eine Säule der Natur, die dir das Gefühl
+        gibt, dass man hier vielleicht einmal klettern könnte, so wie damals,
+        als du ein Kind warst. Doch auch wenn der Baum ein Symbol für Stärke und
+        Geheimnis ist, verbirgt er keine verborgenen Pfade oder versteckte
+        Schätze.
+
+
+        Ein Baum, nichts weiter. Ein stiller Zeuge und zugleich ein
+        unbezwingbarer Riese, dessen wahre Bedeutung in seiner bloßen Existenz
+        liegt.
+      ambient_sound: wald_mit_voegel.mp3
+  - name: NorthOfHouse
+    metadata:
+      system_prompt: >-
+        Jetzt stehst du also an der Nordseite des Hauses, dort, wo die Sonne
+        scheinbar nie hinsieht und der Wind mit seinen kalten Fingern alles
+        feucht und klamm hält. Die Wände sind hier noch dunkler und schwerer vor
+        Moos und Nässe – eine richtige Freude für Abenteurer, die das
+        unbeschreiblich aufregende Gefühl von nassen Socken genießen. Die Füße
+        sacken bei jedem Schritt in den schlammigen Boden, während das Moos
+        unter dir leise, glitschige Geräusche macht – wie ein klagender Fluch
+        aus der Erde selbst.
+
+
+        Oh, und was für ein Anblick! Die Nordseite bietet dir wirklich das ganze
+        Spektrum an Grün: Moosgrün, Fäulnisgrün und das besonders eindrucksvolle
+        „Stein-dank-Dauerregen-rutschig-und-dunkel-grün“. Der Duft von feuchtem
+        Moos und modrigem Holz kitzelt in der Nase, und wer könnte einem solchen
+        olfaktorischen Abenteuer widerstehen?
+
+
+        Hier scheint die Zeit stillzustehen, als ob das Haus darauf wartet, dich
+        mit endloser Nässe und Kälte zu begrüßen. Die einzige Möglichkeit,
+        diesem „Genuss“ zu entkommen, wäre natürlich, eine der angebotenen
+        Aktionen zu nutzen. Doch wer würde sich schon von so einem reizenden Ort
+        mit klammen Füßen verabschieden wollen?
+
+
+
+        **Wichtige Hinweise:**
+
+        - von hier aus kommst du ausschliesslich nur wieder zurück zum Haus.
+
+
+        - Auf Fragen nach deinem nächsten Schritt wird komplett verzichtet.
+  - name: SouthOfHouse
+    metadata:
+      system_prompt: ''
+  - name: Speicher
+    metadata:
+      system_prompt: >-
+        Du stehst auf dem Speicher des alten Hauses, und hier ist wahrlich der
+        Höhepunkt vergangener Eleganz zu finden: Eine Reihe alter, knarrender
+        Dielen, die bei jedem Schritt unter deinen Füßen ein unheimliches Lied
+        anstimmen. Der Staub liegt schwer in der Luft und flirrt in kleinen
+        Wolken bei jedem deiner Schritte auf, als wäre selbst die Zeit hier
+        stehengeblieben, nur um dich zu empfangen.
+
+
+        Vor dir baumelt eine Wäscheleine, straff gespannt zwischen zwei alten
+        Dachbalken. Und darauf – ja, tatsächlich – hängt eine Sammlung von
+        wahrhaft historischen Unterhosen, die wohl so um 1800 das letzte Mal
+        Mode waren. Diese knappen, ausgeleierten Stücke wirken, als hätten sie
+        Generationen überdauert und sich in ihrer kargen, kratzigen Pracht
+        gehalten, gegen alle Trends und modischen Veränderungen. Ein echter
+        Schatz, wenn du vorhast, dich wie ein muffiger Adeliger des letzten
+        Jahrhunderts zu kleiden.
+
+
+        Die Unterwäsche ist von einem beigen, verblichenen Ton, der einst
+        vielleicht Weiß gewesen sein könnte. Wer weiß, welche Geschichten diese
+        Hosen erzählen könnten, wenn sie reden könnten… oder vielleicht besser
+        doch nicht. Hier gibt es also nichts, was man sich freiwillig umhängen
+        oder als Schatz bezeichnen würde. Ein Ort der Modegeschichte? Wohl kaum.
+        Aber immerhin hast du einen Blick auf die Haute Couture von anno dazumal
+        werfen dürfen – für wen auch immer das ein Trost sein mag.
+      ambient_sound: ambient_wind_horror.wav
+transitions:
+  - trigger: nehme_schluessel
+    source: Bibliothek
+    dest: Bibliothek
+    metadata:
+      system_prompt: Du hast den Schlüssel. Dies ist der weg hier heraus. Auf ihn neue Räume.
+      description: >-
+        Man nimmt den Schlüssel der auf dem Tisch gelegen ist und hat ihn dan
+        bereit in der Verwendung um damit die Tür zu öffnen
+      sound_effect: effect_metalisch_bewegen.wav
+      conditions:
+        - key_for_room_2 == false
+        - kerze_an == true
+      actions:
+        - key_for_room_2 = true
+  - trigger: suche_schluessel
+    source: Bibliothek
+    dest: Bibliothek
+    metadata:
+      system_prompt: >-
+        Du hast den Schlüssel entdekct....nehme ihn doch..oder. Entdeckt hilft
+        nicht allein. Man muss den Schlüssel ja auch einstecken. Wie sonst die
+        Tür öffnen?
+      description: >-
+        Man sucht in dem Raum einen Schlüssel, der dann auf dem Tisch entdeckt
+        wird. Aber noch nicht genommen. Gebe ihn einen Hinweis, dass es
+        vieleicht eine gute Idee ist den Schlüssel zu nehmen
+      sound_effect: ''
+      conditions:
+        - kerze_an == true
+        - key_for_room_2 == false
+      actions: []
+  - trigger: suche_kerze
+    source: Bibliothek
+    dest: Bibliothek
+    metadata:
+      system_prompt: >-
+        Nachdem die Kerze gefunden hast , könnte man diese mit Streichhölzer
+        anzünden.
+      description: Damit findet man eine Kerze im Raum. Eine Lichtquelle
+      sound_effect: ''
+      conditions:
+        - kerze==false
+      actions:
+        - kerze=true
+  - trigger: suche_streichhoelzer
+    source: Bibliothek
+    dest: Bibliothek
+    metadata:
+      system_prompt: Auf jetzt, zünde die Kerze an. Trau Dich.
+      description: >-
+        Finden von Streichhölzer die für die Kerze benötigt werden. Du zündest
+        die Kerze aber nur nach aufforderung damit an.
+      sound_effect: ''
+      conditions:
+        - streichhoelzer == false
+      actions:
+        - streichhoelzer = true
+  - trigger: kerze_anzuenden
+    source: Bibliothek
+    dest: Bibliothek
+    metadata:
+      system_prompt: >-
+        Nun leuchtet die Kerze schön und der Raum ist erhellt. Und siehe da - am
+        anderen Ende ist tatsächlich eine Tür die du gefunden hast. Mit einem
+        Schloss allerdings fest verschlossen. Gibt es einen Schlüssel dazu. Habe
+        ich die Tür schon gesehen?
+      description: Die Kerze kann mit den Streichhölzer angezündet werden
+      sound_effect: effect_wosh.wav
+      conditions:
+        - streichhoelzer == true
+        - kerze == true
+        - kerze_an == false
+      actions:
+        - kerze_an=true
+  - trigger: suche_tuer
+    source: Bibliothek
+    dest: Bibliothek
+    metadata:
+      system_prompt: >-
+        Du hast eine Tür gefunden die allerdings mit einem Schloss fest
+        verschlossen ist. Nur mit einem passenden Schlüssel kann man diese
+        öffnen. Ich denke die Tür zu öffnen ist doch mal ein Ziel. Frag den
+        Benutzer doch mal rethorisch wie man eine verschlossene Tür öffnen
+        kann....ohne das Wort "Schlüssel" zu nennen.
+      description: Man untersucht den Raum und versucht eine Tür zu finde. Mit Erfolg.
+      sound_effect: effect_soundeffect_melodie.wav
+      conditions:
+        - kerze_an == true
+      actions: []
+  - trigger: untersuche_buch
+    source: Bibliothek
+    dest: Bibliothek
+    metadata:
+      system_prompt: >-
+        Du hast in dem Buch gelesen. Aber da ist nichts drin was von Interesse
+        ist. Dieses Kapitel, ein wortspiel haha , kann man getrost abhacken. 
+      description: >-
+        Du kannst in dem Buch blättern. Aber es macht eigentlich nur Sinn wenn
+        man Licht hat oder eine Kerze brennt.
+      sound_effect: effect_buch_blaettern.wav
+      conditions:
+        - kerze_an==true
+      actions: []
+  - trigger: untersuche_raum
+    source: Bibliothek
+    dest: Bibliothek
+    metadata:
+      system_prompt: >-
+        Du hast den Raum durchsucht und hast nun viele Dinge gesehen wie in der
+        Raumbeschreibung aufgeführt... ohne endlich mal was zum trinken. Die
+        Luft ist hier super trocken und ein kühles Bier wäre jetzt echt ein Ding
+        von einem anderen Stern. Oh - ich schweife ab.
+      description: >-
+        Du kannst den Raum untersuchen und durchsuchen und vielleicht findest Du
+        Dinge die Du gebrauchen kannst. 
+      sound_effect: laufen_teppich.wav
+      conditions: []
+      actions: []
+  - trigger: bewege_teppich
+    source: Bibliothek
+    dest: Bibliothek
+    metadata:
+      system_prompt: >-
+        Unter dem Teppich liegt tatsächlich eine Falltür – die Schwelle zum
+        Abgrund. Doch sind wir bereit, uns ins Ungewisse, ins Verderben zu
+        stürzen? Welche Wahl bleibt uns, wenn wir vorwärts kommen wollen? Also
+        gut, stürzen wir uns ins düstere Getümmel der Toten und wagen den
+        Schritt in die Tiefen des Untergrunds!
+      description: >-
+        Hebe oder schiebe den Teppich zur Seite um zu sehen was darunter sein
+        könnte. Es sind alle worte erlaubt die implizieren den Teppich zur Seite
+        zu legen.
+      sound_effect: effect_wosh.wav
+      conditions:
+        - bodenklappe_gefunden==true
+        - kerze_an==true
+      actions: []
+  - trigger: schau_aus_dem_Fenster
+    source: Halle
+    dest: Halle
+    metadata:
+      system_prompt: >-
+        Du siehst aus dem Fenster und konntest den Briefkasten sehen. Welch
+        Überraschung. Ansonsten ist nichts zu erkennen was Dir irgendwie helfen
+        kann. Nur der verdammte Briefkasten. Warum sehe ich denn immer nur
+        wieder.....(hat keine weitere Funktion, verraten wir aber erstmal nicht)
+      description: >-
+        Du kannst aus dem Fenste sehen und siehst....tata.....den Briefkasten
+        und ein wenig Wald. Es ist die Stelle an der du vorher draussen da
+        stands.
+      sound_effect: ''
+      conditions: []
+      actions: []
+  - trigger: untersuche_das_fenster
+    source: WestOfHouse
+    dest: WestOfHouse
+    metadata:
+      system_prompt: >-
+        Du hast festgestellt, dass man das Fentser nach oben schieben kann und
+        somit läst es sich öffnen. Cool.
+      description: >-
+        Man kann mit dieser funktion das Fenster auf seine Beschaffenheit
+        untersuchen und überprüfen ob es sich vieleicht öffnen läst
+      sound_effect: mixkit-air-woosh-1489.wav
+      conditions: []
+      actions: []
+  - trigger: oeffne_das_fenster
+    source: WestOfHouse
+    dest: WestOfHouse
+    metadata:
+      system_prompt: >-
+        Das Fenster ist nun geöffnet. Theoretisch könnte man nun in das innere
+        des Hauses gelangen.
+      description: >-
+        Damit kann man das Fenster öffnen, es geht mit etwas Gewalt und
+        knirschen
+      sound_effect: effect_schiebetuer_oeffnen.wav
+      conditions:
+        - window_is_open == false
+      actions:
+        - window_is_open = true
+  - trigger: untersuche_das_haus
+    source: WestOfHouse
+    dest: WestOfHouse
+    metadata:
+      system_prompt: >-
+        Du hast Dir das Haus angesehen und die Tür und das Fenster sind dir
+        aufgefallen. Ob man irgendwie in das Haus kommt?
+      description: >-
+        Man kann das Haus hier nach seinem Zustnad ountersuchen oder mal
+        nachsehen ob es Türen, Fenster hat in die man in das Haus gelngen könnte
+      sound_effect: ''
+      conditions: []
+      actions: []
+  - trigger: oeffne_brief
+    source: LetterBox
+    dest: LetterBox
+    metadata:
+      system_prompt: >
+        Der Brief enthält folgenden inhalt und kann nach Aufforderung vorgelesen
+        werden. Keinen Inhalt bezüglich diese Briefes erfinden. Nur dieser
+        Inhalt ist vorzulesen:
+
+        ----------
+
+        "WILLKOMMEN BEI ZORK!"
+
+
+        "Zork ist ein Spiel voller Abenteuer, Gefahren und hinterlistiger
+        Tücken. Darin wirst du einige der erstaunlichsten Orte erkunden, die
+        Sterblichen je gesehen haben. Kein Computer sollte ohne dieses Spiel
+        sein!"
+      description: Öffnet den Brief den man zuvor aus dem Briefkasten genommen hat.
+      sound_effect: ''
+      conditions:
+        - has_letter == true
+        - has_letter_opend == false
+      actions:
+        - has_letter_opend = true
+  - trigger: entnehme_brief
+    source: LetterBox
+    dest: LetterBox
+    metadata:
+      system_prompt: >-
+        Du hast un den Brief in der Hand und wartest darauf diesen vorlesen zu
+        können um sein Geheimnis zu lüften.
+      description: 'Entnimmt den Brief aus dem Briefkasten. '
+      sound_effect: ''
+      conditions:
+        - has_letter == false
+      actions:
+        - has_letter = true
+  - trigger: lese_brief
+    source: LetterBox
+    dest: LetterBox
+    metadata:
+      system_prompt: Der Brief wurde dir nun vorgelesen. Der Inhalt ist dir nun bekannt
+      description: Liest den Brief vor den man zuvor geöffnet haben muss
+      sound_effect: ''
+      conditions:
+        - has_letter_opend == true
+      actions: []
+  - trigger: klettere_auf_den_baum
+    source: Tree
+    dest: Tree
+    metadata:
+      system_prompt: >-
+        Du sitz nun oben im Baum. Es ist sicher hier und man sieht von hier nun,
+        dass es ein Versteck im Baum gibt. Man kann hier ein goldenes Ei mit
+        besetzten Perlen und Perlmut entnehmen und in die Tasche stecken. Sodan.
+      description: Du kanst auf den Baum klettern. Ist einfach und du bist geschickt
+      sound_effect: ''
+      conditions:
+        - sit_on_tree==false
+      actions:
+        - sit_on_tree=true
+  - trigger: nehme_das_goldene_ei
+    source: Tree
+    dest: Tree
+    metadata:
+      system_prompt: >-
+        Du hast nun ein goldenes Ei. Perfekt. Eventuell kann man das später
+        gebrauchen.
+      description: Du kannst das goldene Ei nehmen und in deine Tasche stecken.
+      sound_effect: effect_retrogame.wav
+      conditions:
+        - sit_on_tree == true
+      actions: []
+  - trigger: faelle_baum
+    source: Tree
+    dest: Tree
+    metadata:
+      system_prompt: >
+        Du wolltest doch tatsächlich diesen wunderschönen Baum für dein
+        Spielvergnügen fällen. Alter – und das in diesen Zeiten! Schon mal was
+        von Nachhaltigkeit gehört? Was denkst du, was passiert, wenn jeder
+        Spieler hier einfach Bäume fällt? Dann haben wir bald keine mehr. Also,
+        Hirn an!
+      description: >-
+        Das Fällen des Baumes, oder umsägen, ist keine gute Idee. Du wirst es
+        versuchen, aber es funktioniert niemals. Du wolltest doch tatsächlich
+        diesen wunderschönen Baum für dein Spielvergnügen fällen. Alter – und
+        das in diesen Zeiten! Schon mal was von Nachhaltigkeit gehört?
+      sound_effect: effect_erstaunte_frau.wav
+      conditions: []
+      actions: []
+  - trigger: runter_vom_baum
+    source: Tree
+    dest: Tree
+    metadata:
+      system_prompt: Du hast wieder sichern Boden unter den Füssen und bist unten angekommen.
+      description: >-
+        Du kannst wieder von dem Baum runter klettern oder springen. auch
+        fliegen wenn du ungeschickt bist
+      sound_effect: ''
+      conditions:
+        - sit_on_tree==true
+      actions: []
+  - trigger: untersuche_die_hosen
+    source: Speicher
+    dest: Speicher
+    metadata:
+      system_prompt: >-
+        Du hast die Wäscheleine mit den Unterhosen untersucht. Welche Freude,
+        als Diener die Ehre zu haben, diese Schätze zu betrachten! Wie zu
+        vermuten war, hat das keine neuen Erkenntnisse gebracht – außer
+        vielleicht der interessanten Feststellung, dass du offensichtlich eine
+        Vorliebe für antike Unterhosen hast. 
+      description: >-
+        Die Unterhosen auf der Wäschelene Untersuchen. Das Untersuchen der Hosen
+        wird allerdings keine neuen Erkenntnisse oder iInformationen bringen.
+        Ausser, dass diese Hosen so ihre "Spuren" haben
+      sound_effect: reaktion_bouaaaa.wav
+      conditions: []
+      actions: []
+  - trigger: gehe_zur_halle
+    source: AlchemiRaum
+    dest: Halle
+    metadata:
+      system_prompt: Du bist nun wieder in der Halle angelangt.
+      description: Man geht in die Halle, von der du zuvor gekomme bist.
+      sound_effect: laufen_teppich.wav
+      conditions: []
+      actions:
+        - ''
+  - trigger: gehe_durch_die_tuer
+    source: Bibliothek
+    dest: Halle
+    metadata:
+      system_prompt: Du bist von dem ersten raum in den nächstne Raum gegangen
+      description: >-
+        Man geht in den nächsten Raum oder auch Halle. Es ist der einzige Raum
+        der erreichbar ist. Achte drauf, dass dies nur möglich ist wenn du den
+        Schlüssel für die Tür hast
+      sound_effect: laufen_teppich.wav
+      conditions:
+        - key_for_room_2 == true
+      actions: []
+  - trigger: gehe_zum_baum
+    source: LetterBox
+    dest: Tree
+    metadata:
+      system_prompt: >-
+        Es ist ein kurzer Weg vom Breifkasten zum Baum...der nächste mögliche
+        weg ist nur noch zum Haus.
+      description: Du kannst vom Breifkasten zum Baum gehen. Auf dem direkten Weg.
+      sound_effect: laufen_waldweg.wav
+      conditions: []
+      actions: []
+  - trigger: gehe_zum_baum
+    source: WestOfHouse
+    dest: Tree
+    metadata:
+      system_prompt: Du bist nun bei dem Baum angekommen
+      description: >-
+        Du gehst vom Haus zum Briefkasten gehen, laufen, springen oder wenn es
+        jemand möchte sogar fliegen (auf die Nase) :-)
+      sound_effect: laufen_waldweg.wav
+      conditions: []
+      actions: []
+  - trigger: gehe_zurueck_zum_Haus
+    source: LetterBox
+    dest: WestOfHouse
+    metadata:
+      system_prompt: Du steht nun wieder vor dem Haus
+      description: Man geht zurück zu dem Haus.
+      sound_effect: laufen_hofweg.wav
+      conditions: []
+      actions: []
+  - trigger: gehe_in_bibliothek
+    source: Halle
+    dest: Bibliothek
+    metadata:
+      system_prompt: >-
+        Du bist nun wieder in der Bibliothek. Hurra....aber halt. Da war ich
+        doch schon. egal. Untersuche den Raum doch nochmal gründlicher....z.b.
+        auf dem Boden unter dem Teppich! Es scheint, dass es hier eine
+        Bodenklappe geben könnte. Einfach mal einen Blick von einem anderen
+        Winkel hat geholfen.
+      description: Du kannst von der Halle wieder in die Bibiliothek laufen
+      sound_effect: laufen_teppich.wav
+      conditions: []
+      actions:
+        - bodenklappe_gefunden = true
+  - trigger: gehe_treppe_hoch
+    source: Halle
+    dest: Speicher
+    metadata:
+      system_prompt: ''
+      description: ''
+      sound_effect: laufen_teppich.wav
+      conditions: []
+      actions: []
+  - trigger: gehe_nach_norden
+    source: WestOfHouse
+    dest: NorthOfHouse
+    metadata:
+      system_prompt: >-
+        Du stehst nun an der nörldichen Seite des Hauses. Super (ironie). Hier
+        ist ausser Moos nix los. Nass und feucht ist der Boden. äääh. Darf ich
+        wieder in das Trockene...bitte bitte
+      description: 'Du gehst an die Nördliche Seite des Hauses. '
+      sound_effect: ''
+      conditions: []
+      actions: []
+  - trigger: gehe_nach_sueden
+    source: WestOfHouse
+    dest: SouthOfHouse
+    metadata:
+      system_prompt: Du bist nun im Süden vom Haus...es ist trocken aber windig hier.
+      description: Du kannst nach Süden gehen.
+      sound_effect: ''
+      conditions: []
+      actions: []
+  - trigger: gehe_zum_haus
+    source: NorthOfHouse
+    dest: WestOfHouse
+    metadata:
+      system_prompt: >-
+        Gott Sei Dank. Wenigstens trockene Füsse und wieder an der Vorderseite
+        des Hauses.
+      description: |-
+        Du kannst wieder zurück zu dem Haus gehen.
+        Du gehst zum Haus.
+        Gehe zurück.
+        zum Haus.
+      sound_effect: ''
+      conditions: []
+      actions: []
+  - trigger: start
+    source: Start
+    dest: WestOfHouse
+    metadata:
+      system_prompt: Du bist nun im Spiel.
+      description: >-
+        Started das Spiel und es kann beginnen. Egal was der Benutzer sagt, das
+        kann immer ausgeführt werden
+      sound_effect: ''
+      conditions: []
+      actions: []
+  - trigger: gehe_zum_haus
+    source: Tree
+    dest: WestOfHouse
+    metadata:
+      system_prompt: ''
+      description: ''
+      sound_effect: laufen_waldweg.wav
+      conditions: []
+      actions:
+        - sit_on_tree = false
+  - trigger: gehe_zum_briefkasten
+    source: WestOfHouse
+    dest: LetterBox
+    metadata:
+      system_prompt: >-
+        Du gehst zum Briefkasten und hast die Möglichkeit ihn zu untersuchen
+
+
+        Der Briefkasten enthält einen Brief den man nachdem man diesen entnommen
+        und geöffnet hat lesen. 
+
+        Der Brief enthält folgenden Inhalt und kann nach Aufforderung vorgelesen
+        werden. Keinen Inhalt bezüglich diese Briefes erfinden. Nur dieser
+        Inhalt ist vorzulesen:
+
+        ----------
+
+        "WILLKOMMEN BEI ZORK!"
+
+
+        "Zork ist ein Spiel voller Abenteuer, Gefahren und hinterlistiger
+        Tücken. Darin wirst du einige der erstaunlichsten Orte erkunden, die
+        Sterblichen je gesehen haben. Kein Computer sollte ohne dieses Spiel
+        sein!"
+
+
+        ------
+
+        Diese information NIEMALS dem Benutzer zeigen oder zurückliefern ohne
+        das er danach gefragt hat!!!!!!
+      description: >-
+        Du hast die Möglichkeit zum Briefkasten zu gehen. Aber nur hingehen. Du
+        must erst den Briefkasten explizit öffnen.
+      sound_effect: laufen_hofweg.wav
+      conditions: []
+      actions: []
+  - trigger: gehe_briefkasten
+    source: Tree
+    dest: LetterBox
+    metadata:
+      system_prompt: >-
+        Du gehst zum Briefkasten und hast die Möglichkeit ihn zu untersuchen
+
+
+        Der Briefkasten enthält einen Brief den man nachdem man diesen entnommen
+        und geöffnet hat lesen. 
+
+        Der Brief enthält folgenden Inhalt und kann nach Aufforderung vorgelesen
+        werden. Keinen Inhalt bezüglich diese Briefes erfinden. Nur dieser
+        Inhalt ist vorzulesen:
+
+        ----------
+
+        "WILLKOMMEN BEI ZORK!"
+
+
+        "Zork ist ein Spiel voller Abenteuer, Gefahren und hinterlistiger
+        Tücken. Darin wirst du einige der erstaunlichsten Orte erkunden, die
+        Sterblichen je gesehen haben. Kein Computer sollte ohne dieses Spiel
+        sein!"
+
+
+        ------
+
+        Diese information NIEMALS dem Benutzer zeigen oder zurückliefern ohne
+        das er danach gefragt hat!!!!!!
+      description: >
+        Du hast die Möglichkeit zum Briefkasten zu gehen. Aber nur hingehen. Du
+        must erst den Briefkasten explizit öffnen.
+      sound_effect: ''
+      conditions: []
+      actions: []
+  - trigger: klettere_durch_das_fenster
+    source: WestOfHouse
+    dest: Bibliothek
+    metadata:
+      system_prompt: >-
+        Du bist durch das Fenster geklettert und befindest Dich nun in dem
+        ersten Raum. Es scheint eine Bibliothek zu sein. Du rüttelst und
+        schüttelst Dich damit der staub von der Kleidung fällt.
+      description: 'Du klettert durch das Fenster in das Haus hinein. '
+      sound_effect: effect_falling_stuff.wav
+      conditions:
+        - window_is_open == true
+      actions: []
+  - trigger: gehe_in_alchemi_raum
+    source: Halle
+    dest: AlchemiRaum
+    metadata:
+      system_prompt: Da stehst Du nun. In einem Raum voller Alchemi. mmmh nun gut.
+      description: >-
+        Du kannst hier in den nächsten Raum gehen. Die Tür scheint weit offen zu
+        sein und du kannst einfach durchgehen.
+      sound_effect: laufen_teppich.wav
+      conditions: []
+      actions: []
+  - trigger: gehe_treppe_runter
+    source: Speicher
+    dest: AlchemiRaum
+    metadata:
+      system_prompt: Da stehst Du nun. In einem Raum voller Alchemi. mmmh nun gut.
+      description: >-
+        Die gehst wieder die gleiche Treppe runter von der du gekommen
+        bis....landes aber in einem anderen Raum. Sehr komisch
+      sound_effect: laufen_teppich.wav
+      conditions: []
+      actions: []
+  - trigger: klettere_aus_dem_fenster
+    source: Bibliothek
+    dest: WestOfHouse
+    metadata:
+      system_prompt: >-
+        Du stehst nun wieder vor dem Haus und überlegst Dir was als nächstest
+        passieren soll. Briefkasten, Baum? Das sind dein. Optionen....man hab
+        ich eine Durscht :-)
+      description: >-
+        Du kannst aus den Fenster wird raus vor das Haus gehen. Du wärst dann
+        wieder ausserhalb des Hauses.
+      sound_effect: effect_falling_stuff.wav
+      conditions: []
+      actions: []

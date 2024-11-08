@@ -1,0 +1,8 @@
+**/secrets
+.history
+**/venv
+**/piper_voices
+**/.env
+**/.vscode
+**/node_modules
+__pycache__
