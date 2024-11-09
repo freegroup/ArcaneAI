@@ -26,6 +26,7 @@ from websocketmanager import WebSocketManager
 from audio.websocket import WebSocketSink
 
 BASE_URI = "/game"
+PORT = 9000
 #SAME_SITE_VALUE = "None" # cross origin and https
 SAME_SITE_VALUE = "Lax" # local http
 
@@ -81,7 +82,7 @@ def create_proxy_aware_redirect(request: Request, target_route: str) -> Redirect
     # Get forwarded headers or defaults
     forwarded_proto = request.headers.get("x-forwarded-proto", "http")
     forwarded_host = request.headers.get("x-forwarded-host", "localhost")
-    forwarded_port = request.headers.get("x-forwarded-port", "")
+    forwarded_port = request.headers.get("x-forwarded-port", f"{PORT}")
     print(f"forwarded_proto {forwarded_proto}")
     print(f"forwarded_host {forwarded_host}")
     print(f"forwarded_port {forwarded_port}")
@@ -263,6 +264,6 @@ async def websocket_endpoint(websocket: WebSocket, token: str):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=9000, forwarded_allow_ips="*")
+    uvicorn.run(app, host="127.0.0.1", port=PORT, forwarded_allow_ips="*")
 
 
