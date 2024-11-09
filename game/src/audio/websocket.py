@@ -1,5 +1,3 @@
-import pyaudio
-
 from audio.base_sink import BaseAudioSink
 from websocketmanager import WebSocketManager
 
