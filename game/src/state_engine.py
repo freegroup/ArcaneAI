@@ -1,12 +1,10 @@
 import yaml
 import os
 import unicodedata
-import asyncio
 
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-import matplotlib.pyplot as plt
 
 from transitions.extensions import HierarchicalGraphMachine
 from scripting.lua import LuaSandbox
@@ -269,19 +267,3 @@ class FileChangeHandler(FileSystemEventHandler):
                 self.last_modified = new_modified_time
                 #print("YAML file modified, reloading FSM configuration.")
                 self.persona._load()  # Reload FSM configuration
-
-
-# Example of how you would use the class
-if __name__ == "__main__":
-    fsm = StateEngine("default.yaml", None)
-    fsm.trigger("become_annoyed")
-
-    # Render the graph of the FSM
-    graph = fsm.machine.get_graph()
-    graph.draw('fsm_diagram.png', prog='dot')
-
-    # Show the generated image
-    img = plt.imread('fsm_diagram.png')
-    plt.imshow(img)
-    plt.axis('off')  # Hide axes
-    plt.show()
