@@ -84,10 +84,12 @@ def create_proxy_aware_redirect(request: Request, target_route: str) -> Redirect
     if forwarded_port and forwarded_port not in ["80", "443"]:
         base_url += f":{forwarded_port}"
 
-    # Manually create the target URL
-    target_url = urljoin(base_url, request.url_for(target_route))
+    # Manually create the target URL, ensuring both parts are strings
+    target_path = str(request.url_for(target_route))  # Ensure target_path is a string
+    target_url = urljoin(base_url, target_path)
 
     return RedirectResponse(url=target_url)
+
 
 # Middleware to retrieve or create a session
 def get_session(request: Request, response: Response) -> Dict:
