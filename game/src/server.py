@@ -115,6 +115,10 @@ async def login(request: Request, username: str = Form(...), password: str = For
 async def ui(request: Request, response: Response):
     # Check if user is authenticated by looking for the "authenticated" cookie
     if request.cookies.get("authenticated") != "yes":
+        print("Request Headers in /ui route:")
+        for header, value in request.headers.items():
+            print(f"{header}: {value}")
+
         return RedirectResponse(url=request.url_for("login_page")) 
 
     # Proceed to load the UI if authenticated
