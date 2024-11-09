@@ -1,7 +1,7 @@
-from tts.openai import OpenAiTTS
-from tts.coqui import CoquiTTS
-from tts.pytts import PyTTS
-from tts.console import Console
+#from tts.openai import OpenAiTTS
+#from tts.coqui import CoquiTTS
+#from tts.pytts import PyTTS
+#from tts.console import Console
 #from tts.piper import PiperTTS
 from tts.google import GoogleTTS
 
