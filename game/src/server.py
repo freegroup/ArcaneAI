@@ -74,11 +74,17 @@ def newChatSession():
         )
 
 def create_proxy_aware_redirect(request: Request, target_route: str) -> RedirectResponse:
+    print("Request Headers in /ui route:")
+    for header, value in request.headers.items():
+        print(f"{header}: {value}")
+
     # Get forwarded headers or defaults
     forwarded_proto = request.headers.get("x-forwarded-proto", "http")
     forwarded_host = request.headers.get("x-forwarded-host", "localhost")
     forwarded_port = request.headers.get("x-forwarded-port", "")
-
+    print(f"forwarded_proto {forwarded_proto}")
+    print(f"forwarded_host {forwarded_host}")
+    print(f"forwarded_port {forwarded_port}")
     # Construct the base URL manually
     base_url = f"{forwarded_proto}://{forwarded_host}"
     if forwarded_port and forwarded_port not in ["80", "443"]:
@@ -134,10 +140,6 @@ async def login(request: Request, username: str = Form(...), password: str = For
 async def ui(request: Request, response: Response):
     # Check if user is authenticated by looking for the "authenticated" cookie
     if request.cookies.get("authenticated") != "yes":
-        print("Request Headers in /ui route:")
-        for header, value in request.headers.items():
-            print(f"{header}: {value}")
-
         return RedirectResponse(url=create_proxy_aware_redirect(request, "login_page")) 
 
     # Proceed to load the UI if authenticated
