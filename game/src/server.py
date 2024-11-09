@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Requ
 from fastapi.responses import JSONResponse, HTMLResponse, FileResponse, RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
+from urllib.parse import urljoin
 from pydantic import BaseModel
 from typing import Dict
 from uuid import uuid4
@@ -72,6 +73,22 @@ def newChatSession():
             jukebox= WebJukebox()
         )
 
+def create_proxy_aware_redirect(request: Request, target_route: str) -> RedirectResponse:
+    # Get forwarded headers or defaults
+    forwarded_proto = request.headers.get("x-forwarded-proto", "http")
+    forwarded_host = request.headers.get("x-forwarded-host", "localhost")
+    forwarded_port = request.headers.get("x-forwarded-port", "")
+
+    # Construct the base URL manually
+    base_url = f"{forwarded_proto}://{forwarded_host}"
+    if forwarded_port and forwarded_port not in ["80", "443"]:
+        base_url += f":{forwarded_port}"
+
+    # Manually create the target URL
+    target_url = urljoin(base_url, request.url_for(target_route))
+
+    return RedirectResponse(url=target_url)
+
 # Middleware to retrieve or create a session
 def get_session(request: Request, response: Response) -> Dict:
     session_id = request.cookies.get("session_id")
@@ -105,7 +122,7 @@ async def login(request: Request, username: str = Form(...), password: str = For
         return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid username or password"})
 
     # Set the session cookie and redirect to the main UI
-    response = RedirectResponse(url=request.url_for("ui"), status_code=status.HTTP_302_FOUND)
+    response = RedirectResponse(url=create_proxy_aware_redirect(request, "ui"), status_code=status.HTTP_302_FOUND)
     response.set_cookie("authenticated", "yes", httponly=True, samesite=SAME_SITE_VALUE)
     return response
 
@@ -119,7 +136,7 @@ async def ui(request: Request, response: Response):
         for header, value in request.headers.items():
             print(f"{header}: {value}")
 
-        return RedirectResponse(url=request.url_for("login_page")) 
+        return RedirectResponse(url=create_proxy_aware_redirect(request, "login_page")) 
 
     # Proceed to load the UI if authenticated
     session, session_id = get_session(request, response)
