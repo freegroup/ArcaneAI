@@ -92,7 +92,7 @@ def create_proxy_aware_redirect(request: Request, target_route: str) -> Redirect
 
     # Manually create the target URL, ensuring both parts are strings
     target_path = request.app.url_path_for(target_route)  # Provides just the path
-    target_url = f"{base_url}{target_path}"  # Combine the base URL and target path
+    target_url = f"{base_url}{BASE_URI}{target_path}"  # Combine the base URL and target path
     print(f"Target URL for Redirect: {target_url}")
 
     return target_url
