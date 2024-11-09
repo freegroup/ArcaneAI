@@ -88,7 +88,7 @@ def create_proxy_aware_redirect(request: Request, target_route: str) -> Redirect
     target_path = str(request.url_for(target_route))  # Ensure target_path is a string
     target_url = urljoin(base_url, target_path)
 
-    return RedirectResponse(url=target_url)
+    return target_url
 
 
 # Middleware to retrieve or create a session
