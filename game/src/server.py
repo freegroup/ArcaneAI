@@ -194,7 +194,7 @@ async def chat(request: Request, data: ChatMessage, response: Response):
         session, session_id = get_session(request, response)
         session.ws_token = old_ws_token
         session.state_engine.trigger(session, "start")
-        text = "Erkläre mir in kurzen Worten worum es hier geht und wer du bist"
+        text = "Erkläre dem Spieler in kurzen Worten worum es hier geht und wer du bist, sei bitte auch so ehrlich und erwähne, dass du manchmal voreilig in deinen Aussagen bist. Du bist ja nur der Gehilfe und nicht das Gehirn. Einfach mal nachhacken hilft falls Du eine Behauptung aufstellst."
 
     response_text = ""
     if len(text) > 0:
