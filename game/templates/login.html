@@ -4,64 +4,102 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            font-family: 'Press Start 2P', cursive;
+            background-color: #24293b;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container img {
+            width: 100%;
+            height: auto;
         }
         .login-container {
-            background-color: #ffffff;
+            background-color: #333;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            text-align: center;
+            border: 4px solid #63908b;
+            border-radius: 0; /* No rounding for a blocky look */
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #loginForm {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            width: 100%;
         }
         h2 {
             margin-bottom: 20px;
-            color: #333;
+            color: #f1c40f;
+            font-size: 1.2rem;
+            text-shadow: 2px 2px 0 #000, 4px 4px 0 #000; /* Blocky shadow */
         }
         input[type="text"], input[type="password"] {
-            width: 100%;
             padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            border: 3px solid #63908b;
+            background-color: #444;
+            color: #fff;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.8rem;
+            width: 100%;
+            box-sizing: border-box;
+            outline: none;
+            text-shadow: 1px 1px 0 #000, 2px 2px 0 #000; /* Blocky shadow on input text */
         }
         button {
             width: 100%;
             padding: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
+            background-color: #e74c3c;
+            color: #fff;
+            border: 3px solid #c0392b;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.8rem;
             cursor: pointer;
+            box-sizing: border-box;
+            text-shadow: 2px 2px 0 #000, 4px 4px 0 #000; /* Blocky shadow */
         }
         button:hover {
-            background-color: #0056b3;
+            background-color: #c0392b;
         }
         .error {
             color: red;
-            font-size: 14px;
+            font-size: 0.8rem;
             margin-top: 10px;
+            text-shadow: 1px 1px 0 #000, 2px 2px 0 #000; /* Blocky shadow on error text */
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2>Login</h2>
-        <p>Base URI is: {{ BASE_URI }}</p>
-        <form id="loginForm">
-            <input type="text" id="username" name="username" placeholder="Username" required>
-            <input type="password" id="password" name="password" placeholder="Password" required>
-            <button type="submit">Login</button>
-        </form>
-        <p class="error" id="errorMessage" style="display: none;"></p>
+    <div class="container">
+        <img src="./assets/login.png" alt="Login Image"/>
+        <div class="login-container">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <input type="text" id="username" name="username" placeholder="Username" required>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+            <p class="error" id="errorMessage" style="display: none;"></p>
+        </div>
     </div>
 
     <script>

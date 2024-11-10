@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Requ
 from fastapi.responses import JSONResponse, HTMLResponse, FileResponse, RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 
 from pydantic import BaseModel
 from typing import Dict
@@ -128,6 +129,9 @@ def get_session(request: Request, response: Response) -> Dict:
     print(f"New session_id set: {session_id}")
     return session_store[session_id], session_id
 
+
+# Mount the static directory to serve CSS, JavaScript, and images
+app.mount("/assets", StaticFiles(directory="static"), name="static")
 
 # GET route for the login page
 @app.get("/login", response_class=HTMLResponse, name="login_page")
