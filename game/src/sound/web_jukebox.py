@@ -16,11 +16,11 @@ class WebJukebox:
         if not file_name or len(file_name)==0:
             return #silently
         message = json.dumps({ "function": "sound.play_sound", "loop": loop, "file_name": file_name}, indent=4)
-        WebSocketManager.send_message(session.ws_token, message)
+        WebSocketManager.send_message(session, message)
 
 
     def stop_all(self, session):
         """Stop all currently playing sounds."""
         message = json.dumps({ "function": "sound.stop_all"}, indent=4)
-        WebSocketManager.send_message(session.ws_token, message)
+        WebSocketManager.send_message(session, message)
 

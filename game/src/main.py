@@ -5,7 +5,7 @@ import json
 from dotenv import load_dotenv
 load_dotenv() 
 
-from motorcontroller.mock import MotorControlerMock
+from game.src.status.local import LocalStatus
 
 from state_engine import StateEngine
 from tts.factory import TTSEngineFactory
@@ -15,7 +15,7 @@ from session import Session
 from sound.local_jukebox import LocalJukebox
 from audio.pyaudio import PyAudioSink
 
-debug_ui = MotorControlerMock()
+debug_ui = LocalStatus()
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(os.path.dirname(BASE_DIR))
@@ -72,7 +72,6 @@ if __name__ == '__main__':
             if action:
                 done = session.state_engine.trigger(session, action)
                 if done:
-                    debug_ui.set(response["expressions"], session.state_engine.get_inventory() )
                     tts_text = response["text"]
                     session.llm.system(session.state_engine.get_action_system_prompt(action))
                 else:
@@ -85,12 +84,11 @@ if __name__ == '__main__':
 
                     """+session.state_engine.last_transition_error
                     response = session.llm.chat(session, text)
-                    debug_ui.set(response["expressions"], session.state_engine.get_inventory() )
                     tts_text = response["text"]
             else:
-                debug_ui.set(response["expressions"], session.state_engine.get_inventory() )
                 tts_text = response["text"]
-                
+
+            debug_ui.set(session, response["expressions"], session.state_engine.get_inventory() )
             session.tts.speak(session, tts_text)
 
 

@@ -4,10 +4,10 @@ from abc import abstractmethod, ABC
 class Base(ABC):
 
     @abstractmethod
-    def stop(self):
+    def stop(self, session):
         pass
 
     @abstractmethod
-    def set(self, expressions, inventory):
+    def set(self, session, expressions, inventory):
         """Sets the expression to use"""
         pass

@@ -38,17 +38,19 @@ class WebSocketManager:
             del WebSocketManager.message_queues[token]
             del WebSocketManager.binary_message_queues[token]
 
+
     @staticmethod
-    def send_message(token: str, message: str) -> None:
+    def send_message(session, message: str) -> None:
         """Adds a text message to the queue to be processed asynchronously."""
-        print("SEND SEND SEND SEND")
-        print(token, message)
+        token = session.ws_token
         if token in WebSocketManager.message_queues:
             WebSocketManager.message_queues[token].put(message)  # Thread-safe enqueue for text
 
+
     @staticmethod
-    def send_bytes(token: str, data: bytes) -> None:
+    def send_bytes(session, data: bytes) -> None:
         """Adds a binary message to the binary queue to be processed asynchronously."""
+        token = session.ws_token
         if token in WebSocketManager.binary_message_queues:
             #print("+", end = "")
             WebSocketManager.binary_message_queues[token].put(data)

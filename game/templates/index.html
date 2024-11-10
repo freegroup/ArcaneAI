@@ -38,8 +38,9 @@
 
 <div id="game-container">
     <div class="background-image"></div>
-  
+    <div id="game-status-container"><div>Deine Position:</div> <div id="game-status-value"></div></div>
     <div class="chat-container" id="chatContainer"></div>
+
     <div class="input-area" id="inputArea">
         <input type="text" id="question" placeholder="Type a message..." onkeypress="handleKeyPress(event)">
         <button id="micButton" onclick="toggleRecognition()">
@@ -77,6 +78,7 @@
     const startButton = document.getElementById("startButton");
     const questionInput = document.getElementById("question");
     const micButton = document.getElementById("micButton");
+    const gameStatus = document.getElementById("game-status-value");
 
     let typingIndicator = null;
 
@@ -174,6 +176,9 @@
                         }
                         else if(message.function === "speak.stop"){
                             stopSpeak();
+                        }
+                        else if(message.function === "state.inventory"){
+                            gameStatus.innerHTML = message.data.state
                         }
                     } catch (error) {
                         console.error("Error parsing text message:", error);

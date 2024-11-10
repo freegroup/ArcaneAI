@@ -16,7 +16,7 @@ import asyncio
 from dotenv import load_dotenv
 load_dotenv() 
 
-from motorcontroller.mock import MotorControlerMock
+from status.websocket import WebSocketStatus as Status
 from state_engine import StateEngine
 from tts.factory import TTSEngineFactory
 from llm.factory import LLMFactory
@@ -40,7 +40,7 @@ MAP_DIR  = os.path.join(PROJECT_DIR, 'maps')
 MAP_FILE =  os.getenv("MAP_FILE")
 
 
-debug_ui = MotorControlerMock()
+status = Status()
 app = FastAPI(title="Chat Application", version="1.0.0", root_path=BASE_URI)
 templates = Jinja2Templates(directory="templates")
 
@@ -110,18 +110,15 @@ def create_proxy_aware_redirect(request: Request, target_route: str) -> Redirect
 def get_session(request: Request, response: Response) -> Dict:
     session_id = request.cookies.get("session_id")
     print(f"Current session_id (get_session): {session_id}")
-    print(session_store)
-    print(session_id)
+
     if session_id and session_id in session_store:
         return session_store[session_id], session_id
-    
+
     if session_id is None:
         session_id = str(uuid4())
     
     session_store[session_id] = newChatSession()
-    print("SET COOKIE SESSION_ID")
     response.set_cookie("session_id", session_id, httponly=True, samesite=SAME_SITE_VALUE)
-    print(f"New session_id set: {session_id}")
     return session_store[session_id], session_id
 
 
@@ -136,7 +133,6 @@ async def login_page(request: Request):
 
 @app.post("/login_post", name="login")
 async def login(request: Request, data: LoginData, response: Response):
-    print("LOGIN IN THE REQUEST FLOW")
     # Manually validate username and password
     if not (secrets.compare_digest(data.username, VALID_USERNAME) and secrets.compare_digest(data.password, VALID_PASSWORD)):
         return JSONResponse({"error": "Invalid username or password"}, status_code=400)
@@ -199,8 +195,6 @@ async def chat(request: Request, data: ChatMessage, response: Response):
         if action:
             done = session.state_engine.trigger(session, action)
             if done:
-                debug_ui.set(response["expressions"], session.state_engine.get_inventory())
-                response_text = response["text"]
                 session.llm.system(session.state_engine.get_action_system_prompt(action))
             else:
                 # generate a negative answer to the last tried transition
@@ -211,20 +205,13 @@ async def chat(request: Request, data: ChatMessage, response: Response):
                 Hier ist der Fehler den wir vom Sytem erhalten haben:
                 """+session.state_engine.last_transition_error
                 response = session.llm.chat(session, text)
-                debug_ui.set(response["expressions"], session.state_engine.get_inventory() )
 
-                response_text= response["text"]
-        else:
-            debug_ui.set(response["expressions"], session.state_engine.get_inventory())
-            response_text = response["text"]
+        response_text = response["text"]
 
-    token = session.ws_token
-    if token:
-        WebSocketManager.send_message(token, json.dumps({"function":"chat_response", "text":response_text}))
-
-    WebSocketManager.send_message(token, json.dumps({"function":"speak.stop"}))
+    WebSocketManager.send_message(session, json.dumps({"function":"speak.stop"}))
+    WebSocketManager.send_message(session, json.dumps({"function":"chat_response", "text":response_text}))
     session.tts.speak(session, response_text)
-    debug_ui.set([], session.state_engine.get_inventory())
+    status.set(session, [], session.state_engine.get_inventory())
 
     return JSONResponse({"response": response_text})
 
