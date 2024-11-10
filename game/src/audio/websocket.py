@@ -9,7 +9,7 @@ class WebSocketSink(BaseAudioSink):
 
     def write(self, session, chunk):
         if not self.close:
-            WebSocketManager.send_bytes(session.ws_token, chunk)
+            WebSocketManager.send_bytes(session, chunk)
 
     def close(self, session):
         self.close = True

@@ -33,6 +33,16 @@ body, input, button, select, textarea {
     width:100%;
 }
 
+#game-status-container{
+    width: 80%;
+    max-width: 600px;
+    color: #c2c2c2;
+    font-size: 1.5em;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
 #welcome-container {
     display: flex;
     flex-direction: column;

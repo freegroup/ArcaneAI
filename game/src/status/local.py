@@ -1,8 +1,8 @@
 import json
 import threading
-from motorcontroller.base import Base
+from status.base import Base
 
-class MotorControlerMock(Base):
+class LocalStatus(Base):
     def __init__(self):
         self.timers = []  # To store active timers
 
@@ -10,7 +10,7 @@ class MotorControlerMock(Base):
         self._cancel_all_timers()
         pass
 
-    def set(self, expressions, inventory):
+    def set(self, session, expressions, inventory):
         # Cancel any existing timers
         self._cancel_all_timers()
 
