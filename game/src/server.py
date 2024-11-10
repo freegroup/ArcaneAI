@@ -132,7 +132,7 @@ async def login(request: Request, username: str = Form(...), password: str = For
         return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid username or password"})
 
     # Set the session cookie and redirect to the main UI
-    response = RedirectResponse(url=create_proxy_aware_redirect(request, "ui"), status_code=status.HTTP_302_FOUND)
+    response = RedirectResponse(url=create_proxy_aware_redirect(request, "ui"), status_code=status.HTTP_307_TEMPORARY_REDIRECT)
     response.set_cookie("authenticated", "yes", httponly=True, samesite=SAME_SITE_VALUE)
     return response
 
