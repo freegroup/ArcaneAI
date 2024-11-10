@@ -4,149 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Interface</title>
-    <style>
-        /* Basic Layout */
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 50px;
-            background-color: #f0f0f5;
-        }
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 
-        /* Chat Container */
-        .chat-container {
-            width: 80%;
-            max-width: 600px;
-            height: 60vh;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 10px;
-            display: flex;
-            flex-direction: column-reverse; /* New messages at bottom */
-            overflow-y: auto;
-            background-color: #ffffff;
-        }
+    <link href="./assets/main.css" rel="stylesheet"/>
+    <link href="./assets/bubbles.css" rel="stylesheet"/>
 
-        /* Message Bubbles */
-        .message {
-            display: inline-block;
-            padding: 10px 15px;
-            border-radius: 15px;
-            margin: 8px 0;
-            max-width: 70%;
-            word-wrap: break-word;
-            font-size: 0.9rem;
-        }
-        
-        /* User Message Bubble */
-        .message.user {
-            background-color: #dcf8c6;
-            align-self: flex-end;
-            color: #303030;
-        }
-
-        /* Bot Message Bubble */
-        .message.bot {
-            background-color: #f1f0f0;
-            align-self: flex-start;
-            color: #606060;
-        }
-
-        /* Input Area */
-        .input-area {
-            width: 80%;
-            max-width: 600px;
-            display: flex;
-            margin-top: 10px;
-        }
-
-        /* Text Input */
-        input[type="text"] {
-            flex: 1;
-            padding: 10px;
-            border-radius: 20px;
-            border: 1px solid #ccc;
-            font-size: 0.9rem;
-        }
-
-        /* Buttons */
-        button, #micButton {
-            padding: 0 15px;
-            margin-left: 8px;
-            border-radius: 20px;
-            border: none;
-            background-color: #34b7f1;
-            color: white;
-            font-size: 0.9rem;
-            cursor: pointer;
-        }
-        button:active, #micButton:active {
-            background-color: #1289c8;
-        }
-
-        /* Mic Button Active Style */
-        #micButton.active {
-            background-color: #ff4d4d;
-        }
-
-        /* Mic Button */
-        #micButton {
-            background-color: transparent;
-            border: none;
-        }
-
-        #micIcon {
-            width: 25px;
-        }
-
-
-         /* Three-Dot Typing Indicator */
-         .typing-indicator {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            margin: 8px 0;
-        }
-        
-        .typing-indicator .dot {
-            width: 8px;
-            height: 8px;
-            margin: 0 3px;
-            background-color: #606060;
-            border-radius: 50%;
-            animation: bounce 1.4s infinite ease-in-out;
-        }
-
-        .typing-indicator .dot:nth-child(1) { animation-delay: -0.32s; }
-        .typing-indicator .dot:nth-child(2) { animation-delay: -0.16s; }
-        .typing-indicator .dot:nth-child(3) { animation-delay: 0s; }
-
-        @keyframes bounce {
-            0%, 80%, 100% { transform: scale(0); }
-            40% { transform: scale(1); }
-        }
-
-    </style>
 </head>
 <body>
 
-<h2>Chat Interface</h2>
-<p>Base URI is: {{ BASE_URI }}</p>
-<!-- Chat container where messages are displayed -->
-<div class="chat-container" id="chatContainer"></div>
+<div id="welcome-container">
+    <div class="background-image"></div>
+  
+    <div class="welcome-text">
+        <div>
+            Ein mysteriöser Fluch hält dich hier gefangen – dieser düstere Dungeon ist 
+            das Einzige, was zwischen dir und deinem wohlverdienten, kalten Bier steht! 
+            Nur ein Weg führt zur Freiheit: das sagenumwobene Goldene Ei finden und den 
+            Bann brechen.
+        </div>
+        <div>
+            Aber keine Sorge, du musst dich nicht selbst in Gefahr begeben! Ein treuer 
+            Gefährte steht dir zur Seite und erledigt jede Herausforderung, die euch 
+            begegnet. Gib ihm einfach klare Anweisungen – wie „Untersuche das Haus 
+            mal genauer“ oder „Schau dir den Baum an“ – und er wird alles für dich erledigen.
+        </div>
+        <div>
+            Bist du bereit? Drücke auf „Start“ und tauche ein in die Welt des Dungeon Escape!
+        </div>
+    </div>
+    <button id="startButton" onclick="startGame()">Start Game</button>
+</div>
 
-<!-- Start Game Button to initialize WebSocket and start the game -->
-<button id="startButton" onclick="startGame()">Start Game</button>
-
-<!-- Input area for user messages -->
-<div class="input-area" style="display: none;" id="inputArea">
-    <input type="text" id="question" placeholder="Type a message..." onkeypress="handleKeyPress(event)">
-    <button id="micButton" onclick="toggleRecognition()">
-        <img id="micIcon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Speaker_Icon.svg/512px-Speaker_Icon.svg.png" alt="Mic">
-    </button>
-
+<div id="game-container">
+    <div class="background-image"></div>
+  
+    <div class="chat-container" id="chatContainer"></div>
+    <div class="input-area" id="inputArea">
+        <input type="text" id="question" placeholder="Type a message..." onkeypress="handleKeyPress(event)">
+        <button id="micButton" onclick="toggleRecognition()">
+            <img id="micIcon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Speaker_Icon.svg/512px-Speaker_Icon.svg.png" alt="Mic">
+        </button>
+    </div>
 </div>
 
 <script>
@@ -171,13 +70,15 @@
     let inactivityTimeout;  // Timer for inactivity
     const inactivityTime = 800;
 
+    const welcomeContainer = document.getElementById("welcome-container");
+    const gameContainer = document.getElementById("game-container");
     const chatContainer = document.getElementById("chatContainer");
     const inputArea = document.getElementById("inputArea");
     const startButton = document.getElementById("startButton");
     const questionInput = document.getElementById("question");
     const micButton = document.getElementById("micButton");
 
-    let typingIndicator = null; // Track the typing indicator element
+    let typingIndicator = null;
 
 
     function handleKeyPress(event) {
@@ -261,7 +162,6 @@
                 if (typeof event.data === "string") {
                     try {
                         const message = JSON.parse(event.data);
-                        console.log(message)
                         if (message.function === "sound.play_sound") {
                             const soundUrl = `${window.location.protocol}//${window.location.host}{{ BASE_URI }}/api/audio/${message.file_name}`;
                             const audio = new Audio(soundUrl);
@@ -304,8 +204,8 @@
     }
 
     async function toggleChatUI(show) {
-        inputArea.style.display = show ? "flex" : "none";
-        startButton.style.display = show ? "none" : "block";
+        welcomeContainer.style.display = show ? "none" : "flex";
+        gameContainer.style.display = show ? "flex" : "none";
 
         try {
             inputArea.focus();
@@ -340,7 +240,10 @@
 
     function addMessage(text, sender) {
         const messageBubble = document.createElement("div");
-        messageBubble.classList.add("message", sender);
+        messageBubble.classList.add("message", sender, "cbbl");
+        if(sender === "user"){
+            messageBubble.classList.add("-right");
+        }
         messageBubble.textContent = text;
         chatContainer.insertBefore(messageBubble, chatContainer.firstChild);
         chatContainer.scrollTop = chatContainer.scrollHeight;
