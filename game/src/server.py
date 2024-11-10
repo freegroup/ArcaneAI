@@ -68,6 +68,11 @@ from fastapi.middleware.cors import CORSMiddleware
 class ChatMessage(BaseModel):
     text: str
 
+class LoginData(BaseModel):
+    username: str
+    password: str
+
+
 def newChatSession():
     print("CREATE NEW SESSION OBJECT")
     return ChatSession(
@@ -131,11 +136,11 @@ async def login_page(request: Request):
 
 
 @app.post("/login_post", name="login")
-async def login(request: Request, username: str = Form(...), password: str = Form(...)):
+async def login(request: Request, data: LoginData, response: Response):
     print("LOGIN IN THE REQUEST FLOW")
     # Manually validate username and password
-    if not (secrets.compare_digest(username, VALID_USERNAME) and secrets.compare_digest(password, VALID_PASSWORD)):
-        return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid username or password"})
+    if not (secrets.compare_digest(data.username, VALID_USERNAME) and secrets.compare_digest(data.password, VALID_PASSWORD)):
+        return JSONResponse({"error": "Invalid username or password"}, status_code=400)
 
     # Set the session cookie and redirect to the main UI
     response = RedirectResponse(url=create_proxy_aware_redirect(request, "ui"), status_code=status.HTTP_307_TEMPORARY_REDIRECT)
