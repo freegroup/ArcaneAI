@@ -83,7 +83,10 @@ class OpenAILLM(BaseLLM):
         response = self._call_openai_model(session)
         if (response["text"] is None or response["text"].strip() == "") and response["action"]:
             response = self._retry_for_text(session, response)
-        response["text"] =  response["text"].replace("Was möchtest du als nächstes tun?", "")
+        
+        # strip off crap repeated phrases
+        # I didn't manage this by using a good system prompt.
+        response["text"] =  response["text"].split("Was möchtest du ")[0]
 
         self._add_to_history("assistant", response["text"])
         return response
