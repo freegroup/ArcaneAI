@@ -50,7 +50,7 @@
       setTimeout(async () => {
         this.initializeMap();
         this.initializeSounds()
-        await this.downloadMap(this.$route.params.fileName || '');
+        await this.downloadMap(this.$route.params.mapName || '');
       }, 500);
     },
   
