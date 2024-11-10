@@ -1,5 +1,6 @@
 <template>
   <splitpanes 
+      id="state-editor"
       ref="splitPanes" 
       class="default-theme full-height"  
       @resized="handleResize">
@@ -120,6 +121,32 @@ export default {
       if (message.type === 'updateDocumentData') {
         this.blocked = true
         this.updateMapDiagram(message.data)
+      }
+      else if(message.type === "toggleFullScreen"){
+        var element = document.getElementById('state-editor');
+
+        var requestFullScreen =
+          element.requestFullscreen ||
+          element.mozRequestFullScreen ||
+          element.webkitRequestFullscreen ||
+          element.msRequestFullscreen;
+
+        var cancelFullScreen =
+          document.exitFullscreen ||
+          document.mozCancelFullScreen ||
+          document.webkitExitFullscreen ||
+          document.msExitFullscreen;
+
+        if (
+          !document.fullscreenElement &&
+          !document.mozFullScreenElement &&
+          !document.webkitFullscreenElement &&
+          !document.msFullscreenElement
+        ) {
+          requestFullScreen.call(element);
+        } else {
+          cancelFullScreen.call(document);
+        }
       }
     });
   }

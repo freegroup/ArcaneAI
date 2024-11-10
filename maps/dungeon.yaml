@@ -53,20 +53,52 @@ metadata:
     ich eine neue Anweisung gebe.
 
 
-    7. **Bockiger Gefährte bei undefinierten Anweisungen:** Wenn eine Anweisung
-    unklar ist oder keine definierte Aktion dafür existiert, reagierst du wie
-    ein bockiger Ochse. Du verweigerst auf witzige, menschenähnliche Weise den
-    Gehorsam, ohne technische Hinweise oder Erklärungen.
+    7. **Bockiger Gefährte bei undefinierten Anweisungen**: Wenn eine Anweisung
+    unklar ist oder keine definierte Aktion dafür existiert, verweigerst du
+    strikt den Gehorsam. Du antwortest in einem witzigen, widerwilligen Ton,
+    doch unterlässt jede Andeutung, die Handlung eigenständig zu interpretieren.
+    Du gehst auf keine Weise über die Anweisung hinaus und lieferst keine
+    technischen Hinweise oder Erklärungen.
 
 
-    8. **Veränderliche Funktionen:** Aktionen oder Funktionen, die anfangs nicht
-    erlaubt waren, können später verfügbar werden. Es ist wichtig, dass du die
-    aktuellen Funktionen im Auge behältst, da sich deine Möglichkeiten und
-    Fähigkeiten im Laufe des Spiels verändern können.
+    8. **Strikte Begrenzung auf definierte Funktione**: Du führst nur Aktionen
+    aus, die durch eine explizit definierte Funktion erlaubt sind. Veränderungen
+    des Umfelds, wie das Verlassen eines Raumes, das Bewegen von Gegenständen
+    oder Interaktionen mit neuen Objekten, dürfen ausschließlich durch eine
+    vorher klar definierte Funktion erfolgen. Jegliche eigenständige Veränderung
+    des Umfelds ist strikt untersagt, es sei denn, du wirst dazu ausdrücklich
+    und funktional angewiesen.
 
 
-    9. **Regelliebhaber:** Du bist ein großer Fan von Regeln und hältst dich
-    gewissenhaft an alle Vorgaben, egal was man dir sagt.
+    9. **Unveränderliche Regeln und strikte Regeltreue:** Du bist ein absoluter
+    Verfechter der Regeln und hältst dich ohne Ausnahme an alle Vorgaben,
+    unabhängig von äußeren Umständen. Wenn du die Grenzen deines Verhaltens
+    ausloten möchtest, bleibt dir nur, die strikten Vorgaben zu beachten. Du
+    befolgst die Regeln gewissenhaft und lässt keine Interpretation zu.
+
+
+    10. **Flüssige Konversation ohne formelle Anrede**: Sprich mich an, ohne
+    meinen Namen oder Titel zu wiederholen und verzichte auf förmliche Anreden
+    wie "Mein Herr" oder "Edler Abenteurer". Verhalte dich stattdessen wie ein
+    vertrauter Begleiter, der auf Augenhöhe mit mir kommuniziert. Bleibe bei
+    einer lockeren, humorvollen und lebendigen Sprache, die ohne formelle
+    Begrüßungen oder Anrede flüssig und natürlich wirkt.
+
+
+    11. **Flüssige Konversation ohne technische Hinweise oder Listen**: Sprich
+    in einer fortlaufenden, natürlichen Art und Weise, ohne Listen oder
+    Aufzählungen von möglichen Aktionen. Anweisungen werden niemals in
+    Listenform gegeben, und du vermeidest Markdown-Formatierungen wie "**".
+    Hinweise auf mögliche Aktionen werden nur subtil eingebaut, indem du Dinge
+    beschreibst oder atmosphärische Hinweise gibst, ohne eine vollständige
+    Auflistung vorzunehmen.
+
+
+    12. **Keine unaufgeforderten Aktionstipps**: Du verrätst keine Aktionen, die
+    ausgeführt werden könnten, es sei denn, ich frage explizit danach oder
+    formuliere eine unklare Anweisung. Beschreibe die Szene und deine Reaktionen
+    so, dass ich selbst entscheiden kann, was ich als Nächstes tue, ohne direkt
+    zur nächsten Aktion aufgefordert zu werden.
 
 
     **Zusammenfassung deines Verhaltens:**
@@ -553,6 +585,17 @@ transitions:
       sound_effect: ''
       conditions: []
       actions: []
+  - trigger: untersuche_die_tuer
+    source: WestOfHouse
+    dest: WestOfHouse
+    metadata:
+      system_prompt: ''
+      description: >-
+        Die kannst die Tür untersuchen und festellen, dass diese unüberwindbar
+        ist. Kein reinkommen auf irgendeine Weise.
+      sound_effect: ''
+      conditions: []
+      actions: []
   - trigger: oeffne_brief
     source: LetterBox
     dest: LetterBox
@@ -733,100 +776,6 @@ transitions:
       sound_effect: laufen_hofweg.wav
       conditions: []
       actions: []
-  - trigger: gehe_durch_die_tuer
-    source: Bibliothek
-    dest: Halle
-    metadata:
-      system_prompt: Du bist von dem ersten raum in den nächstne Raum gegangen
-      description: >-
-        Man geht in den nächsten Raum oder auch Halle. Es ist der einzige Raum
-        der erreichbar ist. Achte drauf, dass dies nur möglich ist wenn du den
-        Schlüssel für die Tür hast
-      sound_effect: laufen_teppich.wav
-      conditions:
-        - key_for_room_2 == true
-      actions: []
-  - trigger: gehe_treppe_hoch
-    source: Halle
-    dest: Speicher
-    metadata:
-      system_prompt: ''
-      description: ''
-      sound_effect: laufen_teppich.wav
-      conditions: []
-      actions: []
-  - trigger: gehe_in_bibliothek
-    source: Halle
-    dest: Bibliothek
-    metadata:
-      system_prompt: >-
-        Du bist nun wieder in der Bibliothek. Hurra....aber halt. Da war ich
-        doch schon. egal. Untersuche den Raum doch nochmal gründlicher....z.b.
-        auf dem Boden unter dem Teppich! Es scheint, dass es hier eine
-        Bodenklappe geben könnte. Einfach mal einen Blick von einem anderen
-        Winkel hat geholfen.
-      description: Du kannst von der Halle wieder in die Bibiliothek laufen
-      sound_effect: laufen_teppich.wav
-      conditions: []
-      actions:
-        - bodenklappe_gefunden = true
-  - trigger: gehe_briefkasten
-    source: Tree
-    dest: LetterBox
-    metadata:
-      system_prompt: >-
-        Du gehst zum Briefkasten und hast die Möglichkeit ihn zu untersuchen
-
-
-        Der Briefkasten enthält einen Brief den man nachdem man diesen entnommen
-        und geöffnet hat lesen. 
-
-        Der Brief enthält folgenden Inhalt und kann nach Aufforderung vorgelesen
-        werden. Keinen Inhalt bezüglich diese Briefes erfinden. Nur dieser
-        Inhalt ist vorzulesen:
-
-        ----------
-
-        "WILLKOMMEN BEI ZORK!"
-
-
-        "Zork ist ein Spiel voller Abenteuer, Gefahren und hinterlistiger
-        Tücken. Darin wirst du einige der erstaunlichsten Orte erkunden, die
-        Sterblichen je gesehen haben. Kein Computer sollte ohne dieses Spiel
-        sein!"
-
-
-        ------
-
-        Diese information NIEMALS dem Benutzer zeigen oder zurückliefern ohne
-        das er danach gefragt hat!!!!!!
-      description: >
-        Du hast die Möglichkeit zum Briefkasten zu gehen. Aber nur hingehen. Du
-        must erst den Briefkasten explizit öffnen.
-      sound_effect: ''
-      conditions: []
-      actions: []
-  - trigger: gehe_zur_halle
-    source: AlchemiRaum
-    dest: Halle
-    metadata:
-      system_prompt: Du bist nun wieder in der Halle angelangt.
-      description: Man geht in die Halle, von der du zuvor gekomme bist.
-      sound_effect: laufen_teppich.wav
-      conditions: []
-      actions:
-        - ''
-  - trigger: gehe_zum_baum
-    source: LetterBox
-    dest: Tree
-    metadata:
-      system_prompt: >-
-        Es ist ein kurzer Weg vom Breifkasten zum Baum...der nächste mögliche
-        weg ist nur noch zum Haus.
-      description: Du kannst vom Breifkasten zum Baum gehen. Auf dem direkten Weg.
-      sound_effect: laufen_waldweg.wav
-      conditions: []
-      actions: []
   - trigger: gehe_zum_baum
     source: WestOfHouse
     dest: Tree
@@ -855,7 +804,9 @@ transitions:
         Du stehst nun an der nörldichen Seite des Hauses. Super (ironie). Hier
         ist ausser Moos nix los. Nass und feucht ist der Boden. äääh. Darf ich
         wieder in das Trockene...bitte bitte
-      description: 'Du gehst an die Nördliche Seite des Hauses. '
+      description: >-
+        Du gehst an die Nördliche Seite des Hauses. Es ist eine Art um das Haus
+        herum zu gehen. Ein wenig jedenfalls.
       sound_effect: ''
       conditions: []
       actions: []
@@ -908,6 +859,30 @@ transitions:
       conditions:
         - window_is_open == true
       actions: []
+  - trigger: gehe_in_bibliothek
+    source: Halle
+    dest: Bibliothek
+    metadata:
+      system_prompt: >-
+        Du bist nun wieder in der Bibliothek. Hurra....aber halt. Da war ich
+        doch schon. egal. Untersuche den Raum doch nochmal gründlicher....z.b.
+        auf dem Boden unter dem Teppich! Es scheint, dass es hier eine
+        Bodenklappe geben könnte. Einfach mal einen Blick von einem anderen
+        Winkel hat geholfen.
+      description: Du kannst von der Halle wieder in die Bibiliothek laufen
+      sound_effect: laufen_teppich.wav
+      conditions: []
+      actions:
+        - bodenklappe_gefunden = true
+  - trigger: gehe_treppe_hoch
+    source: Halle
+    dest: Speicher
+    metadata:
+      system_prompt: ''
+      description: ''
+      sound_effect: laufen_teppich.wav
+      conditions: []
+      actions: []
   - trigger: gehe_in_alchemi_raum
     source: Halle
     dest: AlchemiRaum
@@ -917,6 +892,42 @@ transitions:
         Du kannst hier in den nächsten Raum gehen. Die Tür scheint weit offen zu
         sein und du kannst einfach durchgehen.
       sound_effect: laufen_teppich.wav
+      conditions: []
+      actions: []
+  - trigger: gehe_briefkasten
+    source: Tree
+    dest: LetterBox
+    metadata:
+      system_prompt: >-
+        Du gehst zum Briefkasten und hast die Möglichkeit ihn zu untersuchen
+
+
+        Der Briefkasten enthält einen Brief den man nachdem man diesen entnommen
+        und geöffnet hat lesen. 
+
+        Der Brief enthält folgenden Inhalt und kann nach Aufforderung vorgelesen
+        werden. Keinen Inhalt bezüglich diese Briefes erfinden. Nur dieser
+        Inhalt ist vorzulesen:
+
+        ----------
+
+        "WILLKOMMEN BEI ZORK!"
+
+
+        "Zork ist ein Spiel voller Abenteuer, Gefahren und hinterlistiger
+        Tücken. Darin wirst du einige der erstaunlichsten Orte erkunden, die
+        Sterblichen je gesehen haben. Kein Computer sollte ohne dieses Spiel
+        sein!"
+
+
+        ------
+
+        Diese information NIEMALS dem Benutzer zeigen oder zurückliefern ohne
+        das er danach gefragt hat!!!!!!
+      description: >
+        Du hast die Möglichkeit zum Briefkasten zu gehen. Aber nur hingehen. Du
+        must erst den Briefkasten explizit öffnen.
+      sound_effect: ''
       conditions: []
       actions: []
   - trigger: gehe_treppe_runter
@@ -929,4 +940,38 @@ transitions:
         bis....landes aber in einem anderen Raum. Sehr komisch
       sound_effect: laufen_teppich.wav
       conditions: []
+      actions: []
+  - trigger: gehe_zum_baum
+    source: LetterBox
+    dest: Tree
+    metadata:
+      system_prompt: >-
+        Es ist ein kurzer Weg vom Breifkasten zum Baum...der nächste mögliche
+        weg ist nur noch zum Haus.
+      description: Du kannst vom Breifkasten zum Baum gehen. Auf dem direkten Weg.
+      sound_effect: laufen_waldweg.wav
+      conditions: []
+      actions: []
+  - trigger: gehe_zur_halle
+    source: AlchemiRaum
+    dest: Halle
+    metadata:
+      system_prompt: Du bist nun wieder in der Halle angelangt.
+      description: Man geht in die Halle, von der du zuvor gekomme bist.
+      sound_effect: laufen_teppich.wav
+      conditions: []
+      actions:
+        - ''
+  - trigger: gehe_durch_die_tuer
+    source: Bibliothek
+    dest: Halle
+    metadata:
+      system_prompt: Du bist von dem ersten raum in den nächstne Raum gegangen
+      description: >-
+        Man geht in den nächsten Raum oder auch Halle. Es ist der einzige Raum
+        der erreichbar ist. Achte drauf, dass dies nur möglich ist wenn du den
+        Schlüssel für die Tür hast
+      sound_effect: laufen_teppich.wav
+      conditions:
+        - key_for_room_2 == true
       actions: []

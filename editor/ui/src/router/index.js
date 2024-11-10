@@ -6,19 +6,23 @@ import Inventory from '../views/Inventory.vue';
 
 const routes = [
   {
-    path: '/diagram/:fileName?',
+    path: '/',
+    redirect: '/configuration'
+  },
+  {
+    path: '/diagram/:mapName?',
     name: 'diagram',
     component: StateCanvas,
     props: true
   },
   {
-    path: '/configuration/:fileName?',
+    path: '/configuration/:mapName?',
     name: 'configuration',
     component: Configuration,
     props: true
   },
   {
-    path: '/inventory/:fileName?',
+    path: '/inventory/:mapName?',
     name: 'inventory',
     component: Inventory,
     props: true

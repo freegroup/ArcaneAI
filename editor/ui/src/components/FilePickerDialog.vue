@@ -47,7 +47,7 @@
       async selectMap(map) {
         // Download the selected map content and store it in Vuex
         await this.downloadMap(map);
-        this.$router.replace({ name: this.$route.name, params: { fileName: map } });
+        this.$router.replace({ name: this.$route.name, params: { mapName: map } });
         this.$emit('update:dialog', false); // Close the dialog
       },
   

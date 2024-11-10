@@ -56,8 +56,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-VALID_USERNAME = os.getenv("VALID_USERNAME", "user")
-VALID_PASSWORD = os.getenv("VALID_PASSWORD", "pass")
+VALID_USERNAME = os.getenv("USERNAME", "user")
+VALID_PASSWORD = os.getenv("PASSWORD", "pass")
 
 session_store: Dict[str, Dict] = {}
 
@@ -275,6 +275,7 @@ async def websocket_endpoint(websocket: WebSocket, token: str):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=PORT,  log_level="trace")
+    #uvicorn.run(app, host="0.0.0.0", port=PORT,  log_level="trace")
+    uvicorn.run(app, host="0.0.0.0", port=PORT)
 
 

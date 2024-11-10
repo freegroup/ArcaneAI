@@ -97,6 +97,8 @@ View = draw2d.Canvas.extend({
 
     toggleFullScreen: function() 
     {
+        window.parent.postMessage({ type: 'toggleFullScreen' }, '*');
+        /*
         var doc = window.document;
         var docEl = doc.documentElement;
       
@@ -121,6 +123,7 @@ View = draw2d.Canvas.extend({
         } else {
           cancelFullScreen.call(doc);
         }
+          */
     },
     
     getBoundingBox: function () 
