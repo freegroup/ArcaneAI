@@ -25,6 +25,12 @@ from sound.web_jukebox import WebJukebox
 from websocketmanager import WebSocketManager
 from audio.websocket import WebSocketSink
 
+
+import logging
+# Set up logging
+logging.basicConfig(level=logging.DEBUG)
+
+
 BASE_URI = "/game"
 PORT = 9000
 #SAME_SITE_VALUE = "None" # cross origin and https
