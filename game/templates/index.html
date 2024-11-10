@@ -221,6 +221,7 @@
             const data = await response.json();
             addMessage(data.response, "bot");
             removeTypingIndicator()
+            questionInput.focus()
         } catch (error) {
             console.error("Error starting game:", error);
             responseTextarea.value += "Error starting game.\n";
