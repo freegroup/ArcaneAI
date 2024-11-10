@@ -40,7 +40,8 @@ MAP_DIR  = os.path.join(PROJECT_DIR, 'maps')
 MAP_FILE =  os.getenv("MAP_FILE")
 
 
-status = Status()
+statusManager = Status()
+
 app = FastAPI(title="Chat Application", version="1.0.0", root_path=BASE_URI)
 templates = Jinja2Templates(directory="templates")
 
@@ -211,7 +212,7 @@ async def chat(request: Request, data: ChatMessage, response: Response):
     WebSocketManager.send_message(session, json.dumps({"function":"speak.stop"}))
     WebSocketManager.send_message(session, json.dumps({"function":"chat_response", "text":response_text}))
     session.tts.speak(session, response_text)
-    status.set(session, [], session.state_engine.get_inventory())
+    statusManager.set(session, [], session.state_engine.get_inventory())
 
     return JSONResponse({"response": response_text})
 
