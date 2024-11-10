@@ -86,12 +86,12 @@ def create_proxy_aware_redirect(request: Request, target_route: str) -> Redirect
         print(f"{header}: {value}")
 
     # Get forwarded headers or defaults
-    forwarded_proto = request.headers.get("x-forwarded-proto", "http")
-    forwarded_host = request.headers.get("x-forwarded-host", "localhost")
-    forwarded_port = request.headers.get("x-forwarded-port", f"{PORT}")
-    print(f"forwarded_proto {forwarded_proto}")
-    print(f"forwarded_host {forwarded_host}")
-    print(f"forwarded_port {forwarded_port}")
+    forwarded_proto = request.headers.get("x-dungeon-proto", "http")
+    forwarded_host = request.headers.get("x-dungeon-host", "localhost")
+    forwarded_port = request.headers.get("x-dungeon-port", f"{PORT}")
+    print(f"dungeon_proto {forwarded_proto}")
+    print(f"dungeon_host {forwarded_host}")
+    print(f"dungeon_port {forwarded_port}")
     # Construct the base URL manually
     base_url = f"{forwarded_proto}://{forwarded_host}"
     if forwarded_port and forwarded_port not in ["80", "443"]:
