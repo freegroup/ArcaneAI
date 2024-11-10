@@ -100,9 +100,10 @@ body, input, button, select, textarea {
 input[type="text"] {
     flex: 1;
     padding: 10px;
-    border-radius: 20px;
-    border: 1px solid #ccc;
     font-size: 0.9rem;
+    background-color: #333;
+    padding: 20px;
+    border: 4px solid #63908b;
 }
 
 /* Buttons */
@@ -129,6 +130,7 @@ button:active, #micButton:active {
 #micButton {
     background-color: transparent;
     border: none;
+    display: none;
 }
 
 #micIcon {
