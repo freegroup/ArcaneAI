@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Requ
 from fastapi.responses import JSONResponse, HTMLResponse, FileResponse, RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
-from urllib.parse import urljoin
+
 from pydantic import BaseModel
 from typing import Dict
 from uuid import uuid4
@@ -33,8 +33,8 @@ logging.basicConfig(level=logging.DEBUG)
 
 BASE_URI = "/game"
 PORT = 9000
-#SAME_SITE_VALUE = "None" # cross origin and https
-SAME_SITE_VALUE = "Lax" # local http
+SAME_SITE_VALUE = "None" # cross origin and https
+#SAME_SITE_VALUE = "Lax" # local http
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
