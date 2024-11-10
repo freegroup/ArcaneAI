@@ -130,7 +130,7 @@ async def login_page(request: Request):
     return templates.TemplateResponse("login.html",  {"request": request, "BASE_URI": BASE_URI})
 
 
-@app.post("/login", name="login")
+@app.post("/login_post", name="login")
 async def login(request: Request, username: str = Form(...), password: str = Form(...)):
     print("LOGIN IN THE REQUEST FLOW")
     # Manually validate username and password
