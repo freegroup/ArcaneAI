@@ -33,8 +33,8 @@ logging.basicConfig(level=logging.DEBUG)
 
 BASE_URI = "/game"
 PORT = 9000
-SAME_SITE_VALUE = "None" # cross origin and https
-#SAME_SITE_VALUE = "Lax" # local http
+#SAME_SITE_VALUE = "None" # cross origin and https
+SAME_SITE_VALUE = "Lax" # local http
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
