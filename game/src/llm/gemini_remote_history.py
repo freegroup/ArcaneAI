@@ -100,8 +100,6 @@ class GeminiRemoteHistoryLLM(BaseLLM):
                 system_instruction=session.state_engine.get_global_system_prompt()+" "+self.instruction_addon,
             )
             self.chat_session = self.model.start_chat( enable_automatic_function_calling=False)
-            print(session.state_engine.get_global_system_prompt()+" "+self.instruction_addon)
-
 
         #user_input = user_input.replace(f'\n', '')
         tools = [

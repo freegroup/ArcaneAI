@@ -13,8 +13,8 @@ class GeminiLLM(BaseLLM):
         super().__init__()
         self.max_tokens= 8192
         self.history = []
-        self.model_name = "gemini-1.5-flash"      # latest
-        #self.model_name = "gemini-1.5-pro"  # stable
+        #self.model_name = "gemini-1.5-flash"      # latest
+        self.model_name = "gemini-1.5-pro"  # stable
         self.generation_config = {
             "temperature": 0.1,
             "top_p": 0.95,
@@ -59,13 +59,13 @@ class GeminiLLM(BaseLLM):
             genai.protos.Tool(
                 function_declarations=[
                     genai.protos.FunctionDeclaration(
-                        name=session.state_engine.get_action_name(action),
-                        description=session.state_engine.get_action_description(action),
+                        name=session.state_engine.get_action_name(action_id),
+                        description=session.state_engine.get_action_description(action_id),
                         parameters=None
                     )
                 ]
             )
-            for action in session.state_engine.get_possible_action_ids()
+            for action_id in session.state_engine.get_possible_action_ids()
         ]
 
         possible_actions_instruction = re.sub(r"\s+", " ", f"""
