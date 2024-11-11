@@ -154,10 +154,11 @@ export default {
           .filter((shape) => shape.type === "StateShape" && shape.trigger && shape.trigger.length > 0)
           .flatMap((shape) => 
             shape.trigger.map((trigger) => ({
-              trigger: trigger.name,
+              trigger: trigger.id.replace(/-/g, "_"),
               source: shape.name,
               dest: shape.name,
               metadata: {
+                name: trigger.name,
                 system_prompt: trigger.system_prompt || "",
                 description: trigger.description || "",
                 sound_effect: trigger.sound_effect || "",
@@ -171,10 +172,11 @@ export default {
         const trans2 = state.mapDiagram
           .filter((item) => item.type === "TriggerConnection")
           .map((triggerConnection) => ({
-            trigger: triggerConnection.name,
+            trigger: triggerConnection.id.replace(/-/g, "_"),
             source: triggerConnection.source.name,
             dest: triggerConnection.target.name,
             metadata: {
+              name: triggerConnection.name,
               system_prompt: triggerConnection.userData?.system_prompt || "",
               description: triggerConnection.userData?.description || "",
               sound_effect: triggerConnection.userData?.sound_effect || "",

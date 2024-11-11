@@ -172,7 +172,7 @@ async def chat(request: Request, data: ChatMessage, response: Response):
     print(f"Using session with session_id: {session_id} for /chat request")
 
     text = data.text
-    action = None
+    action_name = None
     log_entry = {
         "question": text,
         "statusBefore": session.state_engine.get_state()
@@ -192,7 +192,7 @@ async def chat(request: Request, data: ChatMessage, response: Response):
             session_store[session_id] = newChatSession()
             session, session_id = get_session(request, response)
             session.ws_token = old_ws_token
-            session.state_engine.trigger(session, "start")
+            session.state_engine.trigger(session, session.state_engine.get_possible_action_id("start"))
             text = "Erkläre dem Spieler in kurzen Worten worum es hier geht und wer du bist, sei bitte auch so ehrlich und erwähne, dass du manchmal voreilig in deinen Aussagen bist da du nicht sofort alles überblickst. Du bist ja nur der Gehilfe und nicht das Gehirn. Einfach mal nachhacken hilft falls Du eine Behauptung aufstellst."
 
         log_entry["question"] = text
@@ -200,12 +200,13 @@ async def chat(request: Request, data: ChatMessage, response: Response):
         response_text = ""
         if len(text) > 0:
             response = session.llm.chat(session, text)
-            action = response.get("action")
+            action_name = response.get("action")
             session.tts.stop(session)
-            if action:
-                done = session.state_engine.trigger(session, action)
+            if action_name:
+                action_id = session.state_engine.get_possible_action_id(action_name)
+                done = session.state_engine.trigger(session, action_id)
                 if done:
-                    session.llm.system(session.state_engine.get_action_system_prompt(action))
+                    session.llm.system(session.state_engine.get_action_system_prompt(action_id))
                 else:
                     # generate a negative answer to the last tried transition
                     text = """
@@ -227,7 +228,7 @@ async def chat(request: Request, data: ChatMessage, response: Response):
     finally:
         log_entry["response"] = response_text
         log_entry["statusAfter"] = session.state_engine.get_state()
-        log_entry["action"] = action
+        log_entry["action"] = action_name
         historyManager.append(session, log_entry)
 
 

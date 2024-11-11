@@ -108,15 +108,14 @@ class GeminiRemoteHistoryLLM(BaseLLM):
             genai.protos.Tool(
                 function_declarations=[
                     genai.protos.FunctionDeclaration(
-                        name=action,
+                        name=session.state_engine.get_action_name(action),
                         description=session.state_engine.get_action_description(action),
                         parameters=None
                     )
                 ]
             )
-            for action in session.state_engine.get_possible_actions()
+            for action in session.state_engine.get_possible_action_ids()
         ]
-        print(json.dumps(session.state_engine.get_possible_actions(), indent=4))
 
         # Erster Modellaufruf mit "function_calling_config" auf "ANY" um zu versuchen "action" und "text" zu bekommen
         #
@@ -130,7 +129,7 @@ class GeminiRemoteHistoryLLM(BaseLLM):
         if result["text"] is None:
             tool_config= content_types.to_tool_config({ "function_calling_config": {"mode": "NONE"}})
             #"No text response; retrying with function_calling_config set to 'NONE'.")
-            if action in session.state_engine.get_possible_actions():
+            if action in session.state_engine.get_possible_action_names():
                 second_result = self._get_response_with_config(f"""
                     SYSTEM: Du hast die Aktion '{result["action"]}' erfolgreich im Hintergrund ausgeführt. Bitte teile dies nun dem Benutzer mit, was du getan hast:
                     User: """+ user_input, tools, tool_config)
