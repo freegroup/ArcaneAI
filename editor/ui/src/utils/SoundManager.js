@@ -12,11 +12,17 @@ class SoundManager {
     storeInstance = store;
   }
 
+  static setVolume(volume) {
+    if (SoundManager.currentAudio) {
+      SoundManager.currentAudio.volume = volume / 100; // Update volume while audio is playing
+    }
+  }
+  
   /**
    * Download and play a sound by name. Stops any currently playing sound.
    * @param {string} soundName - The name of the sound to play.
    */
-  static async playSound(soundName) {
+  static async playSound(soundName, volume=100) {
     if (!storeInstance) {
       console.error("SoundManager: Vuex store not initialized.")
       return
@@ -30,6 +36,7 @@ class SoundManager {
 
     if (soundUrl) {
       SoundManager.currentAudio = new Audio(soundUrl)
+      SoundManager.currentAudio.volume = volume / 100;
       SoundManager.currentAudio.play()
 
       SoundManager.currentAudio.onended = () => {
