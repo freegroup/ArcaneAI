@@ -25,7 +25,7 @@ from session import Session as ChatSession
 from sound.web_jukebox import WebJukebox
 from websocketmanager import WebSocketManager
 from audio.websocket import WebSocketSink
-
+from history import HistoryLog
 
 BASE_URI = "/game"
 PORT = 9000
@@ -41,6 +41,7 @@ MAP_FILE =  os.getenv("MAP_FILE")
 
 
 statusManager = Status()
+historyManager = HistoryLog()
 
 app = FastAPI(title="Chat Application", version="1.0.0", root_path=BASE_URI)
 templates = Jinja2Templates(directory="templates")
@@ -171,50 +172,63 @@ async def chat(request: Request, data: ChatMessage, response: Response):
     print(f"Using session with session_id: {session_id} for /chat request")
 
     text = data.text
-    
-    if text.lower() == "debug":
-        session.llm.dump()
-        return
-     
-    if text.lower() == "reset":
-        session.llm.reset(session)
-        return
-    
-    if text.lower() == "start":
-        old_ws_token = session.ws_token
-        session_store[session_id] = newChatSession()
-        session, session_id = get_session(request, response)
-        session.ws_token = old_ws_token
-        session.state_engine.trigger(session, "start")
-        text = "Erkläre dem Spieler in kurzen Worten worum es hier geht und wer du bist, sei bitte auch so ehrlich und erwähne, dass du manchmal voreilig in deinen Aussagen bist da du nicht sofort alles überblickst. Du bist ja nur der Gehilfe und nicht das Gehirn. Einfach mal nachhacken hilft falls Du eine Behauptung aufstellst."
+    action = None
+    log_entry = {
+        "question": text,
+        "statusBefore": session.state_engine.get_state()
+    }
 
-    response_text = ""
-    if len(text) > 0:
-        response = session.llm.chat(session, text)
-        action = response.get("action")
-        session.tts.stop(session)
-        if action:
-            done = session.state_engine.trigger(session, action)
-            if done:
-                session.llm.system(session.state_engine.get_action_system_prompt(action))
-            else:
-                # generate a negative answer to the last tried transition
-                text = """
-                Die letze Aktion hat leider nicht geklappt. Unten ist der Grund dafür. Schreibe den Benutzer 
-                eine der Situation angepasste Antwort, so, dass die Gesamtstory und experience nicht kaputt geht. 
-                Schreibe diese direkt raus und vermeide sowas wie 'Hier ist die Antort' oder so...
-                Hier ist der Fehler den wir vom Sytem erhalten haben:
-                """+session.state_engine.last_transition_error
-                response = session.llm.chat(session, text)
+    try:
+        if text.lower() == "debug":
+            session.llm.dump()
+            return
+        
+        if text.lower() == "reset":
+            session.llm.reset(session)
+            return
+        
+        if text.lower() == "start":
+            old_ws_token = session.ws_token
+            session_store[session_id] = newChatSession()
+            session, session_id = get_session(request, response)
+            session.ws_token = old_ws_token
+            session.state_engine.trigger(session, "start")
+            text = "Erkläre dem Spieler in kurzen Worten worum es hier geht und wer du bist, sei bitte auch so ehrlich und erwähne, dass du manchmal voreilig in deinen Aussagen bist da du nicht sofort alles überblickst. Du bist ja nur der Gehilfe und nicht das Gehirn. Einfach mal nachhacken hilft falls Du eine Behauptung aufstellst."
 
-        response_text = response["text"]
+        log_entry["question"] = text
 
-    WebSocketManager.send_message(session, json.dumps({"function":"speak.stop"}))
-    WebSocketManager.send_message(session, json.dumps({"function":"chat_response", "text":response_text}))
-    session.tts.speak(session, response_text)
-    statusManager.set(session, [], session.state_engine.get_inventory())
+        response_text = ""
+        if len(text) > 0:
+            response = session.llm.chat(session, text)
+            action = response.get("action")
+            session.tts.stop(session)
+            if action:
+                done = session.state_engine.trigger(session, action)
+                if done:
+                    session.llm.system(session.state_engine.get_action_system_prompt(action))
+                else:
+                    # generate a negative answer to the last tried transition
+                    text = """
+                    Die letze Aktion hat leider nicht geklappt. Unten ist der Grund dafür. Schreibe den Benutzer 
+                    eine der Situation angepasste Antwort, so, dass die Gesamtstory und experience nicht kaputt geht. 
+                    Schreibe diese direkt raus und vermeide sowas wie 'Hier ist die Antort' oder so...
+                    Hier ist der Fehler den wir vom Sytem erhalten haben:
+                    """+session.state_engine.last_transition_error
+                    response = session.llm.chat(session, text)
 
-    return JSONResponse({"response": response_text})
+            response_text = response["text"]
+
+        WebSocketManager.send_message(session, json.dumps({"function":"speak.stop"}))
+        WebSocketManager.send_message(session, json.dumps({"function":"chat_response", "text":response_text}))
+        session.tts.speak(session, response_text)
+        statusManager.set(session, [], session.state_engine.get_inventory())
+
+        return JSONResponse({"response": response_text})
+    finally:
+        log_entry["response"] = response_text
+        log_entry["statusAfter"] = session.state_engine.get_state()
+        log_entry["action"] = action
+        historyManager.append(session, log_entry)
 
 
 # REST endpoint to serve audio files

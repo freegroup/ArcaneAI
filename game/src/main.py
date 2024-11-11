@@ -14,8 +14,10 @@ from stt.factory import STTFactory
 from session import Session
 from sound.local_jukebox import LocalJukebox
 from audio.pyaudio import PyAudioSink
+from history import HistoryLog
 
 statusManager = LocalStatus()
+historyManager = HistoryLog()
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(os.path.dirname(BASE_DIR))
@@ -41,6 +43,7 @@ signal.signal(signal.SIGINT, lambda sig, frame: stop())
 
 def newSession():
     return Session(
+        ws_token = "local",
         map_name =  os.path.splitext(MAP_FILE)[0],  # Remove the suffix from file
         map_dir = MAP_DIR,
         state_engine=StateEngine(f"{MAP_DIR}/{MAP_FILE}"),
@@ -53,44 +56,54 @@ def newSession():
 if __name__ == '__main__':
 
     def process_text(session, text):
+        log_entry = {
+            "question": text,
+            "statusBefore": session.state_engine.get_state()
+        }
+        response_text = "?"
+        action = None
+        try:
+            print("=====================================================================================================")
+            if text.lower() == "debug":
+                session.llm.dump()
+                return
+            if text.lower() == "reset":
+                session.llm.reset(session)
+                return
+            
+            if len(text)>0:
+                response = session.llm.chat(session,text)
+                print(json.dumps(response, indent=4))
 
-        print("=====================================================================================================")
-        if text.lower() == "debug":
-            session.llm.dump()
-            return
-        if text.lower() == "reset":
-            session.llm.reset(session)
-            return
-        
-        if len(text)>0:
-            response = session.llm.chat(session,text)
-            print(json.dumps(response, indent=4))
+                action = response.get("action") 
+                session.tts.stop(session)
 
-            action = response.get("action") 
-            session.tts.stop(session)
-            tts_text = "?"
-            if action:
-                done = session.state_engine.trigger(session, action)
-                if done:
-                    tts_text = response["text"]
-                    session.llm.system(session.state_engine.get_action_system_prompt(action))
+                if action:
+                    done = session.state_engine.trigger(session, action)
+                    if done:
+                        response_text = response["text"]
+                        session.llm.system(session.state_engine.get_action_system_prompt(action))
+                    else:
+                        # generate a negative answer to the last tried transition
+                        text = """
+                        Die letze Aktion hat leider nicht geklappt. Unten ist der Grund dafür. Schreibe den Benutzer 
+                        eine der Situation angepasste Antwort, so, dass die Gesamtstory und experience nicht kaputt geht. 
+                        Schreibe diese direkt raus und vermeide sowas wie 'Hier ist die Antort' oder so...
+                        Hier ist der Fehler den wir vom Sytem erhalten haben:
+
+                        """+session.state_engine.last_transition_error
+                        response = session.llm.chat(session, text)
+                        response_text = response["text"]
                 else:
-                    # generate a negative answer to the last tried transition
-                    text = """
-                    Die letze Aktion hat leider nicht geklappt. Unten ist der Grund dafür. Schreibe den Benutzer 
-                    eine der Situation angepasste Antwort, so, dass die Gesamtstory und experience nicht kaputt geht. 
-                    Schreibe diese direkt raus und vermeide sowas wie 'Hier ist die Antort' oder so...
-                    Hier ist der Fehler den wir vom Sytem erhalten haben:
+                    response_text = response["text"]
 
-                    """+session.state_engine.last_transition_error
-                    response = session.llm.chat(session, text)
-                    tts_text = response["text"]
-            else:
-                tts_text = response["text"]
-
-            statusManager.set(session, response["expressions"], session.state_engine.get_inventory() )
-            session.tts.speak(session, tts_text)
-
+                statusManager.set(session, response["expressions"], session.state_engine.get_inventory() )
+                session.tts.speak(session, response_text)
+        finally:
+            log_entry["response"] = response_text
+            log_entry["statusAfter"] = session.state_engine.get_state()
+            log_entry["action"] = action
+            historyManager.append(session, log_entry)
 
     session = newSession()
 
