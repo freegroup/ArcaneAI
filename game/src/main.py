@@ -5,7 +5,7 @@ import json
 from dotenv import load_dotenv
 load_dotenv() 
 
-from game.src.status.local import LocalStatus
+from status.local import LocalStatus
 
 from state_engine import StateEngine
 from tts.factory import TTSEngineFactory
@@ -15,7 +15,7 @@ from session import Session
 from sound.local_jukebox import LocalJukebox
 from audio.pyaudio import PyAudioSink
 
-debug_ui = LocalStatus()
+statusManager = LocalStatus()
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(os.path.dirname(BASE_DIR))
@@ -34,7 +34,7 @@ def stop():
     global stop_requested
     print("\nStopping gracefully...")
     stop_requested = True
-    debug_ui.stop()
+    statusManager.stop()
     sys.exit(0)
 signal.signal(signal.SIGINT, lambda sig, frame: stop())
 
@@ -88,7 +88,7 @@ if __name__ == '__main__':
             else:
                 tts_text = response["text"]
 
-            debug_ui.set(session, response["expressions"], session.state_engine.get_inventory() )
+            statusManager.set(session, response["expressions"], session.state_engine.get_inventory() )
             session.tts.speak(session, tts_text)
 
 
@@ -101,7 +101,7 @@ if __name__ == '__main__':
     
     # show the current status of the game
     #
-    debug_ui.set([], session.state_engine.get_inventory())
+    statusManager.set(session, [], session.state_engine.get_inventory())
 
     try:
         for text in session.stt.start_recording():

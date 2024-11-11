@@ -1,16 +1,16 @@
 import pygame
 from pygame import mixer
 import os
-import time
+
+from sound.base import BaseJukebox
 
 pygame.mixer.init()
 
-
-class LocalJukebox:
+class LocalJukebox(BaseJukebox):
     def __init__(self):
         self.playing_channels = []
 
-    def play_sound(self, session, file_name, loop=True):
+    def play_sound(self, session, file_name, volume=100, loop=True):
         """
         Play a sound from the given file path.
         :param file_path: Absolute path to the sound file (wav or mp3).
@@ -21,7 +21,8 @@ class LocalJukebox:
             return #silently
         
         file_path = f"{session.map_dir}/{session.map_name}/soundfx/{file_name}"
-
+        print(f"Volume: {volume}")
+        
         try:
             if not os.path.isabs(file_path):
                 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -34,6 +35,10 @@ class LocalJukebox:
             channel = mixer.find_channel()
             if channel is None:
                 raise RuntimeError("No free channel available to play sound")
+
+            # Convert volume to a range between 0.0 and 1.0
+            volume = max(0, min(volume, 100)) / 100.0
+            channel.set_volume(volume)
 
             # Play the sound
             loops = -1 if loop else 0

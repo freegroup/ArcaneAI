@@ -24,7 +24,17 @@
             <v-icon size="small">mdi-play</v-icon>
           </v-btn>
         </div>
-
+        <div>
+          <v-slider
+            v-if="jsonData.userData"
+            v-model="jsonData.userData.sound_effect_volume"
+            :min="1"
+            :max="100"
+            :step="1"
+            append-icon="mdi-volume-high"
+          />
+        </div>
+        
         <div style="flex:1;display:flex;flex-direction: column;">
           <label v-if="jsonData.userData"  for="triggerDescription">Action Description</label>
           <textarea
@@ -95,6 +105,7 @@
             actions: [], 
             conditions: [],
             sound_effect: '',
+            sound_effect_volume: 100,
             description: '',
           },
           conditionsText: '',
@@ -118,6 +129,14 @@
             this.draw2dFrame.postMessage({ type: 'setShapeData', data: data },'*');
         }
       },
+      onVolumeChange() {
+        if(this.jsonData?.userData){
+          const volume = this.jsonData.userData.sound_effect_volume || 100;
+          SoundManager.setVolume(volume);
+          this.onDataChange();
+        }
+      },
+
       updateConditions() {
         const trimmedText = this.conditionsText?.trim();
         if (trimmedText === "" || trimmedText.split('\n').every(line => line.trim() === "")) {
@@ -134,7 +153,8 @@
       },
       async playSelectedSound() {
         if (this.jsonData.userData.sound_effect) {
-          SoundManager.playSound(this.jsonData.userData.sound_effect);
+          const volume = this.jsonData.userData.sound_effect_volume || 100;
+          SoundManager.playSound(this.jsonData.userData.sound_effect,volume);
         }
       },
     },
@@ -155,6 +175,9 @@
       "jsonData.userData.sound_effect"() {
           this.onDataChange();
       },
+      "jsonData.userData.sound_effect_volume"() {
+        this.onVolumeChange();
+      },
       "jsonData.userData.description"() {
           this.onDataChange();
       },
@@ -164,8 +187,11 @@
       window.addEventListener('message', (event) => {
           if (event.origin !== window.location.origin) return;
           const message = event.data;
-          if (message.event === 'onSelect' && message.type == "TriggerConnection") {
+          if (message.event === 'onSelect' && message.type === "TriggerConnection") {
               this.jsonData = message.data
+              if (!this.jsonData.userData.sound_effect_volume) {
+                  this.jsonData.userData.sound_effect_volume = 100;
+              }
           }
           else if (message.event === 'onUnselect') {
               this.jsonData = {}

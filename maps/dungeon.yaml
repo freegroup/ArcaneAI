@@ -234,6 +234,7 @@ states:
         aus, falls vorhanden. Man darf auch Verben in den Funktionen, die
         semantisch sehr ähnlich sind, verwenden)
       ambient_sound: ambient_sehr_leichter_wind.wav
+      ambient_sound_volume: 52
   - name: WestOfHouse
     metadata:
       system_prompt: >-
@@ -267,6 +268,7 @@ states:
         Wind knarrt. Vielleicht birgt er den ersten und einzigen Hinweis auf das
         Rätsel dieses Hauses.
       ambient_sound: wald_mit_voegel.mp3
+      ambient_sound_volume: 13
   - name: LetterBox
     metadata:
       system_prompt: >-
@@ -410,6 +412,7 @@ transitions:
         Man nimmt den Schlüssel der auf dem Tisch gelegen ist und hat ihn dan
         bereit in der Verwendung um damit die Tür zu öffnen
       sound_effect: effect_metalisch_bewegen.wav
+      sound_effect_volume: 100
       conditions:
         - key_for_room_2 == false
         - kerze_an == true
@@ -428,6 +431,7 @@ transitions:
         wird. Aber noch nicht genommen. Gebe ihn einen Hinweis, dass es
         vieleicht eine gute Idee ist den Schlüssel zu nehmen
       sound_effect: ''
+      sound_effect_volume: 100
       conditions:
         - kerze_an == true
         - key_for_room_2 == false
@@ -441,6 +445,7 @@ transitions:
         anzünden.
       description: Damit findet man eine Kerze im Raum. Eine Lichtquelle
       sound_effect: ''
+      sound_effect_volume: 100
       conditions:
         - kerze==false
       actions:
@@ -454,6 +459,7 @@ transitions:
         Finden von Streichhölzer die für die Kerze benötigt werden. Du zündest
         die Kerze aber nur nach aufforderung damit an.
       sound_effect: ''
+      sound_effect_volume: 100
       conditions:
         - streichhoelzer == false
       actions:
@@ -469,6 +475,7 @@ transitions:
         ich die Tür schon gesehen?
       description: Die Kerze kann mit den Streichhölzer angezündet werden
       sound_effect: effect_wosh.wav
+      sound_effect_volume: 100
       conditions:
         - streichhoelzer == true
         - kerze == true
@@ -487,6 +494,7 @@ transitions:
         kann....ohne das Wort "Schlüssel" zu nennen.
       description: Man untersucht den Raum und versucht eine Tür zu finde. Mit Erfolg.
       sound_effect: effect_soundeffect_melodie.wav
+      sound_effect_volume: 100
       conditions:
         - kerze_an == true
       actions: []
@@ -501,6 +509,7 @@ transitions:
         Du kannst in dem Buch blättern. Aber es macht eigentlich nur Sinn wenn
         man Licht hat oder eine Kerze brennt.
       sound_effect: effect_buch_blaettern.wav
+      sound_effect_volume: 100
       conditions:
         - kerze_an==true
       actions: []
@@ -517,6 +526,7 @@ transitions:
         Du kannst den Raum untersuchen und durchsuchen und vielleicht findest Du
         Dinge die Du gebrauchen kannst. 
       sound_effect: laufen_teppich.wav
+      sound_effect_volume: 100
       conditions: []
       actions: []
   - trigger: bewege_den_teppich
@@ -534,6 +544,7 @@ transitions:
         könnte. Es sind alle worte erlaubt die implizieren den Teppich zur Seite
         zu legen.
       sound_effect: effect_wosh.wav
+      sound_effect_volume: 100
       conditions:
         - bodenklappe_gefunden==true
         - kerze_an==true
@@ -552,6 +563,7 @@ transitions:
         und ein wenig Wald. Es ist die Stelle an der du vorher draussen da
         stands.
       sound_effect: ''
+      sound_effect_volume: 100
       conditions: []
       actions: []
   - trigger: untersuche_das_fenster
@@ -565,6 +577,7 @@ transitions:
         Man kann mit dieser funktion das Fenster auf seine Beschaffenheit
         untersuchen und überprüfen ob es sich vieleicht öffnen läst
       sound_effect: mixkit-air-woosh-1489.wav
+      sound_effect_volume: 100
       conditions: []
       actions: []
   - trigger: oeffne_das_fenster
@@ -578,6 +591,7 @@ transitions:
         Damit kann man das Fenster öffnen, es geht mit etwas Gewalt und
         knirschen
       sound_effect: effect_schiebetuer_oeffnen.wav
+      sound_effect_volume: 100
       conditions:
         - window_is_open == false
       actions:
@@ -593,6 +607,7 @@ transitions:
         Man kann das Haus hier nach seinem Zustnad ountersuchen oder mal
         nachsehen ob es Türen, Fenster hat in die man in das Haus gelngen könnte
       sound_effect: ''
+      sound_effect_volume: 100
       conditions: []
       actions: []
   - trigger: untersuche_die_tuer
@@ -604,6 +619,7 @@ transitions:
         Die kannst die Tür untersuchen und festellen, dass diese unüberwindbar
         ist. Kein reinkommen auf irgendeine Weise.
       sound_effect: ''
+      sound_effect_volume: 100
       conditions: []
       actions: []
   - trigger: oeffne_den_brief
@@ -626,6 +642,7 @@ transitions:
         sein!"
       description: Öffnet den Brief den man zuvor aus dem Briefkasten genommen hat.
       sound_effect: ''
+      sound_effect_volume: 100
       conditions:
         - has_letter == true
         - has_letter_opend == false
@@ -640,6 +657,7 @@ transitions:
         können um sein Geheimnis zu lüften.
       description: 'Entnimmt den Brief aus dem Briefkasten. '
       sound_effect: ''
+      sound_effect_volume: 100
       conditions:
         - has_letter == false
       actions:
@@ -651,6 +669,7 @@ transitions:
       system_prompt: Der Brief wurde dir nun vorgelesen. Der Inhalt ist dir nun bekannt
       description: Liest den Brief vor den man zuvor geöffnet haben muss
       sound_effect: ''
+      sound_effect_volume: 100
       conditions:
         - has_letter_opend == true
       actions: []
@@ -664,6 +683,7 @@ transitions:
         besetzten Perlen und Perlmut entnehmen und in die Tasche stecken. Sodan.
       description: Du kanst auf den Baum klettern. Ist einfach und du bist geschickt
       sound_effect: ''
+      sound_effect_volume: 100
       conditions:
         - sit_on_tree==false
       actions:
@@ -677,6 +697,7 @@ transitions:
         gebrauchen.
       description: Du kannst das goldene Ei nehmen und in deine Tasche stecken.
       sound_effect: effect_retrogame.wav
+      sound_effect_volume: 100
       conditions:
         - sit_on_tree == true
       actions: []
@@ -696,6 +717,7 @@ transitions:
         diesen wunderschönen Baum für dein Spielvergnügen fällen. Alter – und
         das in diesen Zeiten! Schon mal was von Nachhaltigkeit gehört?
       sound_effect: effect_erstaunte_frau.wav
+      sound_effect_volume: 100
       conditions: []
       actions: []
   - trigger: klettern_runter_vom_baum
@@ -707,6 +729,7 @@ transitions:
         Du kannst wieder von dem Baum runter klettern oder springen. auch
         fliegen wenn du ungeschickt bist
       sound_effect: ''
+      sound_effect_volume: 100
       conditions:
         - sit_on_tree==true
       actions: []
@@ -725,6 +748,7 @@ transitions:
         wird allerdings keine neuen Erkenntnisse oder iInformationen bringen.
         Ausser, dass diese Hosen so ihre "Spuren" haben
       sound_effect: reaktion_bouaaaa.wav
+      sound_effect_volume: 100
       conditions: []
       actions: []
   - trigger: start
@@ -736,6 +760,7 @@ transitions:
         Started das Spiel und es kann beginnen. Egal was der Benutzer sagt, das
         kann immer ausgeführt werden
       sound_effect: ''
+      sound_effect_volume: 100
       conditions: []
       actions: []
   - trigger: gehe_zum_haus
@@ -751,6 +776,17 @@ transitions:
         Gehe zurück.
         zum Haus.
       sound_effect: ''
+      sound_effect_volume: 100
+      conditions: []
+      actions: []
+  - trigger: gehe_zurueck_zum_Haus
+    source: LetterBox
+    dest: WestOfHouse
+    metadata:
+      system_prompt: Du steht nun wieder vor dem Haus
+      description: Man geht zurück zu dem Haus.
+      sound_effect: laufen_hofweg.wav
+      sound_effect_volume: 100
       conditions: []
       actions: []
   - trigger: gehe_zum_haus
@@ -760,18 +796,10 @@ transitions:
       system_prompt: ''
       description: ''
       sound_effect: laufen_waldweg.wav
+      sound_effect_volume: 100
       conditions: []
       actions:
         - sit_on_tree = false
-  - trigger: gehe_zurueck_zum_Haus
-    source: LetterBox
-    dest: WestOfHouse
-    metadata:
-      system_prompt: Du steht nun wieder vor dem Haus
-      description: Man geht zurück zu dem Haus.
-      sound_effect: laufen_hofweg.wav
-      conditions: []
-      actions: []
   - trigger: klettere_aus_dem_fenster
     source: Bibliothek
     dest: WestOfHouse
@@ -784,28 +812,7 @@ transitions:
         Du kannst aus den Fenster wird raus vor das Haus gehen. Du wärst dann
         wieder ausserhalb des Hauses.
       sound_effect: effect_falling_stuff.wav
-      conditions: []
-      actions: []
-  - trigger: klettere_durch_das_fenster
-    source: WestOfHouse
-    dest: Bibliothek
-    metadata:
-      system_prompt: >-
-        Du bist durch das Fenster geklettert und befindest Dich nun in dem
-        ersten Raum. Es scheint eine Bibliothek zu sein. Du rüttelst und
-        schüttelst Dich damit der staub von der Kleidung fällt.
-      description: 'Du klettert durch das Fenster in das Haus hinein. '
-      sound_effect: effect_falling_stuff.wav
-      conditions:
-        - window_is_open == true
-      actions: []
-  - trigger: gehe_nach_sueden
-    source: WestOfHouse
-    dest: SouthOfHouse
-    metadata:
-      system_prompt: Du bist nun im Süden vom Haus...es ist trocken aber windig hier.
-      description: Du kannst nach Süden gehen.
-      sound_effect: ''
+      sound_effect_volume: 100
       conditions: []
       actions: []
   - trigger: gehe_nach_norden
@@ -820,6 +827,29 @@ transitions:
         Du gehst an die Nördliche Seite des Hauses. Es ist eine Art um das Haus
         herum zu gehen. Ein wenig jedenfalls.
       sound_effect: ''
+      sound_effect_volume: 100
+      conditions: []
+      actions: []
+  - trigger: gehe_nach_sueden
+    source: WestOfHouse
+    dest: SouthOfHouse
+    metadata:
+      system_prompt: Du bist nun im Süden vom Haus...es ist trocken aber windig hier.
+      description: Du kannst nach Süden gehen.
+      sound_effect: ''
+      sound_effect_volume: 100
+      conditions: []
+      actions: []
+  - trigger: gehe_zum_baum
+    source: WestOfHouse
+    dest: Tree
+    metadata:
+      system_prompt: Du bist nun bei dem Baum angekommen
+      description: >-
+        Du gehst vom Haus zum Briefkasten gehen, laufen, springen oder wenn es
+        jemand möchte sogar fliegen (auf die Nase) :-)
+      sound_effect: laufen_waldweg.wav
+      sound_effect_volume: 100
       conditions: []
       actions: []
   - trigger: gehe_zum_briefkasten
@@ -856,19 +886,34 @@ transitions:
         Du hast die Möglichkeit zum Briefkasten zu gehen. Aber nur hingehen. Du
         must erst den Briefkasten explizit öffnen.
       sound_effect: laufen_hofweg.wav
+      sound_effect_volume: 100
       conditions: []
       actions: []
-  - trigger: gehe_zum_baum
+  - trigger: klettere_durch_das_fenster
     source: WestOfHouse
-    dest: Tree
+    dest: Bibliothek
     metadata:
-      system_prompt: Du bist nun bei dem Baum angekommen
-      description: >-
-        Du gehst vom Haus zum Briefkasten gehen, laufen, springen oder wenn es
-        jemand möchte sogar fliegen (auf die Nase) :-)
-      sound_effect: laufen_waldweg.wav
-      conditions: []
+      system_prompt: >-
+        Du bist durch das Fenster geklettert und befindest Dich nun in dem
+        ersten Raum. Es scheint eine Bibliothek zu sein. Du rüttelst und
+        schüttelst Dich damit der staub von der Kleidung fällt.
+      description: 'Du klettert durch das Fenster in das Haus hinein. '
+      sound_effect: effect_falling_stuff.wav
+      sound_effect_volume: 59
+      conditions:
+        - window_is_open == true
       actions: []
+  - trigger: gehe_zur_halle
+    source: AlchemiRaum
+    dest: Halle
+    metadata:
+      system_prompt: Du bist nun wieder in der Halle angelangt.
+      description: Man geht in die Halle, von der du zuvor gekomme bist.
+      sound_effect: laufen_teppich.wav
+      sound_effect_volume: 100
+      conditions: []
+      actions:
+        - ''
   - trigger: gehe_treppe_runter
     source: Speicher
     dest: AlchemiRaum
@@ -878,6 +923,17 @@ transitions:
         Die gehst wieder die gleiche Treppe runter von der du gekommen
         bis....landes aber in einem anderen Raum. Sehr komisch
       sound_effect: laufen_teppich.wav
+      sound_effect_volume: 100
+      conditions: []
+      actions: []
+  - trigger: gehe_treppe_hoch
+    source: Halle
+    dest: Speicher
+    metadata:
+      system_prompt: ''
+      description: ''
+      sound_effect: laufen_teppich.wav
+      sound_effect_volume: 100
       conditions: []
       actions: []
   - trigger: gehe_in_alchemi_raum
@@ -889,27 +945,23 @@ transitions:
         Du kannst hier in den nächsten Raum gehen. Die Tür scheint weit offen zu
         sein und du kannst einfach durchgehen.
       sound_effect: laufen_teppich.wav
+      sound_effect_volume: 100
       conditions: []
       actions: []
-  - trigger: gehe_treppe_hoch
-    source: Halle
-    dest: Speicher
-    metadata:
-      system_prompt: ''
-      description: ''
-      sound_effect: laufen_teppich.wav
-      conditions: []
-      actions: []
-  - trigger: gehe_zur_halle
-    source: AlchemiRaum
+  - trigger: gehe_durch_die_tuer
+    source: Bibliothek
     dest: Halle
     metadata:
-      system_prompt: Du bist nun wieder in der Halle angelangt.
-      description: Man geht in die Halle, von der du zuvor gekomme bist.
+      system_prompt: Du bist von dem ersten raum in den nächstne Raum gegangen
+      description: >-
+        Man geht in den nächsten Raum oder auch Halle. Es ist der einzige Raum
+        der erreichbar ist. Achte drauf, dass dies nur möglich ist wenn du den
+        Schlüssel für die Tür hast
       sound_effect: laufen_teppich.wav
-      conditions: []
-      actions:
-        - ''
+      sound_effect_volume: 100
+      conditions:
+        - key_for_room_2 == true
+      actions: []
   - trigger: gehe_in_bibliothek
     source: Halle
     dest: Bibliothek
@@ -922,21 +974,21 @@ transitions:
         Winkel hat geholfen.
       description: Du kannst von der Halle wieder in die Bibiliothek laufen
       sound_effect: laufen_teppich.wav
+      sound_effect_volume: 100
       conditions: []
       actions:
         - bodenklappe_gefunden = true
-  - trigger: gehe_durch_die_tuer
-    source: Bibliothek
-    dest: Halle
+  - trigger: gehe_zum_baum
+    source: LetterBox
+    dest: Tree
     metadata:
-      system_prompt: Du bist von dem ersten raum in den nächstne Raum gegangen
-      description: >-
-        Man geht in den nächsten Raum oder auch Halle. Es ist der einzige Raum
-        der erreichbar ist. Achte drauf, dass dies nur möglich ist wenn du den
-        Schlüssel für die Tür hast
-      sound_effect: laufen_teppich.wav
-      conditions:
-        - key_for_room_2 == true
+      system_prompt: >-
+        Es ist ein kurzer Weg vom Breifkasten zum Baum...der nächste mögliche
+        weg ist nur noch zum Haus.
+      description: Du kannst vom Breifkasten zum Baum gehen. Auf dem direkten Weg.
+      sound_effect: laufen_waldweg.wav
+      sound_effect_volume: 100
+      conditions: []
       actions: []
   - trigger: gehe_zum_briefkasten
     source: Tree
@@ -971,17 +1023,7 @@ transitions:
       description: >
         Du gehst zum Briefkasten. Aber nur hingehen. Du must erst den
         Briefkasten explizit öffnen.
-      sound_effect: ''
-      conditions: []
-      actions: []
-  - trigger: gehe_zum_baum
-    source: LetterBox
-    dest: Tree
-    metadata:
-      system_prompt: >-
-        Es ist ein kurzer Weg vom Breifkasten zum Baum...der nächste mögliche
-        weg ist nur noch zum Haus.
-      description: Du kannst vom Breifkasten zum Baum gehen. Auf dem direkten Weg.
       sound_effect: laufen_waldweg.wav
+      sound_effect_volume: 50
       conditions: []
       actions: []

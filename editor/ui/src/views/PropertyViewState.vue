@@ -28,7 +28,7 @@
           <v-slider
             v-if="jsonData.userData"
             v-model="jsonData.userData.ambient_sound_volume"
-            :min="0"
+            :min="1"
             :max="100"
             :step="1"
             append-icon="mdi-volume-high"

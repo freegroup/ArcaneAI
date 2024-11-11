@@ -142,6 +142,9 @@ export default {
           .map((shape) => ({
             name: shape.name,
             metadata: {
+              // kopiere erstmal alles...
+              ...shape.userData,
+              //...und ein paar Felder benötigen ein "trim"
               system_prompt: (shape.userData?.system_prompt ?? "").trim(),
               ambient_sound: shape.userData?.ambient_sound?.trim(),
             },
@@ -158,6 +161,7 @@ export default {
                 system_prompt: trigger.system_prompt || "",
                 description: trigger.description || "",
                 sound_effect: trigger.sound_effect || "",
+                sound_effect_volume: trigger.sound_effect_volume || 100,
                 conditions: trigger.conditions || [],
                 actions: trigger.actions || []
               }
@@ -174,6 +178,7 @@ export default {
               system_prompt: triggerConnection.userData?.system_prompt || "",
               description: triggerConnection.userData?.description || "",
               sound_effect: triggerConnection.userData?.sound_effect || "",
+              sound_effect_volume: triggerConnection.userData?.sound_effect_volume || 100,
               conditions: triggerConnection.userData?.conditions || [],
               actions: triggerConnection.userData?.actions || []
             }
