@@ -56,7 +56,6 @@ StateShape = draw2d.shape.layout.VerticalLayout.extend({
         this.createPort("input")
         this.createPort("output")
 
-
         this.add(this.classLabel);
         this.classLabel.on("contextmenu", (emitter, event)=>{
             $.contextMenu({
@@ -243,7 +242,9 @@ StateShape = draw2d.shape.layout.VerticalLayout.extend({
 
         this.children.each(function(i,e){
             if(i>0){ // skip the header of the figure
+                debugger
                 memento.trigger.push({
+                    id: e.figure.getId(),
                     name:e.figure.getName(),
                     description:e.figure.getDescription(),
                     sound_effect:e.figure.getSoundEffect(),

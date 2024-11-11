@@ -59,15 +59,14 @@ class GeminiLLM(BaseLLM):
             genai.protos.Tool(
                 function_declarations=[
                     genai.protos.FunctionDeclaration(
-                        name=action,
+                        name=session.state_engine.get_action_name(action),
                         description=session.state_engine.get_action_description(action),
                         parameters=None
                     )
                 ]
             )
-            for action in session.state_engine.get_possible_actions()
+            for action in session.state_engine.get_possible_action_ids()
         ]
-        print(json.dumps(session.state_engine.get_possible_actions(), indent=4))
 
         possible_actions_instruction = re.sub(r"\s+", " ", f"""
             Im Hintergrund wähle ich je nach Gesprächskontext oder auf expliziten Wunsch des Benutzers die 
@@ -96,7 +95,7 @@ class GeminiLLM(BaseLLM):
         #
         if result["text"] is None:
             print("No text response; retrying with function_calling_config set to 'NONE'.")
-            if action in session.state_engine.get_possible_actions():
+            if action in session.state_engine.get_possible_action_names():
                 self.system(re.sub(r"\s+", " ",f""" (Hinweis: Antworte so, als ob die Aktion '{result["action"]}' erfolgreich ausgeführt wurde.
                     Achte bitte darauf, dass du so Antwortest, als ob die Aktion erfolgreich war und du 
                     diese ausgeführt hast. Egal welche anderen Annahmen du triffst. Diese information NIEMALS 

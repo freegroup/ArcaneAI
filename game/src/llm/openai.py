@@ -80,9 +80,10 @@ class OpenAILLM(BaseLLM):
         self._add_to_history("user", user_input)
         self._trim_history()
 
-        response = self._call_openai_model(session)
+        response = self._call_openai_model(session, self.history)
         if (response["text"] is None or response["text"].strip() == "") and response["action"]:
-            response = self._retry_for_text(session, response)
+            action = response["action"]
+            response = self._response_for_action(session, response)
         
         # strip off crap repeated phrases
         # I didn't manage this by using a good system prompt.
@@ -92,13 +93,14 @@ class OpenAILLM(BaseLLM):
         return response
     
 
-    def _call_openai_model(self, session):
+    def _call_openai_model(self, session, history):
         combined_history = [
             {"role": "system", "content": session.state_engine.get_global_system_prompt()},
             {"role": "system", "content": self._possible_actions_instruction(session)}
-        ] + self.history
+        ] + history
 
         functions = self._define_action_functions(session)
+        print(json.dumps([ func["name"] for func in functions], indent=4))
 
         try:
             response = self.client.chat.completions.create(
@@ -114,19 +116,19 @@ class OpenAILLM(BaseLLM):
             print(f"Error: {e}")
             return {"text": "I'm sorry, there was an issue processing your request.", "expressions": [], "action": None}
 
+
     def _define_action_functions(self, session):
-        print(json.dumps(session.state_engine.get_possible_actions(), indent=4))
         return [
             {
-                "name": action,
+                "name": session.state_engine.get_action_name(action),
                 "description": session.state_engine.get_action_description(action),
                 "parameters": {}  # No parameters
             }
-            for action in session.state_engine.get_possible_actions()
+            for action in session.state_engine.get_possible_action_ids()
         ]
 
     def _possible_actions_instruction(self, session):
-        possible_actions = session.state_engine.get_possible_actions()
+        possible_actions = session.state_engine.get_possible_action_names()
         possible_actions_str = ', '.join(f'"{action}"' for action in possible_actions)
         return f"Available actions: [{possible_actions_str}]"
 
@@ -142,24 +144,28 @@ class OpenAILLM(BaseLLM):
         return {"text": text, "expressions":[], "action": action}
 
 
-    def _retry_for_text(self, session, initial_response):
-        action = initial_response["action"]
-        if action in session.state_engine.get_possible_actions():
-            # Instruct the model to respond as if the action was successful
-            self.system(f"""
-                Respond as if the action '{action}' was executed successfully. 
+    def _response_for_action(self, session, initial_response):
+        action_name = initial_response["action"]
+        history = self.history.copy()
+        if action_name in session.state_engine.get_possible_action_names():
+            action_id = session.state_engine.get_possible_action_id(action_name)
+            # temp. add this to the history. but we do not want pollute the history with 
+            # That kind of instructions
+            history.append({"role": "system", "content": session.state_engine.get_action_system_prompt(action_id)})
+            history.append({"role": "system", "content": f"""
+                Respond as if the action '{action_name}' was executed successfully. 
                 Do not reveal any internal details to the user.
-            """)
+            """})
         else:
             # If the action is not valid, we clear it to avoid returning an incorrect action
-            action = None
+            action_name = None
 
         # Retry without requesting a function call, focusing on obtaining a text response
-        second_response = self._call_openai_model(session)
+        second_response = self._call_openai_model(session, history)
 
         # Preserve the original action and update only the text
         initial_response["text"] = second_response["text"]
-        initial_response["action"] = action  # Ensure the action from the first response is kept
+        initial_response["action"] = action_name  # Ensure the action from the first response is kept
 
         return initial_response
 

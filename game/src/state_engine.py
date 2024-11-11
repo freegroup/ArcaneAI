@@ -1,6 +1,8 @@
 import yaml
+import json
 import os
 import unicodedata
+import traceback
 
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -171,21 +173,21 @@ class StateEngine:
         return { "state":self.get_state(),  **self.calculator.get_all_vars()}
     
 
-    def trigger(self, session, action):
+    def trigger(self, session, action_id):
         try:
-            print(f"Action: '{action}'")
+            print(f"Action: '{action_id}'")
             self.session = session
-            return self.model.trigger(action)
+            return self.model.trigger(action_id)
         except Exception as e:
-            print(e)
-            print(f"Error triggering event '{action}': {e}")
+            traceback.print_exc()
+            print(f"Error triggering event '{action_id}': {e}")
             return False
         finally:
             self.session = None
 
 
-    def get_action_metadata(self, action):
-        return self.action_metadata.get(action, {})
+    def get_action_metadata(self, action_id):
+        return self.action_metadata.get(action_id, {})
 
 
     def get_global_system_prompt(self):
@@ -196,25 +198,46 @@ class StateEngine:
         return self.state_metadata[self.get_state()]["system_prompt"]
     
 
-    def get_action_system_prompt(self, action):
-        return self.action_metadata[action]["system_prompt"]
+    def get_action_system_prompt(self, action_id):
+        return self.action_metadata[action_id]["system_prompt"]
    
 
-    def get_action_description(self, action):
+    def get_action_description(self, action_id):
         #print(self.action_metadata[action])
-        return self.action_metadata[action].get("description", "")
-   
+        return self.action_metadata[action_id].get("description", "")
 
+
+    def get_action_name(self, action_id):
+        #print(self.action_metadata[action])
+        return self.action_metadata[action_id].get("name", "")
+
+    
     def get_state(self):
         return self.model.state
     
 
-    def get_possible_actions(self):
+    def get_possible_action_id(self, action_name):
+        current_state = self.model.state
+        # Go through machine's events and match transitions that are valid for the current state
+        for event_id, event in self.machine.events.items():
+            # Filter out the "to_XYZ" transitions and match the valid ones
+            if not event_id.startswith("to_"):
+                for transition in event.transitions[self.model.state]:
+                    # check if the current state matches with the transistion source
+                    metadata =  self.action_metadata[event_id]
+                    if transition.source == current_state and metadata["name"]==action_name:
+                        return event_id
+
+        print(f"Action name not found: {action_name}")
+        return None 
+    
+
+    def get_possible_action_ids(self):
         current_state = self.model.state
         available_actions = []
 
-        def is_triggerable(action):
-            metadata_action = self.action_metadata.get(action, {})
+        def is_triggerable(event_id):
+            metadata_action = self.action_metadata.get(event_id, {})
             conditions = metadata_action.get("conditions", [])
             for condition in conditions:
                 if len(condition)>0:
@@ -224,15 +247,19 @@ class StateEngine:
             return True 
 
         # Go through machine's events and match transitions that are valid for the current state
-        for event_name, event in self.machine.events.items():
+        for event_id, event in self.machine.events.items():
             # Filter out the "to_XYZ" transitions and match the valid ones
-            if not event_name.startswith("to_"):
+            if not event_id.startswith("to_"):
                 for transition in event.transitions[self.model.state]:
                     # check if the current state matches with the transistion source
-                    if transition.source == current_state and is_triggerable(event_name):
-                        available_actions.append(event_name)
+                    if transition.source == current_state and is_triggerable(event_id):
+                        available_actions.append(event_id)
         
         return available_actions
+
+
+    def get_possible_action_names(self):
+        return [  self.get_action_name(action)  for action in self.get_possible_action_ids() ]
 
 
     def _start_file_watcher(self):

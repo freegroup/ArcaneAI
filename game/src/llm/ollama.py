@@ -114,18 +114,17 @@ class OllamaLLM(BaseLLM):
             return {"text": "I'm sorry, there was an issue processing your request.", "expressions": [], "action": None}
 
     def _define_action_functions(self, session):
-        print(json.dumps(session.state_engine.get_possible_actions(), indent=4))
         return [
             {
-                "name": action,
+                "name": session.state_engine.get_action_name(action),
                 "description": session.state_engine.get_action_description(action),
                 "parameters": {}  # No parameters
             }
-            for action in session.state_engine.get_possible_actions()
+            for action in session.state_engine.get_possible_action_ids()
         ]
 
     def _possible_actions_instruction(self, session):
-        possible_actions = session.state_engine.get_possible_actions()
+        possible_actions = session.state_engine.get_possible_action_names()
         possible_actions_str = ', '.join(f'"{action}"' for action in possible_actions)
         return f"Available actions: [{possible_actions_str}]"
 
@@ -143,7 +142,7 @@ class OllamaLLM(BaseLLM):
 
     def _retry_for_text(self, session, initial_response):
         action = initial_response["action"]
-        if action in session.state_engine.get_possible_actions():
+        if action in session.state_engine.get_possible_action_names():
             # Instruct the model to respond as if the action was successful
             self.system(f"""
                 Respond as if the action '{action}' was executed successfully. 

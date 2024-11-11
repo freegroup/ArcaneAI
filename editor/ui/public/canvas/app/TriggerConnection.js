@@ -21,7 +21,6 @@ var TriggerConnection= draw2d.Connection.extend({
                 stroke:3,
                 color:"#cce5bc",
                 radius: 20,
-                dasharray:"- ",
                 router:routerToUse
             }, attr),
             extend({

@@ -2,6 +2,7 @@ import os
 import sys 
 import signal
 import json
+import traceback
 from dotenv import load_dotenv
 load_dotenv() 
 
@@ -61,7 +62,7 @@ if __name__ == '__main__':
             "statusBefore": session.state_engine.get_state()
         }
         response_text = "?"
-        action = None
+        action_name = None
         try:
             print("=====================================================================================================")
             if text.lower() == "debug":
@@ -73,16 +74,15 @@ if __name__ == '__main__':
             
             if len(text)>0:
                 response = session.llm.chat(session,text)
-                print(json.dumps(response, indent=4))
-
-                action = response.get("action") 
+                action_name = response.get("action") 
                 session.tts.stop(session)
 
-                if action:
-                    done = session.state_engine.trigger(session, action)
+                if action_name:
+                    action_id = session.state_engine.get_possible_action_id(action_name)
+                    done = session.state_engine.trigger(session, action_id)
                     if done:
                         response_text = response["text"]
-                        session.llm.system(session.state_engine.get_action_system_prompt(action))
+                        session.llm.system(session.state_engine.get_action_system_prompt(action_id))
                     else:
                         # generate a negative answer to the last tried transition
                         text = """
@@ -102,14 +102,14 @@ if __name__ == '__main__':
         finally:
             log_entry["response"] = response_text
             log_entry["statusAfter"] = session.state_engine.get_state()
-            log_entry["action"] = action
+            log_entry["action"] = action_name
             historyManager.append(session, log_entry)
 
     session = newSession()
 
     # Start the game for this new session
     #
-    session.state_engine.trigger(session, "start")
+    session.state_engine.trigger(session, session.state_engine.get_possible_action_id("start"))
     process_text(session, "Erkläre mir in kurzen Worten worum es hier geht und wer du bist")
     
     # show the current status of the game
@@ -122,5 +122,6 @@ if __name__ == '__main__':
                 break
             process_text(session, text)
     except Exception as e:
+        traceback.print_exc()
         print(f"An error occurred: {e}")
         stop()
