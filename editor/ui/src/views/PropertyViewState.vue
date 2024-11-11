@@ -24,7 +24,16 @@
             <v-icon size="small">mdi-play</v-icon>
           </v-btn>
         </div>
-    
+        <div>
+          <v-slider
+            v-if="jsonData.userData"
+            v-model="jsonData.userData.ambient_sound_volume"
+            :min="0"
+            :max="100"
+            :step="1"
+            append-icon="mdi-volume-high"
+          />
+        </div>
         
         <label v-if="jsonData.userData"  for="systemPrompt">Sceen Description</label>
         <textarea
@@ -58,6 +67,7 @@
           userData: {
             system_prompt: '',
             ambient_sound: '',
+            ambient_sound_volume: 100,
           },
         }
       };
@@ -72,11 +82,13 @@
       "jsonData.userData.ambient_sound"() {
         this.onDataChange();
       },
+      "jsonData.userData.ambient_sound_volume"() {
+        this.onVolumeChange();
+      },
     },
     methods: {
 
       onDataChange() { 
-        console.log(this.jsonData)
         this.jsonData.name = this.jsonData?.name?.replace(/[^a-zA-Z0-9]/g, '');
         if (this.draw2dFrame ) {
             var data = JSON.parse(JSON.stringify( this.jsonData ));
@@ -84,9 +96,18 @@
         }
       },
 
+      onVolumeChange() {
+        if(this.jsonData?.userData){
+          const volume = this.jsonData.userData.ambient_sound_volume || 100;
+          SoundManager.setVolume(volume);
+          this.onDataChange();
+        }
+      },
+
       async playSelectedSound() {
         if (this.jsonData.userData.ambient_sound) {
-          SoundManager.playSound(this.jsonData.userData.ambient_sound);
+          const volume = this.jsonData.userData.ambient_sound_volume || 100;
+          SoundManager.playSound(this.jsonData.userData.ambient_sound, volume);
         }
       },
     },
@@ -97,7 +118,10 @@
             if (event.origin !== window.location.origin) return;
             const message = event.data;
             if (message.event === 'onSelect' && message.type == "StateShape") {
-                this.jsonData = message.data
+                this.jsonData = message.data;
+                if (!this.jsonData.userData.ambient_sound_volume) {
+                  this.jsonData.userData.ambient_sound_volume = 100;
+                }
             }
             else if (message.event === 'onUnselect') {
                 this.jsonData = {}
