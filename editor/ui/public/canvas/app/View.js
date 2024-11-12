@@ -44,7 +44,65 @@ View = draw2d.Canvas.extend({
         //ZoomOut Button and the callback
         $("#canvas_zoom_out").on("click", () => { 
             setZoom(this.getZoom() * 0.8)
-        })  
+        }) 
+
+        this.on("contextmenu", (emitter, event) => {
+            let figure = this.getBestFigure(event.x, event.y)
+      
+  
+            if (figure !== null) {
+              let {x,y} = event
+              let items = {}
+      
+              if (figure instanceof Raft) {
+                items = {
+                    "label": {name: "contextmenu.add_label"},
+                    "delete": {name: "contextmenu.delete"},
+                    "sep1": "---------",
+                    "design": {name: "contextmenu.open_designer"},
+                    "help": {name: "contextmenu.description"}
+                }
+              } 
+              $.contextMenu({
+                selector: 'body',
+                events: {
+                  hide: () => {
+                    $.contextMenu('destroy')
+                  }
+                },
+                callback: (key, options) => {
+                  switch (key) {
+                    case "label":
+                      inputPrompt.show(t("dialog.add_label"), t("label.label"))
+                      .then( value => {
+                        let label = new draw2d.shape.basic.Label({text: value, stroke: 0, x: -20, y: -40})
+                        let locator = new draw2d.layout.locator.SmartDraggableLocator()
+                        label.installEditor(new LabelInplaceEditor())
+                        figure.add(label, locator)
+                      })
+                      break
+                    case "design":
+                      let scope = figure.attr("userData.scope")
+                      let shapeName = figure.attr("userData.file")
+                      window.open(`../designer?${scope}=${shapeName}`, "designer")
+                      break
+                    case "help":
+                      markdownDialog.show(figure)
+                      break
+                    case "delete":
+                      this.getCommandStack().execute(new draw2d.command.CommandDelete(figure))
+                      break
+                    default:
+                      figure.executeContextMenuEntry(key, x, y)
+                      break
+                  }
+                },
+                x: x,
+                y: y,
+                items: items
+              })
+            }
+          })
 	},
 
     getFigure: function(id)
@@ -97,8 +155,8 @@ View = draw2d.Canvas.extend({
 
     toggleFullScreen: function() 
     {
-        window.parent.postMessage({ type: 'toggleFullScreen' }, '*');
-        /*
+        //window.parent.postMessage({ type: 'toggleFullScreen' }, '*');
+        
         var doc = window.document;
         var docEl = doc.documentElement;
       
@@ -123,7 +181,6 @@ View = draw2d.Canvas.extend({
         } else {
           cancelFullScreen.call(doc);
         }
-          */
     },
     
     getBoundingBox: function () 
