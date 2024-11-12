@@ -96,7 +96,8 @@ class OpenAILLM(BaseLLM):
     def _call_openai_model(self, session, history):
         combined_history = [
             {"role": "system", "content": session.state_engine.get_global_system_prompt()},
-            {"role": "system", "content": self._possible_actions_instruction(session)}
+            {"role": "system", "content": session.state_engine.get_state_system_prompt()},
+            {"role": "system", "content": self._possible_actions_instruction(session)},
         ] + history
 
         functions = self._define_action_functions(session)
@@ -130,7 +131,7 @@ class OpenAILLM(BaseLLM):
     def _possible_actions_instruction(self, session):
         possible_actions = session.state_engine.get_possible_action_names()
         possible_actions_str = ', '.join(f'"{action}"' for action in possible_actions)
-        return f"Available actions: [{possible_actions_str}]"
+        return f"Use the supplied tools to assist the user: [{possible_actions_str}]"
 
 
     def _process_response(self, response):
@@ -171,11 +172,15 @@ class OpenAILLM(BaseLLM):
 
 
     def _trim_history(self):
-        while self._count_tokens(self.history) > self.token_limit:
-            if len(self.history) > 1:
-                self.history.pop(0)
-            else:
-                break
+        entry_limit = 4
+        self.history = self.history[-entry_limit:]
+
+        #while self._count_tokens(self.history) > self.token_limit:
+        #    if len(self.history) > 1:
+        #        self.history.pop(0)
+        #    else:
+        #        break
+
 
     def _count_tokens(self, messages):
         return sum(len(self.tokenizer.encode(message["content"])) for message in messages)
