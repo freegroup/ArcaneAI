@@ -90,6 +90,25 @@
         }
     }
 
+    async function startGame() {
+        try {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const response = await fetch("{{ BASE_URI }}/websocket/connect",{
+                credentials: "include"  // Ensure cookies are included
+            });
+            const data = await response.json();
+            token = data.token;
+
+            createWebSocketConnection();
+            toggleChatUI(true);
+            showTypingIndicator();            
+
+        } catch (error) {
+            console.error("Error initializing WebSocket:", error);
+        }
+    }
+
+
     async function sendQuestion() {
         const userMessage = questionInput.value.trim();
         questionInput.value = "";
@@ -141,60 +160,33 @@
         }
     }
 
-    async function startGame() {
-        try {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const response = await fetch("{{ BASE_URI }}/websocket/connect",{
-                credentials: "include"  // Ensure cookies are included
-            });
-            const data = await response.json();
-            token = data.token;
+    // Function to play sound based on WebSocket message
+    function playSound(message) {
+        const soundUrl = `${window.location.protocol}//${window.location.host}{{ BASE_URI }}/api/audio/${message.file_name}`;
+        const audio = new Audio(soundUrl);
+        audio.loop = message.loop;
+        audioPlayers[message.file_name] = audio;
+        audio.play().catch(error => console.error("Error playing audio:", error));
+        
+        audio.addEventListener('ended', () => {
+            if (!audio.loop) {
+                delete audioPlayers[message.file_name];
+                console.log(`Sound ${message.file_name} ended and was removed.`);
+            }
+        });
 
-            const wsProtocol = window.location.protocol === "https:" ? "wss://" : "ws://";
-            const wsUrl = `${wsProtocol}${window.location.host}{{ BASE_URI }}/websocket/${token}`;
-            websocket = new WebSocket(wsUrl);
-
-            websocket.onopen = () => {
-                reconnectAttempts = 0;
-                toggleChatUI(true);
-                showTypingIndicator();
-            };
-
-            websocket.onmessage = async (event) => {
-                if (typeof event.data === "string") {
-                    try {
-                        const message = JSON.parse(event.data);
-                        if (message.function === "sound.play_sound") {
-                            const soundUrl = `${window.location.protocol}//${window.location.host}{{ BASE_URI }}/api/audio/${message.file_name}`;
-                            const audio = new Audio(soundUrl);
-                            audio.loop = message.loop;
-                            audioPlayers[message.file_name] = audio;
-                            audio.play().catch(error => console.error("Error playing audio:", error));
-                        }
-                        else if (message.function === "sound.stop_all") {
-                            stopAllSounds();
-                        }
-                        else if(message.function === "speak.stop"){
-                            stopSpeak();
-                        }
-                        else if(message.function === "state.inventory"){
-                            gameStatus.innerHTML = message.data.state
-                        }
-                    } catch (error) {
-                        console.error("Error parsing text message:", error);
-                    }
-                } else if (event.data instanceof Blob) {
-                    const arrayBuffer = await event.data.arrayBuffer();
-                    enqueueChunk(arrayBuffer);
+        if (message.duration > 0 && !message.loop) {
+            setTimeout(() => {
+                if (!audio.ended) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                    delete audioPlayers[message.file_name];
+                    console.log(`Sound ${message.file_name} stopped after duration limit.`);
                 }
-            };
-
-            websocket.onerror = (error) => console.error("WebSocket error:", error);
-            websocket.onclose = () => reconnectWebSocket();
-        } catch (error) {
-            console.error("Error initializing WebSocket:", error);
+            }, message.duration * 1000);
         }
     }
+
 
     // Function to stop all currently playing sound effects
     function stopAllSounds() {
@@ -206,6 +198,19 @@
             delete audioPlayers[fileName];
         }
         console.log("All sound effects stopped.");
+    }
+
+    function stopAmbientSounds() {
+        for (const fileName in audioPlayers) {
+            const audio = audioPlayers[fileName];
+
+            if (audio.loop) {
+                audio.pause();
+                audio.currentTime = 0;
+                delete audioPlayers[fileName];
+            }
+        }
+        console.log("All ambient sound effects stopped.");
     }
 
     async function toggleChatUI(show) {
@@ -229,20 +234,65 @@
             questionInput.focus()
         } catch (error) {
             console.error("Error starting game:", error);
-            responseTextarea.value += "Error starting game.\n";
         }
     }
 
+
+
+    function createWebSocketConnection()     {
+        const wsProtocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+        const wsUrl = `${wsProtocol}${window.location.host}{{ BASE_URI }}/websocket/${token}`;
+        websocket = new WebSocket(wsUrl);
+
+        websocket.onopen = () => {
+            reconnectAttempts = 0;
+            console.log("WebSocket connection established.");
+        };
+
+        websocket.onmessage =  handleWebSocketMessage;
+        websocket.onerror = (error) => console.error("WebSocket error:", error);
+        websocket.onclose = () => reconnectWebSocket();
+    }
+
+
+    // Handle WebSocket reconnection attempts
     function reconnectWebSocket() {
         if (reconnectAttempts < maxReconnectAttempts) {
             setTimeout(() => {
                 reconnectAttempts++;
-                startGame();
+                console.log("Attempting to reconnect WebSocket...");
+                reconnectWebSocket(); 
             }, 5000);
         } else {
             addMessage("Unable to reconnect WebSocket.", "bot");
         }
     }
+
+    // Function to handle WebSocket messages
+    async function handleWebSocketMessage(event) {
+        if (typeof event.data === "string") {
+            try {
+                const message = JSON.parse(event.data);
+                if (message.function === "sound.play_sound") {
+                    playSound(message);
+                } else if (message.function === "sound.stop_all") {
+                    stopAllSounds();
+                } else if (message.function === "sound.stop_ambient") {
+                    stopAmbientSounds();
+                } else if (message.function === "speak.stop") {
+                    stopSpeak();
+                } else if (message.function === "state.inventory") {
+                    gameStatus.innerHTML = message.data.state;
+                }
+            } catch (error) {
+                console.error("Error parsing text message:", error);
+            }
+        } else if (event.data instanceof Blob) {
+            const arrayBuffer = await event.data.arrayBuffer();
+            enqueueChunk(arrayBuffer);
+        }
+    }
+
 
     function addMessage(text, sender) {
         const messageBubble = document.createElement("div");

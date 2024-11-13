@@ -132,7 +132,7 @@ class StateEngine:
 
             if self.session.last_state != current_state:
                 self.session.llm.system(metadata_state.get('system_prompt'))
-                self.session.jukebox.stop_all(self.session)
+                self.session.jukebox.stop_ambient(self.session)
                 value = metadata_state.get("ambient_sound")
                 volume = int(metadata_state.get("ambient_sound_volume", "100") or 100)
                 if value and value.strip():
