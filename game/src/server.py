@@ -173,6 +173,7 @@ async def chat(request: Request, data: ChatMessage, response: Response):
 
     text = data.text
     action_name = None
+    response_text = ""
     log_entry = {
         "question": text,
         "statusBefore": session.state_engine.get_state()
@@ -197,7 +198,6 @@ async def chat(request: Request, data: ChatMessage, response: Response):
 
         log_entry["question"] = text
 
-        response_text = ""
         if len(text) > 0:
             response = session.llm.chat(session, text)
             action_name = response.get("action")
@@ -205,9 +205,7 @@ async def chat(request: Request, data: ChatMessage, response: Response):
             if action_name:
                 action_id = session.state_engine.get_possible_action_id(action_name)
                 done = session.state_engine.trigger(session, action_id)
-                if done:
-                    session.llm.system(session.state_engine.get_action_system_prompt(action_id))
-                else:
+                if not done:
                     # generate a negative answer to the last tried transition
                     text = """
                     Die letze Aktion hat leider nicht geklappt. Unten ist der Grund dafür. Schreibe den Benutzer 
