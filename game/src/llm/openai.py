@@ -57,6 +57,8 @@ class OpenAILLM(BaseLLM):
 
     def system(self, system_instruction):
         if system_instruction:
+            if system_instruction.startswith("Du bist nun im "):
+                print("hit")
             self._add_to_history("system", system_instruction)
         else:
             print("Warning: No system instruction provided.")
