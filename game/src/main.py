@@ -82,7 +82,8 @@ if __name__ == '__main__':
                     done = session.state_engine.trigger(session, action_id)
                     if done:
                         response_text = response["text"]
-                        session.llm.system(session.state_engine.get_action_system_prompt(action_id))
+                        # wird immer nur temp. vor dem trigger verwendet aber nie in die history eingefügt...hoffentlich
+                        #session.llm.system(session.state_engine.get_action_system_prompt(action_id))
                     else:
                         # generate a negative answer to the last tried transition
                         text = """
