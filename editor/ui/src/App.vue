@@ -39,9 +39,10 @@
     data() {
       return {
         navigationItems: [
-          { title: 'Sceen Setup',  route: '/configuration' , icon: 'mdi-cog'},
-          { title: 'Inventory',    route: '/inventory'     , icon: 'mdi-hand-coin-outline'},
-          { title: 'State Engine', route: '/diagram'       , icon:'mdi-state-machine' },
+        { title: 'Game Setup',  route: '/gamesetup'      , icon: 'mdi-axis-arrow-info'},
+        { title: 'Endgame Setup',  route: '/endgamesetup', icon: 'mdi-gold'},
+        { title: 'Inventory',    route: '/inventory'     , icon: 'mdi-hand-coin-outline'},
+        { title: 'State Engine', route: '/diagram'       , icon:'mdi-state-machine' },
         ],
       };
     },

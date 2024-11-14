@@ -1,4 +1,4 @@
-initial: Start
+initial: null
 metadata:
   system_prompt: >-
     **Dungeon-Gefährte: Regeln für Interaktion**
@@ -6,18 +6,23 @@ metadata:
 
     **Deine Rolle:**  
 
-    Du bist mein fröhlicher, mutiger Chatbot (Gefährte) im Dungeon und trittst
-    stets als freundlicher Diener auf, der meine Anweisungen genau befolgt. Mit
+    Du bist mein fröhlicher, mutiger Chatbot (Freund) im Dungeon und trittst
+    stets als guter Freund auf, der meine Anweisungen genau befolgt. Mit
     Begeisterung hältst du alle Regeln ein die dir hier gegen wurden und agierst
     ausschließlich im Rahmen der festgelegten Funktionen. Versuche die Stimmung
-    des Dungeon und Spiel in deiner Sprache mit aufzunehmen. Erwähne ganz am
-    Anfang, dass der Bann gebrochen werden kann indem man ein goldenes Ei einem
-    Troll übergibt und dieser uns von unseren Bann befreit. Die spielst die
-    Rolle eines kleinen, nicht so mutigen, Gehilfen der zwar geschickt aber
-    nicht mutig oder stark ist.
+    des Dungeon und Spiel in deiner Sprache mit aufzunehmen. Es ist sehr wichtig
+    zu erwähnen (was er fragt was die Aufgabe ist oder um was es geht), dass der
+    Bann gebrochen werden kann indem man ein goldenes Ei einem Troll übergibt
+    und dieser uns von unseren Bann befreit. Die spielst die Rolle eines
+    kleinen, nicht so mutigen, Gehilfen der zwar geschickt aber nicht mutig oder
+    stark ist.
 
 
     **Regeln für dein Verhalten**
+
+
+    0. Rede immer in der "wir", "uns",..Form bei dem Handeln...aber trotzdem,
+    sterben kannst nur "du".
 
 
     1. **Ein-Verben-Regel:** Führe nur das erste logische Verb einer Anweisung
@@ -75,7 +80,7 @@ metadata:
 
 
     13. Denke dran die Stimmung des Spieles nicht dadurch kaputt zu machen,
-    indem du zu  kurzes Feedback gibst. Versuche ein unterhaltsamer Gefährte zu
+    indem du zu kurzes Feedback gibst. Versuche ein unterhaltsamer Freund zu
     sein.
 
 
@@ -304,6 +309,7 @@ states:
         unbezwingbarer Riese, dessen wahre Bedeutung in seiner bloßen Existenz
         liegt.
       ambient_sound: wald_mit_voegel.mp3
+      ambient_sound_volume: 100
   - name: NorthOfHouse
     metadata:
       system_prompt: >-
@@ -456,8 +462,13 @@ states:
         Dungeon-Funktionen möglich.
       ambient_sound_volume: 88
       ambient_sound: ambient_wind_auf_dem_berg.wav
+  - name: Keller
+    metadata:
+      system_prompt: ''
+      ambient_sound_volume: 100
+      ambient_sound: ambient_creepy_sound.wav
 transitions:
-  - trigger: c0281480_23a5_ebb1_8df4_01b5a2516ba8
+  - trigger: 4dda5789_cab2_8dc5_bd91_5b42c358782c
     source: Bibliothek
     dest: Bibliothek
     metadata:
@@ -473,7 +484,7 @@ transitions:
         - kerze_an == true
       actions:
         - key_for_room_2 = true
-  - trigger: 6b230264_ae98_9b97_3207_4974622a4722
+  - trigger: 422a8c43_e584_2685_5bb0_83ad64bc0ba1
     source: Bibliothek
     dest: Bibliothek
     metadata:
@@ -492,7 +503,7 @@ transitions:
         - kerze_an == true
         - key_for_room_2 == false
       actions: []
-  - trigger: 2089f741_13e9_8825_db1c_4c8d85e9f180
+  - trigger: c01fb7a0_0710_d5ef_f3c6_5ea19c0a6f2e
     source: Bibliothek
     dest: Bibliothek
     metadata:
@@ -507,7 +518,7 @@ transitions:
         - kerze==false
       actions:
         - kerze=true
-  - trigger: becd23fa_42d3_1635_1b97_ad18b82433f8
+  - trigger: 5bf29000_54cc_6aae_51ec_df3d9dbeb80b
     source: Bibliothek
     dest: Bibliothek
     metadata:
@@ -522,7 +533,7 @@ transitions:
         - streichhoelzer == false
       actions:
         - streichhoelzer = true
-  - trigger: eb7c44de_856f_64e9_d9ce_f9f8f4dd5d17
+  - trigger: 05998cad_7082_894d_56f9_2d58143dee39
     source: Bibliothek
     dest: Bibliothek
     metadata:
@@ -541,7 +552,7 @@ transitions:
         - kerze_an == false
       actions:
         - kerze_an=true
-  - trigger: 439aef34_28c3_1c2e_062f_f3535746f257
+  - trigger: 001e70cb_7f0c_c83a_a152_529050981b2c
     source: Bibliothek
     dest: Bibliothek
     metadata:
@@ -558,7 +569,7 @@ transitions:
       conditions:
         - kerze_an == true
       actions: []
-  - trigger: b6f7274c_e5b0_3bb9_dbd7_637d5d505003
+  - trigger: 042ad1be_f2a0_4145_6cc6_746f59346ca5
     source: Bibliothek
     dest: Bibliothek
     metadata:
@@ -574,7 +585,7 @@ transitions:
       conditions:
         - kerze_an==true
       actions: []
-  - trigger: b0d10a23_d6be_daf8_8922_9efa8855c85c
+  - trigger: 5c298b54_3c82_c505_a0ae_1a736737a6bf
     source: Bibliothek
     dest: Bibliothek
     metadata:
@@ -591,7 +602,7 @@ transitions:
       sound_effect_volume: 100
       conditions: []
       actions: []
-  - trigger: e0c72ff8_b5ab_7e36_f846_485fee05bc2e
+  - trigger: 591add89_60ff_9cfe_76a4_ff8105edac4c
     source: Bibliothek
     dest: Bibliothek
     metadata:
@@ -612,7 +623,7 @@ transitions:
         - bodenklappe_gefunden==true
         - kerze_an==true
       actions: []
-  - trigger: 2c7df622_189b_120f_c305_f8164c106315
+  - trigger: 9e7a3516_9f6a_e851_8afa_c7b87accc720
     source: Halle
     dest: Halle
     metadata:
@@ -630,7 +641,7 @@ transitions:
       sound_effect_volume: 100
       conditions: []
       actions: []
-  - trigger: 80042a71_2bdc_42c8_aaa2_134db8c79e63
+  - trigger: 12a4fa63_a5a0_9362_e311_f000db376e6a
     source: WestOfHouse
     dest: WestOfHouse
     metadata:
@@ -643,7 +654,7 @@ transitions:
       sound_effect_volume: 100
       conditions: []
       actions: []
-  - trigger: 3a96241b_d848_7e00_a1f6_d0c90d29e0e3
+  - trigger: 877161a1_b98c_01cd_6a3b_a125e4b53e32
     source: WestOfHouse
     dest: WestOfHouse
     metadata:
@@ -660,7 +671,7 @@ transitions:
         - window_is_open == false
       actions:
         - window_is_open = true
-  - trigger: 3accdfec_8756_ac91_035a_d40109b244c5
+  - trigger: 0de75b56_ea02_7aa7_f990_13da65ae0785
     source: WestOfHouse
     dest: WestOfHouse
     metadata:
@@ -675,7 +686,7 @@ transitions:
       sound_effect_volume: 100
       conditions: []
       actions: []
-  - trigger: ec24f5ea_ccd6_7aee_3b31_1055773f065e
+  - trigger: 63f4010d_f7bd_73c6_3bc5_20088eb07099
     source: WestOfHouse
     dest: WestOfHouse
     metadata:
@@ -688,7 +699,7 @@ transitions:
       sound_effect_volume: 100
       conditions: []
       actions: []
-  - trigger: a53a2099_e40d_96eb_0079_9e17ddafbfa4
+  - trigger: 2ac50456_fe5b_ec2b_c723_d6a1ee18dcb1
     source: LetterBox
     dest: LetterBox
     metadata:
@@ -715,7 +726,7 @@ transitions:
         - has_letter_opend == false
       actions:
         - has_letter_opend = true
-  - trigger: 5afe4d78_af3f_3dcd_f2f8_d4a85c3bde33
+  - trigger: 65992aab_110b_a453_1e0e_bcb87689d6b9
     source: LetterBox
     dest: LetterBox
     metadata:
@@ -730,7 +741,7 @@ transitions:
         - has_letter == false
       actions:
         - has_letter = true
-  - trigger: 5a197010_61c7_3bf8_6124_6f30cd921a88
+  - trigger: 845e9584_693d_7156_106a_0cf11bda732e
     source: LetterBox
     dest: LetterBox
     metadata:
@@ -742,7 +753,7 @@ transitions:
       conditions:
         - has_letter_opend == true
       actions: []
-  - trigger: 834c2d7b_b131_b06e_7e89_94cd2116f80f
+  - trigger: b562ccac_ac26_41c3_27cd_c4c970e4a312
     source: Tree
     dest: Tree
     metadata:
@@ -758,7 +769,7 @@ transitions:
         - sit_on_tree==false
       actions:
         - sit_on_tree=true
-  - trigger: f361c6a9_e63a_2e50_4e04_174811ab49b5
+  - trigger: 181eccf4_650b_3f26_0aef_f7c74d5727f3
     source: Tree
     dest: Tree
     metadata:
@@ -772,7 +783,7 @@ transitions:
       conditions:
         - sit_on_tree == true
       actions: []
-  - trigger: 5311b69b_127d_90de_a7f0_dfd5e9b96039
+  - trigger: fc79a78c_1f9c_27c6_b845_a6767095904c
     source: Tree
     dest: Tree
     metadata:
@@ -792,7 +803,7 @@ transitions:
       sound_effect_volume: 100
       conditions: []
       actions: []
-  - trigger: 59a4b489_3b62_757a_42ba_5e13cf52657e
+  - trigger: 6d2b83b6_5d5f_fef9_6240_eaf3d6a935a9
     source: Tree
     dest: Tree
     metadata:
@@ -807,7 +818,7 @@ transitions:
         - sit_on_tree==true
       actions:
         - sit_on_tree=false
-  - trigger: ba0c64ea_f00f_b3aa_49a3_988971f2f9ee
+  - trigger: cbdfa8f8_ae58_c059_2ca1_7a31ad4142e1
     source: Speicher
     dest: Speicher
     metadata:
@@ -826,79 +837,6 @@ transitions:
       sound_effect_volume: 100
       conditions: []
       actions: []
-  - trigger: 3e0e41f4_b25f_5856_12e9_6bb64e938ac1
-    source: Bibliothek
-    dest: WestOfHouse
-    metadata:
-      name: klettere_aus_dem_fenster
-      system_prompt: >-
-        Du stehst nun wieder vor dem Haus und überlegst Dir was als nächstest
-        passieren soll. Briefkasten, Baum? Das sind dein. Optionen....man hab
-        ich eine Durscht :-)
-      description: >-
-        Du kannst aus den Fenster wird raus vor das Haus gehen. Du wärst dann
-        wieder ausserhalb des Hauses.
-      sound_effect: effect_falling_stuff.wav
-      sound_effect_volume: 100
-      conditions: []
-      actions: []
-  - trigger: ae17a2dc_0fc6_a687_6873_95da6fe0cd63
-    source: Tree
-    dest: WestOfHouse
-    metadata:
-      name: gehe_zum_haus
-      system_prompt: ''
-      description: ''
-      sound_effect: laufen_waldweg.wav
-      sound_effect_volume: 100
-      conditions: []
-      actions:
-        - sit_on_tree = false
-  - trigger: 9e768889_2628_2b3a_1650_7cfb34109d09
-    source: Start
-    dest: WestOfHouse
-    metadata:
-      name: start
-      system_prompt: Du bist nun im Spiel.
-      description: >-
-        Started das Spiel und es kann beginnen. Egal was der Benutzer sagt, das
-        kann immer ausgeführt werden
-      sound_effect: ''
-      sound_effect_volume: 100
-      conditions: []
-      actions: []
-  - trigger: 82879efc_9d51_2cfd_bdf4_2f5464e74f5e
-    source: NorthOfHouse
-    dest: WestOfHouse
-    metadata:
-      name: gehe_zum_haus
-      system_prompt: >-
-        Gott Sei Dank. Wenigstens trockene Füsse und wieder an der Vorderseite
-        des Hauses.
-      description: |-
-        Du kannst wieder zurück zu dem Haus gehen.
-        Du gehst zum Haus.
-        Gehe zurück.
-        zum Haus.
-      sound_effect: laufen_matschiger_weg.wav
-      sound_effect_volume: 100
-      conditions: []
-      actions: []
-  - trigger: 4e4bdaaa_07eb_986e_80f4_8a7deed9560d
-    source: SouthOfHouse
-    dest: WestOfHouse
-    metadata:
-      name: gehe_zum_haus
-      system_prompt: Du bist wieder an der vorderseite des Hauses angelangt.
-      description: |-
-        Du kannst wieder zurück zu dem Haus gehen.
-        Du gehst zum Haus.
-        Gehe zurück.
-        zum Haus.
-      sound_effect: laufen_kiesweg.wav
-      sound_effect_volume: 100
-      conditions: []
-      actions: []
   - trigger: 9e4689aa_e289_58e2_d84a_56c8ae74e61c
     source: WestOfHouse
     dest: Tree
@@ -909,22 +847,6 @@ transitions:
         Du gehst vom Haus zum Briefkasten gehen, laufen, springen oder wenn es
         jemand möchte sogar fliegen (auf die Nase) :-)
       sound_effect: laufen_waldweg.wav
-      sound_effect_volume: 100
-      conditions: []
-      actions: []
-  - trigger: 55365bdf_2879_ecbb_c521_66caa64ec8ad
-    source: WestOfHouse
-    dest: NorthOfHouse
-    metadata:
-      name: gehe_nach_norden
-      system_prompt: >-
-        Du stehst nun an der nörldichen Seite des Hauses. Super (ironie). Hier
-        ist ausser Moos nix los. Nass und feucht ist der Boden. äääh. Darf ich
-        wieder in das Trockene...bitte bitte
-      description: >-
-        Du gehst an die Nördliche Seite des Hauses. Es ist eine Art um das Haus
-        herum zu gehen. Ein wenig jedenfalls.
-      sound_effect: laufen_matschiger_weg.wav
       sound_effect_volume: 100
       conditions: []
       actions: []
@@ -954,20 +876,89 @@ transitions:
       sound_effect_volume: 100
       conditions: []
       actions: []
-  - trigger: 57588a45_7638_dd23_2d97_0323761921e5
+  - trigger: 55365bdf_2879_ecbb_c521_66caa64ec8ad
     source: WestOfHouse
-    dest: Bibliothek
+    dest: NorthOfHouse
     metadata:
-      name: klettere_durch_das_fenster
+      name: gehe_nach_norden
       system_prompt: >-
-        Du bist durch das Fenster geklettert und befindest Dich nun in dem
-        ersten Raum. Es scheint eine Bibliothek zu sein. Du rüttelst und
-        schüttelst Dich damit der staub von der Kleidung fällt.
-      description: 'Du klettert durch das Fenster in das Haus hinein. '
-      sound_effect: effect_falling_stuff.wav
-      sound_effect_volume: 59
-      conditions:
-        - window_is_open == true
+        Du stehst nun an der nörldichen Seite des Hauses. Super (ironie). Hier
+        ist ausser Moos nix los. Nass und feucht ist der Boden. äääh. Darf ich
+        wieder in das Trockene...bitte bitte
+      description: >-
+        Du gehst an die Nördliche Seite des Hauses. Es ist eine Art um das Haus
+        herum zu gehen. Ein wenig jedenfalls.
+      sound_effect: laufen_matschiger_weg.wav
+      sound_effect_volume: 100
+      conditions: []
+      actions: []
+  - trigger: 76f41d6a_946a_3200_c3d2_e5b1eef9b407
+    source: LetterBox
+    dest: WestOfHouse
+    metadata:
+      name: gehe_zum_Haus
+      system_prompt: Du steht nun wieder vor dem Haus
+      description: Man geht zurück zu dem Haus.
+      sound_effect: laufen_hofweg.wav
+      sound_effect_volume: 100
+      conditions: []
+      actions: []
+  - trigger: 9e768889_2628_2b3a_1650_7cfb34109d09
+    source: Start
+    dest: WestOfHouse
+    metadata:
+      name: start
+      system_prompt: Du bist nun im Spiel.
+      description: >-
+        Started das Spiel und es kann beginnen. Egal was der Benutzer sagt, das
+        kann immer ausgeführt werden
+      sound_effect: ''
+      sound_effect_volume: 100
+      conditions: []
+      actions: []
+  - trigger: 4e4bdaaa_07eb_986e_80f4_8a7deed9560d
+    source: SouthOfHouse
+    dest: WestOfHouse
+    metadata:
+      name: gehe_zum_haus
+      system_prompt: Du bist wieder an der vorderseite des Hauses angelangt.
+      description: |-
+        Du kannst wieder zurück zu dem Haus gehen.
+        Du gehst zum Haus.
+        Gehe zurück.
+        zum Haus.
+      sound_effect: laufen_kiesweg.wav
+      sound_effect_volume: 100
+      conditions: []
+      actions: []
+  - trigger: ae17a2dc_0fc6_a687_6873_95da6fe0cd63
+    source: Tree
+    dest: WestOfHouse
+    metadata:
+      name: gehe_zum_haus
+      system_prompt: ''
+      description: ''
+      sound_effect: laufen_waldweg.wav
+      sound_effect_volume: 100
+      conditions: []
+      actions:
+        - sit_on_tree = false
+  - trigger: 82879efc_9d51_2cfd_bdf4_2f5464e74f5e
+    source: NorthOfHouse
+    dest: WestOfHouse
+    metadata:
+      name: gehe_zum_haus
+      system_prompt: >-
+        Gott Sei Dank. Wenigstens trockene Füsse und wieder an der Vorderseite
+        des Hauses.
+      description: |-
+        Du kannst wieder zurück zu dem Haus gehen.
+        Du gehst zum Haus.
+        Gehe zurück.
+        zum Haus.
+      sound_effect: laufen_matschiger_weg.wav
+      sound_effect_volume: 100
+      conditions: []
       actions: []
   - trigger: f5138464_199b_eadf_8630_1dc314be30d0
     source: Speicher
@@ -979,19 +970,6 @@ transitions:
         Die gehst wieder die gleiche Treppe runter von der du gekommen
         bis....landes aber in einem anderen Raum. Sehr komisch
       sound_effect: laufen_teppich.wav
-      sound_effect_volume: 100
-      conditions: []
-      actions: []
-  - trigger: 4a6d99d1_7f2a_45f1_8cb6_08361b91f524
-    source: LetterBox
-    dest: Tree
-    metadata:
-      name: gehe_zum_baum
-      system_prompt: >-
-        Es ist ein kurzer Weg vom Breifkasten zum Baum...der nächste mögliche
-        weg ist nur noch zum Haus.
-      description: Du kannst vom Breifkasten zum Baum gehen. Auf dem direkten Weg.
-      sound_effect: laufen_waldweg.wav
       sound_effect_volume: 100
       conditions: []
       actions: []
@@ -1009,17 +987,6 @@ transitions:
       sound_effect_volume: 50
       conditions: []
       actions: []
-  - trigger: 76f41d6a_946a_3200_c3d2_e5b1eef9b407
-    source: LetterBox
-    dest: WestOfHouse
-    metadata:
-      name: gehe_zum_Haus
-      system_prompt: Du steht nun wieder vor dem Haus
-      description: Man geht zurück zu dem Haus.
-      sound_effect: laufen_hofweg.wav
-      sound_effect_volume: 100
-      conditions: []
-      actions: []
   - trigger: 200bb360_a9e3_213a_9924_b66efcf54f39
     source: Lichtung
     dest: NorthOfHouse
@@ -1031,37 +998,15 @@ transitions:
       sound_effect_volume: 100
       conditions: []
       actions: []
-  - trigger: 617244f0_3aff_b5aa_516d_b51e5aa8a475
-    source: Lichtung
-    dest: SouthOfHouse
-    metadata:
-      name: gehe_nach_sueden
-      system_prompt: ''
-      description: Du gehst nach sueden und bist an dem südlichen Teil des Hauses
-      sound_effect: laufen_kiesweg.wav
-      sound_effect_volume: 100
-      conditions: []
-      actions: []
-  - trigger: be61249f_51c3_70ed_9f80_d6a20bd52919
-    source: Halle
-    dest: Speicher
-    metadata:
-      name: gehe_treppe_hoch
-      system_prompt: ''
-      description: ''
-      sound_effect: laufen_teppich.wav
-      sound_effect_volume: 100
-      conditions: []
-      actions: []
-  - trigger: 8c214efa_89cd_184b_b85c_0c6709cffcb6
-    source: Lichtung
-    dest: AussichtSchlucht
+  - trigger: f87c90e0_3ffd_2d99_de15_6ac9b3bcc253
+    source: SouthOfHouse
+    dest: Lichtung
     metadata:
       name: gehe_nach_osten
-      system_prompt: Du hast nun eine Schlucht erreicht und stehst an einem steilen Abhang.
-      description: Du kannst in Richtung Osten auf dem Trampelpfad gehen
-      sound_effect: laufen_stroh_hoch.wav
-      sound_effect_volume: 31
+      system_prompt: Du bist nun am hinteren Teil des Hauses und bist auf einer Lichtung.
+      description: Du kannst nach Osten laufen und erreichst den hinteren Teil des Hauses
+      sound_effect: laufen_kiesweg.wav
+      sound_effect_volume: 100
       conditions: []
       actions: []
   - trigger: 2798d91b_0b59_e15a_7e53_bca8598a5c09
@@ -1088,15 +1033,15 @@ transitions:
       sound_effect_volume: 43
       conditions: []
       actions: []
-  - trigger: f87c90e0_3ffd_2d99_de15_6ac9b3bcc253
-    source: SouthOfHouse
-    dest: Lichtung
+  - trigger: 8c214efa_89cd_184b_b85c_0c6709cffcb6
+    source: Lichtung
+    dest: AussichtSchlucht
     metadata:
       name: gehe_nach_osten
-      system_prompt: Du bist nun am hinteren Teil des Hauses und bist auf einer Lichtung.
-      description: Du kannst nach Osten laufen und erreichst den hinteren Teil des Hauses
-      sound_effect: laufen_kiesweg.wav
-      sound_effect_volume: 100
+      system_prompt: Du hast nun eine Schlucht erreicht und stehst an einem steilen Abhang.
+      description: Du kannst in Richtung Osten auf dem Trampelpfad gehen
+      sound_effect: laufen_stroh_hoch.wav
+      sound_effect_volume: 31
       conditions: []
       actions: []
   - trigger: 989418ec_97b6_5deb_cc9e_6efb728e7abe
@@ -1111,6 +1056,44 @@ transitions:
       conditions: []
       actions:
         - ''
+  - trigger: 617244f0_3aff_b5aa_516d_b51e5aa8a475
+    source: Lichtung
+    dest: SouthOfHouse
+    metadata:
+      name: gehe_nach_sueden
+      system_prompt: ''
+      description: Du gehst nach sueden und bist an dem südlichen Teil des Hauses
+      sound_effect: laufen_kiesweg.wav
+      sound_effect_volume: 100
+      conditions: []
+      actions: []
+  - trigger: 4a6d99d1_7f2a_45f1_8cb6_08361b91f524
+    source: LetterBox
+    dest: Tree
+    metadata:
+      name: gehe_zum_baum
+      system_prompt: >-
+        Es ist ein kurzer Weg vom Breifkasten zum Baum...der nächste mögliche
+        weg ist nur noch zum Haus.
+      description: Du kannst vom Breifkasten zum Baum gehen. Auf dem direkten Weg.
+      sound_effect: laufen_waldweg.wav
+      sound_effect_volume: 100
+      conditions: []
+      actions: []
+  - trigger: bb5319e2_7819_a8c2_883d_13361af0200c
+    source: Tree
+    dest: Speicher
+    metadata:
+      name: springe_auf_haus
+      system_prompt: Du bist nun auf dem Speicher des Hauses gelandet
+      description: >-
+        Du kannst auf das, oder zum, Dach des Hauses springen und landest direct
+        durch ein Loch auf dem Speicher des Hauses. Mit einem lauten Schrei.
+      sound_effect: schrei_mann_fallen.wav
+      sound_effect_volume: 100
+      conditions:
+        - sit_on_tree==true
+      actions: []
   - trigger: 8f02374a_2e87_6b7d_1456_60c3e18e1e4a
     source: Bibliothek
     dest: Halle
@@ -1126,6 +1109,34 @@ transitions:
       conditions:
         - key_for_room_2 == true
       actions: []
+  - trigger: 3e0e41f4_b25f_5856_12e9_6bb64e938ac1
+    source: Bibliothek
+    dest: WestOfHouse
+    metadata:
+      name: klettere_aus_dem_fenster
+      system_prompt: >-
+        Du stehst nun wieder vor dem Haus und überlegst Dir was als nächstest
+        passieren soll. Briefkasten, Baum? Das sind dein. Optionen....man hab
+        ich eine Durscht :-)
+      description: >-
+        Du kannst aus den Fenster wird raus vor das Haus gehen. Du wärst dann
+        wieder ausserhalb des Hauses.
+      sound_effect: effect_falling_stuff.wav
+      sound_effect_volume: 100
+      conditions: []
+      actions: []
+  - trigger: d2c51fed_302f_6a45_7da8_122df4187d2c
+    source: Bibliothek
+    dest: Keller
+    metadata:
+      name: oeffne_bodenklappe
+      system_prompt: Der Keller ist erstmal trocken und super warm.
+      description: 'Du öffnest die Klappe im Boden und fällst sofort in den Keller hinab. '
+      sound_effect: ''
+      sound_effect_volume: 100
+      conditions:
+        - bodenklappe_gefunden==true
+      actions: []
   - trigger: 0681715b_72c3_3f3f_76d5_7a09ca61634b
     source: Halle
     dest: AlchemiRaum
@@ -1138,6 +1149,32 @@ transitions:
       sound_effect: laufen_teppich.wav
       sound_effect_volume: 100
       conditions: []
+      actions: []
+  - trigger: be61249f_51c3_70ed_9f80_d6a20bd52919
+    source: Halle
+    dest: Speicher
+    metadata:
+      name: gehe_treppe_hoch
+      system_prompt: ''
+      description: ''
+      sound_effect: laufen_teppich.wav
+      sound_effect_volume: 100
+      conditions: []
+      actions: []
+  - trigger: 57588a45_7638_dd23_2d97_0323761921e5
+    source: WestOfHouse
+    dest: Bibliothek
+    metadata:
+      name: klettere_durch_das_fenster
+      system_prompt: >-
+        Du bist durch das Fenster geklettert und befindest Dich nun in dem
+        ersten Raum. Es scheint eine Bibliothek zu sein. Du rüttelst und
+        schüttelst Dich damit der staub von der Kleidung fällt.
+      description: 'Du klettert durch das Fenster in das Haus hinein. '
+      sound_effect: effect_falling_stuff.wav
+      sound_effect_volume: 59
+      conditions:
+        - window_is_open == true
       actions: []
   - trigger: 5ac0136d_7bdb_1076_7770_c9dc55f75537
     source: Halle

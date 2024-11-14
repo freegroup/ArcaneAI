@@ -1,17 +1,30 @@
 
 let NORMAL_STYLE = {
-    stroke:1,
-    fontColor:"#4f4f4f",  
-    bgColor:"#add6f5", 
+    stroke: 1,
+    fontColor: "#4f4f4f",  
+    bgColor: "#add6f5", 
     color: "#349be8",
 }
 
 let START_STYLE = {
-    stroke:2,
-    fontColor:"#6f6f6f",  
-    bgColor:"#c3bae5", 
+    stroke: 2,
+    fontColor: "#6f6f6f",  
+    bgColor: "#c3bae5", 
     color: "#654cb7",
 }
+
+let END_STYLE = {
+    stroke: 2,
+    fontColor: "#3f3f3f",
+    bgColor: "#ffcccb",
+    color: "#d9534f",
+}
+
+const StateType = Object.freeze({
+    NORMAL: "NORMAL",
+    START: "START",
+    END: "END"
+});
 
 StateShape = draw2d.shape.layout.VerticalLayout.extend({
 
@@ -36,18 +49,18 @@ StateShape = draw2d.shape.layout.VerticalLayout.extend({
                 stroke:1, 
                 gap: 5,
                 radius:3,
-                start: false,
+                stateType: StateType.NORMAL,
                 userData: {
                     system_prompt: ""
                 }
             },attr),
             extend({
               name: this.setName,
-              start: this.setStart,
+              stateType: this.setStateType,
             }, setter),
             extend({
               name: this.getName,
-              start: this.getStart,
+              stateType: this.getStateType,
             }, getter))
                  
         // flag which indicates if the figure should read/write ports to
@@ -77,9 +90,19 @@ StateShape = draw2d.shape.layout.VerticalLayout.extend({
                         break;
                     case "start":
                         this.getCanvas().getCommandStack().execute(
-                            new draw2d.command.CommandAttr(this, {start: true})
+                            new draw2d.command.CommandAttr(this, {stateType: StateType.START})
                         )
-                    break;
+                        break;
+                    case "normal":
+                        this.getCanvas().getCommandStack().execute(
+                            new draw2d.command.CommandAttr(this, {stateType: StateType.NORMAL})
+                        )
+                        break;
+                    case "end":
+                        this.getCanvas().getCommandStack().execute(
+                            new draw2d.command.CommandAttr(this, {stateType: StateType.END})
+                        )
+                        break;
                     default:
                        break;
                    }
@@ -87,36 +110,47 @@ StateShape = draw2d.shape.layout.VerticalLayout.extend({
                 x:event.x,
                 y:event.y,
                 items: {
-                    "start": {name: "Set Start Node"},
                     "add": {name: "Add Trigger"},
                     "sep1": "---------",
+                    "start": {name: "Start Node"},
+                    "normal": {name: "Normal Node"},
+                    "end": {name: "End Node"},
+                    "sep2": "---------",
                     "delete": {name: "Delete"},
                 }
             })
         })
     },
      
-    setStart: function(flag)
+    setStateType: function(stateType) 
     {
-        if(flag === this.start){
-            return this
+        if (stateType === this.stateType) return this;
+
+        // Deselect any other START nodes if setting a new START node
+        if (stateType === StateType.START && this.canvas !== null) {
+            this.canvas.getFigures().each((i, f) => {
+                if (f !== this && f.getStateType?.() === StateType.START) {
+                    f.setStateType?.(StateType.NORMAL);
+                }
+            });
         }
 
-        if(this.canvas!==null){
-            this.canvas.getFigures().each((i, f)=>{
-                if(f !== this) f.setStart(false)
-            })
+        this.stateType = stateType;
+
+        if (this.stateType === StateType.START) {
+            this.classLabel.attr(START_STYLE);
+        } else if (this.stateType === StateType.END) {
+            this.classLabel.attr(END_STYLE);
+        } else {
+            this.classLabel.attr(NORMAL_STYLE);
         }
 
-        this.start = flag
-        this.classLabel.attr(this.start ?START_STYLE:NORMAL_STYLE)
-
-        return this
+        return this;
     },
 
-    getStart: function()
+    getStateType: function()
     {
-        return this.start
+        return this.stateType
     },
 
 
@@ -237,12 +271,11 @@ StateShape = draw2d.shape.layout.VerticalLayout.extend({
         var memento= this._super();
 
         memento.name = this.classLabel.getText();
-        memento.start= this.start
+        memento.stateType = this.stateType ?? StateType.NORMAL
         memento.trigger   = [];
 
         this.children.each(function(i,e){
             if(i>0){ // skip the header of the figure
-                debugger
                 memento.trigger.push({
                     id: e.figure.getId(),
                     name:e.figure.getName(),
@@ -270,7 +303,7 @@ StateShape = draw2d.shape.layout.VerticalLayout.extend({
          this._super(memento);
          
          this.setName(memento.name);
-         this.setStart(memento.start ?? false)
+         this.setStateType(memento.stateType ?? StateType.NORMAL)
 
          if(typeof memento.trigger !== "undefined"){
              $.each(memento.trigger, $.proxy(function(i,e){

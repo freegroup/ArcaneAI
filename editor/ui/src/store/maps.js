@@ -8,13 +8,14 @@ export default {
   state: {
     maps: [],
     mapConfig: {
-      system_prompt: "prompt",
+      system_prompt: "game prompt",
+      final_prompt:"final prompt",
       inventory: [],
     },
     mapDiagram: [],
-    mapName: "unknown.json",
+    mapName: "unknown",
     loading: false,
-    error: null
+    error: null,
   },
   mutations: {
     SET_MAPS(state, maps) {

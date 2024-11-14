@@ -90,6 +90,7 @@ class OpenAILLM(BaseLLM):
         # strip off crap repeated phrases
         # I didn't manage this by using a good system prompt.
         response["text"] =  response["text"].split("Was möchtest du ")[0]
+        response["text"] =  response["text"].split("Was sollen wir")[0]
 
         self._add_to_history("assistant", response["text"])
         return response
