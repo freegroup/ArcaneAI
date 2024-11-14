@@ -13,7 +13,7 @@ Raft = draw2d.shape.composite.Raft.extend({
     },
 
      
-    setStart: function(flag)
+    setStateType: function(flag)
     {
         return this
     },

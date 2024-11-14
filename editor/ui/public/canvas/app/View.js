@@ -46,6 +46,7 @@ View = draw2d.Canvas.extend({
             setZoom(this.getZoom() * 0.8)
         }) 
 
+        /*
         this.on("contextmenu", (emitter, event) => {
             let figure = this.getBestFigure(event.x, event.y)
       
@@ -103,6 +104,7 @@ View = draw2d.Canvas.extend({
               })
             }
           })
+            */
 	},
 
     getFigure: function(id)
