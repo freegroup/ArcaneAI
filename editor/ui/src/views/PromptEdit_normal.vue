@@ -1,10 +1,10 @@
 <template>
   <div class="config-view" >
     <!-- System Prompt Section -->
-    <h4>Endgame Boundaries</h4>
+    <h4>Normal State Prompt</h4>
     <textarea
-      id="finalPrompt"
-      v-model="finalPrompt"
+      id="normalPrompt"
+      v-model="normalPrompt"
       placeholder="Enter system prompt here..."
       class="full-height-textarea"
     ></textarea>
@@ -15,16 +15,16 @@
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
-  name: 'EndGameView',
+  name: 'PropertyView',
   computed: {
     ...mapGetters('maps', ['mapConfig']),
-    finalPrompt: {
+    normalPrompt: {
       get() {
-        return this.mapConfig.final_prompt;
+        return this.mapConfig.normal_prompt;
       },
       set(value) {
         // Commit the updated system prompt to the store
-        this.updateMapConfig({ ...this.mapConfig, final_prompt: value });
+        this.updateMapConfig({ ...this.mapConfig, normal_prompt: value });
       },
     },
     

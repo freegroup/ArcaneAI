@@ -1,8 +1,8 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
 import StateCanvas from '../views/StateCanvas.vue';
-import GameSetup from '../views/GameSetup.vue';
-import EndgameSetup from '../views/EndgameSetup.vue';
+import GameSetup from '../views/PromptEdit_normal.vue';
+import EndgameSetup from '../views/PromptEdit_end.vue';
 import Inventory from '../views/Inventory.vue';
 
 const routes = [
