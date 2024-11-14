@@ -1,4 +1,4 @@
-initial: null
+initial: Start
 metadata:
   system_prompt: >-
     **Dungeon-Gefährte: Regeln für Interaktion**
@@ -101,6 +101,7 @@ metadata:
     streichhoelzer: false
     kerze_an: false
     sit_on_tree: false
+  final_prompt: Endgame prompt
 states:
   - name: AlchemiRaum
     metadata:

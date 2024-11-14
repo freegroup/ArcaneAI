@@ -133,7 +133,7 @@ export default {
 
         // Find the starting state shape
         const startStateShape = state.mapDiagram.find(
-          (shape) => shape.type === "StateShape" && shape.start === true
+          (shape) => shape.type === "StateShape" && shape.stateType === "START"
         );
         const startStateName = startStateShape ? startStateShape.name : null;
         
