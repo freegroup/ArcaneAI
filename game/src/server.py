@@ -193,7 +193,7 @@ async def chat(request: Request, data: ChatMessage, response: Response):
             session_store[session_id] = newChatSession()
             session, session_id = get_session(request, response)
             session.ws_token = old_ws_token
-            session.state_engine.trigger(session, session.state_engine.get_possible_action_id("start"))
+            session.state_engine.trigger(session, session.state_engine.get_action_id("start"))
             text = "Erkläre dem Spieler in kurzen Worten worum es hier geht und wer du bist, sei bitte auch so ehrlich und erwähne, dass du manchmal voreilig in deinen Aussagen bist da du nicht sofort alles überblickst. Du bist ja nur der Gehilfe und nicht das Gehirn. Einfach mal nachhacken hilft falls Du eine Behauptung aufstellst."
 
         log_entry["question"] = text
@@ -203,7 +203,7 @@ async def chat(request: Request, data: ChatMessage, response: Response):
             action_name = response.get("action")
             session.tts.stop(session)
             if action_name:
-                action_id = session.state_engine.get_possible_action_id(action_name)
+                action_id = session.state_engine.get_action_id(action_name)
                 done = session.state_engine.trigger(session, action_id)
                 if not done:
                     # generate a negative answer to the last tried transition
@@ -221,7 +221,6 @@ async def chat(request: Request, data: ChatMessage, response: Response):
         WebSocketManager.send_message(session, json.dumps({"function":"chat_response", "text":response_text}))
         session.tts.speak(session, response_text)
         statusManager.set(session, [], session.state_engine.get_inventory())
-
         return JSONResponse({"response": response_text})
     finally:
         log_entry["response"] = response_text

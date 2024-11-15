@@ -23,7 +23,6 @@ class LocalJukebox(BaseJukebox):
             return  # silently
 
         file_path = f"{session.map_dir}/{session.map_name}/soundfx/{file_name}"
-        print(f"Volume: {volume}")
 
         try:
             if not os.path.isabs(file_path):
@@ -65,7 +64,6 @@ class LocalJukebox(BaseJukebox):
             channel.stop()
             # Clear the channel from playing_channels
             del self.playing_channels[channel]
-            print(f"Sound on channel {channel} stopped after duration limit.")
 
 
     def stop_all(self, session):

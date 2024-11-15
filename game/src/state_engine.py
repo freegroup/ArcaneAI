@@ -1,15 +1,10 @@
 import yaml
-import json
 import os
-import unicodedata
 import traceback
-
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
-
 
 from transitions.extensions import HierarchicalGraphMachine
 from scripting.lua import LuaSandbox
+
 
 class StateEngine:
     def __init__(self, yaml_file_path):
@@ -21,9 +16,7 @@ class StateEngine:
         self.yaml_file_path = yaml_file_path
         self.calculator = LuaSandbox()
         self.model = None
-
         self._load()
-        #self._start_file_watcher()
 
 
     def _load(self):
@@ -150,7 +143,6 @@ class StateEngine:
         the action in future use cases.
         """
         def condition_callback(*args, **kwargs):
-            print(f"Condition callback for action: {action}")
             metadata_action = self.action_metadata.get(action, {})
             conditions = metadata_action.get("conditions", [])
 
@@ -191,7 +183,19 @@ class StateEngine:
 
 
     def get_global_system_prompt(self):
-        return self.fsm_config["metadata"]["system_prompt"]
+        # determine the current state_node type to know which system_prompt we can return.
+        # Right now we have three differnt types:
+        # - start
+        # - normal
+        # - end
+        # We can then have three different settings and agent behaviour based on the current node type.
+        # Maybe we want to switch the mood or the character at all...averything is possible.
+        #
+        state = self.get_state()
+        state_meta = self.state_metadata[state]
+        state_type = state_meta.get("state_type", "normal")
+
+        return self.fsm_config["metadata"][f"{state_type}_prompt"]
     
 
     def get_state_system_prompt(self):
@@ -216,7 +220,7 @@ class StateEngine:
         return self.model.state
     
 
-    def get_possible_action_id(self, action_name):
+    def get_action_id(self, action_name):
         current_state = self.model.state
         # Go through machine's events and match transitions that are valid for the current state
         for event_id, event in self.machine.events.items():
@@ -261,38 +265,3 @@ class StateEngine:
     def get_possible_action_names(self):
         return [  self.get_action_name(action)  for action in self.get_possible_action_ids() ]
 
-
-    def _start_file_watcher(self):
-        """Start a watchdog observer to monitor the YAML file for changes."""
-        watch_dir =  os.path.dirname(self.yaml_file_path) +"/"
-       # print(f"Init file-watch on dir '{watch_dir}'")
-
-        self.observer = Observer()
-        self.observer.schedule(FileChangeHandler(self), watch_dir, recursive=True)
-        self.observer.start()
-
-
-    def stop_file_watcher(self):
-        """Stop the file watcher when no longer needed."""
-        self.observer.stop()
-        self.observer.join()
-
-
-class FileChangeHandler(FileSystemEventHandler):
-    def __init__(self, persona):
-        super().__init__()
-        self.persona = persona
-        self.last_modified = os.path.getmtime(persona.yaml_file_path)
-
-
-    def on_modified(self, event):
-        # Normalize paths to ensure consistent comparison
-        event_path_normalized = unicodedata.normalize('NFC', event.src_path)
-        yaml_path_normalized = unicodedata.normalize('NFC', self.persona.yaml_file_path)
-
-        if event_path_normalized == yaml_path_normalized:
-            new_modified_time = os.path.getmtime(event.src_path)
-            if new_modified_time != self.last_modified:
-                self.last_modified = new_modified_time
-                #print("YAML file modified, reloading FSM configuration.")
-                self.persona._load()  # Reload FSM configuration
