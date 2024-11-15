@@ -32,3 +32,7 @@ docker run -p 9000:9000 \
 
 ```
 
+
+
+
+Du bist durch das Fenster geklettert und befindest Dich nun in dem ersten Raum. Es scheint eine Bibliothek zu sein. Du rüttelst und schüttelst Dich damit der staub von der Kleidung fällt.

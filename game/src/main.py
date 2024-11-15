@@ -78,7 +78,7 @@ if __name__ == '__main__':
                 session.tts.stop(session)
 
                 if action_name:
-                    action_id = session.state_engine.get_possible_action_id(action_name)
+                    action_id = session.state_engine.get_action_id(action_name)
                     done = session.state_engine.trigger(session, action_id)
                     if done:
                         response_text = response["text"]
@@ -110,10 +110,10 @@ if __name__ == '__main__':
 
     # Start the game for this new session
     #
-    session.state_engine.trigger(session, session.state_engine.get_possible_action_id("start"))
+    session.state_engine.trigger(session, session.state_engine.get_action_id("start"))
     process_text(session, "Erkläre mir in kurzen Worten worum es hier geht und wer du bist")
     
-    # show the current status of the game
+    # broadcast the current status of the game
     #
     statusManager.set(session, [], session.state_engine.get_inventory())
 

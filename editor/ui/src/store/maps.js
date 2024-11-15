@@ -148,6 +148,7 @@ export default {
               //...und ein paar Felder benötigen ein "trim"
               system_prompt: (shape.userData?.system_prompt ?? "").trim(),
               ambient_sound: shape.userData?.ambient_sound?.trim(),
+              state_type:  shape.stateType?.toLowerCase()
             },
           }));
 

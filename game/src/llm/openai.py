@@ -84,7 +84,6 @@ class OpenAILLM(BaseLLM):
 
         response = self._call_openai_model(session, self.history)
         if (response["text"] is None or response["text"].strip() == "") and response["action"]:
-            action = response["action"]
             response = self._response_for_action(session, response)
         
         # strip off crap repeated phrases
@@ -107,13 +106,15 @@ class OpenAILLM(BaseLLM):
         print(json.dumps([ func["name"] for func in functions], indent=4))
 
         try:
+            print(json.dumps(combined_history, indent=4))
+
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=combined_history,
                 max_tokens=self.max_tokens,
                 temperature=self.temperature,
                 top_p=self.top_p,
-                functions=functions,
+                functions=functions if len(functions)>0 else None,
             )
             return self._process_response(response)
         except openai.OpenAIError as e:
@@ -152,7 +153,7 @@ class OpenAILLM(BaseLLM):
         action_name = initial_response["action"]
         history = self.history.copy()
         if action_name in session.state_engine.get_possible_action_names():
-            action_id = session.state_engine.get_possible_action_id(action_name)
+            action_id = session.state_engine.get_action_id(action_name)
             # temp. add this to the history. but we do not want pollute the history with 
             # That kind of instructions
             history.append({"role": "system", "content": session.state_engine.get_action_system_prompt(action_id)})
