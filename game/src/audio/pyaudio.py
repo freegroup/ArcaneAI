@@ -15,6 +15,7 @@ class PyAudioSink(BaseAudioSink):
 
 
     def __init__(self):
+        super().__init__()
         self.stream = self.get_instance().open(
             format=pyaudio.paInt16,
             channels=1,
@@ -26,8 +27,8 @@ class PyAudioSink(BaseAudioSink):
     def write(self, session, chunk):
         self.stream.write(chunk)
 
+
     def close(self, session):
-        print("CLOSE SINK")
         if self.stream is not None:
             self.stream.stop_stream()
             self.stream.close()

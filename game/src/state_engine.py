@@ -106,15 +106,17 @@ class StateEngine:
         This creates a callback function that is triggered after a specific transition.
         """
         def callback( *args, **kwargs):
-            #print(f"CALLBACK action: {action}")
             current_state = self.model.state
             metadata_state = self.state_metadata.get(current_state, {})
             metadata_action = self.action_metadata.get(action, {})
+            
             # Execute actions in the LuaSandbox
+            # Update states, calculate points, coins,....
+            #
             actions = metadata_action.get('actions', [])
             for code in actions:
                 if len(code)>0:
-                    self.calculator.eval(code)  # Execute each action in the Lua sandbox
+                    self.calculator.eval(code)
 
             if self.session.last_action != action:
                 self.session.llm.system(metadata_action.get('system_prompt'))
@@ -156,18 +158,22 @@ class StateEngine:
                         print(self.calculator.get_all_vars())
                         return False
 
-            return True  # All conditions passed, allow the transition
+            # All conditions passed, allow the transition
+            return True
 
         return condition_callback
     
 
-    def get_inventory(self):
+    def get_all_vars(self):
         return { "state":self.get_state(),  **self.calculator.get_all_vars()}
+    
+    
+    def get_var(self, name):
+        return self.calculator.get_var(name)
     
 
     def trigger(self, session, action_id):
         try:
-            print(f"Action: '{action_id}'")
             self.session = session
             return self.model.trigger(action_id)
         except Exception as e:

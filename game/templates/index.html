@@ -165,6 +165,11 @@
         const soundUrl = `${window.location.protocol}//${window.location.host}{{ BASE_URI }}/api/audio/${message.file_name}`;
         const audio = new Audio(soundUrl);
         audio.loop = message.loop;
+        if (typeof message.volume === "number") {
+             // Ensure the value is between 0.0 and 1.0
+            audio.volume = Math.max(0, Math.min(1, message.volume / 100));
+        }
+
         audioPlayers[message.file_name] = audio;
         audio.play().catch(error => console.error("Error playing audio:", error));
         
