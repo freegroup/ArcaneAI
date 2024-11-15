@@ -57,8 +57,6 @@ class OpenAILLM(BaseLLM):
 
     def system(self, system_instruction):
         if system_instruction:
-            if system_instruction.startswith("Du bist nun im "):
-                print("hit")
             self._add_to_history("system", system_instruction)
         else:
             print("Warning: No system instruction provided.")
@@ -79,8 +77,8 @@ class OpenAILLM(BaseLLM):
     def chat(self, session, user_input):
         if not user_input:
             return {"text": "No input provided.", "expressions": [], "action": None}
-        self._add_to_history("user", user_input)
         self._trim_history()
+        self._add_to_history("user", user_input)
 
         response = self._call_openai_model(session, self.history)
         if (response["text"] is None or response["text"].strip() == "") and response["action"]:
@@ -134,8 +132,8 @@ class OpenAILLM(BaseLLM):
 
     def _possible_actions_instruction(self, session):
         possible_actions = session.state_engine.get_possible_action_names()
-        possible_actions_str = ', '.join(f'"{action}"' for action in possible_actions)
-        return f"Use the supplied tools to assist the user: [{possible_actions_str}]"
+        possible_actions_str = ', '.join(f"'{action}'" for action in possible_actions)
+        return f"Benutze diese bereitgestellen Funktionen oder Tols um dem Benutzer zu helfen: [{possible_actions_str}]"
 
 
     def _process_response(self, response):

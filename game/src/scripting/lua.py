@@ -6,9 +6,10 @@ class LuaSandbox(BaseSandbox):
     def __init__(self):
         self.lua = LuaRuntime(unpack_returned_tuples=True)
         self.env = self.lua.globals()
+        
         # Capture the initial state of Lua globals (before setting user variables)
         self.initial_globals = set(self.env.keys())
-
+  
 
     def set_var(self, name, value):
         if isinstance(value, bool):

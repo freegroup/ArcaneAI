@@ -80,9 +80,11 @@ class GoogleTTS(BaseTTS):
             input=tts.SynthesisInput(text=text),
             voice=tts.VoiceSelectionParams(
                 language_code="de-DE",
-                name="de-DE-Journey-D"
+                name="de-DE-Journey-D",
             ),
-            audio_config=tts.AudioConfig(audio_encoding=tts.AudioEncoding.LINEAR16)
+            audio_config=tts.AudioConfig(
+                audio_encoding=tts.AudioEncoding.LINEAR16,
+            )
         )
         # Convert audio_content to int16 format for playback
         audio_data = np.frombuffer(response.audio_content, dtype=np.int16)
