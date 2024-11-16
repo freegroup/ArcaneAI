@@ -12,11 +12,12 @@ class OpenAiTTS(BaseTTS):
         self.client = OpenAI()
         self.audio_thread = None
         self.max_retries = 3
+        self.voice = "onyx"
 
 
     def speak(self, session, text):
         # Ensure any ongoing playback is stopped before starting a new one
-        self.stop()
+        self.stop(session)
 
         # Clear the stop event
         self.stop_event.clear()
@@ -32,7 +33,7 @@ class OpenAiTTS(BaseTTS):
                             input=text,
                             speed=1.2,
                             response_format="pcm",
-                            voice="onyx",
+                            voice=self.voice,
                             model="tts-1"
                         ) as response:
                             for chunk in response.iter_bytes(chunk_size=8192):
