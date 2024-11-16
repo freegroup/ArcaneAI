@@ -29,7 +29,7 @@ class OpenAILLM(BaseLLM):
         #self.model = "gpt-3.5-turbo"
         #self.model = "gpt-4o-mini"
         self.model = "gpt-4o"
-
+  
         self.history = []
         self.max_tokens = 2048
         self.stop = None

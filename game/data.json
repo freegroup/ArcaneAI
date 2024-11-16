@@ -2,17 +2,16 @@
     "header": "Current System Status",
     "expression": "neutral",
     "inventory": {
-        "state": "EndOfGame",
-        "window_is_open": false,
-        "streichhoelzer": false,
+        "state": "WestOfHouse",
         "key_for_room_2": false,
-        "has_letter": false,
-        "sit_on_tree": false,
-        "key_for_front_door": false,
+        "streichhoelzer": false,
         "kerze_an": false,
-        "coins": 0,
+        "window_is_open": false,
         "kerze": false,
-        "tts_speed": 0.9,
-        "has_letter_opend": false
+        "has_letter_opend": false,
+        "coins": 0,
+        "sit_on_tree": false,
+        "has_letter": false,
+        "key_for_front_door": false
     }
 }
