@@ -62,7 +62,7 @@ if __name__ == '__main__':
     # Start the game for this new session
     #
     session.state_engine.trigger(session, session.state_engine.get_action_id("start"))
-    process_chat(session, "Erkläre mir in kurzen Worten worum es hier geht und wer du bist", session_factory)
+    process_chat(session, "Hei hallo, was treibst du hier? Du gammelst hier vor der Tür herrum? Du siehst ja ganz schön - nun ja - vergammel aus.", session_factory)
     
     try:
         for text in session.stt.start_recording():
