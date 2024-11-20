@@ -174,7 +174,7 @@ class OpenAILLM(BaseLLM):
 
 
     def _trim_history(self):
-        entry_limit = 4
+        entry_limit = 8
         self.history = self.history[-entry_limit:]
 
         #while self._count_tokens(self.history) > self.token_limit:

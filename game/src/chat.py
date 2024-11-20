@@ -27,8 +27,9 @@ def process_chat(session, text, session_factory: Callable[[str], None]):
 
                 if done:
                     text = " ".join("""
-                    Die letze Aktion war erfolgreich. Schreibe den Benutzer 
-                    eine der Situation angepasste Antwort. Komme nicht auf die Idee neue Aktionen oder vorausschauend zu handeln.
+                    Die letze Aktion war erfolgreich. Wiederhole am besten die letze Chatbot (nicht system)  Antwort, ohne zu erwähnen, dass du diese wiederholst.
+                    Beachte eventuell neue Erkenntnisse.
+                    Komme nicht auf die Idee neue Aktionen oder vorausschauend zu handeln.
                     """.split())
                     response = session.llm.chat(session, text)
                 else:

@@ -2,16 +2,14 @@
     "header": "Current System Status",
     "expression": "neutral",
     "inventory": {
-        "state": "WestOfHouse",
-        "sit_on_tree": false,
-        "key_for_front_door": false,
-        "coins": 0,
-        "has_letter": false,
-        "streichhoelzer": false,
-        "kerze_an": false,
-        "window_is_open": true,
+        "state": "OnTree",
+        "window_is_open": false,
         "kerze": false,
+        "key_for_front_door": false,
+        "kerze_an": false,
+        "streichhoelzer": false,
         "key_for_room_2": false,
-        "has_letter_opend": false
+        "coins": 0,
+        "has_letter": true
     }
 }
