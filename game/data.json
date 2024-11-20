@@ -2,14 +2,14 @@
     "header": "Current System Status",
     "expression": "neutral",
     "inventory": {
-        "state": "OnTree",
-        "window_is_open": false,
-        "kerze": false,
+        "state": "AlchemiRaum",
+        "window_is_open": true,
+        "key_for_room_2": false,
+        "has_letter": true,
+        "streichhoelzer": false,
         "key_for_front_door": false,
         "kerze_an": false,
-        "streichhoelzer": false,
-        "key_for_room_2": false,
         "coins": 0,
-        "has_letter": true
+        "kerze": false
     }
 }

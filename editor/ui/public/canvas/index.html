@@ -10,6 +10,7 @@
   <script src="./lib/jquery.js"></script>
   <script src="./lib/jquery-ui.js"></script>
   <script src="./lib/jquery.browser.js"></script>
+  <script src="./lib/mousetrap.js"></script>
 
   <script src="./lib/draw2d.js"></script>
 
@@ -70,6 +71,16 @@ document.addEventListener("DOMContentLoaded",function () {
 
       window.addEventListener("message", receiveMessage, false);
 
+      // Wir für Mousetrap benötigt. Sonst kommen keine Evnets an.
+      //
+      const canvas = document.getElementById('canvas');
+      const pseudoCheckbox = document.getElementById('pseudoCheckbox');
+      pseudoCheckbox.focus();
+      canvas.addEventListener('click', (event) => {
+          event.preventDefault();
+          pseudoCheckbox.focus();
+      });
+
 });
 
 </script>
@@ -80,6 +91,7 @@ document.addEventListener("DOMContentLoaded",function () {
 
 
   <div id="canvas_toolbar">
+    <input id="pseudoCheckbox" type="checkbox" style="position: absolute; opacity: 0; pointer-events: none;">
     
   </div>
 

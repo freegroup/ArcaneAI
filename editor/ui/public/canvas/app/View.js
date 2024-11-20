@@ -46,6 +46,27 @@ View = draw2d.Canvas.extend({
             setZoom(this.getZoom() * 0.8)
         }) 
 
+        Mousetrap.bindGlobal(['h'], (event) => {
+          this.getLines().each( (i,line)=>{
+            line.setAlpha(0.1)
+          })
+          this.getSelection().each((i, f) => {
+            f.getPorts().each((i, port) =>{
+              port.getConnections().each( (i,con)=>{
+                con.setAlpha(1)
+              })
+            })
+          })
+          return false
+        },"keydown")
+        Mousetrap.bindGlobal(['h'], (event) => {
+          this.getLines().each( (i,line)=>{
+            line.setAlpha(1)
+          })
+          return false
+        },"keyup")
+
+
         /*
         this.on("contextmenu", (emitter, event) => {
             let figure = this.getBestFigure(event.x, event.y)
@@ -167,6 +188,7 @@ View = draw2d.Canvas.extend({
           docEl.mozRequestFullScreen ||
           docEl.webkitRequestFullScreen ||
           docEl.msRequestFullscreen;
+        
         var cancelFullScreen =
           doc.exitFullscreen ||
           doc.mozCancelFullScreen ||
