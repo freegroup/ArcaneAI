@@ -47,10 +47,11 @@ Toolbar = Class.extend({
 		this.addButton  = $("<button>Add</button>");
 		this.html.append(this.addButton);
 		this.addButton.button().click(()=>{
-            let x = this.view.getScrollLeft() +100
-            let y = this.view.getScrollTop() +100
+
+            let x = (this.view.getScrollLeft() + 100) * this.view.getZoom()
+            let y = (this.view.getScrollTop() + 100) * this.view.getZoom()
         
-            var command = new draw2d.command.CommandAdd(this.view, new StateShape({name:"new_state"}), x, y);
+            var command = new draw2d.command.CommandAdd(this.view, new StateShape({name:"NewState"}), x, y);
 			this.view.getCommandStack().execute(command);
 		})
 

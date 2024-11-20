@@ -26,6 +26,7 @@ Application = Class.extend(
 
         this.view.on("select", this.onSelectCallback.bind(this));
         this.view.on("unselect", this.onUnselectCallback.bind(this));
+
     },
 
 	/**
