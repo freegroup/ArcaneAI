@@ -1,6 +1,6 @@
 <template>
     <div class="property-view"  v-if="jsonData.type === 'TriggerConnection'">
-        <h3>Action</h3>
+
         <input
             id="triggerName"
             type="text"
@@ -201,10 +201,15 @@
       });
     }
   };
-  </script>
+</script>
   
-  <style scoped>
+<style scoped>
+  ::v-deep .v-input__details {
+    display: none;
+  }
+
   .property-view {
+    font-size: small;
     height: 100%;
     overflow-y: auto; /* Enables vertical scrolling if content exceeds height */
     padding: 10px;
@@ -216,10 +221,6 @@
     gap: 5px;
   }
   
-
-.property-view h3 {
-  margin-top: 0;
-}
 
 .property-view label {
   display: block;
