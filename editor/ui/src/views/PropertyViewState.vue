@@ -36,14 +36,14 @@
         </div>
         
         <label v-if="jsonData.userData"  for="systemPrompt">Sceen Description</label>
-        <textarea
+        <Codemirror
             v-if="jsonData.userData" 
-            id="systemPrompt"
-            v-model="jsonData.userData.system_prompt"
-            @input="onDataChange"
-            rows="5"
-            placeholder="Enter detailed system instructions here..."
-        ></textarea>
+            class="code-editor"
+            v-model:value="jsonData.userData.system_prompt"
+            :options="cmOptions"
+            placeholder="test placeholder"
+            @change="onDataChange"
+        />
 
     </div>
 </template>
@@ -52,8 +52,15 @@
   import SoundManager from '@/utils/SoundManager'
   import { mapGetters } from 'vuex';
 
+  import Codemirror from "codemirror-editor-vue3";
+  import "codemirror/addon/display/placeholder.js";
+  import "codemirror/mode/jinja2/jinja2.js";
+  import "codemirror/addon/display/placeholder.js";
+  import "codemirror/theme/juejin.css";
+
   export default {
     name: 'PropertyView',
+    components: { Codemirror },
     props: {
         draw2dFrame: {
             type: Object,
@@ -69,6 +76,12 @@
             ambient_sound: '',
             ambient_sound_volume: 100,
           },
+        },
+        cmOptions: {
+          mode: "jinja2",
+          lineNumbers: false, 
+          lineWrapping: true, 
+          styleActiveLine: false,
         }
       };
     },
@@ -164,16 +177,6 @@
   border-radius: 4px;
 }
 
-.property-view textarea {
-  width: 100%;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  resize: vertical; /* Allows vertical resizing only */
-  background-color: #f9f9f9;
-  flex: 1;
-}
-
 .sound-selection {
   display: flex;
   align-items: flex-start;
@@ -182,6 +185,11 @@
 
 .v-combobox {
   flex: 1; 
+}
+
+
+.code-editor >>> .CodeMirror-gutters {
+  display: none !important; /* Versteckt den gesamten Gutter-Bereich */
 }
   </style>
   

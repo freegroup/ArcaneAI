@@ -2,20 +2,37 @@
   <div class="config-view" >
     <!-- System Prompt Section -->
     <h4>Normal State Prompt</h4>
-    <textarea
-      id="normalPrompt"
-      v-model="normalPrompt"
-      placeholder="Enter system prompt here..."
-      class="full-height-textarea"
-    ></textarea>
+    <Codemirror
+      class="full-height-editor"
+      v-model:value="normalPrompt"
+      :options="cmOptions"
+      placeholder="test placeholder"
+  />
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
 
+import Codemirror from "codemirror-editor-vue3";
+import "codemirror/addon/display/placeholder.js";
+import "codemirror/mode/jinja2/jinja2.js";
+import "codemirror/addon/display/placeholder.js";
+import "codemirror/theme/juejin.css";
+
 export default {
   name: 'PropertyView',
+  components: { Codemirror },
+  data(){
+    return {
+      cmOptions: {
+        mode: "jinja2",
+        lineNumbers: false, 
+        lineWrapping: true, 
+        styleActiveLine: false,
+      }
+    }
+  },
   computed: {
     ...mapGetters('maps', ['mapConfig']),
     normalPrompt: {
@@ -31,6 +48,10 @@ export default {
   },
   methods: {
     ...mapActions('maps', ['updateMapConfig']),
+    onChange: (val, cm) => {
+      console.log(val);
+      console.log(cm.getValue());
+    }
   },
 };
 </script>
@@ -46,14 +67,17 @@ export default {
   flex-direction: column;
 }
 
-.config-view textarea {
-  width: 100%;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  resize: vertical; /* Allows vertical resizing only */
-  background-color: #f9f9f9;
-  flex: 1;
+.full-height-editor {
+  flex: 1; 
+  height: 100%; 
 }
 
+.full-height-editor >>> .CodeMirror {
+  font-size: 16px; /* Hier kannst du die Schriftgröße anpassen */
+  font-family: 'Courier New', Courier, monospace; /* Optional: Schriftart anpassen */
+}
+
+.full-height-editor >>> .CodeMirror-gutters {
+  display: none !important; /* Versteckt den gesamten Gutter-Bereich */
+}
 </style>
