@@ -2,14 +2,10 @@
     "header": "Current System Status",
     "expression": "neutral",
     "inventory": {
-        "state": "NorthOfHouse",
-        "has_letter": false,
-        "streichhoelzer": false,
-        "kerze": false,
-        "key_for_front_door": false,
-        "kerze_an": false,
-        "key_for_room_2": false,
-        "window_is_open": false,
-        "coins": 0
+        "state": "WestOfHouse",
+        "discovered_friedhof_der_traeume": false,
+        "eggs": 0,
+        "window_is_open": true,
+        "discovered_north": false
     }
 }
