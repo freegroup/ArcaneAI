@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
+import { InstallCodeMirror } from "codemirror-editor-vue3";
 
 import SoundManager from '@/utils/SoundManager'
 
@@ -13,5 +14,6 @@ const app = createApp(App)
 app.use(router)
 app.use(store)
 app.use(vuetify)
+app.use(InstallCodeMirror);
 
 app.mount('#app')
