@@ -2,14 +2,14 @@
     "header": "Current System Status",
     "expression": "neutral",
     "inventory": {
-        "state": "AlchemiRaum",
-        "window_is_open": true,
-        "key_for_room_2": false,
-        "has_letter": true,
+        "state": "NorthOfHouse",
+        "has_letter": false,
         "streichhoelzer": false,
+        "kerze": false,
         "key_for_front_door": false,
         "kerze_an": false,
-        "coins": 0,
-        "kerze": false
+        "key_for_room_2": false,
+        "window_is_open": false,
+        "coins": 0
     }
 }
