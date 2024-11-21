@@ -38,6 +38,7 @@ StateShape = draw2d.shape.layout.VerticalLayout.extend({
             ...NORMAL_STYLE,
             radius: 10, 
             padding:10,
+            bold:true,
             resizeable:true,
             editor:new draw2d.ui.LabelInplaceEditor()
         })
@@ -153,6 +154,13 @@ StateShape = draw2d.shape.layout.VerticalLayout.extend({
         return this.stateType
     },
 
+    setAlpha: function(alpha){
+        this._super(alpha)
+        this.classLabel.setAlpha(alpha)
+        this.children.each(function(i,e){
+            e.figure.setAlpha(alpha)
+        })
+    },
 
     /**
      * @method
@@ -300,10 +308,11 @@ StateShape = draw2d.shape.layout.VerticalLayout.extend({
       */
      setPersistentAttributes : function(memento)
      {
-         this._super(memento);
+        delete memento.alpha
+        this._super(memento);
          
-         this.setName(memento.name);
-         this.setStateType(memento.stateType ?? StateType.NORMAL)
+        this.setName(memento.name);
+        this.setStateType(memento.stateType ?? StateType.NORMAL)
 
          if(typeof memento.trigger !== "undefined"){
              $.each(memento.trigger, $.proxy(function(i,e){

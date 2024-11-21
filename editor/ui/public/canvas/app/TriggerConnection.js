@@ -75,6 +75,19 @@ var TriggerConnection= draw2d.Connection.extend({
         return this.label.getText();
     },
       
+    setAlpha: function(alpha){
+        this._super(alpha)
+        this.label.setAlpha(alpha)
+    },
+
+    getSourceParent: function(){
+        return this.getSource().getParent()
+    },
+
+    getTargetParent: function(){
+        return this.getTarget().getParent()
+    },
+
     onContextMenu:function(x,y){
 
         $.contextMenu({

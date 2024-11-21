@@ -39,10 +39,9 @@ Toolbar = Class.extend({
         this.deleteButton  = $("<button>Delete</button>");
 		this.html.append(this.deleteButton);
 		this.deleteButton.button().click(()=>{
-			var node = this.view.getPrimarySelection();
-			var command= new draw2d.command.CommandDelete(node);
-			this.view.getCommandStack().execute(command);
+			this.view.deleteSelection()
 		}).button( "option", "disabled", true );
+		Mousetrap.bindGlobal(['del', 'backspace'], this.view.deleteSelection.bind(this.view))
 
 		this.addButton  = $("<button>Add</button>");
 		this.html.append(this.addButton);
