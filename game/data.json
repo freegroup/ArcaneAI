@@ -2,10 +2,13 @@
     "header": "Current System Status",
     "expression": "neutral",
     "inventory": {
-        "state": "WestOfHouse",
+        "state": "FriedhofDerTraeume",
+        "has_cigaretts": false,
         "discovered_friedhof_der_traeume": false,
+        "discovered_north": false,
         "eggs": 0,
-        "window_is_open": true,
-        "discovered_north": false
+        "troll_away": false,
+        "discovered_cigarettes": false,
+        "window_is_open": true
     }
 }

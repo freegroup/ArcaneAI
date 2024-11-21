@@ -78,7 +78,6 @@ View = draw2d.Canvas.extend({
             f.getPorts().each((i, port) =>{
               port.getConnections().each( (i,con)=>{
                 con.setAlpha(1)
-                console.log(con.getSourceParent())
                 con.getSourceParent().setAlpha(1.0)
                 con.getTargetParent().setAlpha(1.0)
               })
