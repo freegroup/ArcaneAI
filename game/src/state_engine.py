@@ -2,6 +2,8 @@ import yaml
 import os
 import traceback
 
+from jinja2 import Template
+
 from transitions.extensions import HierarchicalGraphMachine
 from scripting.lua import LuaSandbox
 
@@ -119,14 +121,14 @@ class StateEngine:
                     self.calculator.eval(code)
 
             if self.session.last_action != action:
-                self.session.llm.system(metadata_action.get('system_prompt'))
+                self.session.llm.system(self.get_action_system_prompt(action))
                 value = metadata_action.get("sound_effect")
                 volume = int(metadata_state.get("sound_effect_volume", "100") or 100)
                 if value and value.strip():
                     self.session.jukebox.play_sound(self.session, value, volume, False)
 
             if self.session.last_state != current_state:
-                self.session.llm.system(metadata_state.get('system_prompt'))
+                self.session.llm.system(self.get_state_system_prompt(current_state))
                 self.session.jukebox.stop_ambient(self.session)
                 value = metadata_state.get("ambient_sound")
                 volume = int(metadata_state.get("ambient_sound_volume", "100") or 100)
@@ -201,20 +203,28 @@ class StateEngine:
         state_meta = self.state_metadata[state]
         state_type = state_meta.get("state_type", "normal")
 
-        return self.fsm_config["metadata"][f"{state_type}_prompt"]
-    
+        prompt = self.fsm_config["metadata"][f"{state_type}_prompt"]
+        template = Template(prompt)
+        return template.render(self.get_all_vars())
+
+
 
     def get_state_system_prompt(self):
-        return self.state_metadata[self.get_state()]["system_prompt"]
+        prompt = self.state_metadata[self.get_state()]["system_prompt"]
+        template = Template(prompt)
+        return template.render(self.get_all_vars())
     
 
     def get_action_system_prompt(self, action_id):
-        return self.action_metadata[action_id]["system_prompt"]
-   
+        prompt = self.action_metadata[action_id]["system_prompt"]
+        template = Template(prompt)
+        return template.render(self.get_all_vars())
+
 
     def get_action_description(self, action_id):
-        #print(self.action_metadata[action])
-        return self.action_metadata[action_id].get("description", "")
+        desc = self.action_metadata[action_id].get("description", "")
+        template = Template(desc)
+        return template.render(self.get_all_vars())
 
 
     def get_action_name(self, action_id):
