@@ -184,12 +184,15 @@
             if (event.origin !== window.location.origin) return;
             const message = event.data;
             if (message.event === 'onSelect' && message.type == "TriggerLabel") {
+                SoundManager.stopCurrentSound()
+
                 this.jsonData = message.data
                 if (!this.jsonData.userData.sound_effect_volume) {
                   this.jsonData.userData.sound_effect_volume = 100;
                 }
             }
             else if (message.event === 'onUnselect') {
+                SoundManager.stopCurrentSound()
                 this.jsonData = {}
             }
         });

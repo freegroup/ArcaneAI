@@ -4,7 +4,9 @@ View = draw2d.Canvas.extend({
 	
 	init:function(id)
     {
-		this._super(id, 8000,8000);
+		    this._super(id, 8000,8000);
+        this.zoomingFactor = 1.2
+
         this.installEditPolicy(new draw2d.policy.canvas.ShowGridEditPolicy());
         this.installEditPolicy(new EditPolicy())
         this.installEditPolicy(new draw2d.policy.connection.DragConnectionCreatePolicy({
@@ -33,8 +35,15 @@ View = draw2d.Canvas.extend({
       
         // ZoomIn Button and the callbacks
         $("#canvas_zoom_in").on("click", () => {
-            setZoom(this.getZoom() * 1.2)
+            setZoom(this.getZoom() * this.zoomingFactor)
         })
+        Mousetrap.bindGlobal(['mod+-'], (event) => {
+          setZoom(this.getZoom() * this.zoomingFactor)
+          return false
+        })
+
+
+
     
         // OneToOne Button
         $("#canvas_zoom_normal").on("click", () => {
@@ -43,23 +52,45 @@ View = draw2d.Canvas.extend({
     
         //ZoomOut Button and the callback
         $("#canvas_zoom_out").on("click", () => { 
-            setZoom(this.getZoom() * 0.8)
+            setZoom(this.getZoom() * (1/this.zoomingFactor))
         }) 
+        // Mousetrap behandelt + und shift+= identisch, da + tatsächlich als Shift+= interpretiert wird.
+        Mousetrap.bindGlobal(['mod+='], (event) => {
+          setZoom(this.getZoom() * 1/this.zoomingFactor)
+          return false
+        })
+
 
         Mousetrap.bindGlobal(['h'], (event) => {
+          if(this.getSelection().isEmpty()){
+            return
+          }
+          this.getFigures()
+            .each( (i,figure)=>{
+              figure.setAlpha(0.1)
+            })
+            
           this.getLines().each( (i,line)=>{
             line.setAlpha(0.1)
           })
           this.getSelection().each((i, f) => {
+            f.setAlpha(1)
             f.getPorts().each((i, port) =>{
               port.getConnections().each( (i,con)=>{
                 con.setAlpha(1)
+                console.log(con.getSourceParent())
+                con.getSourceParent().setAlpha(1.0)
+                con.getTargetParent().setAlpha(1.0)
               })
             })
           })
           return false
         },"keydown")
+
         Mousetrap.bindGlobal(['h'], (event) => {
+          this.getFigures().each( (i,line)=>{
+            line.setAlpha(1)
+          })
           this.getLines().each( (i,line)=>{
             line.setAlpha(1)
           })
@@ -174,6 +205,15 @@ View = draw2d.Canvas.extend({
         });                
 
         return this
+    },
+
+    deleteSelection: function()
+    {
+      var node = this.getPrimarySelection();
+      if(node !== null){
+        var command= new draw2d.command.CommandDelete(node);
+        this.getCommandStack().execute(command);
+      }
     },
 
     toggleFullScreen: function() 

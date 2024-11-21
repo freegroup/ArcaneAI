@@ -118,12 +118,14 @@
             if (event.origin !== window.location.origin) return;
             const message = event.data;
             if (message.event === 'onSelect' && message.type == "StateShape") {
+                SoundManager.stopCurrentSound()
                 this.jsonData = message.data;
                 if (!this.jsonData.userData.ambient_sound_volume) {
                   this.jsonData.userData.ambient_sound_volume = 100;
                 }
             }
             else if (message.event === 'onUnselect') {
+                SoundManager.stopCurrentSound()
                 this.jsonData = {}
             }
         });
