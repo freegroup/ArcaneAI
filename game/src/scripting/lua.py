@@ -33,13 +33,16 @@ class LuaSandbox(BaseSandbox):
 
     def eval(self, code):
         """Evaluates Lua code."""
-        #print(f"Execute '{code}'")
+        try :
+            # empty condition == True
+            if not code or len(code)==0:
+                return True
+            
+            return self.lua.execute(code)
+        except:
+            print(f"Unable to evaluate: '{code}'")
+            return False
 
-        # empty condition == True
-        if not code or len(code)==0:
-            return True
-        
-        return self.lua.execute(code)
 
 
 # Example usage of LuaSandbox
