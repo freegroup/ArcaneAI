@@ -1,6 +1,6 @@
 <template>
     <div class="property-view"  v-if="jsonData.type === 'TriggerLabel'">
-        <h3>Action</h3>
+
         <input
             id="stateName"
             type="text"
@@ -83,7 +83,7 @@
     </div>
   </template>
   
-  <script>
+<script>
   import SoundManager from '@/utils/SoundManager'
   import { mapGetters } from 'vuex';
 
@@ -200,8 +200,13 @@
   };
   </script>
   
-  <style scoped>
-.property-view {
+<style scoped>
+  ::v-deep .v-input__details {
+    display: none;
+  }
+
+  .property-view {
+    font-size: small;
     max-height: 100%;
     overflow-y: auto;
     height: 100%;
@@ -215,10 +220,6 @@
     gap: 5px;
   }
   
-
-.property-view h3 {
-  margin-top: 0;
-}
 
 .property-view label {
   display: block;

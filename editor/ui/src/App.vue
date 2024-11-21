@@ -1,10 +1,24 @@
 <template>
   <v-app id="app">
-
     <app-toolbar @requestDocument="handleRequestDocument" />
 
     <!-- Navigation Drawer with Router Links -->
-    <v-navigation-drawer app permanent width="240">
+    <v-navigation-drawer
+      app
+      :permanent="true"
+      :mini-variant="isCompact"
+      :width="isCompact ? 56 : 240"
+      :mini-variant-width="56"
+    >
+      <!-- Toggle button to control compact state -->
+      <v-list-item @click="toggleDrawerCompact" style="cursor: pointer;">
+        <v-list-item-icon>
+          <v-icon>{{ isCompact ? 'mdi-chevron-right' : 'mdi-chevron-left' }}</v-icon>
+        </v-list-item-icon>
+      </v-list-item>
+
+      <v-divider></v-divider>
+
       <v-list dense>
         <v-list-item
           v-for="item in navigationItems"
@@ -13,17 +27,16 @@
           :prepend-icon="item.icon"
           router
         >
-          <v-list-item-content>
+          <v-list-item-content v-if="!isCompact">
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    
+
     <v-main class="content-area">
       <router-view ref="iframeContainer"></router-view>
     </v-main>
-
   </v-app>
 </template>
 
@@ -33,7 +46,7 @@ import { mapActions } from 'vuex';
 
 export default {
   components: {
-    AppToolbar
+    AppToolbar,
   },
   data() {
     return {
@@ -43,10 +56,17 @@ export default {
         { title: 'Inventory', route: (mapName) => `/inventory/${mapName || ''}`, icon: 'mdi-hand-coin-outline' },
         { title: 'State Engine', route: (mapName) => `/diagram/${mapName || ''}`, icon: 'mdi-state-machine' },
       ],
+      isCompact: false, // Initially, the drawer is expanded
     };
   },
   created() {
-    // Initialisiere Map und Sounds
+    // Load the drawer state from localStorage
+    const storedState = localStorage.getItem('drawerCompactState');
+    if (storedState !== null) {
+      this.isCompact = JSON.parse(storedState);
+    }
+
+    // Initialize Map and Sounds
     setTimeout(async () => {
       this.initializeMap();
       this.initializeSounds();
@@ -71,6 +91,11 @@ export default {
       } else {
         console.error('Iframe component or requestDraw2dDocument method not found');
       }
+    },
+    toggleDrawerCompact() {
+      // Toggle compact state and save to localStorage
+      this.isCompact = !this.isCompact;
+      localStorage.setItem('drawerCompactState', JSON.stringify(this.isCompact));
     },
   },
 };

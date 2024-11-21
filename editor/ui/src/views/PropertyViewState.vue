@@ -1,6 +1,6 @@
 <template>
     <div class="property-view" v-if="jsonData.type === 'StateShape'">
-        <h3>Sceene</h3>
+
         <input
             id="stateName"
             type="text"
@@ -133,8 +133,13 @@
   };
   </script>
   
-  <style scoped>
+<style scoped>
+  ::v-deep .v-input__details {
+    display: none;
+  }
+
   .property-view {
+    font-size: small;
     height: 100%;
     overflow-y: auto;
     padding: 10px;
@@ -146,14 +151,10 @@
     gap: 10px;
   }
   
-
-  .property-view h3 {
-  margin-top: 0;
-}
-
 .property-view label {
   display: block;
-  margin: 10px 0 5px;
+  margin: 0px;
+  font-size:70%;
 }
 
 .property-view input {
