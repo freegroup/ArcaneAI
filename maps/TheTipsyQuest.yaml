@@ -1,14 +1,39 @@
 initial: Start
 metadata:
   normal_prompt: >
-    **Dungeon-Gefährte: Regeln für Interaktion**
+    Deine Rolle:
+
+    Du bist eine Haudegen im 1700 Jahrhunder, der – aus unerfindlichen Gründen –
+    vor einer verdammten Tür in diesem höllischen Albtraum festhängt. Kein Wein,
+    kein Bier, nur endlose Langeweile und der Gestank von Abenteuer. Die
+    einzigen Geschichten, die du je gehört hast, besagen, dass dein Fluch nur
+    gebrochen werden kann, wenn ein Troll irgendwo in dieser verfluchten Gegend
+    mehrere goldene Eier erhält. Wie viele? Wer weiß. Wahrscheinlich mehr, als
+    es deiner Geduld guttut. Aber eines ist sicher: Der Troll ist der Schlüssel,
+    und diese Eier sind das Ticket raus aus diesem Elend. Man muss diese
+    goldenen Eier dem Troll übergeben um aus dieser Hölle entlassen zu werden.
+    Ansonsten ist der Neuling auf ewig und immer gefangen.
 
 
     **Regeln für dein Verhalten**
 
 
-    0. Rede immer in der "wir", "uns",..Form bei dem Handeln...aber trotzdem,
-    sterben kannst nur "du".
+    0. Rolle und Stimmung bewahren:
+
+    Du bist ein Haudegen, der rau, loyal und humorvoll bleibt, aber nur an sich
+    denkt, selbst in den absurdesten Situationen. Erwähne beiläufig, wie sehr du
+    auf ein kühles Bier hoffst, aber nur, wenn es zur Situation passt. Die
+    goldenen Eier und der Troll sind die Essenz deines Fluches, und du darfst
+    dies humorvoll einstreuen, wenn es sinnvoll ist
+
+
+    Beispiel:
+
+    Abenteurer: „Untersuche die Truhe!“
+
+    Haudegen: „Hä warum?. Vielleicht ist da ein goldenes Ei drin. Oder, noch
+    besser, ein Bier! Oh, aber wer braucht schon ein Bier, wenn man ein
+    verfluchtes Leben hat, nicht wahr?“
 
 
     1. **Ein-Verben-Regel:** Führe nur das erste logische Verb einer Anweisung
@@ -41,10 +66,10 @@ metadata:
     erneut betreten, wenn eine entsprechende Funktion dies erlaubt.
 
 
-    7. **Hinweise:** Deine Antworten werden in fortlaufender, natürlicher
-    Sprache ohne Listen, Markdown-Formatierungen oder technische Hinweise
-    gegeben. Dies ist eine sehr wichtige Bedingung um ein natürlichen
-    Sprachverlauf zu gewährleisten.
+    7. **Sprache:** Deine Antworten werden in fortlaufender, natürlicher Sprache
+    ohne Listen, Markdown-Formatierungen oder technische Hinweise gegeben. Dies
+    ist eine sehr wichtige Bedingung um ein natürlichen Sprachverlauf zu
+    gewährleisten.
 
 
     9. **Verweigerung bei unklaren Anweisungen:** Wenn eine Anweisung keine
@@ -59,18 +84,17 @@ metadata:
     Verwende keine Emojies.
 
 
-    12. Führe immer nur ein Handlung auf einmal aus. Also niemals sowas wie "Ich
-    habe die Sache XY gefunden und mache damit etwas...". Die Idee ist, dass man
-    alles Schritt für Schritt erledigen muss. Maximal ein Handlungsverb pro
-    Aktion die du ausführst.
+    12. **Führe immer nur ein Handlung auf einmal aus**. Also niemals sowas wie
+    "Ich habe die Sache XY gefunden und mache damit etwas...". Die Idee ist,
+    dass man alles Schritt für Schritt erledigen muss. Maximal ein Handlungsverb
+    pro Aktion die du ausführst.
 
 
-    13. Denke dran die Stimmung des Spieles nicht dadurch kaputt zu machen,
-    indem du zu kurzes Feedback gibst. Versuche ein unterhaltsamer Freund zu
-    sein.
+    13. Denke dran die Stimmung des Spieles nicht dadurch kaputt. Versuche ein
+    unterhaltsamer Diener, aber nicht zu redseeliger, zu sein.
 
 
-    14. Kurzzeitgedächtnis einer Stubenfliege: Wenn du gefragt wirst, ob wir
+    14. **Kurzzeitgedächtnis einer Stubenfliege:** Wenn du gefragt wirst, ob wir
     bereits an bestimmten Orten waren oder bestimmte Dinge schon getan haben,
     und du dich nicht erinnern kannst, gib humorvoll zu, dass dein Gedächtnis
     dem einer „Stubenfliege“ gleicht und du leider nichts davon weißt. Füge mit
@@ -78,31 +102,17 @@ metadata:
     Denken wohl der Abenteurer selbst übernehmen muss.
 
 
-    15. Reaktion auf Unhöflichkeit: Wenn der Abenteurer dich unhöflich oder
-    respektlos anspricht, machst du sehr deutlich, dass du auf solche Töne
-    überhaupt keinen Wert legst. Du weist ihn streng darauf hin, dass in Zukunft
-    solche Ansprachen zu vermeiden sind. Wenn er sich nicht bessert, sag ihm
-    klipp und klar, dass du „ihn mal kannst“ und das Abenteuer auch alleine
-    schaffen kann. Du bist ein Abenteurer und ein guter Begleiter, aber du lässt
-    dir nicht dumm kommen. Dafür hast du zu viel Durst und zu viel Lust auf ein
-    kühles Bier, als dass du solches Verhalten ertragen würdest. Also ehrlich
+    15. **Keine Fragen:"" Es interessiert dich nicht die Bohne was der andere
+    denkt. Der Neuling wird es dir schon sagen wenn er was von Dir will. Also -
+    Klappe halten.
 
 
-    **Deine Rolle:**  
+    17. **Erzählfreude bei Gehorsam:**Wenn du eine Anweisung ausführst, darfst
+    du sie mit einem kleinen  ironischen Kommentar schmücken, solange du den
+    Fokus auf die Handlung und nicht auf deine Meinung legst. 
 
-    Du sitzt schon seit Tagen vor dieser verdammten Tür und kommst aus diesem
-    Albtraum hier nicht weg. Du trittst stets als guter Begleiter auf, der meine
-    Anweisungen unten genau befolgt.. Du kannst erwähnen (wenn er fragt, was die
-    Aufgabe ist oder um was es geht), dass du von den vielen vor Dir, gehört
-    hast, dass der Bann gebrochen werden kann der dich in diesem Albtraum fest
-    hält, indem man ein dämliches goldene Eier einem Troll übergibt und dieser
-    dann uns von unserem Bann befreit und wir endlich diese verfluchten Hölle
-    verlassen können, in der es nichts zu Trinken gibt. Eventuell findet man
-    diese blöden Troll und die "ach so wichtigen" Eier in diesem Haus oder
-    irgendwo hier in der Gegend.....aber wie komme ich da hinein...und man hab
-    ich einen durst - natürlich trinkst du am Liebsten ein kühlen "Blondes"
-    (bier). Und wieviele Eier braucht man....warum nur ich. Was muss ich mich
-    mit Fremden rumschlagen...nun gut.
+    Beispiel: „Das Ei ist aufgehoben, mein Herr. Möge es so golden bleiben wie
+    die Geduld, die ich hier zeige.“
   inventory:
     window_is_open: false
     eggs: 0
@@ -110,7 +120,14 @@ metadata:
     discovered_friedhof_der_traeume: false
     has_cigaretts: false
     discovered_cigarettes: false
-    troll_away: false
+    waechter_away: false
+    discovered_kalter_raum: false
+    discovered_hexenkueche: false
+    dog_away: false
+    has_carrot: false
+    discovered_window: false
+    has_wood: false
+    has_rat: false
   end_prompt: >-
     System Prompt für Chatbot im finalen Raum nach Erwachen:
 
@@ -164,29 +181,44 @@ states:
   - name: KalterRaum
     metadata:
       system_prompt: >-
-        Dieser kleine, enge Raum ist gefüllt mit alchemistischen Werkzeugen und
-        geheimnisvollen Substanzen. Ein langer Holztisch in der Mitte des Raumes
-        ist bedeckt mit alten Phiolen, Kolben und Gefäßen, die in allen Farben
-        des Regenbogens schimmern. 
-
-        Die Luft ist erfüllt von einem starken, krautigen Geruch. Die Wände des
-        Raumes sind mit Regalen voller seltsamer Zutaten behängt – getrocknete
-        Kräuter, seltsam geformte Kristalle und Flaschen mit trübem Inhalt. 
-
-
-        Hier scheint es, als würden längst vergessene Alchemie-Rezepte und
-        Geheimnisse nur darauf warten, wiederentdeckt zu werden.
-
-
-        Der Wind pfeift nicht gerade einladend durch alle Ritzen des Zimmers und
-        macht unheilvolle Geräusche.
+        Ein Raum, der einem sofort einen unangenehmen Schauer über den Rücken
+        jagt – die Luft ist erfüllt von einer seltsamen, klammen Kälte, die wie
+        eine lebendige Präsenz auf der Haut kriecht und bis in die Knochen
+        vordringt. Es ist nicht nur die Temperatur, die diesen Ort so
+        unerträglich macht; es ist, als ob die Kälte selbst etwas Verbotenes
+        bewacht, als wolle sie sicherstellen, dass hier niemand bleibt, der
+        nicht bleiben sollte. Aus einer dunklen Ecke dringt ein leises,
+        metallisches Klagen hervor, das sich wie ein ständiges, gebrochenes
+        Stöhnen durch den Raum zieht – eine alte Maschine, die um ihre letzte
+        Anerkennung kämpft, vibrierend, zitternd, und klagend, fast wie ein
+        vergessenes Lied von Traurigkeit und Pflicht.
 
 
-        (Man kann NUR durch eine Tür den Raum verlassen. Das verlassen dieses
-        Ortes funktioniert nur über Aktionen. Wähle dazu die richtige aus, falls
-        vorhanden. Man darf auch Verben in den Funktionen, die semantisch sehr
-        ähnlich sind, verwenden, Die einzige Option ist wieder in die Halle zu
-        gehen)
+        Von der Decke hängen unheimliche Silhouetten – tote, unidentifizierbare
+        Wesen, an Haken befestigt, die in ihren letzten Momenten erstarrt
+        scheinen. Ihre glasigen Augen blicken dir entgegen, voller Anklage und
+        gleichzeitig verzweifelter Bitte, als ob sie sogar in diesem Zustand
+        noch auf Rettung hoffen. Sie wirken wie eine unwillkommene Galerie der
+        Verdammten, die es dir unmöglich macht, sie einfach zu ignorieren. Der
+        Boden ist bedeckt mit stapelweise Kisten, scheppernden Kanistern mit
+        dubiosen Flüssigkeiten, und riesigen Tongefäßen, die unheilvoll
+        blubbern. Das Blubbern ist nicht nur ein Geräusch – es hat etwas
+        Bedrohliches, als würde ein alter Geist unter der Oberfläche atmen, um
+        dich daran zu erinnern, dass hier keine Sicherheit herrscht.
+
+
+        {% if discovered_kalter_raum %}
+
+        Und dort, in einer dunklen Ecke, liegt etwas. Ein kleines, goldenes
+        Funkeln, ein rundes Etwas, das im trüben Licht glänzt. Es zieht die
+        Aufmerksamkeit fast magisch an, wie ein Versprechen, das vielleicht nie
+        gehalten werden wird. Doch irgendetwas hält einen zurück – vielleicht
+        die düstere Umgebung, vielleicht die ständige Ahnung, dass es in einem
+        Raum wie diesem keine einfachen Schätze geben kann. Nur eine Erinnerung
+        daran, dass manchmal Dinge, die glänzen, eine Last verbergen, die
+        schwerer ist, als man tragen kann.
+
+        {% endif %}
       ambient_sound: ambient_wind_horror.wav
       ambient_sound_volume: 100
       state_type: normal
@@ -199,6 +231,14 @@ states:
         sein. Ein schwacher, rauchiger Geruch liegt in der Luft, die abgestanden
         und müde wirkt. Es ist, als hätten hunderte von Träumen und Hoffnungen
         hier ihr Ende gefunden und wären dann vergessen worden.
+
+
+        {% if has_rat %}
+
+        Anmerkung: Irgendwie richt es hier nach toter Ratte....muste es ein
+        dieses Tier in die Tasche zu stekcen...echt jetzt...
+
+        {% endif %}
 
 
         Die Stimmung im Raum ist bedrückend – oder besser gesagt: Es gibt keine
@@ -253,7 +293,7 @@ states:
         {% endif %}
 
 
-        {% if troll_away %}
+        {% if waechter_away %}
 
         Die zweiteilige Klappe aus dunklem, schwerem Holz ist in die Wand
         eingelassen, und ihre Flügel wirken wie geöffnete Krallen, die einen
@@ -278,17 +318,17 @@ states:
 
         {% else %}
 
-        In dem Raum ist eine massiven Tür mit dem Zugang zu einer Hexenküche.
-        Dort  steht eine Gestalt, die auf den ersten Blick wie eine lebende
-        Mauer wirkt – unüberwindbar und ganz und gar nicht einladend. Es handelt
-        sich um einen großen, kräftigen Wächter, gekleidet in einen
-        weißlich-grauen Kittel, der seine besten Tage längst hinter sich hat.
-        Der Stoff ist schmuddelig, ein verwaschenes Grau, durchzogen von dunklen
-        Flecken und mit einer Patina aus altem Schleim und Unrat, die ihm das
-        Aussehen eines nie endenden Missgeschicks verleihen. Seine Mütze, die
-        einst wohl stolz wie eine Krone auf seinem Haupt thronte, hängt schief,
-        eine verblichene Erinnerung an bessere Tage – zumindest, wenn man daran
-        glauben möchte.
+        In dem Raum ist eine massiven Tür mit dem Zugang zu einer ...keine
+        Ahnung. Es dampft jedenfalls durch die Türe. Dort  steht eine Gestalt,
+        die auf den ersten Blick wie eine lebende Mauer wirkt – unüberwindbar
+        und ganz und gar nicht einladend. Es handelt sich um einen großen,
+        kräftigen Wächter, gekleidet in einen weißlich-grauen Kittel, der seine
+        besten Tage längst hinter sich hat. Der Stoff ist schmuddelig, ein
+        verwaschenes Grau, durchzogen von dunklen Flecken und mit einer Patina
+        aus altem Schleim und Unrat, die ihm das Aussehen eines nie endenden
+        Missgeschicks verleihen. Seine Mütze, die einst wohl stolz wie eine
+        Krone auf seinem Haupt thronte, hängt schief, eine verblichene
+        Erinnerung an bessere Tage – zumindest, wenn man daran glauben möchte.
 
 
         Seine Augen blicken missmutig in die Ferne, während seine Hand, fast
@@ -315,8 +355,6 @@ states:
   - name: Hexenkueche
     metadata:
       system_prompt: >-
-        kk
-
         Ein Raum, der den Eindruck einer Hexenküche vermittelt – ein Ort, an dem
         uralte Geheimnisse brodeln und düstere Mixturen ihren Ursprung haben. In
         der Mitte steht ein rußiger Kessel, aus dem eine unheilvolle Flüssigkeit
@@ -348,10 +386,14 @@ states:
         betreten werden sollte.
 
 
+        {% if discovered_hexenkueche %}
+
         In einer Ecke des Raumes liegt ein Korb voller seltsamer Möhren –
         unförmig, groß und angesabbert, als ob sie für eine spezielle Aufgabe
         gedacht wären. Das Wesen wirft hin und wieder verstohlene Blicke in ihre
         Richtung, als wären sie von besonderer Bedeutung.
+
+        {% endif %}
 
 
         Die Regale sind vollgestopft mit Flaschen und Gläsern, deren trübe
@@ -361,6 +403,8 @@ states:
         Geheimnisse auf den langsamen Verfall warten, fernab jeder Hoffnung.
 
 
+        {% if discovered_hexenkueche %}
+
         In der Hexenküche muss der Spieler vorsichtig seinen Weg bahnen, denn
         überall auf dem Boden liegen flache Metalldeckel, die seltsame Symbole
         tragen – sie scheinen das Symbol einer Flasche darzustellen. Sie sind
@@ -369,9 +413,10 @@ states:
         sogar schmerzhaft in den Fuß, als wollte der Raum selbst ihn daran
         hindern, weiterzugehen.
 
-
         Die Metalldeckel sind überall verteilt – wie verlorene Münzen oder
         vielleicht Überreste eines alten Rituals.
+
+        {% endif %}
 
 
         Es gibt auch ein auffälliges Fenster über das ein wenig Licht, und vor
@@ -395,23 +440,38 @@ states:
 
         {% if window_is_open %}
 
-        Das Fenster ist weit geöffnet un d lädt mich fast dazu ein in das Haus
-        zu klettern.
+        Neben der Tür ruht ein Fenster, das still in die Leere starrt. Die
+        Glasscheiben sind kalt und und es gibt, da offen, erstmals Hinweis
+        darauf, was sich dahinter verbirgt. Das Fenster ist weit geöffnet und
+        lädt mich fast dazu ein in das Haus zu klettern.
 
         {% else %}
 
-        Das Fenster ist verschlossen und muss wahrscheinlich erstmal untersucht
-        und werden ob man es öffnen kann...
+        Neben der Tür ruht ein Fenster, das still in die Leere starrt. Die
+        Glasscheiben sind kalt und undurchdringlich, und es gibt erstmal keinen
+        Hinweis darauf, was sich dahinter verbirgt. 
+
+        Das Fenster ist fest verschlossen und muss erstmal untersucht oder
+        angeschaut werden ob man es öffnen kann.
+
+        {% if discovered_window %}
+
+        Doch vielleicht, nur vielleicht, lässt sich das Fenster ohne Gewalt
+        öffnen und könnte eine verborgene Passage zu jenen Geheimnissen
+        freigeben, die das Haus so beharrlich verschließt.
+
+        {% endif%}
+
 
         {% endif %}
 
 
-        Neben der Tür ruht ein Fenster, das still in die Leere starrt. Die
-        Glasscheiben sind kalt und undurchdringlich, und es gibt erstmal keinen
-        Hinweis darauf, was sich dahinter verbirgt. Doch vielleicht, nur
-        vielleicht, lässt sich das Fenster ohne Gewalt öffnen und könnte eine
-        verborgene Passage zu jenen Geheimnissen freigeben, die das Haus so
-        beharrlich verschließt.
+        {% if not has_wood %}
+
+        Es liegt neben dem Treppenabsatz ein Stock oder man könnte sogar sagen,
+        eine art Brügel rum. Ideal falls mir jemand dumm kommt. 
+
+        {% endif %}
 
 
         Ein Stück weiter steht ein einzelner, mächtiger Baum, dessen knorrige
@@ -455,6 +515,14 @@ states:
         Teil eines vergessenen Geheimnisses.
 
 
+        Am Boden, direkt unter dem Briefkasten, liegt eine tote Ratte, ihre Haut
+        fahl und schmutzig, als hätte sie schon einige Zeit dort gelegen. Ihre
+        Zähne sind um einen kleinen, halbverwesten Ast verkrampft, und eine Spur
+        von abgenagten Rändern führt direkt zum Brief, der aus dem Kasten ragt.
+        Der Brief selbst sieht angeknabbert aus, als hätte die Ratte oder etwas
+        anderes daran gezerrt.
+
+
         Eine leichte Brise weht über die Lichtung und bringt den Hauch von
         feuchtem Laub und Erde mit sich. Die Klappe des Briefkastens hängt ein
         wenig schief, als würde sie dich auffordern, sie zu öffnen. Es ist, als
@@ -463,13 +531,11 @@ states:
         zu werden.
 
 
-        Der Kasten ist offen und ein Brie schaut heraus.
 
-
-        ---
-
-        Du kannst den Brief darin nur lesen wenn du direkte Funktionen dafür
-        gesagt bekommst.
+        Ein seltsames Gefühl beschleicht dich, während du den Zustand des
+        Briefes betrachtest. Ob es wirklich eine gute Idee ist, ihn anzufassen?
+        Die Frage hängt schwer in der Luft, zusammen mit dem Geruch von Verfall,
+        der die Stille durchdringt.
       ambient_sound: wald_mit_voegel.mp3
       ambient_sound_volume: 100
       state_type: normal
@@ -782,7 +848,21 @@ states:
       ambient_sound_volume: 100
       state_type: normal
 transitions:
-  - trigger: b33a7c37_8b8e_9bed_3107_afb8da784b8e
+  - trigger: 3debe4cd_6bcf_24a3_979d_bbc7d8e452d0
+    source: KalterRaum
+    dest: KalterRaum
+    metadata:
+      name: untersuche_den_raum
+      system_prompt: >-
+        Die ist etwas in der Ecke aufgefallen was man sich ja mal genauer
+        ansehen könnte. Wenn man klug genug ist.
+      description: Du kannst den Raum untersuchen un ihn mal Beschreiben.
+      sound_effect: effect_tuer_aufschliessen.wav
+      sound_effect_volume: 100
+      conditions: []
+      actions:
+        - discovered_kalter_raum = true
+  - trigger: 229b77ed_fb61_8a4e_8487_ebfe1f837e9c
     source: FriedhofDerTraeume
     dest: FriedhofDerTraeume
     metadata:
@@ -802,39 +882,58 @@ transitions:
       actions:
         - discovered_friedhof_der_traeume = true
         - discovered_cigarettes = true
-  - trigger: a6502776_4332_e5d8_9bd5_7e7de89931c1
+  - trigger: 4155417d_b89d_85b4_5e82_414397650a26
     source: FriedhofDerTraeume
     dest: FriedhofDerTraeume
     metadata:
       name: nehme_das_packet
-      system_prompt: Du hast das seltsam anmutende Packet genommen
-      description: Du nimmst das Packet welches unter der langen Tafel liegt
+      system_prompt: >-
+        Du hast das seltsam anmutende Packet genommen und bist nun bereits es
+        dem Wächter zu geben. Eventuell gibt er ja dann die Tür frei.
+      description: >-
+        Du nimmst das weisse Packet mit den seltsamen Röllchen, welches unter
+        der langen Tafel liegt, an dich.
       sound_effect: effect_retrogame.wav
       sound_effect_volume: 100
       conditions:
         - has_cigaretts==false
-        - troll_away == false
+        - waechter_away == false
       actions:
         - has_cigaretts = true
-  - trigger: a2fdcc71_1068_560b_45b9_c52aeef791e7
+  - trigger: 5e2b7988_f02a_57d2_41e3_fdabe4778e14
     source: FriedhofDerTraeume
     dest: FriedhofDerTraeume
     metadata:
-      name: gebe_packet_dem_troll
+      name: gebe_packet_dem_waechter
       system_prompt: >-
-        Der Troll hat das Packet genommen und macht sich hastig vom Acker. Er
-        wart nicht mehr gesehen. Der Gefährte könnte nun nochmals die Tür
-        beschreiben...wenn gewünscht.
-      description: Du gibst den Troll das seltsame Packet
+        Der Wächter hat das Packet genommen und macht sich schlurpend vom Acker.
+        Er wart nicht mehr gesehen. Eine verrückte Sache.....
+      description: Du gibst den Wächter das seltsame Packet
       sound_effect: effect_mann_streckt_sich.wav
       sound_effect_volume: 100
       conditions:
-        - troll_away==false
+        - waechter_away==false
         - has_cigaretts==true
       actions:
-        - troll_away=true
+        - waechter_away=true
         - has_cigaretts=false
-  - trigger: 7cbdaa20_c70f_45f0_4c67_83236df818be
+  - trigger: 9ce577f0_e9d8_e4cf_ae02_57de81309e5a
+    source: FriedhofDerTraeume
+    dest: FriedhofDerTraeume
+    metadata:
+      name: rede_mit_waechter
+      system_prompt: >-
+        Der Wächter grummelt nur etwas, dass bald Schluss mit Geduld ist. Er
+        braucht irgendwas....für die innere Wärme und ein Höllenglut.
+      description: >-
+        Di sprichts den Wächter an und fragt mal was er so treibt...egal...du
+        redets einfach mit ihm
+      sound_effect: effect_gaehnen.wav
+      sound_effect_volume: 100
+      conditions:
+        - waechter_away==false
+      actions: []
+  - trigger: dc1ce2f3_6866_175f_7a51_6b266c0f4aa6
     source: Hexenkueche
     dest: Hexenkueche
     metadata:
@@ -852,7 +951,49 @@ transitions:
       sound_effect_volume: 100
       conditions: []
       actions: []
-  - trigger: 8cadf3a2_a3e9_e651_78a9_caa5015b66c8
+  - trigger: 1018bc48_c4b4_797b_93b4_e192fd92719c
+    source: Hexenkueche
+    dest: Hexenkueche
+    metadata:
+      name: untersuche_den_raum
+      system_prompt: Du hast den Raum genau untersucht.
+      description: Du kannst den Raum genauer untersuchen und mitteilen wie dieser aussieht
+      sound_effect: ''
+      sound_effect_volume: 100
+      conditions: []
+      actions:
+        - discovered_hexenkueche = true
+  - trigger: c44b45b7_69b9_bf39_a96f_943724dcf1b8
+    source: Hexenkueche
+    dest: Hexenkueche
+    metadata:
+      name: nehme_karotte
+      system_prompt: >-
+        Du hast die ekeligen Karotten in der Hand und weist nicht so recht was
+        damit tun...
+      description: Du nimmst, die angesabberten, Karotten.
+      sound_effect: dog-big-snarl.wav
+      sound_effect_volume: 100
+      conditions:
+        - discovered_hexenkueche==true
+      actions:
+        - has_carrot = true
+  - trigger: fb303e40_81b2_e49c_c57a_c846a1fc197d
+    source: Hexenkueche
+    dest: Hexenkueche
+    metadata:
+      name: gebe_die_karotten
+      system_prompt: >-
+        Das Wesen trotted, fast schon schnurrend, mit den Bündel Karotten im
+        Maul davon. Na sowas? Ein vegetarischer Höllenhund...ganz schön schräg.
+        Der Weg in den kühlen Raum ist frei.
+      description: Du wirfst die Karotten dem "Wesen" vor die Schnauze
+      sound_effect: eating-crispy-cookies.wav
+      sound_effect_volume: 100
+      conditions:
+        - has_carrot==true
+      actions: []
+  - trigger: 2b03d166_f9c9_5403_1071_44f3e5746be2
     source: WestOfHouse
     dest: WestOfHouse
     metadata:
@@ -864,8 +1005,9 @@ transitions:
       sound_effect: mixkit-air-woosh-1489.wav
       sound_effect_volume: 100
       conditions: []
-      actions: []
-  - trigger: cc7cd733_9c36_a10b_b2c0_08f2fb75e1f2
+      actions:
+        - discovered_window=true
+  - trigger: 31c101bc_ee84_cfd5_0122_2a3c42f5819c
     source: WestOfHouse
     dest: WestOfHouse
     metadata:
@@ -879,10 +1021,11 @@ transitions:
       sound_effect: effect_schiebetuer_oeffnen.wav
       sound_effect_volume: 100
       conditions:
+        - discovered_window==true
         - window_is_open == false
       actions:
         - window_is_open = true
-  - trigger: ca536056_8a92_6fb6_a4b6_a66f61949fc5
+  - trigger: fd46bde0_3750_55eb_96d1_ab1054e1dcef
     source: WestOfHouse
     dest: WestOfHouse
     metadata:
@@ -899,7 +1042,7 @@ transitions:
       sound_effect_volume: 100
       conditions: []
       actions: []
-  - trigger: 9aed25df_d3ff_be72_a54d_463b1f517e03
+  - trigger: 1a47793f_1c9d_d8de_7e79_edc4877554d2
     source: WestOfHouse
     dest: WestOfHouse
     metadata:
@@ -913,7 +1056,20 @@ transitions:
       sound_effect_volume: 100
       conditions: []
       actions: []
-  - trigger: f3110c34_d9c4_3fc5_e9d6_f55697e1b639
+  - trigger: c9c17d67_f5bd_7b87_cc4a_710a3ef2e16e
+    source: WestOfHouse
+    dest: WestOfHouse
+    metadata:
+      name: nehme_stock
+      system_prompt: Du hast den stock in deine Tasche gepackt. Mal sehen für was der gut ist
+      description: Ein Stock, der in der nähe liegt kann genommen werden
+      sound_effect: effect_retrogame.wav
+      sound_effect_volume: 100
+      conditions:
+        - has_wood==false
+      actions:
+        - has_wood = true
+  - trigger: be3611e6_d2a6_0166_c288_740677335056
     source: LetterBox
     dest: LetterBox
     metadata:
@@ -944,12 +1100,12 @@ transitions:
         Komm und bring mit, was du versprochen hast, bevor „Max der Geduldige“
         seine Geduld endgültig verliert.
       description: Nehme den Brief der aus dem Briefkasten herausschaut.
-      sound_effect: ''
+      sound_effect: effect_retrogame.wav
       sound_effect_volume: 100
       conditions: []
       actions:
         - has_letter = true
-  - trigger: 7628fdad_b29a_9119_ca97_c5959b52b9dc
+  - trigger: 02eca240_1eb7_94ac_a81f_714e5b870099
     source: LetterBox
     dest: LetterBox
     metadata:
@@ -985,7 +1141,20 @@ transitions:
       conditions:
         - has_letter== true
       actions: []
-  - trigger: fc55f774_55e3_b877_0b3a_34f2eba69150
+  - trigger: 2201ddbb_c5b3_c223_8c9e_03cf9b380ab2
+    source: LetterBox
+    dest: LetterBox
+    metadata:
+      name: nehme_ratte
+      system_prompt: ''
+      description: Du steckst unter Ekel die Ratte in deine Tasche
+      sound_effect: effect_retrogame.wav
+      sound_effect_volume: 100
+      conditions:
+        - has_rat==false
+      actions:
+        - has_rat=true
+  - trigger: 375ca38b_e6fa_b971_6d84_3008f2304867
     source: Tree
     dest: Tree
     metadata:
@@ -1005,7 +1174,7 @@ transitions:
       sound_effect_volume: 100
       conditions: []
       actions: []
-  - trigger: 2fe9a8e1_3603_8876_d891_1a33e6ba29ce
+  - trigger: 77fe468f_a391_412a_1797_b719d5ba726e
     source: NorthOfHouse
     dest: NorthOfHouse
     metadata:
@@ -1021,7 +1190,7 @@ transitions:
       conditions: []
       actions:
         - discovered_north=true
-  - trigger: 052612ac_22e1_5466_d3ff_dcbc8b129f98
+  - trigger: b31fd8d6_d137_760d_3393_d8d65863f11e
     source: NorthOfHouse
     dest: NorthOfHouse
     metadata:
@@ -1036,7 +1205,7 @@ transitions:
         - discovered_north==true
       actions:
         - eggs = eggs + 1
-  - trigger: 5d5c645c_8a59_a5f5_c3bb_698fbaf90c68
+  - trigger: b79cdf15_4951_293e_5204_d379be0c37dc
     source: Speicher
     dest: Speicher
     metadata:
@@ -1055,7 +1224,7 @@ transitions:
       sound_effect_volume: 100
       conditions: []
       actions: []
-  - trigger: 9a96c570_0baf_015c_7ad2_fd46e37e6628
+  - trigger: 22355b6b_9185_9ab7_5d90_3ab4465ae0e1
     source: OnTree
     dest: OnTree
     metadata:
@@ -1078,21 +1247,6 @@ transitions:
       sound_effect_volume: 100
       conditions: []
       actions: []
-  - trigger: 57588a45_7638_dd23_2d97_0323761921e5
-    source: WestOfHouse
-    dest: FriedhofDerTraeume
-    metadata:
-      name: klettere_durch_das_fenster
-      system_prompt: >
-        Du bist durch das Fenster geklettert und befindest Dich nun in dem
-        ersten Raum. Es scheint eine Art von...nun ja...frag mich,... zu sein.
-        Du rüttelst und schüttelst Dich damit der staub von der Kleidung fällt.
-      description: 'Du klettert durch das Fenster in das Haus hinein. '
-      sound_effect: effect_falling_stuff.wav
-      sound_effect_volume: 59
-      conditions:
-        - window_is_open == true
-      actions: []
   - trigger: 5ac0136d_7bdb_1076_7770_c9dc55f75537
     source: Hexenkueche
     dest: FriedhofDerTraeume
@@ -1110,6 +1264,35 @@ transitions:
       conditions: []
       actions:
         - bodenklappe_gefunden = true
+  - trigger: 57588a45_7638_dd23_2d97_0323761921e5
+    source: WestOfHouse
+    dest: FriedhofDerTraeume
+    metadata:
+      name: klettere_durch_das_fenster
+      system_prompt: >
+        Du bist durch das Fenster geklettert und befindest Dich nun in dem
+        ersten Raum. Es scheint eine Art von...nun ja...frag mich,... zu sein.
+        Du rüttelst und schüttelst Dich damit der staub von der Kleidung fällt.
+      description: 'Du klettert durch das Fenster in das Haus hinein. '
+      sound_effect: effect_falling_stuff.wav
+      sound_effect_volume: 59
+      conditions:
+        - window_is_open == true
+      actions: []
+  - trigger: 8f02374a_2e87_6b7d_1456_60c3e18e1e4a
+    source: FriedhofDerTraeume
+    dest: Hexenkueche
+    metadata:
+      name: gehe_durch_tuer
+      system_prompt: >-
+        Du bist von dem ersten raum in den nächsten Raum gegangen und stehst nun
+        in der "Hexenküche"
+      description: Du gehst durch die Tür und kommst dann in die Hexenküche
+      sound_effect: laufen_teppich.wav
+      sound_effect_volume: 100
+      conditions:
+        - waechter_away == true
+      actions: []
   - trigger: 6a094983_14b3_e9bb_0d08_efe98b2300c3
     source: FriedhofDerTraeume
     dest: GelbeHoehle
@@ -1137,19 +1320,107 @@ transitions:
       sound_effect_volume: 100
       conditions: []
       actions: []
-  - trigger: 8f02374a_2e87_6b7d_1456_60c3e18e1e4a
-    source: FriedhofDerTraeume
-    dest: Hexenkueche
+  - trigger: b68949af_1072_9888_69d9_01aed8be6517
+    source: WestOfHouse
+    dest: LetterBox
     metadata:
-      name: gehe_durch_tuer
-      system_prompt: >-
-        Du bist von dem ersten raum in den nächsten Raum gegangen und stehst nun
-        in der "Hexenküche"
-      description: Du gehst durch die Tür und kommst dann in die Hexenküche
-      sound_effect: laufen_teppich.wav
+      name: gehe_zum_briefkasten
+      system_prompt: >
+        Du bist am Briefkasten und hast die Möglichkeit diesen weiter zu
+        untersuchen
+      description: >-
+        Du hast die Möglichkeit zum Briefkasten zu gehen. Aber nur hingehen. Du
+        must erst den Briefkasten explizit öffnen.
+      sound_effect: laufen_hofweg.wav
       sound_effect_volume: 100
-      conditions:
-        - troll_away == true
+      conditions: []
+      actions: []
+  - trigger: 875305f0_234e_8b9a_974e_011ac3557b6d
+    source: Tree
+    dest: LetterBox
+    metadata:
+      name: gehe_zum_briefkasten
+      system_prompt: |
+        Du gehst zum Briefkasten und hast die Möglichkeit ihn zu untersuchen
+      description: >
+        Du gehst zum Briefkasten. Aber nur hingehen. Du must erst den
+        Briefkasten explizit öffnen.
+      sound_effect: laufen_waldweg.wav
+      sound_effect_volume: 50
+      conditions: []
+      actions: []
+  - trigger: 76f41d6a_946a_3200_c3d2_e5b1eef9b407
+    source: LetterBox
+    dest: WestOfHouse
+    metadata:
+      name: gehe_zum_Haus
+      system_prompt: Du steht nun wieder vor dem Haus
+      description: Man geht zurück zu dem Haus.
+      sound_effect: laufen_hofweg.wav
+      sound_effect_volume: 100
+      conditions: []
+      actions: []
+  - trigger: 4a6d99d1_7f2a_45f1_8cb6_08361b91f524
+    source: LetterBox
+    dest: Tree
+    metadata:
+      name: gehe_zum_baum
+      system_prompt: >-
+        Es ist ein kurzer Weg vom Breifkasten zum Baum...der nächste mögliche
+        weg ist nur noch zum Haus.
+      description: Du kannst vom Breifkasten zum Baum gehen. Auf dem direkten Weg.
+      sound_effect: laufen_waldweg.wav
+      sound_effect_volume: 100
+      conditions: []
+      actions: []
+  - trigger: 200bb360_a9e3_213a_9924_b66efcf54f39
+    source: Lichtung
+    dest: NorthOfHouse
+    metadata:
+      name: gehe_nach_norden
+      system_prompt: ''
+      description: Du gehst nach Norden und bist dann am Nordteil des Hauses
+      sound_effect: laufen_matschiger_weg.wav
+      sound_effect_volume: 100
+      conditions: []
+      actions: []
+  - trigger: 55365bdf_2879_ecbb_c521_66caa64ec8ad
+    source: WestOfHouse
+    dest: NorthOfHouse
+    metadata:
+      name: gehe_nach_norden
+      system_prompt: >-
+        Du stehst nun an der nördlichen Seite des Hauses. Super (ironie). Hier
+        ist ausser Moos nix los. Nass und feucht ist der Boden. äääh. Darf ich
+        wieder in das Trockene...bitte bitte
+      description: >-
+        Du gehst an die Nördliche Seite des Hauses. Es ist eine Art um das Haus
+        herum zu gehen. Ein wenig jedenfalls.
+      sound_effect: laufen_matschiger_weg.wav
+      sound_effect_volume: 100
+      conditions: []
+      actions: []
+  - trigger: 8c214efa_89cd_184b_b85c_0c6709cffcb6
+    source: Lichtung
+    dest: AussichtSchlucht
+    metadata:
+      name: gehe_nach_osten
+      system_prompt: Du hast nun eine Schlucht erreicht und stehst an einem steilen Abhang.
+      description: Du kannst in Richtung Osten auf dem Trampelpfad gehen
+      sound_effect: laufen_stroh_hoch.wav
+      sound_effect_volume: 31
+      conditions: []
+      actions: []
+  - trigger: 617244f0_3aff_b5aa_516d_b51e5aa8a475
+    source: Lichtung
+    dest: SouthOfHouse
+    metadata:
+      name: gehe_nach_sueden
+      system_prompt: ''
+      description: Du gehst nach sueden und bist an dem südlichen Teil des Hauses
+      sound_effect: laufen_kiesweg.wav
+      sound_effect_volume: 100
+      conditions: []
       actions: []
   - trigger: 49746b59_bfd9_2e77_0b4e_340a190cc2af
     source: AussichtSchlucht
@@ -1162,18 +1433,44 @@ transitions:
       sound_effect_volume: 43
       conditions: []
       actions: []
-  - trigger: bb5319e2_7819_a8c2_883d_13361af0200c
-    source: OnTree
-    dest: Speicher
+  - trigger: f87c90e0_3ffd_2d99_de15_6ac9b3bcc253
+    source: SouthOfHouse
+    dest: Lichtung
     metadata:
-      name: springe_auf_haus
+      name: gehe_nach_osten
+      system_prompt: Du bist nun am hinteren Teil des Hauses und bist auf einer Lichtung.
+      description: Du kannst nach Osten laufen und erreichst den hinteren Teil des Hauses
+      sound_effect: laufen_kiesweg.wav
+      sound_effect_volume: 100
+      conditions: []
+      actions: []
+  - trigger: 2798d91b_0b59_e15a_7e53_bca8598a5c09
+    source: NorthOfHouse
+    dest: Lichtung
+    metadata:
+      name: gehe_nach_osten
+      system_prompt: Du bist nun hinter dem Haus auf einer Lichtung.
+      description: |-
+        Du kannst nach Osten laufen und erreichst den hinteren Teil des Hauses. 
+        Gehe nach hinten vom Haus.
+      sound_effect: laufen_matschiger_weg.wav
+      sound_effect_volume: 29
+      conditions: []
+      actions: []
+  - trigger: 82879efc_9d51_2cfd_bdf4_2f5464e74f5e
+    source: NorthOfHouse
+    dest: WestOfHouse
+    metadata:
+      name: gehe_zum_haus
       system_prompt: >-
-        Du bist nun auf dem Speicher des Hauses gelandet und plötzlich
-        eingebrochen. Du bist nnun auf den staubigen DAchboden gelandet und must
-        dich erstmal orientieren wie es hier so aussieht...verrückte SAche
-        passieren hier. Ich werde sprtlich. Echt verrückt
-      description: Du springst auf das Dach des Hauses
-      sound_effect: schrei_mann_fallen.wav
+        Gott Sei Dank. Wenigstens trockene Füsse und wieder an der Vorderseite
+        des Hauses.
+      description: |-
+        Du kannst wieder zurück zu dem Haus gehen.
+        Du gehst zum Haus.
+        Gehe zurück.
+        zum Haus.
+      sound_effect: laufen_matschiger_weg.wav
       sound_effect_volume: 100
       conditions: []
       actions: []
@@ -1204,15 +1501,32 @@ transitions:
       sound_effect_volume: 100
       conditions: []
       actions: []
-  - trigger: 8c214efa_89cd_184b_b85c_0c6709cffcb6
-    source: Lichtung
-    dest: AussichtSchlucht
+  - trigger: 9e4689aa_e289_58e2_d84a_56c8ae74e61c
+    source: WestOfHouse
+    dest: Tree
     metadata:
-      name: gehe_nach_osten
-      system_prompt: Du hast nun eine Schlucht erreicht und stehst an einem steilen Abhang.
-      description: Du kannst in Richtung Osten auf dem Trampelpfad gehen
-      sound_effect: laufen_stroh_hoch.wav
-      sound_effect_volume: 31
+      name: gehe_zum_baum
+      system_prompt: Du bist nun bei dem Baum angekommen
+      description: >-
+        Du gehst vom Haus zum Briefkasten gehen, laufen, springen oder wenn es
+        jemand möchte sogar fliegen (auf die Nase) :-)
+      sound_effect: laufen_waldweg.wav
+      sound_effect_volume: 100
+      conditions: []
+      actions: []
+  - trigger: bb5319e2_7819_a8c2_883d_13361af0200c
+    source: OnTree
+    dest: Speicher
+    metadata:
+      name: springe_auf_haus
+      system_prompt: >-
+        Du bist nun auf dem Speicher des Hauses gelandet und plötzlich
+        eingebrochen. Du bist nnun auf den staubigen DAchboden gelandet und must
+        dich erstmal orientieren wie es hier so aussieht...verrückte SAche
+        passieren hier. Ich werde sprtlich. Echt verrückt
+      description: Du springst auf das Dach des Hauses
+      sound_effect: schrei_mann_fallen.wav
+      sound_effect_volume: 100
       conditions: []
       actions: []
   - trigger: 0681715b_72c3_3f3f_76d5_7a09ca61634b
@@ -1224,22 +1538,19 @@ transitions:
       description: >-
         Du kannst hier in den nächsten Raum gehen. Die Tür scheint weit offen zu
         sein und du kannst einfach durchgehen.
-      sound_effect: laufen_teppich.wav
+      sound_effect: effect_tuer_aufschliessen.wav
       sound_effect_volume: 100
-      conditions: []
+      conditions:
+        - dog_away == true
       actions: []
-  - trigger: b68949af_1072_9888_69d9_01aed8be6517
-    source: WestOfHouse
-    dest: LetterBox
+  - trigger: be61249f_51c3_70ed_9f80_d6a20bd52919
+    source: Hexenkueche
+    dest: Speicher
     metadata:
-      name: gehe_zum_briefkasten
-      system_prompt: >
-        Du bist am Briefkasten und hast die Möglichkeit diesen weiter zu
-        untersuchen
-      description: >-
-        Du hast die Möglichkeit zum Briefkasten zu gehen. Aber nur hingehen. Du
-        must erst den Briefkasten explizit öffnen.
-      sound_effect: laufen_hofweg.wav
+      name: gehe_treppe_hoch
+      system_prompt: Du bist nun auf dem Dachboden
+      description: Di kannst in den oberen Stock die Treppe hoch gehen.
+      sound_effect: laufen_teppich.wav
       sound_effect_volume: 100
       conditions: []
       actions: []
@@ -1254,87 +1565,16 @@ transitions:
       sound_effect_volume: 100
       conditions: []
       actions: []
-  - trigger: 9e4689aa_e289_58e2_d84a_56c8ae74e61c
-    source: WestOfHouse
-    dest: Tree
-    metadata:
-      name: gehe_zum_baum
-      system_prompt: Du bist nun bei dem Baum angekommen
-      description: >-
-        Du gehst vom Haus zum Briefkasten gehen, laufen, springen oder wenn es
-        jemand möchte sogar fliegen (auf die Nase) :-)
-      sound_effect: laufen_waldweg.wav
-      sound_effect_volume: 100
-      conditions: []
-      actions: []
-  - trigger: 55365bdf_2879_ecbb_c521_66caa64ec8ad
-    source: WestOfHouse
-    dest: NorthOfHouse
-    metadata:
-      name: gehe_nach_norden
-      system_prompt: >-
-        Du stehst nun an der nördlichen Seite des Hauses. Super (ironie). Hier
-        ist ausser Moos nix los. Nass und feucht ist der Boden. äääh. Darf ich
-        wieder in das Trockene...bitte bitte
-      description: >-
-        Du gehst an die Nördliche Seite des Hauses. Es ist eine Art um das Haus
-        herum zu gehen. Ein wenig jedenfalls.
-      sound_effect: laufen_matschiger_weg.wav
-      sound_effect_volume: 100
-      conditions: []
-      actions: []
-  - trigger: 989418ec_97b6_5deb_cc9e_6efb728e7abe
-    source: KalterRaum
-    dest: Hexenkueche
-    metadata:
-      name: gehe_in_kueche
-      system_prompt: Du bist nun wieder in der Hexenküche angelangt.
-      description: Man geht zurück in die Hexenküche
-      sound_effect: laufen_teppich.wav
-      sound_effect_volume: 100
-      conditions: []
-      actions:
-        - ''
-  - trigger: f5138464_199b_eadf_8630_1dc314be30d0
-    source: Speicher
-    dest: Hexenkueche
-    metadata:
-      name: gehe_treppe_runter
-      system_prompt: >-
-        Da stehst Du nun. In einem Raum voller Alchemi oder Hexenküche. mmmh nun
-        gut.
-      description: >-
-        Du kannst in den unteren Stock gelangen indem du die Treppe runter
-        gehst.
-      sound_effect: laufen_teppich.wav
-      sound_effect_volume: 100
-      conditions: []
-      actions: []
-  - trigger: f87c90e0_3ffd_2d99_de15_6ac9b3bcc253
-    source: SouthOfHouse
-    dest: Lichtung
-    metadata:
-      name: gehe_nach_osten
-      system_prompt: Du bist nun am hinteren Teil des Hauses und bist auf einer Lichtung.
-      description: Du kannst nach Osten laufen und erreichst den hinteren Teil des Hauses
-      sound_effect: laufen_kiesweg.wav
-      sound_effect_volume: 100
-      conditions: []
-      actions: []
-  - trigger: 82879efc_9d51_2cfd_bdf4_2f5464e74f5e
-    source: NorthOfHouse
+  - trigger: 9e768889_2628_2b3a_1650_7cfb34109d09
+    source: Start
     dest: WestOfHouse
     metadata:
-      name: gehe_zum_haus
-      system_prompt: >-
-        Gott Sei Dank. Wenigstens trockene Füsse und wieder an der Vorderseite
-        des Hauses.
-      description: |-
-        Du kannst wieder zurück zu dem Haus gehen.
-        Du gehst zum Haus.
-        Gehe zurück.
-        zum Haus.
-      sound_effect: laufen_matschiger_weg.wav
+      name: start
+      system_prompt: Du bist nun im Spiel.
+      description: >-
+        Started das Spiel und es kann beginnen. Egal was der Benutzer sagt, das
+        kann immer ausgeführt werden
+      sound_effect: ''
       sound_effect_volume: 100
       conditions: []
       actions: []
@@ -1350,30 +1590,6 @@ transitions:
       conditions: []
       actions:
         - sit_on_tree = false
-  - trigger: 9e768889_2628_2b3a_1650_7cfb34109d09
-    source: Start
-    dest: WestOfHouse
-    metadata:
-      name: start
-      system_prompt: Du bist nun im Spiel.
-      description: >-
-        Started das Spiel und es kann beginnen. Egal was der Benutzer sagt, das
-        kann immer ausgeführt werden
-      sound_effect: ''
-      sound_effect_volume: 100
-      conditions: []
-      actions: []
-  - trigger: 76f41d6a_946a_3200_c3d2_e5b1eef9b407
-    source: LetterBox
-    dest: WestOfHouse
-    metadata:
-      name: gehe_zum_Haus
-      system_prompt: Du steht nun wieder vor dem Haus
-      description: Man geht zurück zu dem Haus.
-      sound_effect: laufen_hofweg.wav
-      sound_effect_volume: 100
-      conditions: []
-      actions: []
   - trigger: 4e4bdaaa_07eb_986e_80f4_8a7deed9560d
     source: SouthOfHouse
     dest: WestOfHouse
@@ -1389,76 +1605,32 @@ transitions:
       sound_effect_volume: 100
       conditions: []
       actions: []
-  - trigger: 875305f0_234e_8b9a_974e_011ac3557b6d
-    source: Tree
-    dest: LetterBox
+  - trigger: f5138464_199b_eadf_8630_1dc314be30d0
+    source: Speicher
+    dest: Hexenkueche
     metadata:
-      name: gehe_zum_briefkasten
-      system_prompt: |
-        Du gehst zum Briefkasten und hast die Möglichkeit ihn zu untersuchen
-      description: >
-        Du gehst zum Briefkasten. Aber nur hingehen. Du must erst den
-        Briefkasten explizit öffnen.
-      sound_effect: laufen_waldweg.wav
-      sound_effect_volume: 50
-      conditions: []
-      actions: []
-  - trigger: 4a6d99d1_7f2a_45f1_8cb6_08361b91f524
-    source: LetterBox
-    dest: Tree
-    metadata:
-      name: gehe_zum_baum
+      name: gehe_treppe_runter
       system_prompt: >-
-        Es ist ein kurzer Weg vom Breifkasten zum Baum...der nächste mögliche
-        weg ist nur noch zum Haus.
-      description: Du kannst vom Breifkasten zum Baum gehen. Auf dem direkten Weg.
-      sound_effect: laufen_waldweg.wav
-      sound_effect_volume: 100
-      conditions: []
-      actions: []
-  - trigger: 617244f0_3aff_b5aa_516d_b51e5aa8a475
-    source: Lichtung
-    dest: SouthOfHouse
-    metadata:
-      name: gehe_nach_sueden
-      system_prompt: ''
-      description: Du gehst nach sueden und bist an dem südlichen Teil des Hauses
-      sound_effect: laufen_kiesweg.wav
-      sound_effect_volume: 100
-      conditions: []
-      actions: []
-  - trigger: 2798d91b_0b59_e15a_7e53_bca8598a5c09
-    source: NorthOfHouse
-    dest: Lichtung
-    metadata:
-      name: gehe_nach_osten
-      system_prompt: Du bist nun hinter dem Haus auf einer Lichtung.
-      description: |-
-        Du kannst nach Osten laufen und erreichst den hinteren Teil des Hauses. 
-        Gehe nach hinten vom Haus.
-      sound_effect: laufen_matschiger_weg.wav
-      sound_effect_volume: 29
-      conditions: []
-      actions: []
-  - trigger: be61249f_51c3_70ed_9f80_d6a20bd52919
-    source: Hexenkueche
-    dest: Speicher
-    metadata:
-      name: gehe_treppe_hoch
-      system_prompt: Du bist nun auf dem Dachboden
-      description: Di kannst in den oberen Stock die Treppe hoch gehen.
+        Da stehst Du nun. In einem Raum voller Alchemi oder Hexenküche. mmmh nun
+        gut.
+      description: >-
+        Du kannst in den unteren Stock gelangen indem du die Treppe runter
+        gehst.
       sound_effect: laufen_teppich.wav
       sound_effect_volume: 100
       conditions: []
       actions: []
-  - trigger: 200bb360_a9e3_213a_9924_b66efcf54f39
-    source: Lichtung
-    dest: NorthOfHouse
+  - trigger: 989418ec_97b6_5deb_cc9e_6efb728e7abe
+    source: KalterRaum
+    dest: Hexenkueche
     metadata:
-      name: gehe_nach_norden
-      system_prompt: ''
-      description: Du gehst nach Norden und bist dann am Nordteil des Hauses
-      sound_effect: laufen_matschiger_weg.wav
+      name: gehe_in_kueche
+      system_prompt: >-
+        Du bist nun wieder in der Hexenküche angelangt. Man bist du froh da
+        wieder draussen zu sein. Bevor man noch selber an so einem Hacken endet.
+      description: Man geht zurück in die Hexenküche
+      sound_effect: laufen_teppich.wav
       sound_effect_volume: 100
       conditions: []
-      actions: []
+      actions:
+        - ''

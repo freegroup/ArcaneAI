@@ -3,12 +3,19 @@
     "expression": "neutral",
     "inventory": {
         "state": "FriedhofDerTraeume",
+        "discovered_friedhof_der_traeume": true,
+        "discovered_hexenkueche": false,
+        "has_carrot": false,
+        "has_rat": true,
         "has_cigaretts": false,
-        "discovered_friedhof_der_traeume": false,
-        "discovered_north": false,
+        "discovered_kalter_raum": false,
+        "window_is_open": true,
+        "discovered_window": true,
+        "waechter_away": true,
+        "dog_away": false,
+        "discovered_cigarettes": true,
         "eggs": 0,
-        "troll_away": false,
-        "discovered_cigarettes": false,
-        "window_is_open": true
+        "discovered_north": false,
+        "has_wood": true
     }
 }
