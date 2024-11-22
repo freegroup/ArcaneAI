@@ -1,5 +1,6 @@
 from lupa import LuaRuntime
 from scripting.base import BaseSandbox
+import sys
 
 class LuaSandbox(BaseSandbox):
     
@@ -12,12 +13,17 @@ class LuaSandbox(BaseSandbox):
   
 
     def set_var(self, name, value):
-        if isinstance(value, bool):
-            # Lua uses `true` and `false` for booleans
-            lua_value = 'true' if value else 'false'
-            self.lua.execute(f"{name} = {lua_value}")
-        else:
-            self.lua.execute(f"{name} = {value}")
+        try:
+            if isinstance(value, bool):
+                # Lua uses `true` and `false` for booleans
+                lua_value = 'true' if value else 'false'
+                self.lua.execute(f"{name} = {lua_value}")
+            else:
+                self.lua.execute(f"{name} = {value}")
+        except:
+            print(f"ERROR: unable to set Lua value with '{name} = {value}'")
+            sys.exit(1)
+
 
     def get_var(self, name):
         """Gets a Lua variable."""
