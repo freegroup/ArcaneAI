@@ -51,8 +51,10 @@ Raft = draw2d.shape.composite.Raft.extend({
      */
     setPersistentAttributes : function(memento)
     {
-        this._super(memento);
+        delete memento.alpha
 
+        this._super(memento);
+        
         // remove all decorations created in the constructor of this element
         //
         this.resetChildren();
@@ -72,12 +74,5 @@ Raft = draw2d.shape.composite.Raft.extend({
             // add the new figure as child to this figure
             this.add(figure, locator);
         },this));
-    },
-
-    consumeEvent: function(event){
-        if(event.status==="ERROR"){
-            this.addCssClass("error")
-        }
     }
-
 });

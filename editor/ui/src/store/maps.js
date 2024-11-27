@@ -165,6 +165,7 @@ export default {
                 description: trigger.description || "",
                 sound_effect: trigger.sound_effect || "",
                 sound_effect_volume: trigger.sound_effect_volume || 100,
+                sound_effect_duration: trigger.sound_effect_duration,
                 conditions: trigger.conditions || [],
                 actions: trigger.actions || []
               }
@@ -183,6 +184,7 @@ export default {
               description: triggerConnection.userData?.description || "",
               sound_effect: triggerConnection.userData?.sound_effect || "",
               sound_effect_volume: triggerConnection.userData?.sound_effect_volume || 100,
+              sound_effect_duration: triggerConnection.userData?.sound_effect_duration,
               conditions: triggerConnection.userData?.conditions || [],
               actions: triggerConnection.userData?.actions || []
             }

@@ -123,9 +123,10 @@ class StateEngine:
             if self.session.last_action != action:
                 self.session.llm.system(self.get_action_system_prompt(action))
                 value = metadata_action.get("sound_effect")
-                volume = int(metadata_state.get("sound_effect_volume", "100") or 100)
+                volume = int(metadata_action.get("sound_effect_volume", "100") or 100)
+                duration = int(metadata_action.get("sound_effect_duration", "2")) if "sound_effect_duration" in metadata_action else 2
                 if value and value.strip():
-                    self.session.jukebox.play_sound(self.session, value, volume, False)
+                    self.session.jukebox.play_sound(self.session, value, volume, False, duration)
 
             if self.session.last_state != current_state:
                 self.session.llm.system(self.get_state_system_prompt())

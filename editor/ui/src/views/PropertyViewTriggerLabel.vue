@@ -12,9 +12,12 @@
         <!-- Sound ComboBox and Play Button -->
         <div class="sound-selection">
           <v-select
-            v-model="jsonData.userData.sound_effect"
+          v-model="jsonData.userData.sound_effect"
             :items="soundFiles"
+            item-title="text"
+            item-value="value"
             label="Sound Effect"
+            :return-object="false"
             density="compact"
             :items-per-page="1000"
             :list-props="{maxWidth:'350px', minWidth: '350px'}"
@@ -23,6 +26,21 @@
           <v-btn icon size="small" @click="playSelectedSound">
             <v-icon size="small">mdi-play</v-icon>
           </v-btn>
+        </div>
+
+        <div class="sound-duration" v-if="jsonData.userData.sound_effect">
+          <v-text-field
+            v-model.number="jsonData.userData.sound_effect_duration"
+            label="Sound Effect Duration"
+            :suffix="'seconds'"
+            density="compact"
+            type="number"
+            min="0"
+            max="600"
+            @input="onDataChange"
+            append-icon="mdi-clock"
+            outlined
+          />
         </div>
 
         <div>
@@ -105,6 +123,7 @@
             conditions: [], 
             sound_effect: '',
             sound_effect_volume: 100,
+            sound_effect_duration: 2,
             description: '',
           },
         },
@@ -115,7 +134,13 @@
     computed: {
       ...mapGetters('sounds', ['files']),
       soundFiles() {
-        return this.files;
+        return [
+          { text: "None", value: null },
+          ...this.files.map(file => ({
+            text: file.name || file, // Use a descriptive name or the raw file name
+            value: file.name || file, // Use the file name as the value
+          })),
+        ];
       },
     },
     methods: {
@@ -177,6 +202,9 @@
       "jsonData.userData.description"() {
           this.onDataChange();
       },
+      "jsonData.userData.sound_effect_duration"() {
+          this.onDataChange();
+      },
     },
     mounted() {
         // Event listener for messages from the iframe
@@ -187,9 +215,12 @@
                 SoundManager.stopCurrentSound()
 
                 this.jsonData = message.data
-                if (!this.jsonData.userData.sound_effect_volume) {
-                  this.jsonData.userData.sound_effect_volume = 100;
+                this.jsonData.userData.sound_effect_volume ??= 100;
+                // 0 is allowed as well
+                if (this.jsonData.userData.sound_effect_duration === null) {
+                    this.jsonData.userData.sound_effect_duration = 2;
                 }
+
             }
             else if (message.event === 'onUnselect') {
                 SoundManager.stopCurrentSound()
