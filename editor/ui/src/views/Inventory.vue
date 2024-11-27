@@ -97,8 +97,10 @@ export default {
     ...mapGetters('maps', ['mapConfig']),
     inventory: {
       get() {
-        // Return inventory items as an array with key, value, and type
-        return this.mapConfig.inventory || [];
+        // Return inventory items sorted by key
+        return (this.mapConfig.inventory || []).sort((a, b) =>
+          a.key.localeCompare(b.key)
+        );
       },
       set(value) {
         this.updateMapConfig({

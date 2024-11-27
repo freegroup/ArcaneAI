@@ -35,7 +35,8 @@ var TriggerLabel = draw2d.shape.basic.Label.extend({
         })
     },
 
-    updateStyle: function(){
+    updateStyle: function()
+    {
         this.attr("dasharray", this.attr("userData")?.conditions?.length >0?"- ":null)
     },
 
@@ -71,6 +72,29 @@ var TriggerLabel = draw2d.shape.basic.Label.extend({
         this.getUserData().sound_effect = sound_effect
     },
 
+
+    getSoundEffectDuration: function()
+    {
+        return this.getUserData().sound_effect_duration
+    },
+
+    setSoundEffectDuration: function(sound_effect_duration)
+    {
+        this.getUserData().sound_effect_duration = sound_effect_duration
+    },
+
+
+    getSoundEffectVolume: function()
+    {
+        return this.getUserData().sound_effect_volume
+    },
+
+    setSoundEffectVolume: function(sound_effect_volume)
+    {
+        this.getUserData().sound_effect_volume = sound_effect_volume
+    },
+
+    
     getConditions: function()
     {
         return this.getUserData().conditions

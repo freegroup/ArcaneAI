@@ -289,6 +289,8 @@ StateShape = draw2d.shape.layout.VerticalLayout.extend({
                     name:e.figure.getName(),
                     description:e.figure.getDescription(),
                     sound_effect:e.figure.getSoundEffect(),
+                    sound_effect_duration:e.figure.getSoundEffectDuration(),
+                    sound_effect_volume:e.figure.getSoundEffectVolume(),
                     system_prompt: e.figure.getSystemPrompt(),
                     conditions: e.figure.getConditions(),
                     actions: e.figure.getActions()
@@ -321,6 +323,8 @@ StateShape = draw2d.shape.layout.VerticalLayout.extend({
                  trigger.setActions(e.actions ?? [])
                  trigger.setDescription(e.description ?? "")
                  trigger.setSoundEffect(e.sound_effect ?? "")
+                 trigger.setSoundEffectDuration(e.sound_effect_duration ?? 2)
+                 trigger.setSoundEffectVolume(e.sound_effect_volume ?? 100)
                  trigger.setSystemPrompt(e.system_prompt ?? "")
              },this));
          }
