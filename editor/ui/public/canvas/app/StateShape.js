@@ -47,7 +47,7 @@ StateShape = draw2d.shape.layout.VerticalLayout.extend({
             extend({
                 bgColor:null, 
                 color:"#d7d7d7", 
-                stroke:1, 
+                stroke:0, 
                 gap: 5,
                 radius:3,
                 stateType: StateType.NORMAL,
@@ -149,17 +149,24 @@ StateShape = draw2d.shape.layout.VerticalLayout.extend({
         return this;
     },
 
+    
     getStateType: function()
     {
         return this.stateType
     },
 
-    setAlpha: function(alpha){
+    
+    setAlpha: function(alpha)
+    {
         this._super(alpha)
         this.classLabel.setAlpha(alpha)
         this.children.each(function(i,e){
             e.figure.setAlpha(alpha)
         })
+        this.getPorts().each(function(i,p){
+            p.setAlpha(alpha)
+        })
+        
     },
 
     /**
@@ -174,23 +181,23 @@ StateShape = draw2d.shape.layout.VerticalLayout.extend({
 	   	 var label =new TriggerLabel(txt);
          
          var _table=this;
-         label.on("contextmenu", function(emitter, event){
+         label.on("contextmenu", (emitter, event)=>{
              $.contextMenu({
                  selector: 'body', 
                  events:
                  {  
-                     hide:function(){ $.contextMenu( 'destroy' ); }
+                     hide:()=>{ $.contextMenu( 'destroy' ); }
                  },
-                 callback: $.proxy(function(key, options) 
+                 callback: (key, options) =>
                  {
                     switch(key){
                     case "rename":
-                        setTimeout(function(){
+                        setTimeout(()=>{
                             emitter.onDoubleClick();
                         },10);
                         break;
                     case "new":
-                        setTimeout(function(){
+                        setTimeout(()=>{
                             _table.addTrigger("_new_").onDoubleClick();
                         },10);
                         break;
@@ -201,14 +208,14 @@ StateShape = draw2d.shape.layout.VerticalLayout.extend({
                     default:
                         break;
                     }
-                 
-                 },this),
+                 },
                  x:event.x,
                  y:event.y,
                  items: 
                  {
-                     "rename": {name: "Rename Trigger"},
-                     "sep1":   "---------",
+                    "new": {name: "Add Trigger"},
+                    "rename": {name: "Rename Trigger"},
+                    "sep1":   "---------",
                      "delete": {name: "Delete Trigger"}
                  }
              });
@@ -297,7 +304,10 @@ StateShape = draw2d.shape.layout.VerticalLayout.extend({
                 });
             }
         });
-         
+
+        delete memento.alpha
+        delete memento.stroke
+     
          return memento;
      },
      
@@ -311,6 +321,8 @@ StateShape = draw2d.shape.layout.VerticalLayout.extend({
      setPersistentAttributes : function(memento)
      {
         delete memento.alpha
+        delete memento.stroke
+
         this._super(memento);
          
         this.setName(memento.name);

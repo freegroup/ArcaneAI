@@ -26,7 +26,6 @@ body {
 	position: absolute;
 	top: 0px;
 	left: 0px;
-	background-color: #FFFFFF;
 }
 
 
@@ -60,7 +59,7 @@ body {
 
 #canvas_zoom > button {
 	background-color:transparent;
-	font-weight:100;
+	font-weight:800;
 	font-size: 12px;
 	border-radius:5px;
 	padding:5px;
