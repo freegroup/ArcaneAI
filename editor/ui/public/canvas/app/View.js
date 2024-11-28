@@ -7,7 +7,7 @@ View = draw2d.Canvas.extend({
 		    this._super(id, 8000,8000);
         this.zoomingFactor = 1.2
 
-        this.installEditPolicy(new draw2d.policy.canvas.ShowGridEditPolicy());
+        this.installEditPolicy(new draw2d.policy.canvas.ShowGridEditPolicy({bgColor: "#333", color:"#222"}));
         this.installEditPolicy(new EditPolicy())
         this.installEditPolicy(new draw2d.policy.connection.DragConnectionCreatePolicy({
             createConnection: function(){
