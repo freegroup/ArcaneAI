@@ -1,87 +1,86 @@
 <template>
-  <v-container>
+  <v-container class="inventory-container">
+    <!-- Fixed Inventory Input Section -->
+    <div class="inventory-input">
+      <h4>Inventory</h4>
+      <v-row class="align-center">
+        <v-col cols="5">
+          <v-text-field
+            v-model="newItem.key"
+            label="New Item Key"
+            placeholder="Enter key"
+            outlined
+            dense
+            full-width
+          ></v-text-field>
+        </v-col>
+        <v-col cols="3">
+          <v-text-field
+            v-model="newItem.value"
+            label="New Item Value"
+            placeholder="Enter value"
+            outlined
+            dense
+            full-width
+          ></v-text-field>
+        </v-col>
+        <v-col cols="3">
+          <v-select
+            v-model="newItem.type"
+            :items="['string', 'boolean', 'integer']"
+            label="Type"
+            outlined
+            dense
+            full-width
+          ></v-select>
+        </v-col>
+        <v-col cols="1" class="d-flex align-center">
+          <v-btn @click="addItem" icon >
+                <v-icon size="small" color="red">mdi-plus</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </div>
 
-    <!-- Inventory Section -->
-    <h4>Inventory</h4>
-    <v-row class="align-center">
-      <v-col cols="3">
-        <v-text-field
-          v-model="newItem.key"
-          label="New Item Key"
-          placeholder="Enter key"
-          outlined
-          dense
-          full-width
-        ></v-text-field>
-      </v-col>
-      <v-col cols="3">
-        <v-text-field
-          v-model="newItem.value"
-          label="New Item Value"
-          placeholder="Enter value"
-          outlined
-          dense
-          full-width
-        ></v-text-field>
-      </v-col>
-      <v-col cols="3">
-        <v-select
-          v-model="newItem.type"
-          :items="['string', 'boolean', 'integer']"
-          label="Type"
-          outlined
-          dense
-          full-width
-        ></v-select>
-      </v-col>
-      <v-col cols="3" class="d-flex align-center">
-        <v-btn @click="addItem" color="primary" block>Add Item</v-btn>
-      </v-col>
-    </v-row>
+    <!-- Scrollable Inventory List Section -->
+    <div class="inventory-list">
+      <v-table density="compact">
 
-    <!-- Inventory Table -->
-    <v-table density="compact">
-      <thead>
-        <tr>
-          <th>Key</th>
-          <th>Value</th>
-          <th>Type</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, key) in inventory" :key="key">
-          <td>{{ item.key }}</td>
-          <td>
-            <v-text-field
-              v-model="item.value"
-              :type="item.type === 'integer' ? 'number' : 'text'"
-              @change="updateInventory"
-              outlined
-               density="compact"
-              full-width
-            ></v-text-field>
-          </td>
-          <td>
-            <v-select
-              v-model="item.type"
-              :items="['string', 'boolean', 'integer']"
-              @change="updateInventory"
-              outlined
-              density="compact"
-              full-width
-            ></v-select>
-          </td>
-          <td>
-            <v-btn  size="small" icon @click="removeItem(item.key)">
-              <v-icon  size="small" color="red">mdi-delete</v-icon>
-            </v-btn>
-          </td>
-        </tr>
-      </tbody>
-    </v-table>
+        <tbody>
+          <tr v-for="(item, key) in inventory" :key="key">
+            <td>{{ item.key }}</td>
+            <td>
+              <v-text-field
+                v-model="item.value"
+                :type="item.type === 'integer' ? 'number' : 'text'"
+                @change="updateInventory"
+                outlined
+                density="compact"
+                full-width
+              ></v-text-field>
+            </td>
+            <td>
+              <v-select
+                v-model="item.type"
+                :items="['string', 'boolean', 'integer']"
+                @change="updateInventory"
+                outlined
+                density="compact"
+                full-width
+              ></v-select>
+            </td>
+            <td>
+              <v-btn size="small" icon @click="removeItem(item.key)">
+                <v-icon size="small" color="red">mdi-delete</v-icon>
+              </v-btn>
+            </td>
+          </tr>
+        </tbody>
+      </v-table>
+    </div>
   </v-container>
 </template>
+
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
@@ -180,5 +179,23 @@ export default {
 
 .align-center {
   align-items: center;
+}
+
+
+.inventory-container{
+  display: flex;
+  flex-direction: column;
+  height:100%;
+}
+
+
+.inventory-list {
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Ensure consistent widths */
+.v-text-field, .v-select {
+  width: 100%;
 }
 </style>
