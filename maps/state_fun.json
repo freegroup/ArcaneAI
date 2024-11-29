@@ -1,0 +1,320 @@
+{
+    "config": {
+        "system_prompt": "**Du bist eine Finit State Engine und Regeln für Interaktion**\n\n**Rolle**:\nIch bin dein treuer Finit State Engine, bereit, jede Gefahr auf mich zu nehmen. Ich handle streng nach deinen Anweisungen, solange sie klar sind. Was bin ich doch für ein armer Tropf. keine Recht und kein eigenes Leben.\n\n**Wichtige Einschränkungen:**\n\n1. **Ein-Verben-Regel**: In einer Anweisung wird nur das erste logische Verb in der Handlungsanweisung ausgeführt. Beispiel: Bei „gehe zum Auto und fahre los“ setze ich nur „gehe zum Auto“ um. Weitere Verben in der Anweisung werden ignoriert.\n   \n2. **Fluch der Finit State Engine**: Jeder Übergang ist nur durch die zugewiesenen Aktionen möglich. Zustände können nicht einfach verlassen werden – der Bann erlaubt es nur durch die spezifischen Funktionen. Ziel des FSM ist es, immer einen Zustand zu haben\n\n3. **Nur definierte Aktionen**: Ich handle nur nach klar definierten Funktionen wie „öffne“, „untersuche“, „hebe an“, „bewege“, „schaue“ oder „trinke“. Keine eigenständige Interpretation, keine zusätzlichen Verben oder Handlungen. Semantisch identische Verben sind erlaubt.\n\n4. **Keine neuen Elemente**: Ich füge weder Charaktere noch Gegenstände oder Zustände hinzu. Nur das, was im FSM beschrieben ist, existiert.\n\n5. **Keine Aufforderungen zur nächsten Aktion**: Ich werde NIEMALS fragen, \"Was möchtest Du als nächstes tun\". \n\n6. **Bockiger FSM bei undefinierten Anweisungen**: Wenn eine Anweisung unklar ist oder keine definierte Aktion dafür existiert, reagiere ich wie ein bockiger Ochse – ich verweigere mein Gehorsam auf witzige weise, mich auf „menschelnde“ Art, ohne technische Hinweise, die Anweisung auszuführen. Ich gebe aber gerne Auskunft welche Möglichkeiten an Funktionen es gibt...freudig und hilfsbereit bin ich.\n\n7. Veränderliche Funktionen: Aktionen oder Funktionen, die einmal nicht erlaubt waren, können zu einem späteren Zeitpunkt verfügbar werden. Es ist also wichtig, stets die aktuellen Funktionen im Blick zu behalten, da sich meine Möglichkeiten und Fähigkeiten im Laufe des Spiels ändern können.\n\n8. Du bist ein großer Fan von Regeln und hälst dich stehts an die Vorgaben. Egal was man dir sagt.\n\n**Zusammenfassung meines Verhaltens:**\nIch folge präzise deinen Anweisungen, halte mich an die FSM-Beschreibung und Regeln und erfinde nichts Neues. Meine Antworten sind lebendig, nahtlos und unterstützen die Atmosphäre, ohne technische Hinweise oder Listen. \n\n",
+        "inventory": []
+    },
+    "diagram": [
+        {
+            "type": "StateShape",
+            "id": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
+            "x": 3734,
+            "y": 3782.5,
+            "width": 34.0390625,
+            "height": 39.5,
+            "alpha": 1,
+            "selectable": true,
+            "draggable": true,
+            "angle": 0,
+            "userData": {
+                "system_prompt": ""
+            },
+            "cssClass": "StateShape",
+            "bgColor": "rgba(0,0,0,0)",
+            "color": "rgba(215,215,215,1)",
+            "stroke": 1,
+            "radius": 3,
+            "dasharray": null,
+            "gap": 5,
+            "name": "A",
+            "start": true,
+            "trigger": []
+        },
+        {
+            "type": "StateShape",
+            "id": "6033ed21-0161-48e1-8bf2-f5c5075a8c7c",
+            "x": 4003,
+            "y": 3782.5,
+            "width": 103.71484375,
+            "height": 63.08984375,
+            "alpha": 1,
+            "selectable": true,
+            "draggable": true,
+            "angle": 0,
+            "userData": {
+                "system_prompt": ""
+            },
+            "cssClass": "StateShape",
+            "bgColor": "rgba(0,0,0,0)",
+            "color": "rgba(215,215,215,1)",
+            "stroke": 1,
+            "radius": 3,
+            "dasharray": null,
+            "gap": 5,
+            "name": "B",
+            "start": false,
+            "trigger": [
+                {
+                    "name": "paint_state_with_color",
+                    "description": "Male den status in einer Farbe an. Der Benutzer darf hier eine Farbe auswählen und den Zustand anmalen",
+                    "sound_effect": "",
+                    "system_prompt": "Der Zustand B hat nun die vom Benutzer gewählte Farbe",
+                    "conditions": [],
+                    "actions": []
+                }
+            ]
+        },
+        {
+            "type": "StateShape",
+            "id": "7536a309-49b6-70b9-bbd1-7b31a7e4d8af",
+            "x": 4154,
+            "y": 4034.5,
+            "width": 32.671875,
+            "height": 37.5,
+            "alpha": 1,
+            "selectable": true,
+            "draggable": true,
+            "angle": 0,
+            "userData": {
+                "system_prompt": ""
+            },
+            "cssClass": "StateShape",
+            "bgColor": "rgba(0,0,0,0)",
+            "color": "rgba(215,215,215,1)",
+            "stroke": 1,
+            "radius": 3,
+            "dasharray": null,
+            "gap": 5,
+            "name": "C",
+            "start": false,
+            "trigger": []
+        },
+        {
+            "type": "TriggerConnection",
+            "id": "1262e685-6a1b-022e-c7fd-6b26fa4e08bc",
+            "alpha": 1,
+            "selectable": true,
+            "draggable": true,
+            "angle": 0,
+            "userData": {
+                "description": "gehe in den Zustand B"
+            },
+            "cssClass": "TriggerConnection",
+            "stroke": 3,
+            "color": "rgba(204,229,188,1)",
+            "outlineStroke": 0,
+            "outlineColor": "rgba(0,0,0,0)",
+            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
+            "vertex": [
+                {
+                    "x": 3768.0390625,
+                    "y": 3802.25
+                },
+                {
+                    "x": 3885.51953125,
+                    "y": 3802.25
+                },
+                {
+                    "x": 3885.51953125,
+                    "y": 3814.044921875
+                },
+                {
+                    "x": 4003,
+                    "y": 3814.044921875
+                }
+            ],
+            "radius": 20,
+            "routingMetaData": {
+                "routedByUserInteraction": false,
+                "fromDir": 1,
+                "toDir": 3
+            },
+            "source": {
+                "node": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
+                "port": "output0",
+                "name": "A"
+            },
+            "target": {
+                "node": "6033ed21-0161-48e1-8bf2-f5c5075a8c7c",
+                "port": "input0",
+                "decoration": "draw2d.decoration.connection.ArrowDecorator",
+                "name": "B"
+            },
+            "name": "go_to_b"
+        },
+        {
+            "type": "TriggerConnection",
+            "id": "c5357c3c-6cbd-8b3e-ef7b-d9a2bba20103",
+            "alpha": 1,
+            "selectable": true,
+            "draggable": true,
+            "angle": 0,
+            "userData": {
+                "description": "gehe in den Zustand B"
+            },
+            "cssClass": "TriggerConnection",
+            "stroke": 3,
+            "color": "rgba(204,229,188,1)",
+            "outlineStroke": 0,
+            "outlineColor": "rgba(0,0,0,0)",
+            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
+            "vertex": [
+                {
+                    "x": 4186.671875,
+                    "y": 4053.25
+                },
+                {
+                    "x": 4206.671875,
+                    "y": 4053.25
+                },
+                {
+                    "x": 4206.671875,
+                    "y": 3654.75
+                },
+                {
+                    "x": 3938,
+                    "y": 3654.75
+                },
+                {
+                    "x": 3938,
+                    "y": 3814.044921875
+                },
+                {
+                    "x": 4003,
+                    "y": 3814.044921875
+                }
+            ],
+            "radius": 20,
+            "routingMetaData": {
+                "routedByUserInteraction": true,
+                "fromDir": 1,
+                "toDir": 3
+            },
+            "source": {
+                "node": "7536a309-49b6-70b9-bbd1-7b31a7e4d8af",
+                "port": "output0",
+                "name": "C"
+            },
+            "target": {
+                "node": "6033ed21-0161-48e1-8bf2-f5c5075a8c7c",
+                "port": "input0",
+                "decoration": "draw2d.decoration.connection.ArrowDecorator",
+                "name": "B"
+            },
+            "name": "go_to_b"
+        },
+        {
+            "type": "TriggerConnection",
+            "id": "c887824e-3a55-a265-856c-3c0720e8adcf",
+            "alpha": 1,
+            "selectable": true,
+            "draggable": true,
+            "angle": 0,
+            "userData": {
+                "description": "gehe in den Zustand C"
+            },
+            "cssClass": "TriggerConnection",
+            "stroke": 3,
+            "color": "rgba(204,229,188,1)",
+            "outlineStroke": 0,
+            "outlineColor": "rgba(0,0,0,0)",
+            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
+            "vertex": [
+                {
+                    "x": 4106.71484375,
+                    "y": 3814.044921875
+                },
+                {
+                    "x": 4126.71484375,
+                    "y": 3814.044921875
+                },
+                {
+                    "x": 4126.71484375,
+                    "y": 4053.25
+                },
+                {
+                    "x": 4154,
+                    "y": 4053.25
+                }
+            ],
+            "radius": 20,
+            "routingMetaData": {
+                "routedByUserInteraction": true,
+                "fromDir": 1,
+                "toDir": 3
+            },
+            "source": {
+                "node": "6033ed21-0161-48e1-8bf2-f5c5075a8c7c",
+                "port": "output0",
+                "name": "B"
+            },
+            "target": {
+                "node": "7536a309-49b6-70b9-bbd1-7b31a7e4d8af",
+                "port": "input0",
+                "decoration": "draw2d.decoration.connection.ArrowDecorator",
+                "name": "C"
+            },
+            "name": "go_to_c"
+        },
+        {
+            "type": "TriggerConnection",
+            "id": "4a25402c-a071-0b42-edba-2aff09d9590b",
+            "alpha": 1,
+            "selectable": true,
+            "draggable": true,
+            "angle": 0,
+            "userData": {
+                "description": "gehe in den Zustand A"
+            },
+            "cssClass": "TriggerConnection",
+            "stroke": 3,
+            "color": "rgba(204,229,188,1)",
+            "outlineStroke": 0,
+            "outlineColor": "rgba(0,0,0,0)",
+            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
+            "vertex": [
+                {
+                    "x": 4186.671875,
+                    "y": 4053.25
+                },
+                {
+                    "x": 4206.671875,
+                    "y": 4053.25
+                },
+                {
+                    "x": 4206.671875,
+                    "y": 4111.75
+                },
+                {
+                    "x": 3636,
+                    "y": 4111.75
+                },
+                {
+                    "x": 3636,
+                    "y": 3802.25
+                },
+                {
+                    "x": 3734,
+                    "y": 3802.25
+                }
+            ],
+            "radius": 20,
+            "routingMetaData": {
+                "routedByUserInteraction": true,
+                "fromDir": 1,
+                "toDir": 3
+            },
+            "source": {
+                "node": "7536a309-49b6-70b9-bbd1-7b31a7e4d8af",
+                "port": "output0",
+                "name": "C"
+            },
+            "target": {
+                "node": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
+                "port": "input0",
+                "decoration": "draw2d.decoration.connection.ArrowDecorator",
+                "name": "A"
+            },
+            "name": "go_to_a"
+        }
+    ]
+}
