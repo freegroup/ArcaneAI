@@ -28,7 +28,6 @@ body {
 	left: 0px;
 }
 
-
 #canvas_toolbar {
 	position: fixed;
 	top: 0px;
@@ -37,11 +36,43 @@ body {
 	display: flex;
 	flex-wrap: nowrap;
 	align-items: center;
-	background-color:rgb(230, 245, 240);
+	background-color: rgba(0, 0, 0, 0.6); /* Black with transparency */
+	backdrop-filter: blur(10px); /* Frosted glass effect */
+	-webkit-backdrop-filter: blur(10px); /* Safari compatibility */
+	border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border for definition */
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
 	padding: 10px;
-}
+	z-index: 1000; /* Ensure it stays above other content */
+  }
 
+  .toolbar_delimiter{
+	margin-right:10px;
+  }
 
+  .glassy-button {
+	display: inline-block;
+	padding: 3px 10px;
+	margin-right:3px;
+	font-size: 14px;
+	font-weight: 400;
+	color: rgba(255, 255, 255, 0.85); /* White text with slight transparency */
+	background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent black */
+	backdrop-filter: blur(10px); /* Frosted glass effect */
+	-webkit-backdrop-filter: blur(10px); /* Safari compatibility */
+	border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border */
+	border-radius: 8px; /* Rounded corners for Material Design look */
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+	cursor: pointer;
+	text-align: center;
+	transition: all 0.3s ease; /* Smooth hover effect */
+  }
+  
+  .glassy-button:hover {
+	background-color: rgba(255, 255, 255, 0.1); /* Slightly lighter background on hover */
+	box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3); /* Increase shadow for hover effect */
+  }
+
+  
 #canvas_zoom{
 	position: fixed;
     bottom: 20px;

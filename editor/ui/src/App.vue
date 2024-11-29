@@ -1,6 +1,6 @@
 <template>
   <v-app id="app">
-    <app-toolbar @requestDocument="handleRequestDocument" />
+    <app-toolbar density="compact" dark @requestDocument="handleRequestDocument" />
 
     <!-- Navigation Drawer with Router Links -->
     <v-navigation-drawer
@@ -115,6 +115,5 @@ export default {
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  background-color: #f0f0f0;
 }
 </style>
