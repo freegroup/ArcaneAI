@@ -19,7 +19,7 @@ Toolbar = Class.extend({
 
 		// Inject the UNDO Button and the callbacks
 		//
-		this.undoButton  = $("<button>Undo</button>");
+		this.undoButton  = $("<button class='glassy-button' >Undo</button>");
 		this.html.append(this.undoButton);
 		this.undoButton.button().click($.proxy(function(){
 		       this.view.getCommandStack().undo();
@@ -27,7 +27,7 @@ Toolbar = Class.extend({
 
 		// Inject the REDO Button and the callback
 		//
-		this.redoButton  = $("<button>Redo</button>");
+		this.redoButton  = $("<button class='glassy-button' >Redo</button>");
 		this.html.append(this.redoButton);
 		this.redoButton.button().click(()=>{
 		    this.view.getCommandStack().redo();
@@ -36,14 +36,14 @@ Toolbar = Class.extend({
 		this.delimiter  = $("<span class='toolbar_delimiter'>&nbsp;</span>");
 		this.html.append(this.delimiter);
 
-        this.deleteButton  = $("<button>Delete</button>");
+        this.deleteButton  = $("<button class='glassy-button' >Delete</button>");
 		this.html.append(this.deleteButton);
 		this.deleteButton.button().click(()=>{
 			this.view.deleteSelection()
 		}).button( "option", "disabled", true );
 		Mousetrap.bindGlobal(['del', 'backspace'], this.view.deleteSelection.bind(this.view))
 
-		this.addButton  = $("<button>Add</button>");
+		this.addButton  = $("<button class='glassy-button' >Add</button>");
 		this.html.append(this.addButton);
 		this.addButton.button().click(()=>{
 
@@ -55,7 +55,7 @@ Toolbar = Class.extend({
 		})
 
 
-		this.fullscreenButton  = $("<button>Fullscreen</button>");
+		this.fullscreenButton  = $("<button class='glassy-button' >Fullscreen</button>");
 		this.html.append(this.fullscreenButton);
 		this.fullscreenButton.button().click(()=>{
 			this.view.toggleFullScreen();

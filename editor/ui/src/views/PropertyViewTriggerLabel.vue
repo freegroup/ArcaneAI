@@ -104,6 +104,7 @@
 <script>
   import SoundManager from '@/utils/SoundManager'
   import { mapGetters } from 'vuex';
+  import "codemirror/theme/material-darker.css";
 
   export default {
     name: 'PropertyView',
@@ -243,8 +244,6 @@
     height: 100%;
     overflow-y: auto; 
     padding: 10px;
-    background-color: #fafafa;
-    border-left: 1px solid #ddd;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -261,7 +260,6 @@
 .property-view input {
   width: 100%;
   padding: 5px;
-  border: 1px solid #ccc;
   border-radius: 4px;
 }
 
@@ -269,10 +267,8 @@
 .property-view textarea {
   width: 100%;
   padding: 5px;
-  border: 1px solid #ccc;
   border-radius: 4px;
   resize: vertical; /* Allows vertical resizing only */
-  background-color: #f9f9f9;
   flex: 1;
 }
 

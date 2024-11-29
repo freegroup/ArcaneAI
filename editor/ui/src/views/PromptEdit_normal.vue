@@ -19,6 +19,7 @@ import "codemirror/addon/display/placeholder.js";
 import "codemirror/mode/jinja2/jinja2.js";
 import "codemirror/addon/display/placeholder.js";
 import "codemirror/theme/juejin.css";
+import "codemirror/theme/material-darker.css";
 
 export default {
   name: 'PropertyView',
@@ -29,6 +30,7 @@ export default {
         mode: "jinja2",
         lineNumbers: false, 
         lineWrapping: true, 
+        theme: "material-darker",
         styleActiveLine: false,
       }
     }
@@ -74,7 +76,7 @@ export default {
 
 .full-height-editor >>> .CodeMirror {
   font-size: 16px; /* Hier kannst du die Schriftgröße anpassen */
-  font-family: 'Courier New', Courier, monospace; /* Optional: Schriftart anpassen */
+  font-family: 'Roboto', Arial, Helvetica, sans-serif !important;
 }
 
 .full-height-editor >>> .CodeMirror-gutters {

@@ -57,6 +57,7 @@
   import "codemirror/mode/jinja2/jinja2.js";
   import "codemirror/addon/display/placeholder.js";
   import "codemirror/theme/juejin.css";
+  import "codemirror/theme/material-darker.css";
 
   export default {
     name: 'PropertyView',
@@ -81,6 +82,7 @@
           mode: "jinja2",
           lineNumbers: false, 
           lineWrapping: true, 
+          theme: "material-darker",
           styleActiveLine: false,
         }
       };
@@ -156,8 +158,6 @@
     height: 100%;
     overflow-y: auto;
     padding: 10px;
-    background-color: #fafafa;
-    border-left: 1px solid #ddd;
     box-sizing: border-box; 
     display: flex;
     flex-direction: column;
@@ -173,7 +173,6 @@
 .property-view input {
   width: 100%;
   padding: 5px;
-  border: 1px solid #ccc;
   border-radius: 4px;
 }
 
@@ -187,6 +186,11 @@
   flex: 1; 
 }
 
+
+.code-editor >>> .CodeMirror {
+  font-size: 16px; /* Hier kannst du die Schriftgröße anpassen */
+  font-family: 'Roboto', Arial, Helvetica, sans-serif !important;
+}
 
 .code-editor >>> .CodeMirror-gutters {
   display: none !important; /* Versteckt den gesamten Gutter-Bereich */

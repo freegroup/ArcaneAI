@@ -8,4 +8,7 @@ import '@mdi/font/css/materialdesignicons.css'; // Import Material Design Icons
 export default createVuetify({
   components,
   directives,
+  theme: {
+    defaultTheme: 'dark'
+  }
 });

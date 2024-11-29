@@ -164,6 +164,9 @@ export default {
   height: 100%;
   display: flex;
 }
+.splitpanes.default-theme .splitpanes__pane {
+  background-color: transparent;
+}
 
 .iframe-container {
   width: 100%;
@@ -171,20 +174,6 @@ export default {
   display: flex;
 }
 
-.sidebar {
-  background-color: #f4f4f4;
-  padding: 10px;
-  height: 100%;
-  overflow-y: auto;
-}
-
-.palette-item {
-  padding: 10px;
-  margin: 5px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  cursor: pointer;
-}
 iframe {
   width: 100%;
   height: 100%;
