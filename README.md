@@ -1,4 +1,5 @@
-# 🕹️ AI-Powered Text Adventure Engine
+# 🕹️ ArcaneAI - Text Adventure Engine
+> "Because without 'AI' in the name, no one would venture into our dungeon of clicks... Yes, we too have succumbed to the dark path of clickbait. But hey, an adventure is an adventure, even for algorithms!"
 
 ![Game Screenshot](./images/screnshoot.png)  
 _Enter a world where classic text adventures meet the cutting edge of AI._
