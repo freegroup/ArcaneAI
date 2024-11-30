@@ -8,7 +8,6 @@ Welcome to the **AI-Powered Text Adventure Engine**, a modern twist on classic i
 
 The engine dynamically generates engaging narratives, custom-tailored to your journey through a world of interconnected rooms, characters, and puzzles. By merging the deterministic logic of a state machine with the creativity of an AI, the result is an adventure that's both structured and limitless.
 
----
 
 ## 🚀 Features
 - **State-Driven Gameplay**: Every "room" or "state" dynamically defines the story, puzzles, and actions available.
@@ -29,4 +28,8 @@ Learn about the engine's structure and modular design, including the dynamic sta
 Discover development details, code structure, and how you can can run the project locally [here](./DEVELOPMENT.md)
 
 # ▶️ Demo Videos
+
+
+# ⚠️ Disclaimer: A Playground, Not a Product!
+Welcome, brave adventurer! Just to set expectations: ArcaneAI is a magical playground, not yet a polished game engine ready for battle. It's a place where experiments thrive, where algorithms impress even their own creators, and where the fun lies in exploring what works (and what doesn’t). It’s surprising, intriguing, joyful, and definitely inspiring... but it's not a finished product. So grab your sword of curiosity, roll the dice of creativity, and enjoy the ride!
 
