@@ -22,6 +22,7 @@ class StateEngine:
 
 
     def _load(self):
+        print(f"Try to load map file: {self.yaml_file_path}")
         # Store the current state if the model already exists
         current_state = self.model.state if self.model and hasattr(self.model, 'state') else None
         #print(f"Current state before reload: {current_state}")
