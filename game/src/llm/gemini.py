@@ -4,6 +4,7 @@ import json
 import re
 
 import google.generativeai as genai
+from logger_setup import logger
 
 from llm.base import BaseLLM
 
@@ -33,12 +34,12 @@ class GeminiLLM(BaseLLM):
 
         # Returns the "context window" for the model,
         # which is the combined input and output token limits.
-        print(f"Gemini {self.model_info.input_token_limit=}")
-        print(f"Gemini {self.model_info.output_token_limit=}")
+        logger.info(f"Gemini {self.model_info.input_token_limit=}")
+        logger.info(f"Gemini {self.model_info.output_token_limit=}")
 
 
     def dump(self):
-        print(json.dumps(self.history, indent=4))
+        logger.info(json.dumps(self.history, indent=4))
 
 
     def reset(self, session):
@@ -51,7 +52,7 @@ class GeminiLLM(BaseLLM):
 
     def chat(self, session, user_input):
         if not user_input:
-            print("Error: No user input provided.")
+            logger.error("Error: No user input provided.")
             return {"text": "No input provided.", "expressions": [], "action": None}
 
         user_input = user_input.replace(f'\n', '')
@@ -94,7 +95,7 @@ class GeminiLLM(BaseLLM):
         # Kann manchmal passieren. AI = fuzzy
         #
         if result["text"] is None:
-            print("No text response; retrying with function_calling_config set to 'NONE'.")
+            logger.debug("No text response; retrying with function_calling_config set to 'NONE'.")
             if action in session.state_engine.get_possible_action_names():
                 self.system(re.sub(r"\s+", " ",f""" (Hinweis: Antworte so, als ob die Aktion '{result["action"]}' erfolgreich ausgeführt wurde.
                     Achte bitte darauf, dass du so Antwortest, als ob die Aktion erfolgreich war und du 
@@ -120,20 +121,20 @@ class GeminiLLM(BaseLLM):
         self._add_to_history(role='user', message=user_input)
         self._add_to_history(role='model', message=result["text"] )
 
-        print(json.dumps(result, indent=4))
+        logger.debug(json.dumps(result, indent=4))
         return result
 
 
     def _add_to_history(self, role, message):
         if not message:
-            print("Warning: No message provided.")
+            logger.error("Warning: No message provided.")
             return
         
         # Check if history is empty or the last entry is different in content
         if self.history and self.history[-1]["role"] == role:
             # If the message is identical to the last entry, skip adding
             if message in self.history[-1]["parts"]:
-                print("Duplicate message detected; not adding to history.")
+                logger.error("Duplicate message detected; not adding to history.")
                 return
             
             # If the role matches the last entry, append the message to `parts`
@@ -181,11 +182,11 @@ class GeminiLLM(BaseLLM):
                 return result  # Exit the loop and function if successful
 
             except Exception as e:
-                print(e)
-                print(json.dumps(self.history, indent=4))
+                logger.error(e)
+                logger.error(json.dumps(self.history, indent=4))
                 attempt += 1
                 if attempt > max_retries:
-                    print("Max retries reached. Returning empty result.")
+                    logger.error("Max retries reached. Returning empty result.")
                     return {"text": "Error: Unable to get response after multiple attempts.", "expressions": [], "action": None}
                 time.sleep(0.1)
 

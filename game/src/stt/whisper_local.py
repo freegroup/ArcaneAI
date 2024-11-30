@@ -1,6 +1,7 @@
 from stt.base import BaseSTT
 from RealtimeSTT import AudioToTextRecorder
 
+from logger_setup import logger
 
 class WhisperLocal(BaseSTT):
     def __init__(self, on_speech_start=None):
@@ -19,7 +20,7 @@ class WhisperLocal(BaseSTT):
         self._stopped = True
 
     def start_recording(self):
-        print("LargeSTT is ready. Wait until it says 'speak now'")
+        logger.info("WhisperLocal is ready. Wait until it says 'speak now'")
         # Call text() synchronously to get the transcription result.
         while not self._stopped:
             transcription = self.recorder.text()

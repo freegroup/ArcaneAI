@@ -2,6 +2,8 @@ from lupa import LuaRuntime
 from scripting.base import BaseSandbox
 import sys
 
+from logger_setup import logger
+
 class LuaSandbox(BaseSandbox):
     
     def __init__(self):
@@ -21,7 +23,7 @@ class LuaSandbox(BaseSandbox):
             else:
                 self.lua.execute(f"{name} = {value}")
         except:
-            print(f"ERROR: unable to set Lua value with '{name} = {value}'")
+            logger.error(f"ERROR: unable to set Lua value with '{name} = {value}'")
             sys.exit(1)
 
 
@@ -46,7 +48,7 @@ class LuaSandbox(BaseSandbox):
             
             return self.lua.execute(code)
         except:
-            print(f"Unable to evaluate: '{code}'")
+            logger.error(f"Unable to evaluate: '{code}'")
             return False
 
 
@@ -59,7 +61,7 @@ if __name__ == "__main__":
     sandbox.set_var("coins", 10)
 
     # Get the value of the variable
-    print(f"Coins before: {sandbox.get_var('coins')}")
+    logger.info(f"Coins before: {sandbox.get_var('coins')}")
 
     sandbox.eval("coins = 5")
 
@@ -69,6 +71,6 @@ if __name__ == "__main__":
     sandbox.eval("return (coins > 5)")
 
     # Get the updated value of coins
-    print(f"Coins after: {sandbox.get_var('coins')}")
+    logger.info(f"Coins after: {sandbox.get_var('coins')}")
 
-    print(sandbox.get_all_vars())
+    logger.info(sandbox.get_all_vars())

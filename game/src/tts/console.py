@@ -1,4 +1,5 @@
 from tts.base import BaseTTS
+from logger_setup import logger
 
 # Definition of CLIOutput class inheriting from BaseTTS
 class Console(BaseTTS):

@@ -1,5 +1,6 @@
 import json
 import os
+from logger_setup import logger
 
 class HistoryLog:
     def __init__(self):
@@ -8,7 +9,7 @@ class HistoryLog:
     def append(self, session, log):
         file_path = f"history-{session.ws_token}.json"
         new_log_entry = json.dumps(log, indent=4)
-        print(new_log_entry)
+        logger.debug(new_log_entry)
 
         try:
             if not os.path.isfile(file_path):
@@ -35,4 +36,4 @@ class HistoryLog:
                     json_file.write(",\n" + new_log_entry + "\n]")
 
         except Exception as e:
-            print(f"Error writing to {file_path}: {e}")
+            logger.error(f"Error writing to {file_path}: {e}")

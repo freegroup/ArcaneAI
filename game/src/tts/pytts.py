@@ -1,5 +1,6 @@
 import pyttsx3
 from tts.base import BaseTTS
+from logger_setup import logger
 
 # Definition of JanTTS class inheriting from BaseTTS
 class PyTTS(BaseTTS):
@@ -11,11 +12,11 @@ class PyTTS(BaseTTS):
 
 
     def speak(self, session, text):
-        print("PyTTS: "+text)
+        logger.debug("PyTTS: "+text)
         self.engine.say(text)
         self.engine.runAndWait()
 
     def stop(self, session):
-        print("PyTTS: stop")
+        logger.debug("PyTTS: stop")
         self.engine.stop()
         pass

@@ -2,6 +2,7 @@ import requests
 import json
 
 from paraphraser.base import BaseParaphraser
+from logger_setup import logger
 
 
 class JanParaphraser(BaseParaphraser):
@@ -18,7 +19,7 @@ class JanParaphraser(BaseParaphraser):
 
 
     def paraphrase(self, sentence:str):
-        print(sentence)
+        logger.debug(sentence)
         prompts = [
             {
                 "role": "system", 

@@ -17,7 +17,7 @@ class CLIText(BaseSTT):
         """Starts recording by taking user input from CLI until stopped."""
         while not self._stopped:
             self.on_text_start()
-            transcription = input("You: ")
+            transcription = input("\nYou: ")
             if self._stopped:
                 break
             if transcription:

@@ -2,6 +2,7 @@ import pyaudio
 import webrtcvad
 import traceback
 from vad.base import BaseVad
+from logger_setup import logger
 
 class WebrtcVad(BaseVad):
     def __init__(self, on_speech_start=None, on_speech_end=None, on_speech_data=None):
@@ -41,18 +42,18 @@ class WebrtcVad(BaseVad):
             stream_callback=self.audio_callback
         )
         self.stream.start_stream()
-        print("VAD Audio stream started.")
+        logger.debug("VAD Audio stream started.")
 
 
     def close(self):
         if self.stream is not None:
-            print("Stopping audio stream...")
+            logger.debug("Stopping audio stream...")
             try:
                 self.stream.stop_stream()
                 self.stream.close()
-                print("Audio stream stopped.")
+                logger.debug("Audio stream stopped.")
             except Exception as e:
-                print(f"Error stopping audio stream: {e}")
+                logger.error(f"Error stopping audio stream: {e}")
                 traceback.print_exc()
             finally:
                 self.stream = None
@@ -62,7 +63,7 @@ class WebrtcVad(BaseVad):
         try:
             if in_data is not None and self.vad.is_speech(in_data, self.sample_rate):
                 if not self.recording:
-                    print("Speech detected, starting recording...")
+                    logger.debug("Speech detected, starting recording...")
                     self.on_speech_start()
                     self.recording = True
                     self.silence_duration = 0
@@ -71,12 +72,12 @@ class WebrtcVad(BaseVad):
                 if self.recording:
                     self.silence_duration += self.frame_duration_ms                    
                     if self.silence_duration >= self.silence_threshold:
-                        print("Silence detected, stopping recording...")
+                        logger.debug("Silence detected, stopping recording...")
                         self.on_speech_end()
                         self.recording = False
             return (in_data, pyaudio.paContinue)
         except Exception as e:
-            print(f"Error in audio callback: {e}")
+            logger.error(f"Error in audio callback: {e}")
             traceback.print_exc()
             return (None, pyaudio.paContinue)
 

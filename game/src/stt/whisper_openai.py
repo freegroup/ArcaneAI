@@ -8,6 +8,7 @@ import io
 
 from stt.base import BaseSTT
 from vad.webrtc import WebrtcVad
+from logger_setup import logger
 
 _false_positiv = ["Amara.org", "Untertitel ", "Pff"]
 
@@ -40,7 +41,7 @@ class WhisperOpenAi(BaseSTT):
             self.transcription_ready = True
         else:
             # If it's a false positive, we simply ignore the transcription
-            #print("Transcription ignored due to false positive match.")
+            #logger.debug("Transcription ignored due to false positive match.")
             pass
 
 
@@ -54,7 +55,7 @@ class WhisperOpenAi(BaseSTT):
         if transcription:
             for phrase in _false_positiv:
                 if phrase.lower() in transcription.lower():
-                    #print(f"Filtered out transcription due to false positive: '{phrase}' found.")
+                    #logger.debug(f"Filtered out transcription due to false positive: '{phrase}' found.")
                     return True
         return False
 
@@ -88,18 +89,18 @@ class WhisperOpenAi(BaseSTT):
   
             # Measure how much time it took to transcribe
             duration = time.time() - start_time
-            print(f"Transcription completed in {duration:.2f} seconds.")
-            print(transcription.text)
+            logger.debug(f"Transcription completed in {duration:.2f} seconds.")
+            logger.debug(transcription.text)
 
             return transcription.text
         except Exception as e:
-            print(f"An error occurred: {e}")
+            logger.error(f"An error occurred: {e}")
             return ""
 
 
     def start_recording(self):
         # Start the VAD process and yield transcriptions as they become available
-        print("Starting VAD...")
+        logger.debug("Starting VAD...")
         try:
             self.vad.start()
             self.do_run = True
@@ -107,13 +108,13 @@ class WhisperOpenAi(BaseSTT):
                 if self.transcription_ready:
                     self.transcription_ready = False
                     if self.current_transcription:
-                        print(self.current_transcription)
+                        logger.debug(self.current_transcription)
                         yield self.current_transcription
                 else:
                     # Add a small sleep to prevent excessive CPU usage
                     time.sleep(0.1)
         except Exception as e:
-            print(f"Error starting VAD: {e}")
+            logger.error(f"Error starting VAD: {e}")
             traceback.print_exc()
         finally:
             self.vad.close()

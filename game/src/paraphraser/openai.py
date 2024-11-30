@@ -6,6 +6,7 @@ import tiktoken
 import os
 
 from paraphraser.base import BaseParaphraser
+from logger_setup import logger
 
 
 # Definition der Klasse OpenAILLM, die von BaseLLM erbt
@@ -24,7 +25,7 @@ class OpenAIParaphraser(BaseParaphraser):
 
 
     def paraphrase(self, sentence:str):
-        print(sentence)
+        logger.debug(sentence)
         prompts = [
             {
                 "role": "system", 

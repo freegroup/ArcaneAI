@@ -1,6 +1,7 @@
 import json
 import threading
 from status.base import Base
+from logger_setup import logger
 
 class LocalStatus(Base):
     def __init__(self):
@@ -40,7 +41,7 @@ class LocalStatus(Base):
             with open("data.json", "w") as json_file:
                 json.dump(data, json_file, indent=4)
         except Exception as e:
-            print(f"Error writing to data.json: {e}")
+            logger.error(f"Error writing to data.json: {e}")
 
 
     def _cancel_all_timers(self):
