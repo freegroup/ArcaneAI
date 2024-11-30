@@ -51,6 +51,9 @@ OPENAI_API_KEY=#############your-key##########
 #GEMINI_API_KEY=#####gemini-key##################
 #GOOGLE_APPLICATION_CREDENTIALS=./secrets/gen-lang-client-#############.json
 
+# info, debug, error, fatal
+ARCANEAI_LOG_LEVEL=info
+
 # Configuration for the web UI
 #
 MAP_FILE=TheTipsyQuest.yaml
