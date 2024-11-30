@@ -18,7 +18,13 @@ The engine dynamically generates engaging narratives, custom-tailored to your jo
 - **Prompt Editor for Storytelling**: Fine-tune the AI's narrative by customizing prompts and dialog directly in an integrated editor.
 - **Infinite Possibilities**: Extend the game world with new states, rooms, or narrative prompts.
 
+
 # [📐 Achitecture](./ARCHITECTURE.md)
+Learn about the engine's structure and modular design, including the dynamic state engine and AI integration [here](./ARCHITECTURE.md).
+
+
 
 # [🛠️ Developement](./DEVELOPMENT.md)
+Discover development details, code structure, and how you can can run the project locally [here](./DEVELOPMENT.md)
+
 
