@@ -29,7 +29,7 @@ Learn about the engine's structure and modular design, including the dynamic sta
 
 
 # 🛠️ Developement
-Discover development details, code structure, and how you can can run the project locally [here](./DEVELOPMENT.md)
+Discover development details, code structure, and how you can can [run the project locally](./DEVELOPMENT.md)
 
 # ▶️ Demo Videos
 
