@@ -27,6 +27,7 @@ from websocketmanager import WebSocketManager
 from audio.websocket import WebSocketSink
 from history import HistoryLog
 from chat import process_chat
+from logger_setup import logger
 
 BASE_URI = "/game"
 PORT = 9000
@@ -73,7 +74,6 @@ class LoginData(BaseModel):
 
 
 def session_factory():
-    print("CREATE NEW SESSION OBJECT")
     return ChatSession(
             map_name =  os.path.splitext(MAP_FILE)[0],  # Remove the suffix from file
             map_dir = MAP_DIR,
@@ -87,17 +87,17 @@ def session_factory():
         )
 
 def create_proxy_aware_redirect(request: Request, target_route: str) -> RedirectResponse:
-    print("Request Headers in /ui route:")
+    logger.debug("Request Headers in /ui route:")
     for header, value in request.headers.items():
-        print(f"{header}: {value}")
+        logger.debug(f"{header}: {value}")
 
     # Get forwarded headers or defaults
     forwarded_proto = request.headers.get("x-dungeon-proto", "http")
     forwarded_host = request.headers.get("x-dungeon-host", "localhost")
     forwarded_port = request.headers.get("x-dungeon-port", f"{PORT}")
-    print(f"dungeon_proto {forwarded_proto}")
-    print(f"dungeon_host {forwarded_host}")
-    print(f"dungeon_port {forwarded_port}")
+    logger.debug(f"dungeon_proto {forwarded_proto}")
+    logger.debug(f"dungeon_host {forwarded_host}")
+    logger.debug(f"dungeon_port {forwarded_port}")
     # Construct the base URL manually
     base_url = f"{forwarded_proto}://{forwarded_host}"
     if forwarded_port and forwarded_port not in ["80", "443"]:
@@ -106,7 +106,7 @@ def create_proxy_aware_redirect(request: Request, target_route: str) -> Redirect
     # Manually create the target URL, ensuring both parts are strings
     target_path = request.app.url_path_for(target_route)  # Provides just the path
     target_url = f"{base_url}{BASE_URI}{target_path}"  # Combine the base URL and target path
-    print(f"Target URL for Redirect: {target_url}")
+    logger.debug(f"Target URL for Redirect: {target_url}")
 
     return target_url
 
@@ -114,7 +114,7 @@ def create_proxy_aware_redirect(request: Request, target_route: str) -> Redirect
 # Middleware to retrieve or create a session
 def get_session(request: Request, response: Response) -> Dict:
     session_id = request.cookies.get("session_id")
-    print(f"Current session_id (get_session): {session_id}")
+    logger.debug(f"Current session_id (get_session): {session_id}")
 
     if session_id and session_id in session_store:
         return session_store[session_id], session_id
@@ -161,7 +161,7 @@ async def ui(request: Request, response: Response):
     template_response = templates.TemplateResponse("index.html", {"request": request, "session": session, "BASE_URI": BASE_URI})
     template_response.set_cookie("session_id", session_id, httponly=True, samesite=SAME_SITE_VALUE)
     
-    print(f"Using session with session_id: {session_id} for /ui request")
+    logger.debug(f"Using session with session_id: {session_id} for /ui request")
     return template_response
 
 
@@ -172,7 +172,7 @@ async def chat(request: Request, data: ChatMessage, response: Response):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
     session, session_id = get_session(request, response)
-    print(f"Using session with session_id: {session_id} for /chat request")
+    logger.debug(f"Using session with session_id: {session_id} for /chat request")
 
     # new user input. Stop curent TTS output
     #
@@ -216,26 +216,26 @@ async def get_audio(filename: str, request: Request, response: Response):
 @app.get("/websocket/connect", name="ws_connect")
 async def ws_connect(request: Request, response: Response):
     session, session_id = get_session(request, response)
-    print(f"Using session with session_id: {session_id} for /ws/connect request")
+    logger.debug(f"Using session with session_id: {session_id} for /ws/connect request")
 
     if not session.ws_token:
         session.ws_token = str(uuid4())
 
-    print(f"Retrieved or created ws_token: {session.ws_token}")
+    logger.debug(f"Retrieved or created ws_token: {session.ws_token}")
     return {"token": session.ws_token}
 
 
 # WebSocket handling
 @app.websocket("/websocket/{token}")
 async def websocket_endpoint(websocket: WebSocket, token: str):
-    print("WZ_TOKEN", token)
+    logger.debug("WZ_TOKEN", token)
     await WebSocketManager.connect(websocket, token)
     try:
         while True:
             await WebSocketManager.process_queue(token)
             await asyncio.sleep(0.1)  # Small delay to prevent a tight loop, adjust as needed
     except WebSocketDisconnect:
-        print("WebSocket disconnected")
+        logger.info("WebSocket disconnected")
         await WebSocketManager.remove(token)
         
 

@@ -1,6 +1,7 @@
 import tkinter as tk
 import json
 import os
+from logger_setup import logger
 
 class TkinterFileReaderApp:
     def __init__(self, json_file="data.json", check_interval=200):
@@ -42,9 +43,9 @@ class TkinterFileReaderApp:
                 self.last_mtime = current_mtime
                 self.load_and_update()
         except FileNotFoundError:
-            print(f"File '{self.json_file}' not found.")
+            logger.error(f"File '{self.json_file}' not found.")
         except json.JSONDecodeError:
-            print(f"Error decoding JSON in '{self.json_file}'.")
+            logger.error(f"Error decoding JSON in '{self.json_file}'.")
 
         self.root.after(self.check_interval, self.check_for_updates)
 
@@ -78,7 +79,7 @@ class TkinterFileReaderApp:
                 self.inventory_labels[key] = (key_label, value_label)
 
         except Exception as e:
-            print(f"Error loading or updating data: {e}")
+            logger.error(f"Error loading or updating data: {e}")
 
     def run(self):
         """Run the Tkinter main loop."""

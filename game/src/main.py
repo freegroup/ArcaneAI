@@ -17,6 +17,7 @@ from sound.local_jukebox import LocalJukebox
 from audio.pyaudio import PyAudioSink
 from history import HistoryLog
 from chat import process_chat
+from logger_setup import logger
 
 status_manager  = LocalStatus()
 history_manager = HistoryLog()
@@ -27,14 +28,14 @@ MAP_DIR  = os.path.join(PROJECT_DIR, 'maps')
 
 MAP_FILE =  os.getenv("MAP_FILE")
 
-print(MAP_DIR)
+logger.info(MAP_DIR)
 
 stop_requested = False
 
 
 def stop():
     global stop_requested
-    print("\nStopping gracefully...")
+    logger.debug("Stopping gracefully...")
     stop_requested = True
     status_manager.stop()
     sys.exit(0)
@@ -72,5 +73,5 @@ if __name__ == '__main__':
             process_chat(session, text, session_factory)
     except Exception as e:
         traceback.print_exc()
-        print(f"An error occurred: {e}")
+        logger.error(f"An error occurred: {e}")
         stop()

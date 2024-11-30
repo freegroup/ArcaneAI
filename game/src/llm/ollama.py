@@ -3,6 +3,7 @@ from openai import OpenAI
 import json
 
 import tiktoken
+from logger_setup import logger
 
 from llm.base import BaseLLM
 
@@ -50,7 +51,7 @@ class OllamaLLM(BaseLLM):
 
 
     def dump(self):
-        print(json.dumps(self.history, indent=4))
+        logger.info(json.dumps(self.history, indent=4))
 
 
     def reset(self, session):
@@ -61,16 +62,16 @@ class OllamaLLM(BaseLLM):
         if system_instruction:
             self._add_to_history("system", system_instruction)
         else:
-            print("Warning: No system instruction provided.")
+            logger.error("Warning: No system instruction provided.")
 
 
     def _add_to_history(self, role, message):
         if not message:
-            print("Warning: No message provided.")
+            logger.error("Warning: No message provided.")
             return
         
         if self.history and self.history[-1]["role"] == role and self.history[-1]["content"] == message:
-            print("Duplicate message detected; not adding to history.")
+            logger.error("Duplicate message detected; not adding to history.")
             return
         
         self.history.append({"role": role, "content": message})
@@ -110,7 +111,7 @@ class OllamaLLM(BaseLLM):
             )
             return self._process_response(response)
         except openai.OpenAIError as e:
-            print(f"Error: {e}")
+            logger.error(f"Error: {e}")
             return {"text": "I'm sorry, there was an issue processing your request.", "expressions": [], "action": None}
 
     def _define_action_functions(self, session):

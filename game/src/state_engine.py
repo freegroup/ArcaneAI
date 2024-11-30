@@ -6,6 +6,7 @@ from jinja2 import Template
 
 from transitions.extensions import HierarchicalGraphMachine
 from scripting.lua import LuaSandbox
+from logger_setup import logger
 
 
 class StateEngine:
@@ -22,10 +23,10 @@ class StateEngine:
 
 
     def _load(self):
-        print(f"Try to load map file: {self.yaml_file_path}")
+        logger.info(f"Try to load map file: {self.yaml_file_path}")
         # Store the current state if the model already exists
         current_state = self.model.state if self.model and hasattr(self.model, 'state') else None
-        #print(f"Current state before reload: {current_state}")
+        #logger.debug(f"Current state before reload: {current_state}")
 
         # Read the YAML file and set up the machine
         with open(self.yaml_file_path, 'r') as f:
@@ -38,9 +39,9 @@ class StateEngine:
             # We need the old state during hot reload
             if self.calculator.get_var(item) == None:
                 self.calculator.set_var(item, value)
-                print(f"Set {item} = {value} in Lua sandbox")
+                logger.info(f"Set {item} = {value} in Lua sandbox")
             else:
-                print(f"Reuse {item} = {self.calculator.get_var(item)} from Lua sandbox")
+                logger.info(f"Reuse {item} = {self.calculator.get_var(item)} from Lua sandbox")
 
         self.model_metadata = self.fsm_config.get("metadata", {})
         self.action_metadata = {}
@@ -62,10 +63,10 @@ class StateEngine:
 
         # Attempt to restore the previous state if it exists in the new state list
         if current_state and current_state in [state['name'] for state in clean_states]:
-            #print(f"Restoring previous state: {current_state}")
+            #logger.debug(f"Restoring previous state: {current_state}")
             self.machine.set_state(current_state)
         else:
-            print("Previous state not found in new configuration, using initial state.")
+            logger.debug("Previous state not found in new configuration, using initial state.")
             
 
     def _prepare_states(self, states):
@@ -158,8 +159,8 @@ class StateEngine:
                     result = self.calculator.eval(f'return ({condition})')
                     if not result:  # If any condition fails, return False
                         self.last_transition_error = f"Condition '{condition}' failed for '{action}'"
-                        print(self.last_transition_error)
-                        print(self.calculator.get_all_vars())
+                        logger.debug(self.last_transition_error)
+                        logger.debug(self.calculator.get_all_vars())
                         return False
 
             # All conditions passed, allow the transition
@@ -182,7 +183,7 @@ class StateEngine:
             return self.model.trigger(action_id)
         except Exception as e:
             traceback.print_exc()
-            print(f"Error triggering event '{action_id}': {e}")
+            logger.error(f"Error triggering event '{action_id}': {e}")
             return False
         finally:
             self.session = None
@@ -230,7 +231,7 @@ class StateEngine:
 
 
     def get_action_name(self, action_id):
-        #print(self.action_metadata[action])
+        #logger.debug(self.action_metadata[action])
         return self.action_metadata[action_id].get("name", "")
 
     
@@ -250,7 +251,7 @@ class StateEngine:
                     if transition.source == current_state and metadata["name"]==action_name:
                         return event_id
 
-        print(f"Action name not found: {action_name}")
+        logger.error(f"Action name not found: {action_name}")
         return None 
     
 

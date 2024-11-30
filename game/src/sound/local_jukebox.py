@@ -4,6 +4,7 @@ import os
 import threading
 
 from sound.base import BaseJukebox
+from logger_setup import logger
 
 pygame.mixer.init()
 
@@ -55,7 +56,7 @@ class LocalJukebox(BaseJukebox):
                 timer.start()
 
         except Exception as e:
-            print(f"Unable to play sound: '{file_path}', Error: {e}")
+            logger.error(f"Unable to play sound: '{file_path}', Error: {e}")
 
 
     def _stop_sound(self, channel):

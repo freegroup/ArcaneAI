@@ -3,6 +3,7 @@ from tts.base import BaseTTS
 import threading
 import time
 from openai import OpenAI
+from logger_setup import logger
 
 class OpenAiTTS(BaseTTS):
     def __init__(self, audio_sink):
@@ -36,6 +37,7 @@ class OpenAiTTS(BaseTTS):
                             voice=self.voice,
                             model="tts-1"
                         ) as response:
+                            print(f"LLM: {text}")
                             for chunk in response.iter_bytes(chunk_size=8192):
                                 if self.stop_event.is_set():
                                     break
@@ -43,13 +45,13 @@ class OpenAiTTS(BaseTTS):
                         break  # Exit loop if streaming succeeds
                     except (ConnectionError, TimeoutError) as e:
                         retries += 1
-                        print(f"Connection error ({retries}/{self.max_retries}): {e}")
+                        logger.error(f"Connection error ({retries}/{self.max_retries}): {e}")
                         time.sleep(1)
                     except Exception as e:
-                        print(f"Unexpected error during streaming: {e}")
+                        logger.error(f"Unexpected error during streaming: {e}")
                         break
             except Exception as e:
-                print(f"Error in play_audio thread: {e}")
+                logger.error(f"Error in play_audio thread: {e}")
 
         self.audio_thread = threading.Thread(target=play_audio)
         self.audio_thread.start()
@@ -64,5 +66,5 @@ class OpenAiTTS(BaseTTS):
                 self.audio_thread.join()
             self.audio_thread = None
         except Exception as e:
-            print(f"Error in stop method: {e}")
+            logger.error(f"Error in stop method: {e}")
 

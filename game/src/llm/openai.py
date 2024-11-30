@@ -4,6 +4,7 @@ import json
 
 import tiktoken
 import os
+from logger_setup import logger
 
 from llm.base import BaseLLM
 
@@ -48,7 +49,7 @@ class OpenAILLM(BaseLLM):
 
 
     def dump(self):
-        print(json.dumps(self.history, indent=4))
+        logger.info(json.dumps(self.history, indent=4))
 
 
     def reset(self, session):
@@ -59,16 +60,16 @@ class OpenAILLM(BaseLLM):
         if system_instruction:
             self._add_to_history("system", system_instruction)
         else:
-            print("Warning: No system instruction provided.")
+            logger.error("Warning: No system instruction provided.")
 
 
     def _add_to_history(self, role, message):
         if not message:
-            print("Warning: No message provided.")
+            logger.error("Warning: No message provided.")
             return
         
         if self.history and self.history[-1]["role"] == role and self.history[-1]["content"] == message:
-            print("Duplicate message detected; not adding to history.")
+            logger.error("Duplicate message detected; not adding to history.")
             return
         
         self.history.append({"role": role, "content": message})
@@ -101,10 +102,10 @@ class OpenAILLM(BaseLLM):
         ] + history
 
         functions = self._define_action_functions(session)
-        print(json.dumps([ func["name"] for func in functions], indent=4))
+        logger.debug(json.dumps([ func["name"] for func in functions], indent=4))
 
         try:
-            print(json.dumps(combined_history, indent=4))
+            logger.debug(json.dumps(combined_history, indent=4))
 
             response = self.client.chat.completions.create(
                 model=self.model,
@@ -116,7 +117,7 @@ class OpenAILLM(BaseLLM):
             )
             return self._process_response(response)
         except openai.OpenAIError as e:
-            print(f"Error: {e}")
+            logger.error(f"Error: {e}")
             return {"text": "I'm sorry, there was an issue processing your request.", "expressions": [], "action": None}
 
 

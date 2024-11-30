@@ -3,6 +3,7 @@ import numpy as np
 import threading
 from tts.base import BaseTTS
 from piper.voice import PiperVoice
+from logger_setup import logger
 
 def get_absolute_path(*relative_parts):
     base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -40,7 +41,7 @@ class PiperTTS(BaseTTS):
                     # Play the audio data immediately
                     self.audio_sink.write(session, audio_data.tobytes())
             except Exception as e:
-                print(f"Error in play_audio thread: {e}")
+                logger.error(f"Error in play_audio thread: {e}")
 
         # Start the playback in a separate thread
         self.audio_thread = threading.Thread(target=play_audio)
@@ -57,5 +58,5 @@ class PiperTTS(BaseTTS):
                 self.audio_thread.join()
             self.audio_thread = None
         except Exception as e:
-            print(f"Error in stop method: {e}")
+            logger.error(f"Error in stop method: {e}")
 

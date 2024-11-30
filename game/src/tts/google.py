@@ -4,6 +4,7 @@ import threading
 import google.cloud.texttospeech as tts
 import re
 from concurrent.futures import ThreadPoolExecutor, wait, FIRST_COMPLETED
+from logger_setup import logger
 
 from tts.base import BaseTTS
 
@@ -47,10 +48,11 @@ class GoogleTTS(BaseTTS):
                             chunk = audio_data_second[i:i+1024].tobytes()
                             self.audio_sink.write(session, chunk)
                 except Exception as e:
-                    print(f"Error in play_audio_google thread: {e}")
+                    logger.error(f"Error in play_audio_google thread: {e}")
                 finally:
                     self.stop(session)
 
+            print(f"LLM: {text}")
             self.audio_thread = threading.Thread(target=play_audio_google, daemon=True)
             self.audio_thread.start()
 
@@ -68,7 +70,7 @@ class GoogleTTS(BaseTTS):
                 self.audio_thread.join()
             self.audio_thread = None
         except Exception as e:
-            print(f"Error in stop method: {e}")
+            logger.error(f"Error in stop method: {e}")
 
 
     def _synthesize_text(self, text):

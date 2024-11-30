@@ -1,5 +1,6 @@
 import time
 from RealtimeTTS import TextToAudioStream, CoquiEngine
+from logger_setup import logger
 
 from tts.base import BaseTTS
 
@@ -18,7 +19,7 @@ class CoquiTTS(BaseTTS):
 
 
     def speak(self, session, text):
-        print("CoquiTTS: "+text)
+        logger.debug("CoquiTTS: "+text)
         self.stream.feed(text)
         time.sleep(1.0)
         self.stream.play_async()
@@ -27,7 +28,7 @@ class CoquiTTS(BaseTTS):
 
 
     def stop(self, session):
-        print("CoquiTTS: stop")
+        logger.debug("CoquiTTS: stop")
         self.stream.stop()
   
 
