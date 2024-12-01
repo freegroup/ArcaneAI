@@ -1,6 +1,6 @@
 import abc
 
-# Definition of BaseLLM class (could be extended in the future with more functionalities)
+# Definition of BaseLLM class 
 class BaseLLM(abc.ABC):
     def __init__(self):
         pass
