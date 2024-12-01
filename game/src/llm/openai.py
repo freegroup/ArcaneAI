@@ -1,6 +1,7 @@
 import openai
 from openai import OpenAI
 import json
+import sys
 
 import tiktoken
 import os
@@ -43,7 +44,8 @@ class OpenAILLM(BaseLLM):
         
         self.api_key = os.getenv("OPENAI_API_KEY")
         if not self.api_key:
-            raise ValueError("API key for OpenAI not found in environment variables.")
+            logger.fatal("API key for OpenAI not found in environment variables.")
+            sys.exit(1)
      
         self.client = OpenAI(api_key=self.api_key)
 
@@ -61,18 +63,6 @@ class OpenAILLM(BaseLLM):
             self._add_to_history("system", system_instruction)
         else:
             logger.error("Warning: No system instruction provided.")
-
-
-    def _add_to_history(self, role, message):
-        if not message:
-            logger.error("Warning: No message provided.")
-            return
-        
-        if self.history and self.history[-1]["role"] == role and self.history[-1]["content"] == message:
-            logger.error("Duplicate message detected; not adding to history.")
-            return
-        
-        self.history.append({"role": role, "content": message})
 
 
     def chat(self, session, user_input):
@@ -93,6 +83,18 @@ class OpenAILLM(BaseLLM):
         self._add_to_history("assistant", response["text"])
         return response
     
+
+    def _add_to_history(self, role, message):
+        if not message:
+            logger.error("Warning: No message provided.")
+            return
+        
+        if self.history and self.history[-1]["role"] == role and self.history[-1]["content"] == message:
+            logger.error("Duplicate message detected; not adding to history.")
+            return
+        
+        self.history.append({"role": role, "content": message})
+
 
     def _call_openai_model(self, session, history):
         combined_history = [
