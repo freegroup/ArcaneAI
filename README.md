@@ -4,11 +4,9 @@
 ![Game Screenshot](./images/screnshoot.png)  
 _Enter a world where classic text adventures meet the cutting edge of AI._
 
-Welcome to the **AI-Powered Text Adventure Engine**, a modern twist on classic interactive fiction like _Zork_ (originally released in **1980**). Imagine if a **state engine** from the golden age of gaming and a **Large Language Model (LLM)** like GPT had a child—this project is that child.
-
-The engine dynamically generates engaging narratives, custom-tailored to your journey through a world of interconnected rooms, characters, and puzzles. By merging the deterministic logic of a state machine with the creativity of an AI, the result is an adventure that's both structured and limitless.
 
 ---
+
 **TL;DR:** Let's adventure through a mad experiment of Large Language Models, social media angst, and giving AI some serious attitude—complete with moods like a morning grump or a Grinch-like disposition.
 
 ---
