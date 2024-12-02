@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArcaneAI - Entdecke dein Abenteuer</title>
+    <link rel="stylesheet" href="./main.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/simple-parallax-js/5.6.0/simpleParallax.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js" defer></script>
+</head>
+<body>
+    <div class="section">
+        <h1 class="header">HOW TO CREATE A GOOD TEXT ADVENTURE (ENGINE)</h1>
+    </div>
+    <div class="section">
+        <p>
+            This post is a summary of my thoughts on the development of text adventure engine, particularly with regard 
+            to the challenges and problems associated with them.
+        </p>
+    </div>
+    <div class="section" style="text-align: center;">
+        <img src="./images/screnshoot.png" style="max-width: 80%;width: 50%;">
+    </div>
+    
+    <div class="section">
+        <h2 class="title">The Creative Process and Challenges</h2>
+        <p>
+            Every creative process has its quirks. Sometimes, you come up with a solution without any clue what problem 
+            it's meant to solve. Well, I had one of those moments. I paired a large language model (LLM) with a state engine, 
+            just to see if it would work. Of course, it worked—it's not rocket science. But seeing it live? Somehow, it felt a bit like magic.
+        </p>
+        <p>
+            Then it hit me: perfect for a text adventure! Suddenly, I could walk through rooms, explore environments—the whole thing felt quite brilliant. 
+            But here's the catch: I'm a computer scientist, not Hemingway. That's where the LLM stepped in again. I set the plot and mood, and the LLM 
+            handled the Hemingway part.
+        </p>
+        <p>
+            I come up with the puzzles, and Hemingway—uh, I mean the LLM—does the rest. And that, my friends, is how you create a solution that 
+            suddenly gives you a whole new problem to solve.
+        </p>
+    </div>
+    
+    <div class="section">
+        <h2 class="title">Text-Based Adventures: The Writing Challenges</h2>
+        <p>
+            Text-based adventures usually involve a lot of text, and let's face it, we're probably 
+            not Hemingways. You need good writing, a good plot, interesting characters, and of course, 
+            engaging mechanics to drive the game forward. Many existing games either have a good plot 
+            but terrible writing, or dull mechanics, or they have well-written text but completely banal 
+            content. Take a look at some games on popular websites—you will quickly understand what I mean.
+        </p>
+    </div>
+    
+    <div class="section">
+        <h2 class="title">Enhancing the Player Experience</h2>
+        <p>
+            If you want to reach a broader community, you need more than just text. You need something that 
+            enhances the player experience—whether it's sound effects, background music, or even voice-over, 
+            so players can immerse themselves more deeply in the atmosphere. This can make a significant 
+            difference, especially for visually impaired players. In my approach, I want to ensure that this 
+            target group can dive into the story just as intensively as sighted players.
+        </p>
+    </div>
+    
+    <div class="section">
+        <h2 class="title">AI Integration for Realistic Characters</h2>
+        <p>
+            The integration of an AI-based engine is also intended to help make the character feel more 
+            real, allowing the player to build a deeper relationship with them. The dialogues should 
+            not just feel predetermined and dull—the freedom for characters to respond flexibly and naturally 
+            to input creates a completely different emotional depth. At the same time, the game itself 
+            remains guided: it is not a completely open AI game where the challenge is solely to understand 
+            the AI. The plot, puzzles, and mood are determined by the author's guidelines. This ensures 
+            that the story remains a shared experience that players can discuss with each other and that 
+            fosters community-building—rather than everyone having a completely different journey.
+        </p>
+    </div>
+    
+    <div class="section">
+        <h2 class="title">The Intended Audience</h2>
+        <p>
+            Who is the intended audience for these games? Just like any other genre, you have three main groups of players
+            :</p>
+        <h3 class="subtitle">1. The game's creator</h3>
+        <p>
+            It's not as bad as you may think (or even as bad as I think). As a software developer, I'm quite used to 
+            writing software just for myself. Just take a look at my GitHub repos... Some writers create their 
+            stories just to read them for themselves after a year or so. 
+            Art created for a single person is still art.
+        </p>
+        <h3 class="subtitle">2. Other creators in the same genre</h3>
+        <p>
+            The interactive fiction community is the best example here: they use similar tools, write their 
+            own games, and play each other's games. It can be a pretty closed community at times.
+        </p>
+        <h3 class="subtitle">3. The usual gamers</h3>
+        <p>
+            Yeah... the usual gamers... millions of players...
+        </p>
+        <p>
+            Do you have awesome pixel art landscapes to impress them? A killer soundtrack? Amazing voice 
+            acting? Most of the time, no.
+        </p>
+        <p>
+            You have text. The player types some text as input, and your game responds with some text as output.
+        </p>
+    </div>
+    
+    <div class="section">
+        <h2 class="title">The Biggest Challenges</h2>
+        <h3 class="subtitle">1. Outdated Text Processing</h3>
+        <p>
+            Most traditional text adventures fail at basic input. The engine understands 'go north,' but not 'let's go north.' 
+            Such limitations make it difficult to maintain immersion. In my approach, natural language processing should be a 
+            central element so that the game can also handle more complex phrasing and keep interactions smooth. It's a 
+            text-based game, and one of the main tasks is to process text. A game that understands 'hello' but can't 
+            process 'hello, how are you?' is missing a critical component.
+        </p>
+        <h3 class="subtitle">2. Simple Gameplay Mechanics</h3>
+        <p>
+            Many older frameworks for interactive fiction rely on simple mechanics like four directions (north, south, east, west) 
+            and the usual "examine this, examine that." My goal is to create more depth—both in terms of interacting with the 
+            environment and in terms of the player's ability to move through the world.
+        </p>
+        <h3 class="subtitle">3. Characters with Depth</h3>
+        <p>
+            A key point of my idea is that characters are not just narrative devices but real, tangible personalities with 
+            their own thoughts, feelings, and secrets. The ability to interact with them in natural conversations and build 
+            real relationships is a crucial aspect of the experience. Players should be able to empathize with the characters, 
+            laugh with them, cry with them, and seek solutions together in difficult situations.
+        </p>
+    </div>
+    
+    <div class="section">
+        <h2 class="title">Summary</h2>
+        <p>In summary, I want to create a game that:</p>
+        <ul>
+            <li>Features complex mechanics that go far beyond simple movement and examination</li>
+            <li>Provides characters that are real personalities with whom the player can build relationships</li>
+            <li>Integrates natural language processing to ensure an authentic player experience</li>
+            <li>Includes sound and voice-over to enhance the atmosphere and provide an intense experience for visually impaired players as well</li>
+        </ul>
+        <p>The goal is to tell a story so compelling that players talk not only about the game itself but also about the shared journey they experienced—whether it's solving a puzzle or exploring relationships with the characters. It's not just about moving from room to room, but about experiencing a deep, emotional, and thrilling story together.</p>
+    </div>
+
+</body>
+</html>
