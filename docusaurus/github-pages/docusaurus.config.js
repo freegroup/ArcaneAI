@@ -3,7 +3,7 @@ module.exports = {
   title: 'ArcaneAI Dokumentation',
   tagline: 'Minimal und einfach',
   url: 'https://freegroup.github.io',
-  baseUrl: '/',
+  baseUrl: '/ArcaneAI',
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
