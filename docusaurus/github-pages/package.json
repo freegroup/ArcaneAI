@@ -6,7 +6,7 @@
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
     "build": "docusaurus build",
-    "postbuild": "rm -rf ../../docs && cp -r build ../../docs",    
+    "postbuild": "rm -rf ../../docs && cp -r build ../../docs",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
@@ -19,7 +19,7 @@
     "@docusaurus/preset-classic": "3.6.3",
     "@mdx-js/react": "^3.0.0",
     "clsx": "^2.0.0",
-    "prism-react-renderer": "^2.3.0",
+    "prism-react-renderer": "^2.4.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
   },
