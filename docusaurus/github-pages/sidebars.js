@@ -29,6 +29,7 @@ module.exports = {
       type: 'category',
       label: 'Examples',
       items: [
+        'examples/state',
         'examples/mood',
       ],
     },
