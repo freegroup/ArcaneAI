@@ -34,9 +34,12 @@ module.exports = {
       ],
     },
     {
-      type: 'doc',
-      id: 'setup', 
+      type: 'category',
       label: 'Setup',
+      items: [
+        'setup/prerequisites',
+        'setup/console',
+      ],
     },
   ],
 };
