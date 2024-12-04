@@ -8,7 +8,7 @@ module.exports = {
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'freegroup', // Dein GitHub Username
-  projectName: 'ArcaneAI',       // Der Name deines Repositories
+  projectName: process.env.NODE_ENV === 'production' ? '/ArcaneAI/' : '/',
   presets: [
     [
       '@docusaurus/preset-classic',
@@ -31,7 +31,13 @@ module.exports = {
         alt: 'Logo', // Alternativtext für das Logo
         src: 'img/logo.png',  // Pfad zum Logo (relativ zum `static`-Ordner)
       },
-
+      items: [
+        {
+          type: 'html',
+          value: '<span class="color header-slogan">How to create a AI text adventure engine</span>',
+          position: 'left', 
+        },
+      ],
     },
     colorMode: {
       defaultMode: 'dark',          // Setzt das Dark Theme als Standard

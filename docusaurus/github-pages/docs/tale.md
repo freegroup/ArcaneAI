@@ -12,7 +12,7 @@ It all began innocently, with the idea of giving an LLM its own mood—like a mo
 
 ---
 
-Then came an idea. Could this AI be controlled by emotions? Could it react based on mood like a grumpy old shopkeeper in a text adventure? And so the first scenario was born: “What if I could verbally ‘rant and insult’ (scold and berate) the LLM, and it would refuse to work unless I made a sincere apology?” An AI with feelings - that was the plan. Too cheeky? The LLM would fold its proverbial arms and refuse to budge until it got a heartfelt "I'm sorry." Perfect for the wild world of social media, where taking a break when you're angry should be standard practice.
+Then came an idea. Could this AI be controlled by emotions? Could it react based on mood like a grumpy old shopkeeper in a text adventure? And so the first scenario was born: “What if I could verbally ‘rant and insult’ (scold and berate) the LLM, and it would refuse to work unless I made a sincere apology?” An AI with feelings - that was the plan. Too cheeky? The LLM would fold its proverbial arms and refuse to budge until it got a heartfelt `I'm sorry`. Perfect for the wild world of social media, where taking a break when you're angry should be standard practice.
 
 
 ![screen](/img/state_engine.png)
