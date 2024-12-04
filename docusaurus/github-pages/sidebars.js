@@ -3,7 +3,7 @@ module.exports = {
     {
       type: 'doc',
       id: 'home', 
-      label: 'Home',
+      label: 'Press Start',
     },
     {
       type: 'doc',
@@ -17,17 +17,20 @@ module.exports = {
         'challenges/creative',
         'challenges/player',
         'challenges/audience',
+        'challenges/biggest_challenges',
       ],
-    },
-    {
-      type: 'doc',
-      id: 'biggest_challenges', 
-      label: 'Biggest Challenges',
     },
     {
       type: 'doc',
       id: 'solutions', 
       label: 'Solutions',
+    },
+    {
+      type: 'category',
+      label: 'Examples',
+      items: [
+        'examples/mood',
+      ],
     },
   ],
 };
