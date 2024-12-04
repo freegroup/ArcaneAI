@@ -128,8 +128,9 @@ button, #micButton {
     color: white;
     font-size: 0.9rem;
     cursor: pointer;
-    box-shadow: 0 -3px #fff, 0 -6px #000, 3px 0 #fff, 3px -3px #000, 6px 0 #000, 0 3px #fff, 0 6px #000, -3px 0 #fff, -3px 3px #000, -6px 0 #000, -3px -3px #000, 3px 3px #000, 3px 9px #aaa, 6px 6px #aaa, 9px 3px #aaa;
+    border: 4px solid #63908b;
 }
+
 button:active, #micButton:active {
     background-color: #1289c8;
 }
@@ -142,8 +143,7 @@ button:active, #micButton:active {
 /* Mic Button */
 #micButton {
     background-color: transparent;
-    border: none;
-    display: none;
+    color:#1289c8;
 }
 
 #micIcon {
