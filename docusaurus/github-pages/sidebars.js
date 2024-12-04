@@ -32,5 +32,10 @@ module.exports = {
         'examples/mood',
       ],
     },
+    {
+      type: 'doc',
+      id: 'setup', 
+      label: 'Setup',
+    },
   ],
 };

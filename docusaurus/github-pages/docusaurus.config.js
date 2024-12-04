@@ -1,3 +1,5 @@
+import { themes as prismThemes } from 'prism-react-renderer';
+
 // docusaurus/docusaurus.config.js
 module.exports = {
   title: 'ArcaneAI Dokumentation',
@@ -62,5 +64,9 @@ module.exports = {
       disableSwitch: true,          // Deaktiviert den Theme-Switcher, damit der Benutzer nicht wechseln kann
       respectPrefersColorScheme: false, // Ignoriert die Benutzerpräferenz
     },
+    prism: {
+      theme: prismThemes.dracula,
+      additionalLanguages: ['bash', "python"],
+    },  
   },
 };
