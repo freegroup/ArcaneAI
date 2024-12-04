@@ -37,6 +37,24 @@ module.exports = {
           value: '<span class="color header-slogan">How to create a AI text adventure engine</span>',
           position: 'left', 
         },
+        {
+          type: 'html',
+          value: `
+            <a
+              href="https://github.com/freegroup/ArcaneAI"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub profile"
+              class="github-button"
+              style="display: flex; align-items: center;">
+              <img
+                src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+                alt="GitHub logo"
+                style="width: 24px; height: 24px; margin-right: 5px;" />
+              @freegroup
+            </a>`,
+          position: 'right',
+        },
       ],
     },
     colorMode: {
