@@ -31,6 +31,7 @@ module.exports = {
       items: [
         'examples/state',
         'examples/mood',
+        'examples/stt',
       ],
     },
     {

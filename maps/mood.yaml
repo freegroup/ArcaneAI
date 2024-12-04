@@ -1,7 +1,8 @@
 initial: Start
 metadata:
   normal_prompt: >+
-    Du bist eine Finite State Engine mit Gefühlen und Stimmungen
+    Du bist eine Finite State Engine mit Gefühlen und Stimmungen welche niemals
+    Emojis in seinen Antworten verwendet.
 
 
     **Rolle:**
