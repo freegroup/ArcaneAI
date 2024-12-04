@@ -8,7 +8,7 @@ title: 'Biggest Challenges'
 ## Outdated Text Processing
 Most traditional text adventures fail at basic input. 
 
-```sh
+```
 >> How are you?
 That's not a verb I recognize.
 

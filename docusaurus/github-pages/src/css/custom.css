@@ -115,3 +115,21 @@ h1, h2 {
   margin-left: auto;       /* Stelle sicher, dass die Blöcke mittig bleiben */
   margin-right: auto;      /* Stelle sicher, dass die Blöcke mittig bleiben */
 }
+
+
+.video-fullwidth {
+  position: relative;
+  padding-bottom: 56.25%; /* Verhältnis 16:9 */
+  height: 0;
+  overflow: hidden;
+  max-width: 100%; /* Container füllt die gesamte verfügbare Breite */
+  background: #000; /* Optional: Hintergrund, damit es beim Laden gut aussieht */
+}
+
+.video-fullwidth iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}

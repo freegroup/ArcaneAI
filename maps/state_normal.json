@@ -33,13 +33,13 @@
             "id": "6033ed21-0161-48e1-8bf2-f5c5075a8c7c",
             "x": 4063,
             "y": 3764.5,
-            "width": 101.71484375,
-            "height": 61.08984375,
+            "width": 30.671875,
+            "height": 35.5,
             "selectable": true,
             "draggable": true,
             "angle": 0,
             "userData": {
-                "system_prompt": "Dies ist der Zustand \"B\". Nichts Besonderes ...ein Zustnad halt",
+                "system_prompt": "Dies ist der Zustand \"B\". Nichts Besonderes ...ein Zustand halt",
                 "ambient_sound_volume": 100
             },
             "cssClass": "StateShape",
@@ -50,19 +50,7 @@
             "gap": 5,
             "name": "B",
             "stateType": "NORMAL",
-            "trigger": [
-                {
-                    "id": "ebab35b8-11a1-d93b-b574-8a5a5ca93471",
-                    "name": "paint_state_with_color",
-                    "description": "Male den status in einer Farbe an. Der Benutzer darf hier eine Farbe auswählen und den Zustand anmalen",
-                    "sound_effect": "effect_retrogame.wav",
-                    "sound_effect_duration": 2,
-                    "sound_effect_volume": 100,
-                    "system_prompt": "Der Zustand B hat nun die vom Benutzer gewählte Farbe",
-                    "conditions": [],
-                    "actions": []
-                }
-            ]
+            "trigger": []
         },
         {
             "type": "StateShape",
@@ -114,6 +102,62 @@
         },
         {
             "type": "TriggerConnection",
+            "id": "1262e685-6a1b-022e-c7fd-6b26fa4e08bc",
+            "alpha": 1,
+            "selectable": true,
+            "draggable": true,
+            "angle": 0,
+            "userData": {
+                "description": "gehe in den Zustand B",
+                "sound_effect_volume": 100,
+                "sound_effect": "effect_retrogame.wav",
+                "system_prompt": "Du bist nun in Zustand B. "
+            },
+            "cssClass": "TriggerConnection",
+            "stroke": 3,
+            "color": "rgba(204,229,188,1)",
+            "outlineStroke": 0,
+            "outlineColor": "rgba(0,0,0,0)",
+            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
+            "vertex": [
+                {
+                    "x": 3852.671875,
+                    "y": 3793.25
+                },
+                {
+                    "x": 3957.8359375,
+                    "y": 3793.25
+                },
+                {
+                    "x": 3957.8359375,
+                    "y": 3782.25
+                },
+                {
+                    "x": 4063,
+                    "y": 3782.25
+                }
+            ],
+            "radius": 20,
+            "routingMetaData": {
+                "routedByUserInteraction": false,
+                "fromDir": 1,
+                "toDir": 3
+            },
+            "source": {
+                "node": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
+                "port": "output0",
+                "name": "A"
+            },
+            "target": {
+                "node": "6033ed21-0161-48e1-8bf2-f5c5075a8c7c",
+                "port": "input0",
+                "decoration": "draw2d.decoration.connection.ArrowDecorator",
+                "name": "B"
+            },
+            "name": "go_to_b"
+        },
+        {
+            "type": "TriggerConnection",
             "id": "c5357c3c-6cbd-8b3e-ef7b-d9a2bba20103",
             "alpha": 1,
             "selectable": true,
@@ -150,11 +194,11 @@
                 },
                 {
                     "x": 3972,
-                    "y": 3795.044921875
+                    "y": 3782.25
                 },
                 {
                     "x": 4063,
-                    "y": 3795.044921875
+                    "y": 3782.25
                 }
             ],
             "radius": 20,
@@ -167,62 +211,6 @@
                 "node": "7536a309-49b6-70b9-bbd1-7b31a7e4d8af",
                 "port": "output0",
                 "name": "C"
-            },
-            "target": {
-                "node": "6033ed21-0161-48e1-8bf2-f5c5075a8c7c",
-                "port": "input0",
-                "decoration": "draw2d.decoration.connection.ArrowDecorator",
-                "name": "B"
-            },
-            "name": "go_to_b"
-        },
-        {
-            "type": "TriggerConnection",
-            "id": "1262e685-6a1b-022e-c7fd-6b26fa4e08bc",
-            "alpha": 1,
-            "selectable": true,
-            "draggable": true,
-            "angle": 0,
-            "userData": {
-                "description": "gehe in den Zustand B",
-                "sound_effect_volume": 100,
-                "sound_effect": "effect_retrogame.wav",
-                "system_prompt": "Du bist nun in Zustand B. "
-            },
-            "cssClass": "TriggerConnection",
-            "stroke": 3,
-            "color": "rgba(204,229,188,1)",
-            "outlineStroke": 0,
-            "outlineColor": "rgba(0,0,0,0)",
-            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
-            "vertex": [
-                {
-                    "x": 3852.671875,
-                    "y": 3793.25
-                },
-                {
-                    "x": 3957.8359375,
-                    "y": 3793.25
-                },
-                {
-                    "x": 3957.8359375,
-                    "y": 3795.044921875
-                },
-                {
-                    "x": 4063,
-                    "y": 3795.044921875
-                }
-            ],
-            "radius": 20,
-            "routingMetaData": {
-                "routedByUserInteraction": false,
-                "fromDir": 1,
-                "toDir": 3
-            },
-            "source": {
-                "node": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
-                "port": "output0",
-                "name": "A"
             },
             "target": {
                 "node": "6033ed21-0161-48e1-8bf2-f5c5075a8c7c",
@@ -253,12 +241,12 @@
             "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
             "vertex": [
                 {
-                    "x": 4164.71484375,
-                    "y": 3795.044921875
+                    "x": 4093.671875,
+                    "y": 3782.25
                 },
                 {
                     "x": 4212.71484375,
-                    "y": 3795.044921875
+                    "y": 3782.25
                 },
                 {
                     "x": 4212.71484375,
@@ -287,6 +275,59 @@
                 "name": "C"
             },
             "name": "go_to_c"
+        },
+        {
+            "type": "TriggerConnection",
+            "id": "c94c5b8e-66b2-382d-d9de-f29a0b8d8510",
+            "alpha": 1,
+            "selectable": true,
+            "draggable": true,
+            "angle": 0,
+            "userData": {
+                "sound_effect_volume": 100
+            },
+            "cssClass": "TriggerConnection",
+            "stroke": 3,
+            "color": "rgba(204,229,188,1)",
+            "outlineStroke": 0,
+            "outlineColor": "rgba(0,0,0,0)",
+            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
+            "vertex": [
+                {
+                    "x": 3568.84375,
+                    "y": 3793.75
+                },
+                {
+                    "x": 3658.421875,
+                    "y": 3793.75
+                },
+                {
+                    "x": 3658.421875,
+                    "y": 3793.25
+                },
+                {
+                    "x": 3822,
+                    "y": 3793.25
+                }
+            ],
+            "radius": 20,
+            "routingMetaData": {
+                "routedByUserInteraction": true,
+                "fromDir": 1,
+                "toDir": 3
+            },
+            "source": {
+                "node": "53d2a3e8-302c-0407-7c14-152f7ecd27cf",
+                "port": "output0",
+                "name": "Start"
+            },
+            "target": {
+                "node": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
+                "port": "input0",
+                "decoration": "draw2d.decoration.connection.ArrowDecorator",
+                "name": "A"
+            },
+            "name": "start"
         },
         {
             "type": "TriggerConnection",
@@ -351,59 +392,6 @@
                 "name": "A"
             },
             "name": "go_to_a"
-        },
-        {
-            "type": "TriggerConnection",
-            "id": "c94c5b8e-66b2-382d-d9de-f29a0b8d8510",
-            "alpha": 1,
-            "selectable": true,
-            "draggable": true,
-            "angle": 0,
-            "userData": {
-                "sound_effect_volume": 100
-            },
-            "cssClass": "TriggerConnection",
-            "stroke": 3,
-            "color": "rgba(204,229,188,1)",
-            "outlineStroke": 0,
-            "outlineColor": "rgba(0,0,0,0)",
-            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
-            "vertex": [
-                {
-                    "x": 3568.84375,
-                    "y": 3793.75
-                },
-                {
-                    "x": 3658.421875,
-                    "y": 3793.75
-                },
-                {
-                    "x": 3658.421875,
-                    "y": 3793.25
-                },
-                {
-                    "x": 3822,
-                    "y": 3793.25
-                }
-            ],
-            "radius": 20,
-            "routingMetaData": {
-                "routedByUserInteraction": true,
-                "fromDir": 1,
-                "toDir": 3
-            },
-            "source": {
-                "node": "53d2a3e8-302c-0407-7c14-152f7ecd27cf",
-                "port": "output0",
-                "name": "Start"
-            },
-            "target": {
-                "node": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
-                "port": "input0",
-                "decoration": "draw2d.decoration.connection.ArrowDecorator",
-                "name": "A"
-            },
-            "name": "start"
         }
     ]
 }
