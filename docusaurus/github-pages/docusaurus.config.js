@@ -8,7 +8,7 @@ module.exports = {
   baseUrl: '/ArcaneAI',
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/logo.png',
   organizationName: 'freegroup', // Dein GitHub Username
   projectName: process.env.NODE_ENV === 'production' ? '/ArcaneAI/' : '/',
   presets: [
