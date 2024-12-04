@@ -1,9 +1,9 @@
 ![headline](./images/headline.png)
 
-> "Because without 'AI' in the name, no one would venture into our dungeon of clicks... Yes, we too have succumbed to the dark path of clickbait. But hey, an adventure is an adventure, even for algorithms!"
-
-
-
+Because without 'AI' in the name, no one would venture into our dungeon of clicks... Yes, we too have succumbed to the dark path of clickbait. But hey, an adventure is an adventure, even for algorithms!
+ 
+ 
+ 
 **Read the [Documentation](https://freegroup.github.io/ArcaneAI/solutions)**
 
 
