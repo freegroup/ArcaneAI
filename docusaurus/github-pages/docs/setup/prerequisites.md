@@ -1,9 +1,9 @@
 ---
-id: setup
-title: 'Setup'
+id: prerequisites
+title: 'Prerequisites'
 ---
 
-# Run it localy
+# Prerequisites
 ...so, if your curiosity has been piqued and you’ve been hunting for a <span class="color">"Try it out"</span> button... sorry, not here. Running an LLM for everyone is just too expensive for us normal folks. But don’t worry, I’ll show you how to get it running locally. There’s just one small hurdle... but hey, consider it the first step in your text adventure—obtain the key! Yes, just like in a classic adventure game, but instead of a rusty old key, you'll need an API key from OpenAI to summon GPT-4. 😉
 
 There are two versions: a console version and a UI version. The UI version comes with Chrome’s great speech-to-text feature, but for getting started, the console version is just perfect.
@@ -14,14 +14,13 @@ There are two versions: a console version and a UI version. The UI version comes
 - <span class="color">Web Version</span>: The web version uses the highly advanced Speech-to-Text engine of the Google Chrome browser, which is powered by a Google backend.
 
 
-## Prerequisites
 The prerequisites are required for either the bash version and for the Web version
 
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/freegroup/ai-dungeon.git
-cd ai-dungeon
+git clone https://github.com/freegroup/ArcaneAI.git
+cd ArcaneAI
 
 ```
 
@@ -30,7 +29,7 @@ cd ai-dungeon
 Other versions may work as well, but this is tested and works perfectly.
 
 ```bash
-# Go into the game directory to prepare the Python environment
+# Go into the ./game directory to prepare the Python environment
 cd game 
 
 # Create a virtual environment to keep the global environment clean
@@ -45,9 +44,9 @@ pip install -r requirements.txt
 
 ### An API Key for Your Preferred LLM
 
-Due to the use of `function calling`, the only fully working LLM for now is OpenAI GPT-4. Other models may work with adjustments to the prompt, but as of now, they require more tweaking, and I haven't gotten them running yet.
+Due to the use of `function calling`, the only fully working LLM for now is OpenAI GPT-4o. Other models may work with adjustments to the prompt, but as of now, they require more tweaking, and I haven't gotten them running yet.
 
-We use a `.env` file or environment variables to expose API keys for the different LLM and TTS providers. Let’s create one and configure it:
+I use a `.env` file or environment variables to expose API keys for the different LLM and TTS providers. Let’s create one and configure it:
 
 Create a file `./game/.env` with the following content:
 
@@ -72,16 +71,4 @@ PASSWORD=<password>
 ```
 
 
-## 🖥️ How to Run the bash version locally
-
-### The very simple state engine
-we are still in the `./game` directory
-
-```sh
-
-# start the engine and your conversation
-# https://youtu.be/6V3JYzU5Cd8
-#
-MAP_FILE=mood.yaml python ./src/main.py
-
-```
+now you are ready to run a demo setup...
