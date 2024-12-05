@@ -18,6 +18,6 @@ we are still in the `./game` directory and we installed the [prerequisites](/set
 # start the engine and your conversation
 # https://youtu.be/6V3JYzU5Cd8
 #
-MAP_FILE=state_normal.yaml python ./src/main.py
+MAP_FILE=state_normal python ./src/main.py
 
 ```

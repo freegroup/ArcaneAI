@@ -64,7 +64,7 @@ ARCANEAI_LOG_LEVEL=info
 
 # Configuration for the web UI
 #
-MAP_FILE=TheTipsyQuest.yaml
+MAP_FILE=TheTipsyQuest
 USERNAME=<username>
 PASSWORD=<password>
 

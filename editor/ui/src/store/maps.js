@@ -95,6 +95,30 @@ export default {
       }
     },
 
+    async createNewMap({ commit, dispatch }, mapName) {
+      if( mapName===undefined || mapName.length===0){
+        return // silently
+      }
+
+      commit('SET_LOADING', true);
+      commit('SET_ERROR', null);
+      try {
+        const response = await axios.post(`${API_BASE_URL}/maps/${mapName}`, {
+          responseType: 'blob',
+        });
+        const mapData = await response.data; 
+        commit('SET_MAP_CONFIG', mapData.config); 
+        commit('SET_MAP_DIAGRAM', mapData.diagram); 
+        commit('SET_MAP_NAME', mapName);
+        await dispatch('sounds/fetchSounds', mapName, { root: true });
+      } catch (error) {
+        commit('SET_ERROR', error.response?.data?.detail || 'Error downloading file');
+        throw error;
+      } finally {
+        commit('SET_LOADING', false);
+      }
+    },
+
     async updateMapConfig({ commit }, data) {
       commit('SET_MAP_CONFIG', data);
     },
@@ -124,8 +148,8 @@ export default {
         let formData = new FormData();
         formData.append('file', blob, state.mapName + ".json");
 
-        // Send POST request to backend
-        await axios.post(`${API_BASE_URL}/maps/`, formData, {
+        // Send PUT request to backend
+        await axios.put(`${API_BASE_URL}/maps/`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -218,7 +242,7 @@ export default {
         blob = new Blob([formatedYaml], { type: 'application/json' });
         formData = new FormData();
         formData.append('file', blob, state.mapName + ".yaml");
-        await axios.post(`${API_BASE_URL}/maps/`, formData, {
+        await axios.put(`${API_BASE_URL}/maps/`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
