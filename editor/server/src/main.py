@@ -1,19 +1,22 @@
 import os
+import shutil
+import uvicorn
+import json
+from typing import List
+
 from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from typing import List
-import uvicorn
 
 # Aktueller Dateipfad (__file__) und das src-Verzeichnis ermitteln
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(BASE_DIR)))
 
 # Verzeichnis für YAML-Dateien und statische Dateien definieren
-MAPS_FILE_DIR = os.path.join(PROJECT_DIR, 'maps')
+MAPS_ROOT_DIR = os.path.join(PROJECT_DIR, 'maps')
 STATIC_FILES_DIR = os.path.join(BASE_DIR, 'static')
 
 
@@ -45,33 +48,67 @@ class NoCacheMiddleware(BaseHTTPMiddleware):
 app.add_middleware(NoCacheMiddleware)
 
 
-@app.post("/api/v1/maps/")
+@app.post("/api/v1/maps/{map_name}")
+async def create_file(map_name: str):
+    """Speichert eine hochgeladene Datei im angegebenen Verzeichnis"""
+    # Path to the template.json file in the current directory
+    template_path = os.path.join(BASE_DIR, "template.json")
+     # Verify the template.json exists
+    if not os.path.exists(template_path):
+        raise HTTPException(status_code=500, detail="template.json not found")
+    # Directory structure to be created
+    map_dir = os.path.join(MAPS_ROOT_DIR, map_name)
+    soundfx_dir = os.path.join(map_dir, "soundfx")
+    
+
+    try:
+        os.makedirs(soundfx_dir, exist_ok=True)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to create directories: {e}")
+    
+    map_file_path = os.path.join(map_dir, "index.json")
+    try:
+        shutil.copy(template_path, map_file_path)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to copy template.json: {e}")
+
+    return FileResponse(map_file_path)
+
+
+
+@app.put("/api/v1/maps/")
 async def save_file(file: UploadFile = File(...)):
     """Speichert eine hochgeladene Datei im angegebenen Verzeichnis"""
-    file_location = os.path.join(MAPS_FILE_DIR, file.filename)
-    with open(file_location, "wb") as f:
-        f.write(await file.read())
-    return {"message": f"Datei {file.filename} gespeichert"}
+    map_name, suffix = os.path.splitext(file.filename)
+    file_location = os.path.join(MAPS_ROOT_DIR, map_name, f"index{suffix}")
+
+    try:
+        with open(file_location, "wb") as f:
+            f.write(await file.read())
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Fehler beim Speichern der Datei: {e}")
+
+    return {"message": f"Datei {file.filename} gespeichert unter {file_location}"}
 
 
 @app.get("/api/v1/maps/")
 async def list_files() -> List[str]:
-    """Listet alle JSON Dateien im definierten Verzeichnis auf"""
+    """Listet alle Unterverzeichnisse im definierten Verzeichnis auf"""
     try:
-        files = [
-            os.path.splitext(f)[0]  # Remove the suffix from each file
-            for f in os.listdir(MAPS_FILE_DIR) 
-            if f.endswith(".json")
+        # Alle Einträge im Verzeichnis prüfen, ob sie Unterverzeichnisse sind
+        directories = [
+            d for d in os.listdir(MAPS_ROOT_DIR) 
+            if os.path.isdir(os.path.join(MAPS_ROOT_DIR, d))
         ]
-        return files
+        return directories
     except FileNotFoundError:
         raise HTTPException(status_code=500, detail="Directory not found")
-    
+
 
 @app.get("/api/v1/maps/{map_name}")
 async def get_file(map_name: str):
-    """Lädt eine YAML-Datei anhand ihres Namens"""
-    file_location = os.path.join(MAPS_FILE_DIR, map_name + ".json")
+    """Lädt eine JSON-Datei anhand ihres Namens"""
+    file_location = os.path.join(MAPS_ROOT_DIR, map_name,  "index.json")
     if not os.path.exists(file_location):
         raise HTTPException(status_code=404, detail="Datei nicht gefunden")
     
@@ -82,7 +119,7 @@ async def get_file(map_name: str):
 async def list_sound_files(map_name: str) -> List[str]:
     """Listet alle Sound-Dateien im definierten Verzeichnis auf"""
     try:
-        sound_dir = os.path.join(MAPS_FILE_DIR, map_name, "soundfx")
+        sound_dir = os.path.join(MAPS_ROOT_DIR, map_name, "soundfx")
         files = [f for f in os.listdir(sound_dir) if f.endswith((".mp3", ".wav"))]
         return files
     except FileNotFoundError:
@@ -90,9 +127,9 @@ async def list_sound_files(map_name: str) -> List[str]:
 
 
 @app.get("/api/v1/sounds/{map_name}/{file_name}")
-async def get_mp3_file(map_name: str, file_name: str):
-    """Lädt eine MP3-Datei anhand ihres Namens"""
-    file_location = os.path.join(MAPS_FILE_DIR, map_name, "soundfx", file_name)
+async def get_sound_file(map_name: str, file_name: str):
+    """Lädt eine Sound-Datei anhand ihres Namens"""
+    file_location = os.path.join(MAPS_ROOT_DIR, map_name, "soundfx", file_name)
     if not os.path.exists(file_location):
         raise HTTPException(status_code=404, detail="Datei nicht gefunden")
     

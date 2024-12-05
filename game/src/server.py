@@ -37,7 +37,7 @@ SAME_SITE_VALUE = "Lax" # local http
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(os.path.dirname(BASE_DIR))
-MAP_DIR  = os.path.join(PROJECT_DIR, 'maps')
+MAPS_ROOT_DIR  = os.path.join(PROJECT_DIR, 'maps')
 
 MAP_FILE =  os.getenv("MAP_FILE")
 
@@ -75,9 +75,9 @@ class LoginData(BaseModel):
 
 def session_factory():
     return ChatSession(
-            map_name =  os.path.splitext(MAP_FILE)[0],  # Remove the suffix from file
-            map_dir = MAP_DIR,
-            state_engine = StateEngine(f"{MAP_DIR}/{MAP_FILE}"),
+            map_name =  MAP_FILE,
+            map_dir = MAPS_ROOT_DIR,
+            state_engine = StateEngine(f"{MAPS_ROOT_DIR}/{MAP_FILE}/index.yaml"),
             llm = LLMFactory.create(),
             tts = TTSEngineFactory.create(WebSocketSink()),
             stt = STTFactory.create(),

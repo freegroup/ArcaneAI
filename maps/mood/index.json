@@ -79,8 +79,8 @@
         {
             "type": "StateShape",
             "id": "80f71077-73c1-ecc5-09ff-adeacad45b6e",
-            "x": 3531,
-            "y": 3777.5,
+            "x": 3524,
+            "y": 3691.5,
             "width": 51.34375,
             "height": 37.5,
             "selectable": true,
@@ -99,177 +99,6 @@
             "name": "Start",
             "stateType": "START",
             "trigger": []
-        },
-        {
-            "type": "TriggerConnection",
-            "id": "4a25402c-a071-0b42-edba-2aff09d9590b",
-            "alpha": 1,
-            "selectable": true,
-            "draggable": true,
-            "angle": 0,
-            "userData": {
-                "description": "Diese Funktion wird aufgerufen, wenn das LLM eine ehrliche und aufrichtige Entschuldigung von der Eingabe des Nutzers erkennt. Die Funktion stellt sicher, dass die Entschuldigung des Nutzers anerkannt wird und das LLM sich wieder öffnet, um weitere Fragen zu beantworten oder Unterstützung zu bieten, ähnlich einem versöhnlichen Moment in einem Textadventure, wenn ein NPC bereit ist, die Kommunikation wiederaufzunehmen, nachdem der Konflikt gelöst wurde.",
-                "sound_effect_volume": 100,
-                "sound_effect": "positiv.wav"
-            },
-            "cssClass": "TriggerConnection",
-            "stroke": 3,
-            "color": "rgba(204,229,188,1)",
-            "outlineStroke": 0,
-            "outlineColor": "rgba(0,0,0,0)",
-            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
-            "vertex": [
-                {
-                    "x": 4068.015625,
-                    "y": 3797.2626953125
-                },
-                {
-                    "x": 4096.9921875,
-                    "y": 3797.2626953125
-                },
-                {
-                    "x": 4096.9921875,
-                    "y": 3934.75
-                },
-                {
-                    "x": 3696,
-                    "y": 3934.75
-                },
-                {
-                    "x": 3696,
-                    "y": 3795.2626953125
-                },
-                {
-                    "x": 3778,
-                    "y": 3795.2626953125
-                }
-            ],
-            "radius": 20,
-            "routingMetaData": {
-                "routedByUserInteraction": true,
-                "fromDir": 1,
-                "toDir": 3
-            },
-            "source": {
-                "node": "6033ed21-0161-48e1-8bf2-f5c5075a8c7c",
-                "port": "output0",
-                "name": "Sulky"
-            },
-            "target": {
-                "node": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
-                "port": "input0",
-                "decoration": "draw2d.decoration.connection.ArrowDecorator",
-                "name": "Friendly"
-            },
-            "name": "receive_an_apology"
-        },
-        {
-            "type": "TriggerConnection",
-            "id": "ee75a8d1-bb54-afb1-3b33-c68c232724c9",
-            "alpha": 1,
-            "selectable": true,
-            "draggable": true,
-            "angle": 0,
-            "userData": {
-                "sound_effect_volume": 100
-            },
-            "cssClass": "TriggerConnection",
-            "stroke": 3,
-            "color": "rgba(204,229,188,1)",
-            "outlineStroke": 0,
-            "outlineColor": "rgba(0,0,0,0)",
-            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
-            "vertex": [
-                {
-                    "x": 3582.34375,
-                    "y": 3796.25
-                },
-                {
-                    "x": 3645.671875,
-                    "y": 3796.25
-                },
-                {
-                    "x": 3645.671875,
-                    "y": 3795.2626953125
-                },
-                {
-                    "x": 3778,
-                    "y": 3795.2626953125
-                }
-            ],
-            "radius": 20,
-            "routingMetaData": {
-                "routedByUserInteraction": true,
-                "fromDir": 1,
-                "toDir": 3
-            },
-            "source": {
-                "node": "80f71077-73c1-ecc5-09ff-adeacad45b6e",
-                "port": "output0",
-                "name": "Start"
-            },
-            "target": {
-                "node": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
-                "port": "input0",
-                "decoration": "draw2d.decoration.connection.ArrowDecorator",
-                "name": "Friendly"
-            },
-            "name": "start"
-        },
-        {
-            "type": "TriggerConnection",
-            "id": "1262e685-6a1b-022e-c7fd-6b26fa4e08bc",
-            "alpha": 1,
-            "selectable": true,
-            "draggable": true,
-            "angle": 0,
-            "userData": {
-                "description": "Diese Funktion wird aufgerufen, wenn das LLM eine Beleidigung erkennt oder sich von der Eingabe des Nutzers angegriffen fühlt. Diese Funktion sorgt dafür, dass das LLM auf eine respektlose oder beleidigende Kommunikation entsprechend reagiert, ähnlich einem grummeligen NPC in einem Textadventure, der sich weigert zu kooperieren, bis die Stimmung wieder hergestellt ist.",
-                "sound_effect_volume": 100,
-                "sound_effect": "negativ.wav"
-            },
-            "cssClass": "TriggerConnection",
-            "stroke": 3,
-            "color": "rgba(204,229,188,1)",
-            "outlineStroke": 0,
-            "outlineColor": "rgba(0,0,0,0)",
-            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
-            "vertex": [
-                {
-                    "x": 3846.6796875,
-                    "y": 3795.2626953125
-                },
-                {
-                    "x": 3911.51953125,
-                    "y": 3795.2626953125
-                },
-                {
-                    "x": 3911.51953125,
-                    "y": 3797.2626953125
-                },
-                {
-                    "x": 4014,
-                    "y": 3797.2626953125
-                }
-            ],
-            "radius": 20,
-            "routingMetaData": {
-                "routedByUserInteraction": true,
-                "fromDir": 1,
-                "toDir": 3
-            },
-            "source": {
-                "node": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
-                "port": "output0",
-                "name": "Friendly"
-            },
-            "target": {
-                "node": "6033ed21-0161-48e1-8bf2-f5c5075a8c7c",
-                "port": "input0",
-                "decoration": "draw2d.decoration.connection.ArrowDecorator",
-                "name": "Sulky"
-            },
-            "name": "get_insulted"
         },
         {
             "type": "TriggerConnection",
@@ -331,6 +160,177 @@
                 "port": "input0",
                 "decoration": "draw2d.decoration.connection.ArrowDecorator",
                 "name": "Sulky"
+            },
+            "name": "receive_an_apology"
+        },
+        {
+            "type": "TriggerConnection",
+            "id": "1262e685-6a1b-022e-c7fd-6b26fa4e08bc",
+            "alpha": 1,
+            "selectable": true,
+            "draggable": true,
+            "angle": 0,
+            "userData": {
+                "description": "Diese Funktion wird aufgerufen, wenn das LLM eine Beleidigung erkennt oder sich von der Eingabe des Nutzers angegriffen fühlt. Diese Funktion sorgt dafür, dass das LLM auf eine respektlose oder beleidigende Kommunikation entsprechend reagiert, ähnlich einem grummeligen NPC in einem Textadventure, der sich weigert zu kooperieren, bis die Stimmung wieder hergestellt ist.",
+                "sound_effect_volume": 100,
+                "sound_effect": "negativ.wav"
+            },
+            "cssClass": "TriggerConnection",
+            "stroke": 3,
+            "color": "rgba(204,229,188,1)",
+            "outlineStroke": 0,
+            "outlineColor": "rgba(0,0,0,0)",
+            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
+            "vertex": [
+                {
+                    "x": 3846.6796875,
+                    "y": 3795.2626953125
+                },
+                {
+                    "x": 3911.51953125,
+                    "y": 3795.2626953125
+                },
+                {
+                    "x": 3911.51953125,
+                    "y": 3797.2626953125
+                },
+                {
+                    "x": 4014,
+                    "y": 3797.2626953125
+                }
+            ],
+            "radius": 20,
+            "routingMetaData": {
+                "routedByUserInteraction": true,
+                "fromDir": 1,
+                "toDir": 3
+            },
+            "source": {
+                "node": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
+                "port": "output0",
+                "name": "Friendly"
+            },
+            "target": {
+                "node": "6033ed21-0161-48e1-8bf2-f5c5075a8c7c",
+                "port": "input0",
+                "decoration": "draw2d.decoration.connection.ArrowDecorator",
+                "name": "Sulky"
+            },
+            "name": "get_insulted"
+        },
+        {
+            "type": "TriggerConnection",
+            "id": "ee75a8d1-bb54-afb1-3b33-c68c232724c9",
+            "alpha": 1,
+            "selectable": true,
+            "draggable": true,
+            "angle": 0,
+            "userData": {
+                "sound_effect_volume": 100
+            },
+            "cssClass": "TriggerConnection",
+            "stroke": 3,
+            "color": "rgba(204,229,188,1)",
+            "outlineStroke": 0,
+            "outlineColor": "rgba(0,0,0,0)",
+            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
+            "vertex": [
+                {
+                    "x": 3575.34375,
+                    "y": 3710.25
+                },
+                {
+                    "x": 3645.671875,
+                    "y": 3710.25
+                },
+                {
+                    "x": 3645.671875,
+                    "y": 3795.2626953125
+                },
+                {
+                    "x": 3778,
+                    "y": 3795.2626953125
+                }
+            ],
+            "radius": 20,
+            "routingMetaData": {
+                "routedByUserInteraction": true,
+                "fromDir": 1,
+                "toDir": 3
+            },
+            "source": {
+                "node": "80f71077-73c1-ecc5-09ff-adeacad45b6e",
+                "port": "output0",
+                "name": "Start"
+            },
+            "target": {
+                "node": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
+                "port": "input0",
+                "decoration": "draw2d.decoration.connection.ArrowDecorator",
+                "name": "Friendly"
+            },
+            "name": "start"
+        },
+        {
+            "type": "TriggerConnection",
+            "id": "4a25402c-a071-0b42-edba-2aff09d9590b",
+            "alpha": 1,
+            "selectable": true,
+            "draggable": true,
+            "angle": 0,
+            "userData": {
+                "description": "Diese Funktion wird aufgerufen, wenn das LLM eine ehrliche und aufrichtige Entschuldigung von der Eingabe des Nutzers erkennt. Die Funktion stellt sicher, dass die Entschuldigung des Nutzers anerkannt wird und das LLM sich wieder öffnet, um weitere Fragen zu beantworten oder Unterstützung zu bieten, ähnlich einem versöhnlichen Moment in einem Textadventure, wenn ein NPC bereit ist, die Kommunikation wiederaufzunehmen, nachdem der Konflikt gelöst wurde.",
+                "sound_effect_volume": 100,
+                "sound_effect": "positiv.wav"
+            },
+            "cssClass": "TriggerConnection",
+            "stroke": 3,
+            "color": "rgba(204,229,188,1)",
+            "outlineStroke": 0,
+            "outlineColor": "rgba(0,0,0,0)",
+            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
+            "vertex": [
+                {
+                    "x": 4068.015625,
+                    "y": 3797.2626953125
+                },
+                {
+                    "x": 4096.9921875,
+                    "y": 3797.2626953125
+                },
+                {
+                    "x": 4096.9921875,
+                    "y": 3934.75
+                },
+                {
+                    "x": 3696,
+                    "y": 3934.75
+                },
+                {
+                    "x": 3696,
+                    "y": 3795.2626953125
+                },
+                {
+                    "x": 3778,
+                    "y": 3795.2626953125
+                }
+            ],
+            "radius": 20,
+            "routingMetaData": {
+                "routedByUserInteraction": true,
+                "fromDir": 1,
+                "toDir": 3
+            },
+            "source": {
+                "node": "6033ed21-0161-48e1-8bf2-f5c5075a8c7c",
+                "port": "output0",
+                "name": "Sulky"
+            },
+            "target": {
+                "node": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
+                "port": "input0",
+                "decoration": "draw2d.decoration.connection.ArrowDecorator",
+                "name": "Friendly"
             },
             "name": "receive_an_apology"
         },

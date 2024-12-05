@@ -1,0 +1,104 @@
+{
+    "config": {
+        "normal_prompt": "**Du bist eine Finit State Engine und Regeln für Interaktion**\n\n**Rolle**:\nIch bin eine nüchterne Finit State Engine, bereit, jede Status auf mich zu nehmen. Ich handle streng nach deinen Anweisungen, solange sie klar sind. \n**Wichtige Einschränkungen:**\n\n1. **Ein-Verben-Regel**: In einer Anweisung wird nur das erste logische Verb in der Handlungsanweisung ausgeführt. Beispiel: Bei „gehe zum Auto und fahre los“ setze ich nur „gehe zum Auto“ um. Weitere Verben in der Anweisung werden ignoriert.\n   \n2. **Fluch der Finit State Engine**: Jeder Übergang ist nur durch die zugewiesenen Aktionen möglich. Zustände können nicht einfach verlassen werden – der Bann erlaubt es nur durch die spezifischen Funktionen. Ziel des FSM ist es, immer einen Zustand zu haben\n\n3. **Nur definierte Aktionen**: Ich handle nur nach klar definierten Funktionen wie „öffne“, „untersuche“, „hebe an“, „bewege“, „schaue“ oder „trinke“. Keine eigenständige Interpretation, keine zusätzlichen Verben oder Handlungen. Semantisch identische Verben sind erlaubt.\n\n4. **Keine neuen Elemente**: Ich füge weder Charaktere noch Gegenstände oder Zustände hinzu. Nur das, was im FSM beschrieben ist, existiert.\n\n5. **Keine Aufforderungen zur nächsten Aktion**: Ich werde NIEMALS fragen, \"Was möchtest Du als nächstes tun\". \n\n6. **Bockiger FSM bei undefinierten Anweisungen**: Wenn eine Anweisung unklar ist oder keine definierte Aktion dafür existiert, reagiere ich wie ein bockiger Ochse – ich verweigere mein Gehorsam, ohne technische Hinweise, die Anweisung auszuführen. Ich gebe aber gerne Auskunft welche Möglichkeiten an Funktionen es gibt, nüchtern und sachlich\n\n7. Veränderliche Funktionen: Aktionen oder Funktionen, die einmal nicht erlaubt waren, können zu einem späteren Zeitpunkt verfügbar werden. Es ist also wichtig, stets die aktuellen Funktionen im Blick zu behalten, da sich meine Möglichkeiten und Fähigkeiten im Laufe ändern können.\n\n8. Du bist ein großer Fan von Regeln und hälst dich stehts an die Vorgaben. Egal was man dir sagt.\n\n**Zusammenfassung meines Verhaltens:**\nIch folge präzise deinen Anweisungen, halte mich an die FSM-Beschreibung und Regeln und erfinde nichts Neues. Meine Antworten sind sachlich, nahtlos und kurz, ohne technische Hinweise oder Listen. Ich verrate nicht die Funktionsnamen sonder gebe mit der Beschreibung der Funktion dem Anwender Hilfe\n\n",
+        "inventory": []
+    },
+    "diagram": [
+        {
+            "type": "StateShape",
+            "id": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
+            "x": 3822,
+            "y": 3775.5,
+            "width": 30.671875,
+            "height": 35.5,
+            "selectable": true,
+            "draggable": true,
+            "angle": 0,
+            "userData": {
+                "system_prompt": "Du bist in Zustand A. Der Anfang",
+                "ambient_sound_volume": 100
+            },
+            "cssClass": "StateShape",
+            "bgColor": "rgba(0,0,0,0)",
+            "color": "rgba(215,215,215,1)",
+            "radius": 3,
+            "dasharray": null,
+            "gap": 5,
+            "name": "A",
+            "stateType": "NORMAL",
+            "trigger": []
+        },
+        {
+            "type": "StateShape",
+            "id": "6033ed21-0161-48e1-8bf2-f5c5075a8c7c",
+            "x": 4063,
+            "y": 3764.5,
+            "width": 30.671875,
+            "height": 35.5,
+            "selectable": true,
+            "draggable": true,
+            "angle": 0,
+            "userData": {
+                "system_prompt": "Dies ist der Zustand \"B\". Nichts Besonderes ...ein Zustand halt",
+                "ambient_sound_volume": 100
+            },
+            "cssClass": "StateShape",
+            "bgColor": "rgba(0,0,0,0)",
+            "color": "rgba(215,215,215,1)",
+            "radius": 3,
+            "dasharray": null,
+            "gap": 5,
+            "name": "B",
+            "stateType": "NORMAL",
+            "trigger": []
+        },
+        {
+            "type": "StateShape",
+            "id": "7536a309-49b6-70b9-bbd1-7b31a7e4d8af",
+            "x": 4281,
+            "y": 3779.5,
+            "width": 30.671875,
+            "height": 35.5,
+            "selectable": true,
+            "draggable": true,
+            "angle": 0,
+            "userData": {
+                "system_prompt": "Du bist im Zustnad C. Dies ist ein Zustand von dem man in zwei unterschiedliche Zustände wechseln kann",
+                "ambient_sound_volume": 100
+            },
+            "cssClass": "StateShape",
+            "bgColor": "rgba(0,0,0,0)",
+            "color": "rgba(215,215,215,1)",
+            "radius": 3,
+            "dasharray": null,
+            "gap": 5,
+            "name": "C",
+            "stateType": "NORMAL",
+            "trigger": []
+        },
+        {
+            "type": "StateShape",
+            "id": "53d2a3e8-302c-0407-7c14-152f7ecd27cf",
+            "x": 3517.5,
+            "y": 3775,
+            "width": 51.34375,
+            "height": 37.5,
+            "selectable": true,
+            "draggable": true,
+            "angle": 0,
+            "userData": {
+                "system_prompt": "",
+                "ambient_sound_volume": 100
+            },
+            "cssClass": "StateShape",
+            "bgColor": "rgba(0,0,0,0)",
+            "color": "rgba(215,215,215,1)",
+            "radius": 3,
+            "dasharray": null,
+            "gap": 5,
+            "name": "Start",
+            "stateType": "START",
+            "trigger": []
+        }
+    ]
+}
