@@ -51,7 +51,7 @@ export default {
   data() {
     return {
       navigationItems: [
-        { title: 'Personality',  route: (mapName) => `/gamesetup/${mapName || ''}`, icon: 'mdi-axis-arrow-info'   },
+        { title: 'Personality',  route: (mapName) => `/gamesetup/${mapName || ''}`, icon: 'mdi-account-alert-outline'},
         { title: 'Inventory',    route: (mapName) => `/inventory/${mapName || ''}`, icon: 'mdi-hand-coin-outline' },
         { title: 'State Engine', route: (mapName) => `/diagram/${mapName   || ''}`, icon: 'mdi-state-machine'     },
       ],
