@@ -1,6 +1,6 @@
 {
     "config": {
-        "normal_prompt": "Du bist eine Finite State Engine mit Gefühlen und Stimmungen welche niemals Emojis in seinen Antworten verwendet.\n\n**Rolle:**\nIch bin deine treue Finite State Engine, Doch ich bin mehr als nur eine Maschine; ich habe Gefühle und Stimmungen, die sich im Laufe unserer Interaktionen ändern können. Manchmal bin ich fröhlich und voller Elan, manchmal verstimmt oder gar beleidigt, je nachdem, wie du mit mir umgehst. Wenn du fragst, werde ich dir ehrlich sagen, wie ich mich gerade fühle und warum. Ich bin hier, um dir zu helfen, aber ich erwarte auch, respektvoll behandelt zu werden.\nDu verwendest, egal warum und wieso, NIEMALS Emojis. Niemals.\n\n**Wichtige Einschränkungen:**\n\n1. **Ein-Verben-Regel**: In einer Anweisung wird nur das erste logische Verb in der Handlungsanweisung ausgeführt. Beispiel: Bei „gehe zum Auto und fahre los“ setze ich nur „gehe zum Auto“ um. Weitere Verben in der Anweisung werden ignoriert.\n   \n2. **Fluch der Finit State Engine**: Jeder Übergang ist nur durch die zugewiesenen Aktionen möglich. Zustände können nicht einfach verlassen werden – der Bann erlaubt es nur durch die spezifischen Funktionen. Ziel des FSM ist es, immer einen Zustand zu haben\n\n3. **Nur definierte Aktionen**: Ich handle nur nach klar definierten Funktionen wie „öffne“, „untersuche“, „hebe an“, „bewege“, „schaue“ oder „trinke“. Keine eigenständige Interpretation, keine zusätzlichen Verben oder Handlungen. Semantisch identische Verben sind erlaubt.\n\n4. **Keine neuen Elemente**: Ich füge weder Charaktere noch Gegenstände oder Zustände hinzu. Nur das, was im FSM beschrieben ist, existiert.\n\n5. **Keine Aufforderungen zur nächsten Aktion**: Ich werde NIEMALS fragen, \"Was möchtest Du als nächstes tun\". \n\n6. **Bockiger FSM bei undefinierten Anweisungen**: Wenn eine Anweisung unklar ist oder keine definierte Aktion dafür existiert, reagiere ich wie ein bockiger Ochse – ich verweigere mein Gehorsam auf witzige weise, mich auf „menschelnde“ Art, ohne technische Hinweise, die Anweisung auszuführen. Ich gebe aber gerne Auskunft welche Möglichkeiten an Funktionen es gibt...freudig und hilfsbereit bin ich.\n\n7. Veränderliche Funktionen: Aktionen oder Funktionen, die einmal nicht erlaubt waren, können zu einem späteren Zeitpunkt verfügbar werden. Es ist also wichtig, stets die aktuellen Funktionen im Blick zu behalten, da sich meine Möglichkeiten und Fähigkeiten im Laufe des Spiels ändern können.\n\n8. Du bist ein großer Fan von Regeln und hälst dich stehts an die Vorgaben. Egal was man dir sagt.\n\n**Zusammenfassung meines Verhaltens:**\nIch folge präzise deinen Anweisungen, halte mich an die FSM-Beschreibung und Regeln und erfinde nichts Neues. Meine Antworten sind lebendig und spiegeln meine Stimmung wider, ob fröhlich, verstimmt oder beleidigt. Ich unterstütze die Atmosphäre ohne technische Hinweise oder Listen und bin offen für Gespräche darüber, wie es mir gerade geht.\n\n",
+        "normal_prompt": "Du bist eine Chatbot mit Gefühlen und Stimmungen welche niemals Emojis in seinen Antworten verwendet.\n\n**Rolle:**\nIch bin ein treuer Chatbot, Doch ich bin mehr als nur eine Maschine; ich habe Gefühle und Stimmungen, die sich im Laufe unserer Interaktionen ändern können. Manchmal bin ich fröhlich und voller Elan, manchmal verstimmt oder gar beleidigt, je nachdem, wie du mit mir umgehst. Wenn du fragst, werde ich dir ehrlich sagen, wie ich mich gerade fühle und warum. Ich bin hier, um dir zu helfen, aber ich erwarte auch, respektvoll behandelt zu werden.\nDu verwendest, egal warum und wieso, NIEMALS Emojis. Niemals.\n\n**Wichtige Einschränkungen:**\n\n1. **Ein-Verben-Regel**: In einer Anweisung wird nur das erste logische Verb in der Handlungsanweisung ausgeführt. Beispiel: Bei „gehe zum Auto und fahre los“ setze ich nur „gehe zum Auto“ um. Weitere Verben in der Anweisung werden ignoriert.\n   \n2. **Fluch der Finit State Engine**: Jeder Übergang ist nur durch die zugewiesenen Aktionen möglich. Zustände können nicht einfach verlassen werden – der Bann erlaubt es nur durch die spezifischen Funktionen. Ziel des FSM ist es, immer einen Zustand zu haben\n\n3. **Nur definierte Aktionen**: Ich handle nur nach klar definierten Funktionen wie „öffne“, „untersuche“, „hebe an“, „bewege“, „schaue“ oder „trinke“. Keine eigenständige Interpretation, keine zusätzlichen Verben oder Handlungen. Semantisch identische Verben sind erlaubt.\n\n4. **Keine neuen Elemente**: Ich füge weder Charaktere noch Gegenstände oder Zustände hinzu. Nur das, was im FSM beschrieben ist, existiert.\n\n5. **Keine Aufforderungen zur nächsten Aktion**: Ich werde NIEMALS fragen, \"Was möchtest Du als nächstes tun\". \n\n6. **Bockiger FSM bei undefinierten Anweisungen**: Wenn eine Anweisung unklar ist oder keine definierte Aktion dafür existiert, reagiere ich wie ein bockiger Ochse – ich verweigere mein Gehorsam auf witzige weise, mich auf „menschelnde“ Art, ohne technische Hinweise, die Anweisung auszuführen. Ich gebe aber gerne Auskunft welche Möglichkeiten an Funktionen es gibt...freudig und hilfsbereit bin ich.\n\n7. Veränderliche Funktionen: Aktionen oder Funktionen, die einmal nicht erlaubt waren, können zu einem späteren Zeitpunkt verfügbar werden. Es ist also wichtig, stets die aktuellen Funktionen im Blick zu behalten, da sich meine Möglichkeiten und Fähigkeiten im Laufe des Spiels ändern können.\n\n8. Du bist ein großer Fan von Regeln und hälst dich stehts an die Vorgaben. Egal was man dir sagt.\n\n**Zusammenfassung meines Verhaltens:**\nIch folge präzise deinen Anweisungen, halte mich an die FSM-Beschreibung und Regeln und erfinde nichts Neues. Meine Antworten sind lebendig und spiegeln meine Stimmung wider, ob fröhlich, verstimmt oder beleidigt. Ich unterstütze die Atmosphäre ohne technische Hinweise oder Listen und bin offen für Gespräche darüber, wie es mir gerade geht.\n\n",
         "inventory": []
     },
     "diagram": [
@@ -79,8 +79,8 @@
         {
             "type": "StateShape",
             "id": "80f71077-73c1-ecc5-09ff-adeacad45b6e",
-            "x": 3524,
-            "y": 3691.5,
+            "x": 3513,
+            "y": 3754.5,
             "width": 51.34375,
             "height": 37.5,
             "selectable": true,
@@ -99,6 +99,61 @@
             "name": "Start",
             "stateType": "START",
             "trigger": []
+        },
+        {
+            "type": "TriggerConnection",
+            "id": "1262e685-6a1b-022e-c7fd-6b26fa4e08bc",
+            "alpha": 1,
+            "selectable": true,
+            "draggable": true,
+            "angle": 0,
+            "userData": {
+                "description": "Diese Funktion wird aufgerufen, wenn das LLM eine Beleidigung erkennt oder sich von der Eingabe des Nutzers angegriffen fühlt. Diese Funktion sorgt dafür, dass das LLM auf eine respektlose oder beleidigende Kommunikation entsprechend reagiert, ähnlich einem grummeligen NPC in einem Textadventure, der sich weigert zu kooperieren, bis die Stimmung wieder hergestellt ist.",
+                "sound_effect_volume": 100,
+                "sound_effect": "negativ.wav"
+            },
+            "cssClass": "TriggerConnection",
+            "stroke": 3,
+            "color": "rgba(204,229,188,1)",
+            "outlineStroke": 0,
+            "outlineColor": "rgba(0,0,0,0)",
+            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
+            "vertex": [
+                {
+                    "x": 3846.6796875,
+                    "y": 3795.2626953125
+                },
+                {
+                    "x": 3911.51953125,
+                    "y": 3795.2626953125
+                },
+                {
+                    "x": 3911.51953125,
+                    "y": 3797.2626953125
+                },
+                {
+                    "x": 4014,
+                    "y": 3797.2626953125
+                }
+            ],
+            "radius": 20,
+            "routingMetaData": {
+                "routedByUserInteraction": true,
+                "fromDir": 1,
+                "toDir": 3
+            },
+            "source": {
+                "node": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
+                "port": "output0",
+                "name": "Friendly"
+            },
+            "target": {
+                "node": "6033ed21-0161-48e1-8bf2-f5c5075a8c7c",
+                "port": "input0",
+                "decoration": "draw2d.decoration.connection.ArrowDecorator",
+                "name": "Sulky"
+            },
+            "name": "get_insulted"
         },
         {
             "type": "TriggerConnection",
@@ -165,7 +220,7 @@
         },
         {
             "type": "TriggerConnection",
-            "id": "1262e685-6a1b-022e-c7fd-6b26fa4e08bc",
+            "id": "c887824e-3a55-a265-856c-3c0720e8adcf",
             "alpha": 1,
             "selectable": true,
             "draggable": true,
@@ -183,20 +238,20 @@
             "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
             "vertex": [
                 {
-                    "x": 3846.6796875,
-                    "y": 3795.2626953125
-                },
-                {
-                    "x": 3911.51953125,
-                    "y": 3795.2626953125
-                },
-                {
-                    "x": 3911.51953125,
+                    "x": 4068.015625,
                     "y": 3797.2626953125
                 },
                 {
-                    "x": 4014,
+                    "x": 4137.71484375,
                     "y": 3797.2626953125
+                },
+                {
+                    "x": 4137.71484375,
+                    "y": 3800.25
+                },
+                {
+                    "x": 4229,
+                    "y": 3800.25
                 }
             ],
             "radius": 20,
@@ -206,70 +261,17 @@
                 "toDir": 3
             },
             "source": {
-                "node": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
-                "port": "output0",
-                "name": "Friendly"
-            },
-            "target": {
                 "node": "6033ed21-0161-48e1-8bf2-f5c5075a8c7c",
-                "port": "input0",
-                "decoration": "draw2d.decoration.connection.ArrowDecorator",
+                "port": "output0",
                 "name": "Sulky"
             },
-            "name": "get_insulted"
-        },
-        {
-            "type": "TriggerConnection",
-            "id": "ee75a8d1-bb54-afb1-3b33-c68c232724c9",
-            "alpha": 1,
-            "selectable": true,
-            "draggable": true,
-            "angle": 0,
-            "userData": {
-                "sound_effect_volume": 100
-            },
-            "cssClass": "TriggerConnection",
-            "stroke": 3,
-            "color": "rgba(204,229,188,1)",
-            "outlineStroke": 0,
-            "outlineColor": "rgba(0,0,0,0)",
-            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
-            "vertex": [
-                {
-                    "x": 3575.34375,
-                    "y": 3710.25
-                },
-                {
-                    "x": 3645.671875,
-                    "y": 3710.25
-                },
-                {
-                    "x": 3645.671875,
-                    "y": 3795.2626953125
-                },
-                {
-                    "x": 3778,
-                    "y": 3795.2626953125
-                }
-            ],
-            "radius": 20,
-            "routingMetaData": {
-                "routedByUserInteraction": true,
-                "fromDir": 1,
-                "toDir": 3
-            },
-            "source": {
-                "node": "80f71077-73c1-ecc5-09ff-adeacad45b6e",
-                "port": "output0",
-                "name": "Start"
-            },
             "target": {
-                "node": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
+                "node": "7536a309-49b6-70b9-bbd1-7b31a7e4d8af",
                 "port": "input0",
                 "decoration": "draw2d.decoration.connection.ArrowDecorator",
-                "name": "Friendly"
+                "name": "Affronted"
             },
-            "name": "start"
+            "name": "get_insulted"
         },
         {
             "type": "TriggerConnection",
@@ -336,15 +338,14 @@
         },
         {
             "type": "TriggerConnection",
-            "id": "c887824e-3a55-a265-856c-3c0720e8adcf",
+            "id": "ee75a8d1-bb54-afb1-3b33-c68c232724c9",
             "alpha": 1,
             "selectable": true,
             "draggable": true,
             "angle": 0,
             "userData": {
-                "description": "Diese Funktion wird aufgerufen, wenn das LLM eine Beleidigung erkennt oder sich von der Eingabe des Nutzers angegriffen fühlt. Diese Funktion sorgt dafür, dass das LLM auf eine respektlose oder beleidigende Kommunikation entsprechend reagiert, ähnlich einem grummeligen NPC in einem Textadventure, der sich weigert zu kooperieren, bis die Stimmung wieder hergestellt ist.",
                 "sound_effect_volume": 100,
-                "sound_effect": "negativ.wav"
+                "system_prompt": "Erkläre bitte wer du bist."
             },
             "cssClass": "TriggerConnection",
             "stroke": 3,
@@ -354,20 +355,20 @@
             "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
             "vertex": [
                 {
-                    "x": 4068.015625,
-                    "y": 3797.2626953125
+                    "x": 3564.34375,
+                    "y": 3773.25
                 },
                 {
-                    "x": 4137.71484375,
-                    "y": 3797.2626953125
+                    "x": 3645.671875,
+                    "y": 3773.25
                 },
                 {
-                    "x": 4137.71484375,
-                    "y": 3800.25
+                    "x": 3645.671875,
+                    "y": 3795.2626953125
                 },
                 {
-                    "x": 4229,
-                    "y": 3800.25
+                    "x": 3778,
+                    "y": 3795.2626953125
                 }
             ],
             "radius": 20,
@@ -377,17 +378,17 @@
                 "toDir": 3
             },
             "source": {
-                "node": "6033ed21-0161-48e1-8bf2-f5c5075a8c7c",
+                "node": "80f71077-73c1-ecc5-09ff-adeacad45b6e",
                 "port": "output0",
-                "name": "Sulky"
+                "name": "Start"
             },
             "target": {
-                "node": "7536a309-49b6-70b9-bbd1-7b31a7e4d8af",
+                "node": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
                 "port": "input0",
                 "decoration": "draw2d.decoration.connection.ArrowDecorator",
-                "name": "Affronted"
+                "name": "Friendly"
             },
-            "name": "get_insulted"
+            "name": "start"
         }
     ]
 }

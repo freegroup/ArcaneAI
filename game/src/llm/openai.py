@@ -62,7 +62,7 @@ class OpenAILLM(BaseLLM):
         if system_instruction:
             self._add_to_history("system", system_instruction)
         else:
-            logger.error("Warning: No system instruction provided.")
+            logger.warning("No system instruction provided.")
 
 
     def chat(self, session, user_input):
@@ -86,7 +86,7 @@ class OpenAILLM(BaseLLM):
 
     def _add_to_history(self, role, message):
         if not message:
-            logger.error("Warning: No message provided.")
+            logger.warning("No message provided.")
             return
         
         if self.history and self.history[-1]["role"] == role and self.history[-1]["content"] == message:

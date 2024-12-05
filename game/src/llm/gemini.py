@@ -127,7 +127,7 @@ class GeminiLLM(BaseLLM):
 
     def _add_to_history(self, role, message):
         if not message:
-            logger.error("Warning: No message provided.")
+            logger.warning("No message provided.")
             return
         
         # Check if history is empty or the last entry is different in content
