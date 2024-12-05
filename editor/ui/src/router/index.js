@@ -2,7 +2,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import StateCanvas from '../views/StateCanvas.vue';
 import GameSetup from '../views/PromptEdit_normal.vue';
-import EndgameSetup from '../views/PromptEdit_end.vue';
 import Inventory from '../views/Inventory.vue';
 
 const routes = [
@@ -14,12 +13,6 @@ const routes = [
     path: '/gamesetup/:mapName?',
     name: 'gamesetup',
     component: GameSetup,
-    props: true
-  },
-  {
-    path: '/endgamesetup/:mapName?',
-    name: 'endgamesetup',
-    component: EndgameSetup,
     props: true
   },
   {

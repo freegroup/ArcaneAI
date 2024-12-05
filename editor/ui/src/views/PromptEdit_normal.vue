@@ -1,12 +1,12 @@
 <template>
   <div class="config-view" >
     <!-- System Prompt Section -->
-    <h4>Normal State Prompt</h4>
+    <h4>Chatbot Personality</h4>
     <Codemirror
       class="full-height-editor"
       v-model:value="normalPrompt"
       :options="cmOptions"
-      placeholder="test placeholder"
+      placeholder="prompt placeholder"
   />
   </div>
 </template>

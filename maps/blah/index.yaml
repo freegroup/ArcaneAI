@@ -69,21 +69,20 @@ states:
       system_prompt: Du bist in Zustand A. Der Anfang
       ambient_sound_volume: 100
       state_type: normal
-  - name: B
-    metadata:
-      system_prompt: Dies ist der Zustand "B". Nichts Besonderes ...ein Zustand halt
-      ambient_sound_volume: 100
-      state_type: normal
-  - name: C
-    metadata:
-      system_prompt: >-
-        Du bist im Zustnad C. Dies ist ein Zustand von dem man in zwei
-        unterschiedliche Zustände wechseln kann
-      ambient_sound_volume: 100
-      state_type: normal
   - name: Start
     metadata:
       system_prompt: ''
       ambient_sound_volume: 100
       state_type: start
-transitions: []
+transitions:
+  - trigger: 91b03d36_c479_5dbe_e31c_882cfbccf67b
+    source: Start
+    dest: A
+    metadata:
+      name: start
+      system_prompt: ''
+      description: ''
+      sound_effect: ''
+      sound_effect_volume: 100
+      conditions: []
+      actions: []

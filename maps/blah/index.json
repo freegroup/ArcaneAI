@@ -7,8 +7,8 @@
         {
             "type": "StateShape",
             "id": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
-            "x": 3822,
-            "y": 3775.5,
+            "x": 4144,
+            "y": 3772.5,
             "width": 30.671875,
             "height": 35.5,
             "selectable": true,
@@ -25,54 +25,6 @@
             "dasharray": null,
             "gap": 5,
             "name": "A",
-            "stateType": "NORMAL",
-            "trigger": []
-        },
-        {
-            "type": "StateShape",
-            "id": "6033ed21-0161-48e1-8bf2-f5c5075a8c7c",
-            "x": 4063,
-            "y": 3764.5,
-            "width": 30.671875,
-            "height": 35.5,
-            "selectable": true,
-            "draggable": true,
-            "angle": 0,
-            "userData": {
-                "system_prompt": "Dies ist der Zustand \"B\". Nichts Besonderes ...ein Zustand halt",
-                "ambient_sound_volume": 100
-            },
-            "cssClass": "StateShape",
-            "bgColor": "rgba(0,0,0,0)",
-            "color": "rgba(215,215,215,1)",
-            "radius": 3,
-            "dasharray": null,
-            "gap": 5,
-            "name": "B",
-            "stateType": "NORMAL",
-            "trigger": []
-        },
-        {
-            "type": "StateShape",
-            "id": "7536a309-49b6-70b9-bbd1-7b31a7e4d8af",
-            "x": 4281,
-            "y": 3779.5,
-            "width": 30.671875,
-            "height": 35.5,
-            "selectable": true,
-            "draggable": true,
-            "angle": 0,
-            "userData": {
-                "system_prompt": "Du bist im Zustnad C. Dies ist ein Zustand von dem man in zwei unterschiedliche Zustände wechseln kann",
-                "ambient_sound_volume": 100
-            },
-            "cssClass": "StateShape",
-            "bgColor": "rgba(0,0,0,0)",
-            "color": "rgba(215,215,215,1)",
-            "radius": 3,
-            "dasharray": null,
-            "gap": 5,
-            "name": "C",
             "stateType": "NORMAL",
             "trigger": []
         },
@@ -99,6 +51,59 @@
             "name": "Start",
             "stateType": "START",
             "trigger": []
+        },
+        {
+            "type": "TriggerConnection",
+            "id": "91b03d36-c479-5dbe-e31c-882cfbccf67b",
+            "alpha": 1,
+            "selectable": true,
+            "draggable": true,
+            "angle": 0,
+            "userData": {
+                "sound_effect_volume": 100
+            },
+            "cssClass": "TriggerConnection",
+            "stroke": 3,
+            "color": "rgba(204,229,188,1)",
+            "outlineStroke": 0,
+            "outlineColor": "rgba(0,0,0,0)",
+            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
+            "vertex": [
+                {
+                    "x": 3867.84375,
+                    "y": 3714.75
+                },
+                {
+                    "x": 3993.921875,
+                    "y": 3714.75
+                },
+                {
+                    "x": 3993.921875,
+                    "y": 3790.25
+                },
+                {
+                    "x": 4144,
+                    "y": 3790.25
+                }
+            ],
+            "radius": 20,
+            "routingMetaData": {
+                "routedByUserInteraction": true,
+                "fromDir": 1,
+                "toDir": 3
+            },
+            "source": {
+                "node": "53d2a3e8-302c-0407-7c14-152f7ecd27cf",
+                "port": "output0",
+                "name": "Start"
+            },
+            "target": {
+                "node": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
+                "port": "input0",
+                "decoration": "draw2d.decoration.connection.ArrowDecorator",
+                "name": "A"
+            },
+            "name": "start"
         }
     ]
 }

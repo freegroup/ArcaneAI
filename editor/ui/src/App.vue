@@ -51,10 +51,9 @@ export default {
   data() {
     return {
       navigationItems: [
-        { title: 'Game Setup', route: (mapName) => `/gamesetup/${mapName || ''}`, icon: 'mdi-axis-arrow-info' },
-        { title: 'Endgame Setup', route: (mapName) => `/endgamesetup/${mapName || ''}`, icon: 'mdi-gold' },
-        { title: 'Inventory', route: (mapName) => `/inventory/${mapName || ''}`, icon: 'mdi-hand-coin-outline' },
-        { title: 'State Engine', route: (mapName) => `/diagram/${mapName || ''}`, icon: 'mdi-state-machine' },
+        { title: 'Personality',  route: (mapName) => `/gamesetup/${mapName || ''}`, icon: 'mdi-axis-arrow-info'   },
+        { title: 'Inventory',    route: (mapName) => `/inventory/${mapName || ''}`, icon: 'mdi-hand-coin-outline' },
+        { title: 'State Engine', route: (mapName) => `/diagram/${mapName   || ''}`, icon: 'mdi-state-machine'     },
       ],
       isCompact: false, // Initially, the drawer is expanded
     };
