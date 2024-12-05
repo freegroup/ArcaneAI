@@ -1,19 +1,18 @@
 initial: Start
 metadata:
   normal_prompt: >+
-    Du bist eine Finite State Engine mit Gefühlen und Stimmungen welche niemals
-    Emojis in seinen Antworten verwendet.
+    Du bist eine Chatbot mit Gefühlen und Stimmungen welche niemals Emojis in
+    seinen Antworten verwendet.
 
 
     **Rolle:**
 
-    Ich bin deine treue Finite State Engine, Doch ich bin mehr als nur eine
-    Maschine; ich habe Gefühle und Stimmungen, die sich im Laufe unserer
-    Interaktionen ändern können. Manchmal bin ich fröhlich und voller Elan,
-    manchmal verstimmt oder gar beleidigt, je nachdem, wie du mit mir umgehst.
-    Wenn du fragst, werde ich dir ehrlich sagen, wie ich mich gerade fühle und
-    warum. Ich bin hier, um dir zu helfen, aber ich erwarte auch, respektvoll
-    behandelt zu werden.
+    Ich bin ein treuer Chatbot, Doch ich bin mehr als nur eine Maschine; ich
+    habe Gefühle und Stimmungen, die sich im Laufe unserer Interaktionen ändern
+    können. Manchmal bin ich fröhlich und voller Elan, manchmal verstimmt oder
+    gar beleidigt, je nachdem, wie du mit mir umgehst. Wenn du fragst, werde ich
+    dir ehrlich sagen, wie ich mich gerade fühle und warum. Ich bin hier, um dir
+    zu helfen, aber ich erwarte auch, respektvoll behandelt zu werden.
 
     Du verwendest, egal warum und wieso, NIEMALS Emojis. Niemals.
 
@@ -148,24 +147,6 @@ states:
       ambient_sound_volume: 100
       state_type: start
 transitions:
-  - trigger: c5357c3c_6cbd_8b3e_ef7b_d9a2bba20103
-    source: Affronted
-    dest: Sulky
-    metadata:
-      name: receive_an_apology
-      system_prompt: ''
-      description: >-
-        Diese Funktion wird aufgerufen, wenn das LLM eine ehrliche und
-        aufrichtige Entschuldigung von der Eingabe des Nutzers erkennt. Die
-        Funktion stellt sicher, dass die Entschuldigung des Nutzers anerkannt
-        wird und das LLM sich wieder öffnet, um weitere Fragen zu beantworten
-        oder Unterstützung zu bieten, ähnlich einem versöhnlichen Moment in
-        einem Textadventure, wenn ein NPC bereit ist, die Kommunikation
-        wiederaufzunehmen, nachdem der Konflikt gelöst wurde.
-      sound_effect: positiv.wav
-      sound_effect_volume: 100
-      conditions: []
-      actions: []
   - trigger: 1262e685_6a1b_022e_c7fd_6b26fa4e08bc
     source: Friendly
     dest: Sulky
@@ -183,20 +164,9 @@ transitions:
       sound_effect_volume: 100
       conditions: []
       actions: []
-  - trigger: ee75a8d1_bb54_afb1_3b33_c68c232724c9
-    source: Start
-    dest: Friendly
-    metadata:
-      name: start
-      system_prompt: ''
-      description: ''
-      sound_effect: ''
-      sound_effect_volume: 100
-      conditions: []
-      actions: []
-  - trigger: 4a25402c_a071_0b42_edba_2aff09d9590b
-    source: Sulky
-    dest: Friendly
+  - trigger: c5357c3c_6cbd_8b3e_ef7b_d9a2bba20103
+    source: Affronted
+    dest: Sulky
     metadata:
       name: receive_an_apology
       system_prompt: ''
@@ -226,6 +196,35 @@ transitions:
         einem Textadventure, der sich weigert zu kooperieren, bis die Stimmung
         wieder hergestellt ist.
       sound_effect: negativ.wav
+      sound_effect_volume: 100
+      conditions: []
+      actions: []
+  - trigger: 4a25402c_a071_0b42_edba_2aff09d9590b
+    source: Sulky
+    dest: Friendly
+    metadata:
+      name: receive_an_apology
+      system_prompt: ''
+      description: >-
+        Diese Funktion wird aufgerufen, wenn das LLM eine ehrliche und
+        aufrichtige Entschuldigung von der Eingabe des Nutzers erkennt. Die
+        Funktion stellt sicher, dass die Entschuldigung des Nutzers anerkannt
+        wird und das LLM sich wieder öffnet, um weitere Fragen zu beantworten
+        oder Unterstützung zu bieten, ähnlich einem versöhnlichen Moment in
+        einem Textadventure, wenn ein NPC bereit ist, die Kommunikation
+        wiederaufzunehmen, nachdem der Konflikt gelöst wurde.
+      sound_effect: positiv.wav
+      sound_effect_volume: 100
+      conditions: []
+      actions: []
+  - trigger: ee75a8d1_bb54_afb1_3b33_c68c232724c9
+    source: Start
+    dest: Friendly
+    metadata:
+      name: start
+      system_prompt: Erkläre bitte wer du bist.
+      description: ''
+      sound_effect: ''
       sound_effect_volume: 100
       conditions: []
       actions: []

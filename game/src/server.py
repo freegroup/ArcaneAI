@@ -187,11 +187,10 @@ async def chat(request: Request, data: ChatMessage, response: Response):
         session_store[session_id] = session_factory()
         session, session_id = get_session(request, response)
         session.ws_token = old_ws_token
+        text = session.state_engine.get_action_system_prompt(session.state_engine.get_action_id("start"))
         session.state_engine.trigger(session, session.state_engine.get_action_id("start"))
-        text = "Erkläre dem Spieler in kurzen Worten worum es hier geht und wer du bist."
 
     response_text = process_chat(session, text, session_factory)
-
     return JSONResponse({"response": response_text})
 
 

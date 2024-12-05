@@ -62,9 +62,10 @@ if __name__ == '__main__':
 
     # Start the game for this new session
     #
+    initial_dialog = session.state_engine.get_action_system_prompt(session.state_engine.get_action_id("start"))
     session.state_engine.trigger(session, session.state_engine.get_action_id("start"))
-    process_chat(session, "Hei hallo, was treibst du hier? Du gammelst hier vor der Tür herrum? Du siehst ja ganz schön - nun ja - vergammel aus.", session_factory)
-    
+    process_chat(session, initial_dialog, session_factory)
+   
     try:
         for text in session.stt.start_recording():
             if stop_requested:
