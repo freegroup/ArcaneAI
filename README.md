@@ -4,7 +4,7 @@ Because without 'AI' in the name, no one would venture into our dungeon of click
  
  
  
-**Read the [Documentation](https://freegroup.github.io/ArcaneAI/solutions)**
+**Read the [Documentation](https://freegroup.github.io/ArcaneAI)**
 
 
 
