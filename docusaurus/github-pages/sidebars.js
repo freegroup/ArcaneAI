@@ -40,6 +40,7 @@ module.exports = {
       items: [
         'setup/prerequisites',
         'setup/console',
+        'setup/browser',
       ],
     },
   ],
