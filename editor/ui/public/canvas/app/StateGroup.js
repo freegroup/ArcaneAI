@@ -1,6 +1,6 @@
 StateGroup = draw2d.shape.composite.Raft.extend({
 
-    NAME : "Raft",
+    NAME : "StateGroup",
 
     init : function(attr, setter, getter)
     {

@@ -1,8 +1,10 @@
 import openai
 from openai import OpenAI
 import json
+import sys
 
 import tiktoken
+import os
 from logger_setup import logger
 
 from llm.base import BaseLLM
@@ -23,13 +25,11 @@ def make_serializable(obj):
 
 
 # Definition der Klasse OpenAILLM, die von BaseLLM erbt
-class OllamaLLM(BaseLLM):
+class DeepSeekLLM(BaseLLM):
     def __init__(self):
         super().__init__()
-        
-        #self.model = "llama3:8b"
-        #self.model = "deepseek-r1:32b"
-        self.model = "qwen3:30b"
+        #self.model = "deepseek-chat"
+        self.model = "deepseek-reasoner"
 
         self.history = []
         self.max_tokens = 2048
@@ -40,12 +40,16 @@ class OllamaLLM(BaseLLM):
         self.top_p = 0.95
         self.token_limit = 4000 
         self.tokenizer = tiktoken.get_encoding("cl100k_base")
-
-        self.api_key = "schnuffel"
+        
+        self.api_key = os.getenv("DEEPSEEK_API_KEY")
+        if not self.api_key:
+            logger.fatal("API key for DeepSeek not found in environment variables.")
+            sys.exit(1)
+     
         self.client = OpenAI(
-            base_url = 'http://localhost:11434/v1',
-            api_key=self.api_key
-        )
+            api_key=self.api_key,
+            base_url = "https://api.deepseek.com/v1"
+            )
 
 
     def dump(self):
@@ -72,10 +76,11 @@ class OllamaLLM(BaseLLM):
         response = self._call_openai_model(session, self.history)
         if (response["text"] is None or response["text"].strip() == "") and response["action"]:
             response = self._response_for_action(session, response)
-
+        
         # strip off crap repeated phrases
         # I didn't manage this by using a good system prompt.
-        response["text"] =  response["text"].replace("Was möchtest du als nächstes tun?", "")
+        response["text"] =  response["text"].split("Was möchtest du ")[0]
+        response["text"] =  response["text"].split("Was sollen wir")[0]
 
         self._add_to_history("assistant", response["text"])
         return response
@@ -112,12 +117,13 @@ class OllamaLLM(BaseLLM):
                 max_tokens=self.max_tokens,
                 temperature=self.temperature,
                 top_p=self.top_p,
-                functions=functions,
+                functions=functions if len(functions)>0 else None,
             )
             return self._process_response(response)
         except openai.OpenAIError as e:
             logger.error(f"Error: {e}")
             return {"text": "I'm sorry, there was an issue processing your request.", "expressions": [], "action": None}
+
 
     def _define_action_functions(self, session):
         return [
@@ -131,8 +137,8 @@ class OllamaLLM(BaseLLM):
 
     def _possible_actions_instruction(self, session):
         possible_actions = session.state_engine.get_possible_action_names()
-        possible_actions_str = ', '.join(f'"{action}"' for action in possible_actions)
-        return f"Benutze diese bereitgestellen Funktionen oder Tools um dem Benutzer zu helfen: [{possible_actions_str}]"
+        possible_actions_str = ', '.join(f"'{action}'" for action in possible_actions)
+        return f"Benutze diese bereitgestellen Funktionen oder Tols um dem Benutzer zu helfen: [{possible_actions_str}]"
 
 
     def _process_response(self, response):
@@ -175,6 +181,13 @@ class OllamaLLM(BaseLLM):
     def _trim_history(self):
         entry_limit = 8
         self.history = self.history[-entry_limit:]
+
+        #while self._count_tokens(self.history) > self.token_limit:
+        #    if len(self.history) > 1:
+        #        self.history.pop(0)
+        #    else:
+        #        break
+
 
     def _count_tokens(self, messages):
         return sum(len(self.tokenizer.encode(message["content"])) for message in messages)
