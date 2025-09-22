@@ -37,7 +37,7 @@ class OpenAiTTS(BaseTTS):
                             voice=self.voice,
                             model="tts-1"
                         ) as response:
-                            print(f"LLM: {text}")
+                            #print(f"LLM: {text}")
                             for chunk in response.iter_bytes(chunk_size=8192):
                                 if self.stop_event.is_set():
                                     break

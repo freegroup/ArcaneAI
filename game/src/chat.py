@@ -1,56 +1,34 @@
+# chat.py
 from typing import Callable
+from session import Session
 
-def process_chat(session, text, session_factory: Callable[[str], None]):
-    log_entry = {
+def process_chat(session: Session, text: str, session_factory: Callable[[], None] = None):
+    if not text:
+        return
+    
+    # 1. Rufe die gekapselte chat-Methode auf.
+    #    Die ganze Komplexität (History, Prompts) ist jetzt im LLM-Client verborgen.
+    response_dict = session.llm.chat(session, text)
+    
+    action_name = response_dict.get("action")
+    response_text = response_dict.get("text")
+
+    # 2. Wenn eine Aktion zurückkam, triggere die State Engine.
+    if action_name:
+        action_id = session.state_engine.get_action_id(action_name)
+        if action_id:
+            session.state_engine.trigger(session, action_id)
+            # Hinweis: Der Feedback-Text kommt jetzt direkt vom ersten LLM-Aufruf.
+            # Kein zweiter Aufruf mehr nötig.
+    
+    # 3. Sprich den finalen Text.
+    if response_text:
+        session.tts.speak(session, response_text)
+
+    # Dein alter HistoryLog kann weiterhin die finalen Ergebnisse aufzeichnen.
+    session.history_manager.append(session, {
         "question": text,
-        "statusBefore": session.state_engine.get_state()
-    }
-    response_text = "?"
-    action_name = None
-    try:
-        if text.lower() == "debug":
-            session.llm.dump()
-            return
-        if text.lower() == "reset":
-            session.llm.reset(session)
-            return
-        
-        if len(text)>0:
-            response = session.llm.chat(session,text)
-            action_name = response.get("action") 
-
-            # trigger the action, if the LLM found an action to trigger
-            #
-            if action_name:
-                action_id = session.state_engine.get_action_id(action_name)
-                done = session.state_engine.trigger(session, action_id)
-
-                if done:
-                    text = " ".join("""
-                    Die letze Aktion war erfolgreich. Wiederhole am besten die letze Chatbot (nicht system)  Antwort, 
-                    ohne zu erwähnen, dass du diese wiederholst. Beachte eventuell neue Erkenntnisse.
-                    Komme nicht auf die Idee neue Aktionen oder vorausschauend zu handeln. Lese nicht das system prompt vor.
-                    Fasse deine Antwort nicht als erzähler sondern als Gefährte der mit mir redet.
-                    Du stellts niemals eine Frage oder gibst Hinweise was man als nächstes tun soll....niemals.
-                    """.split())
-                    response = session.llm.chat(session, text)
-                else:
-                    text = " ".join("""
-                    Die letze Aktion hat leider nicht geklappt. Unten ist der Grund dafür. Schreibe den Benutzer 
-                    eine der Situation angepasste Antwort, so, dass die Gesamtstory und experience nicht kaputt geht. 
-                    Schreibe diese direkt raus und vermeide sowas wie 'Hier ist die Antort' oder so...
-                    Hier ist der Fehler den wir vom Sytem erhalten haben:
-                    """.split())+" "+session.state_engine.last_transition_error
-                    response = session.llm.chat(session, text)
-
-            response_text = response["text"]
-            session.status_manager.set(session, response["expressions"], session.state_engine.get_all_vars() )
-           
-            session.tts.speak(session, response_text)
-    finally:
-        log_entry["response"] = response_text
-        log_entry["statusAfter"] = session.state_engine.get_state()
-        log_entry["action"] = action_name
-        session.history_manager.append(session, log_entry)
-
-    return response_text
+        "response": response_text,
+        "action": action_name,
+        "statusAfter": session.state_engine.get_state()
+    })

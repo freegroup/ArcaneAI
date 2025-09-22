@@ -6,6 +6,7 @@ import tiktoken
 from logger_setup import logger
 
 from llm.base import BaseLLM
+from utils.text import sanitize_output_text
 
 def make_serializable(obj):
     """Convert an object to a form that is JSON serializable."""
@@ -25,14 +26,10 @@ def make_serializable(obj):
 class OllamaLLM(BaseLLM):
     def __init__(self):
         super().__init__()
-        # Facebook LLM model
-        self.model = "llama3:8b"
-
-        # A commercial-friendly small language model by NVIDIA optimized for roleplay, RAG QA, and function calling.
-        #self.model = "nemotron-mini"
-
-        # An open weights function calling model based on Llama 3, competitive with GPT-4o function calling capabilities.
-        #self.model = "firefunction-v2"
+        
+        #self.model = "llama3:8b"
+        #self.model = "deepseek-r1:32b"
+        self.model = "qwen3:30b"
 
         self.history = []
         self.max_tokens = 2048
@@ -43,6 +40,7 @@ class OllamaLLM(BaseLLM):
         self.top_p = 0.95
         self.token_limit = 4000 
         self.tokenizer = tiktoken.get_encoding("cl100k_base")
+
         self.api_key = "schnuffel"
         self.client = OpenAI(
             base_url = 'http://localhost:11434/v1',
@@ -65,6 +63,24 @@ class OllamaLLM(BaseLLM):
             logger.warning("No system instruction provided.")
 
 
+    def chat(self, session, user_input):
+        if not user_input:
+            return {"text": "No input provided.", "expressions": [], "action": None}
+        self._trim_history()
+        self._add_to_history("user", user_input)
+
+        response = self._call_openai_model(session, self.history)
+        if (response["text"] is None or response["text"].strip() == "") and response["action"]:
+            response = self._response_for_action(session, response)
+
+        # strip off crap repeated phrases
+        # I didn't manage this by using a good system prompt.
+        response["text"] =  response["text"].replace("Was möchtest du als nächstes tun?", "")
+
+        self._add_to_history("assistant", response["text"])
+        return response
+    
+
     def _add_to_history(self, role, message):
         if not message:
             logger.warning("No message provided.")
@@ -77,30 +93,19 @@ class OllamaLLM(BaseLLM):
         self.history.append({"role": role, "content": message})
 
 
-    def chat(self, session, user_input):
-        if not user_input:
-            return {"text": "No input provided.", "expressions": [], "action": None}
-        self._add_to_history("user", user_input)
-        self._trim_history()
-
-        response = self._call_openai_model(session)
-        if (response["text"] is None or response["text"].strip() == "") and response["action"]:
-            response = self._retry_for_text(session, response)
-        response["text"] =  response["text"].replace("Was möchtest du als nächstes tun?", "")
-
-        self._add_to_history("assistant", response["text"])
-        return response
-    
-
-    def _call_openai_model(self, session):
+    def _call_openai_model(self, session, history):
         combined_history = [
             {"role": "system", "content": session.state_engine.get_global_system_prompt()},
-            {"role": "system", "content": self._possible_actions_instruction(session)}
-        ] + self.history
+            {"role": "system", "content": session.state_engine.get_state_system_prompt()},
+            {"role": "system", "content": self._possible_actions_instruction(session)},
+        ] + history
 
         functions = self._define_action_functions(session)
+        logger.debug(json.dumps([ func["name"] for func in functions], indent=4))
 
         try:
+            logger.debug(json.dumps(combined_history, indent=4))
+
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=combined_history,
@@ -127,7 +132,7 @@ class OllamaLLM(BaseLLM):
     def _possible_actions_instruction(self, session):
         possible_actions = session.state_engine.get_possible_action_names()
         possible_actions_str = ', '.join(f'"{action}"' for action in possible_actions)
-        return f"Available actions: [{possible_actions_str}]"
+        return f"Benutze diese bereitgestellen Funktionen oder Tools um dem Benutzer zu helfen: [{possible_actions_str}]"
 
 
     def _process_response(self, response):
@@ -137,38 +142,39 @@ class OllamaLLM(BaseLLM):
             if choice.function_call:
                 action = choice.function_call.name
             elif choice.content:
-                text = choice.content
+                text = sanitize_output_text(choice.content)
         return {"text": text, "expressions":[], "action": action}
 
 
-    def _retry_for_text(self, session, initial_response):
-        action = initial_response["action"]
-        if action in session.state_engine.get_possible_action_names():
-            # Instruct the model to respond as if the action was successful
-            self.system(f"""
-                Respond as if the action '{action}' was executed successfully. 
+    def _response_for_action(self, session, initial_response):
+        action_name = initial_response["action"]
+        history = self.history.copy()
+        if action_name in session.state_engine.get_possible_action_names():
+            action_id = session.state_engine.get_action_id(action_name)
+            # temp. add this to the history. but we do not want pollute the history with 
+            # That kind of instructions
+            history.append({"role": "system", "content": session.state_engine.get_action_system_prompt(action_id)})
+            history.append({"role": "system", "content": f"""
+                Respond as if the action '{action_name}' was executed successfully. 
                 Do not reveal any internal details to the user.
-            """)
+            """})
         else:
             # If the action is not valid, we clear it to avoid returning an incorrect action
-            action = None
+            action_name = None
 
         # Retry without requesting a function call, focusing on obtaining a text response
-        second_response = self._call_openai_model(session)
+        second_response = self._call_openai_model(session, history)
 
         # Preserve the original action and update only the text
         initial_response["text"] = second_response["text"]
-        initial_response["action"] = action  # Ensure the action from the first response is kept
+        initial_response["action"] = action_name  # Ensure the action from the first response is kept
 
         return initial_response
 
 
     def _trim_history(self):
-        while self._count_tokens(self.history) > self.token_limit:
-            if len(self.history) > 1:
-                self.history.pop(0)
-            else:
-                break
+        entry_limit = 8
+        self.history = self.history[-entry_limit:]
 
     def _count_tokens(self, messages):
         return sum(len(self.tokenizer.encode(message["content"])) for message in messages)

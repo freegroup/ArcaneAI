@@ -8,6 +8,7 @@ import os
 from logger_setup import logger
 
 from llm.base import BaseLLM
+from utils.text import sanitize_output_text
 
 def make_serializable(obj):
     """Convert an object to a form that is JSON serializable."""
@@ -136,7 +137,7 @@ class OpenAILLM(BaseLLM):
     def _possible_actions_instruction(self, session):
         possible_actions = session.state_engine.get_possible_action_names()
         possible_actions_str = ', '.join(f"'{action}'" for action in possible_actions)
-        return f"Benutze diese bereitgestellen Funktionen oder Tols um dem Benutzer zu helfen: [{possible_actions_str}]"
+        return f"Benutze diese bereitgestellen Funktionen oder Tools um dem Benutzer zu helfen: [{possible_actions_str}]"
 
 
     def _process_response(self, response):
@@ -146,7 +147,7 @@ class OpenAILLM(BaseLLM):
             if choice.function_call:
                 action = choice.function_call.name
             elif choice.content:
-                text = choice.content
+                text = sanitize_output_text(choice.content)
         return {"text": text, "expressions":[], "action": action}
 
 

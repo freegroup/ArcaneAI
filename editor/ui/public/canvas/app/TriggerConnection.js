@@ -115,7 +115,6 @@ var TriggerConnection= draw2d.Connection.extend({
                 "delete": {name: "Delete"}
             }
         });
-
     },
 
      /**
