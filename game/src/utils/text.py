@@ -1,6 +1,8 @@
 import re
 import json
 
+import json
+
 def remove_emojis(text):
     # Emoji-Regex-Pattern basierend auf Unicode-Ranges
     emoji_pattern = re.compile(
@@ -60,7 +62,7 @@ def extract_json_text_from_raw_text(raw_content):
         return cleaned_content
     except json.JSONDecodeError as e:
         print(f"Erster Parsing-Versuch fehlgeschlagen: {e}")
-        print(f"Rohdaten: {raw_content}")
+        print(f"Rohdaten: ===========================================================\n{raw_content}\n==============================================================")
 
         # Zweiter Versuch: Ungültige Zeichen entfernen
         try:

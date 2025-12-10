@@ -4,127 +4,164 @@ from pydantic import BaseModel, Field, ValidationError
 from typing import Literal, Union, List, Annotated
 import json
 import re
-
+from logger_setup import logger
+from utils.text import extract_json_text_from_raw_text
 
 # --- Pydantic-Modelle definieren den Vertrag ---
+class Aktion(BaseModel):
+    decision_type:  Literal["action"] 
+    name: str
+    execution_text: str
+
+def make_action_model(valid_actions: list[str]):
+    class DynamicAktion(Aktion):
+        decision_type:  Literal["action"] 
+        name: str
+        execution_text: str
+
+        @classmethod
+        def validate_action(cls, name: str):
+            if name not in valid_actions:
+                raise ValueError(f"Ungültige Aktion: {name}. Erlaubt: {valid_actions}")
+            return name
+
+        # Pydantic v2: Validator mit Decorator
+        @classmethod
+        def model_validate(cls, data):
+            obj = super().model_validate(data)
+            cls.validate_action(obj.name)
+            return obj
+
+    return DynamicAktion
 
 
-def extract_json_from_text(text: str) -> str:
-    """Extrahiert JSON aus Text, auch wenn es in Code-Blöcken oder normalem Text versteckt ist."""
-    text = text.strip()
-    
-    # Entferne Code-Block Marker
-    if text.startswith('```json'):
-        text = text[7:]
-    elif text.startswith('```'):
-        text = text[3:]
-    if text.endswith('```'):
-        text = text[:-3]
-    
-    text = text.strip()
-    
-    # Suche nach JSON-Objekten mit regex
-    json_pattern = r'\{.*?\}'
-    matches = re.findall(json_pattern, text, re.DOTALL)
-    
-    if matches:
-        # Nimm das erste vollständige JSON-Objekt
-        return matches[0]
-    
-    return text
+class Konversation(BaseModel):
+    decision_type: Literal["conversation"]
+    content: str
 
-# --- Die vollständige, korrigierte LLM-Client-Klasse ---
+class HilfeAnfordern(BaseModel):
+    decision_type: Literal["help"]
+
+
+
 class InstructorLLM:
     def __init__(self):
         self.model_name = "DeepSeek-Coder-V2-Lite-Instruct-Q8_0"
         self.history = []
-        self.client = instructor.patch(
-            OpenAI(base_url="http://localhost:1337/v1", api_key="any"),
-            mode=instructor.Mode.TOOLS,
-        )
+        self.client = OpenAI(base_url="http://localhost:1337/v1", api_key="any")
+
 
     def reset(self, session):
         self.history = []
-        initial_prompt = session.state_engine.get_action_system_prompt(session.state_engine.get_action_id("start"))
-        if initial_prompt:
-             self.history.append({"role": "assistant", "content": initial_prompt})
+
 
     def system(self, system_instruction: str):
-        """Fügt eine temporäre System-Nachricht für den NÄCHSTEN Aufruf hinzu."""
         if system_instruction:
             self.history.append({"role": "system", "content": system_instruction})
 
+
     def chat(self, session, user_input: str) -> dict:
-        self.history.append({"role": "user", "content": user_input})
+        if not user_input:
+            return {"text": "No input provided.", "expressions": [], "action": None}
+        self._trim_history()
+        self._add_to_history("user", user_input)
 
-        system_prompt = session.state_engine.get_global_system_prompt()
-        
-        # Sammle alle temporären und permanenten Nachrichten
-        temp_system_messages = [msg for msg in self.history if msg["role"] == "system"]
-        user_assistant_history = [msg for msg in self.history if msg["role"] in ["user", "assistant"]]
-        messages = [{"role": "system", "content": system_prompt}] + temp_system_messages + user_assistant_history
+        combined_history = [
+            {"role": "system", "content": session.state_engine.get_global_system_prompt()},
+            {"role": "system", "content": session.state_engine.get_state_system_prompt()},
+            {"role": "system", "content": self._possible_actions_instruction(session)},
+        ] + self.history
+        for entry in combined_history:
+            print(entry["role"])
+            print(entry["content"])
+            print("------------------------------------------------------------------------")
+        print("=========================================================================")
+        response =  self.client.chat.completions.create(
+            model=self.model_name,
+            messages=combined_history,
+            temperature=0.1,
+            max_tokens=2000)
+        raw_content = response.choices[0].message.content
+        self._add_to_history(role="assistant", message=raw_content)
+        # Extrahiere JSON
+        json_str = extract_json_text_from_raw_text(raw_content)
+        #print(f"🔍 Extracted JSON: {json_str}")
 
-        possible_actions_ids = session.state_engine.get_possible_action_ids()
-        valid_action_names = [session.state_engine.get_action_name(id) for id in possible_actions_ids]
-
-        entscheidung = self._get_decision(messages, valid_action_names)
-        
-        # Entferne temporäre System-Nachrichten nach dem Aufruf, um die History sauber zu halten
-        self.history = [msg for msg in self.history if msg["role"] != "system"]
-        
-        return self._process_entscheidung(session, entscheidung)
-
-    def _get_decision(self, messages: List, valid_actions: List[str]) -> Entscheidung:
-        """Private Methode, die den eigentlichen, robusten instructor-Aufruf macht."""
-        if not valid_actions:
-            valid_actions = ["keine_aktion_moeglich"] # Fallback, falls keine Aktionen verfügbar sind
-            
-        # Pydantic's korrekter Weg, um ein Feld in einem bestehenden Modell dynamisch zu ändern
-        AktionDynamisch = type(
-            "AktionDynamisch",
-            (Aktion,),
-            {"__annotations__": {"name": Literal[*valid_actions]}}
-        )
-
-        EntscheidungDynamisch = Annotated[
-            Union[AktionDynamisch, Konversation, HilfeAnfordern],
-            Field(discriminator="entscheidungstyp")
-        ]
+        # Parse JSON
         try:
-            return self.client.chat.completions.create(
-                model=self.model_name,
-                messages=messages,
-                response_model=EntscheidungDynamisch,
-                max_retries=2,
-            )
+            json_data = json.loads(json_str)
+    
+            # Validiere mit Pydantic
+            if json_data.get("decision_type") == "action":
+                try:
+                    possible_actions_ids = session.state_engine.get_possible_action_ids()
+                    valid_action_names = [session.state_engine.get_action_name(id) for id in possible_actions_ids]
+                    DynAction = make_action_model(valid_action_names)
+                    action = DynAction(**json_data)
+                    return {"text": action.execution_text, "action": action.name}
+                except ValidationError as ve:
+                    # LLM hat eine ungültige Aktion erfunden
+                    #invalid_action = json_data.get("name", "unbekannt")
+                    return {"text": "Nicht verstanden", "action": None}
+            elif json_data.get("decision_type") == "conversation":
+                return {"text": json_data["content"], "action": None}
+            else:
+                raise ValueError(f"Unbekannter decision_type: {json_data.get('decision_type')}")
         except Exception as e:
-            print(f"!! Kritischer Fehler im LLM-Aufruf: {e}")
-            return Konversation(entscheidungstyp="konversation", inhalt="Mein Verstand ist gerade Matsch.")
+            print(e)
+            return {"text": json_str, "action": None}
 
-    def _process_entscheidung(self, session, entscheidung: Entscheidung) -> dict:
-        """
-        Übersetzt das Pydantic-Objekt in das erwartete Dictionary und aktualisiert die History.
-        """
-        assistant_message = ""
-        action_name = None
+    def _add_to_history(self, role, message):
+        if not message:
+            logger.warning("No message provided.")
+            return
+        
+        if self.history and self.history[-1]["role"] == role and self.history[-1]["content"] == message:
+            logger.error("Duplicate message detected; not adding to history.")
+            return
+        
+        self.history.append({"role": role, "content": message})
 
-        if isinstance(entscheidung, Aktion):
-            action_name = entscheidung.name
-            assistant_message = entscheidung.ausfuehrungstext
-        elif isinstance(entscheidung, Konversation):
-            assistant_message = entscheidung.inhalt
-        elif isinstance(entscheidung, HilfeAnfordern):
-            actions_with_desc = {
-                session.state_engine.get_action_name(id): session.state_engine.get_action_description(id)
-                for id in session.state_engine.get_possible_action_ids()
-            }
-            assistant_message = self._generate_hint(actions_with_desc)
+
+    def _possible_actions_instruction(self, session):
+        action_str = chr(10).join( [
+            f"- {session.state_engine.get_action_name(action)}: {session.state_engine.get_action_description(action)}"
+            for action in session.state_engine.get_possible_action_ids()
+        ])
+        return f"""
+Benutze diese bereitgestellen Funktionen oder Tools um dem Benutzer zu helfen: 
+{action_str}
         
-        # Füge die finale Antwort des Assistenten zur internen History hinzu
-        self.history.append({"role": "assistant", "content": assistant_message})
-        
-        # Gib das Dictionary im alten, kompatiblen Format zurück
-        return {"text": assistant_message, "action": action_name}
+**Regeln für dein Verhalten**
+
+WICHTIG: Du MUSST immer mit einem JSON-Objekt antworten! Kein normaler Text!
+
+STRIKTE REGELN:
+- Erfinde KEINE Geschichten, Missionen, Ziele oder Hintergründe
+- Erfinde KEINE Personen, Orte, Kinder, Dörfer oder sonstige Details
+- Erwähne NUR was in der aktuellen Situation existiert
+- Bei Fragen antworte nur basierend auf dem was du SIEHST
+- Wenn du etwas nicht weißt: "Weiß ich nicht" oder "Kann ich nicht sagen"
+
+Regeln:
+1. Wenn die Anweisung des Benutzers einer der obigen Aktionen entspricht, antworte mit: 
+   {{"decision_type": "action", "name": "AKTIONSNAME", "execution_text": "Ein kurzer Satz im Charakter, der die Ausführung bestätigt."}}
+   Beispiel: {{"decision_type": "action", "name": "nehme_stock", "execution_text": "Na gut, ich heb den knorrigen Stock auf."}}
+
+2. Für normale Begrüßungen oder Smalltalk: {{"decision_type": "conversation", "content": "Kurze Antwort im Charakter - OHNE erfundene Details"}}
+
+3. NUR wenn explizit nach Hilfe/Optionen gefragt wird: {{"decision_type": "help"}}
+
+4. Für alle anderen Fragen: {{"decision_type": "conversation", "content": "Antwort basierend NUR auf dem was du siehst"}}
+
+Beispiele:
+- {{"decision_type": "conversation", "content": "Weiß ich auch nicht. Ich seh nur ein altes Haus, ein Fenster, einen Briefkasten und einen Stock."}}
+- {{"decision_type": "conversation", "content": "Keine Ahnung. Ich steh nur hier rum."}}
+
+ERFINDE NIEMALS GESCHICHTEN, ZIELE ODER DETAILS DIE NICHT EXPLIZIT VORGEGEBEN SIND!
+ANTWORTE NUR MIT JSON, NIEMALS MIT NORMALEM TEXT!
+    """
+
 
     def _generate_hint(self, current_actions_with_desc: dict) -> str:
         """Private Methode zur Generierung von Hinweisen."""
@@ -137,3 +174,8 @@ class InstructorLLM:
             messages=[{"role": "user", "content": hint_prompt}]
         )
         return response.choices[0].message.content
+
+
+    def _trim_history(self):
+        entry_limit = 8
+        self.history = self.history[-entry_limit:]

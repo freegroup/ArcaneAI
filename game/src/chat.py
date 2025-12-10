@@ -18,9 +18,8 @@ def process_chat(session: Session, text: str, session_factory: Callable[[], None
         action_id = session.state_engine.get_action_id(action_name)
         if action_id:
             session.state_engine.trigger(session, action_id)
-            # Hinweis: Der Feedback-Text kommt jetzt direkt vom ersten LLM-Aufruf.
-            # Kein zweiter Aufruf mehr nötig.
-    
+
+
     # 3. Sprich den finalen Text.
     if response_text:
         session.tts.speak(session, response_text)
