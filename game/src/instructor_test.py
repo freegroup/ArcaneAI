@@ -74,11 +74,6 @@ CHAT_HISTORY = [
 base_client = OpenAI(base_url="http://localhost:1337/v1", api_key="any")
 model_name = "DeepSeek-Coder-V2-Lite-Instruct-Q8_0"
 
-# instructor nur für Validierung verwenden
-instructor_client = instructor.from_openai(base_client, mode=instructor.Mode.TOOLS)
-
-# --- 2. Pydantic-Modelle ---
-
 
 class Aktion(BaseModel):
     entscheidungstyp: str = Field("aktion", const=True)

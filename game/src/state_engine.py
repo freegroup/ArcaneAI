@@ -207,6 +207,9 @@ class StateEngine:
         state_type = state_meta.get("state_type", "normal")
 
         prompt = self.fsm_config["metadata"][f"{state_type}_prompt"]
+        print("======================")
+        print(prompt)
+        print("======================")
         template = Template(prompt)
         return template.render(self.get_all_vars())
 
