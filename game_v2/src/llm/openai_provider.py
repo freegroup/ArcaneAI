@@ -11,14 +11,6 @@ class OpenAIProvider(BaseLLMProvider):
     OpenAI provider for GPT models.
     """
     
-    AVAILABLE_MODELS = [
-        "gpt-4",
-        "gpt-4-turbo",
-        "gpt-4-turbo-preview",
-        "gpt-3.5-turbo",
-        "gpt-3.5-turbo-16k"
-    ]
-    
     BASE_URL = "https://api.openai.com/v1"
     
     def __init__(self, api_key: str, model: str, temperature: float = 0.1, max_tokens: int = 2000):
@@ -85,26 +77,9 @@ class OpenAIProvider(BaseLLMProvider):
         if not self.api_key.startswith("sk-"):
             raise ValueError("Invalid OpenAI API key format")
         
-        if self.model not in self.AVAILABLE_MODELS:
-            raise ValueError(
-                f"Invalid OpenAI model: {self.model}. "
-                f"Available models: {', '.join(self.AVAILABLE_MODELS)}"
-            )
-        
         if not 0.0 <= self.temperature <= 2.0:
             raise ValueError("Temperature must be between 0.0 and 2.0")
         
         if self.max_tokens <= 0:
             raise ValueError("max_tokens must be positive")
     
-    def get_provider_name(self) -> str:
-        """Return provider name."""
-        return "openai"
-    
-    def supports_streaming(self) -> bool:
-        """OpenAI supports streaming."""
-        return True
-    
-    def get_available_models(self) -> List[str]:
-        """Return list of available OpenAI models."""
-        return self.AVAILABLE_MODELS.copy()

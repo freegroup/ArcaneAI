@@ -11,6 +11,7 @@ sys.path.insert(0, str(Path(__file__).parent / "src"))
 from llm import LLMFactory
 from state_engine import StateEngine
 from game_controller import GameController
+from session import GameSession
 
 
 def main():
@@ -34,6 +35,9 @@ def main():
         # Create game controller
         controller = GameController(state_engine, llm_factory)
         
+        # Create single session for console mode
+        session = GameSession("console", controller)
+        
         print("Spiel bereit!")
         print()
         
@@ -42,7 +46,7 @@ def main():
         return
     
     # Start game
-    initial_desc = controller.start_game()
+    initial_desc = session.start_game()
     print(initial_desc)
     print()
     print("(Tippe 'quit' zum Beenden, 'help' für Hilfe)")
@@ -63,21 +67,27 @@ def main():
                 break
             
             if user_input.lower() == 'help':
-                print("\nVerfügbare Aktionen:")
-                print(controller.get_available_actions())
-                print(f"\nAktueller State: {controller.get_current_state()}")
+                print("\nVerfügbare Befehle:")
+                print("- quit: Spiel beenden")
+                print("- state: Aktuellen State anzeigen")
+                print("- inventory: Inventar anzeigen")
+                print("- help: Diese Hilfe anzeigen")
                 print()
                 continue
             
             if user_input.lower() == 'state':
-                print(f"\nAktueller State: {controller.get_current_state()}")
-                print(state_engine.get_current_state_description())
+                print(f"\nAktueller State: {session.get_current_state()}")
+                print(session.game_controller.state_engine.get_current_state_description())
                 print()
+                continue
+            
+            if user_input.lower() == 'inventory':
+                print(f"\nInventar: {session.inventory if session.inventory else 'Leer'}\n")
                 continue
             
             # Process input through LLM
             print()
-            response = controller.process_input(user_input)
+            response = session.process_input(user_input)
             print(response)
             print()
             

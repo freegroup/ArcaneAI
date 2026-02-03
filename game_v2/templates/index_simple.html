@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Adventure Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link href="./assets/main.css" rel="stylesheet"/>
+    <link href="./assets/bubbles.css" rel="stylesheet"/>
+</head>
+<body>
+
+<div id="welcome-container">
+    <div class="background-image"></div>
+    <div class="welcome-text">
+        <div>
+            Ein mysteriöser Fluch hält dich hier gefangen – dieser düstere Dungeon ist 
+            das Einzige, was zwischen dir und deinem wohlverdienten, kalten Bier steht! 
+            Nur ein Weg führt zur Freiheit: das sagenumwobene Goldene Ei finden und den 
+            Bann brechen.
+        </div>
+        <div>
+            Aber keine Sorge, du musst dich nicht selbst in Gefahr begeben! Ein treuer 
+            Gefährte steht dir zur Seite und erledigt jede Herausforderung, die euch 
+            begegnet. Gib ihm einfach klare Anweisungen – wie „Untersuche das Haus 
+            mal genauer" oder „Schau dir den Baum an" – und er wird alles für dich erledigen.
+        </div>
+        <div>
+            Bist du bereit? Drücke auf „Start" und tauche ein in die Welt des Dungeon Escape!
+        </div>
+    </div>
+    <button id="startButton" onclick="startGame()">Start Game</button>
+</div>
+
+<div id="game-container">
+    <div class="background-image"></div>
+    <div id="game-status-container">
+        <div>Deine Position:</div> 
+        <div id="game-status-value"></div>
+    </div>
+    <div class="chat-container" id="chatContainer"></div>
+
+    <div class="input-area" id="inputArea">
+        <input type="text" id="question" placeholder="Type a message..." onkeypress="handleKeyPress(event)">
+    </div>
+</div>
+
+<script>
+    const welcomeContainer = document.getElementById("welcome-container");
+    const gameContainer = document.getElementById("game-container");
+    const chatContainer = document.getElementById("chatContainer");
+    const inputArea = document.getElementById("inputArea");
+    const questionInput = document.getElementById("question");
+    const gameStatus = document.getElementById("game-status-value");
+
+    let typingIndicator = null;
+
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            sendQuestion();
+        }
+    }
+
+    async function startGame() {
+        try {
+            toggleChatUI(true);
+            showTypingIndicator();
+            
+            const response = await fetch("{{ BASE_URI }}/api/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({ text: "start" })
+            });
+
+            const data = await response.json();
+            removeTypingIndicator();
+            addMessage(data.response, "bot");
+            updateGameStatus(data.state);
+            questionInput.focus();
+        } catch (error) {
+            console.error("Error starting game:", error);
+            removeTypingIndicator();
+            addMessage("Error starting game.", "bot");
+        }
+    }
+
+    async function sendQuestion() {
+        const userMessage = questionInput.value.trim();
+        questionInput.value = "";
+
+        if (userMessage) {
+            addMessage(userMessage, "user");
+            showTypingIndicator();
+
+            try {
+                const response = await fetch("{{ BASE_URI }}/api/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({ text: userMessage })
+                });
+
+                if (!response.ok) throw new Error(`Server error: ${response.status}`);
+
+                const data = await response.json();
+                removeTypingIndicator();
+                addMessage(data.response, "bot");
+                updateGameStatus(data.state);
+            } catch (error) {
+                console.error("Error:", error);
+                removeTypingIndicator();
+                addMessage("Error connecting to server.", "bot");
+            }
+        }
+    }
+
+    function showTypingIndicator() {
+        if (!typingIndicator) {
+            typingIndicator = document.createElement("div");
+            typingIndicator.classList.add("typing-indicator");
+
+            for (let i = 0; i < 3; i++) {
+                const dot = document.createElement("div");
+                dot.classList.add("dot");
+                typingIndicator.appendChild(dot);
+            }
+            chatContainer.insertBefore(typingIndicator, chatContainer.firstChild);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    }
+
+    function removeTypingIndicator() {
+        if (typingIndicator) {
+            chatContainer.removeChild(typingIndicator);
+            typingIndicator = null;
+        }
+    }
+
+    function addMessage(text, sender) {
+        const messageBubble = document.createElement("div");
+        messageBubble.classList.add("message", sender, "cbbl");
+        if(sender === "user"){
+            messageBubble.classList.add("-right");
+        }
+        messageBubble.textContent = text;
+        chatContainer.insertBefore(messageBubble, chatContainer.firstChild);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    function updateGameStatus(state) {
+        if (state) {
+            gameStatus.textContent = state;
+        }
+    }
+
+    function toggleChatUI(show) {
+        welcomeContainer.style.display = show ? "none" : "flex";
+        gameContainer.style.display = show ? "flex" : "none";
+        if (show) {
+            questionInput.focus();
+        }
+    }
+</script>
+
+</body>
+</html>

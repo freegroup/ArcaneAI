@@ -150,10 +150,6 @@ Wenn keine Aktion passt:
         try:
             response = self.llm_provider.chat(self.conversation_history)
             llm_text = response.content
-            
-            # Debug: Print raw LLM response
-            print(f"\n[DEBUG] LLM Response: {llm_text}\n")
-            
         except Exception as e:
             return f"Fehler beim LLM-Aufruf: {e}"
         
@@ -165,10 +161,6 @@ Wenn keine Aktion passt:
         # Extract action
         action_name = self._extract_action(llm_text)
         clean_response = self._clean_response(llm_text)
-        
-        # Debug: Print extracted values
-        print(f"[DEBUG] Extracted action: {action_name}")
-        print(f"[DEBUG] Clean response: {clean_response}\n")
         
         # Handle no action
         if action_name == "keine_aktion" or action_name is None:
@@ -187,7 +179,3 @@ Wenn keine Aktion passt:
     def get_current_state(self) -> str:
         """Get current state name."""
         return self.state_engine.get_current_state_name()
-    
-    def get_available_actions(self) -> str:
-        """Get formatted list of available actions."""
-        return self.state_engine.get_available_actions_description()

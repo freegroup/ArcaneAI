@@ -40,12 +40,15 @@ class StateEngine:
         self.definition_path = Path(definition_path)
         self.states: Dict[str, State] = {}
         self.actions: List[Action] = []
-        self.current_state: Optional[str] = None
         self.action_hook: Optional[Callable[[Action], bool]] = None
         self.identity: str = ""
         self.behaviour: str = ""
         
         self._load_definition()
+        
+        # Validate that we have an initial state
+        if not hasattr(self, 'current_state') or not self.current_state:
+            raise ValueError("No initial_state defined in game definition")
     
     def _load_definition(self):
         """Load game definition from JSON file."""
@@ -92,26 +95,20 @@ class StateEngine:
         """
         self.action_hook = hook
     
-    def get_current_state(self) -> Optional[State]:
+    def get_current_state(self) -> State:
         """Get the current state object."""
-        if self.current_state:
-            return self.states.get(self.current_state)
-        return None
+        return self.states[self.current_state]
     
     def get_current_state_name(self) -> str:
         """Get the name of the current state."""
-        return self.current_state or "Unknown"
+        return self.current_state
     
     def get_current_state_description(self) -> str:
         """Get the description of the current state."""
-        state = self.get_current_state()
-        return state.description if state else "Kein State aktiv."
+        return self.get_current_state().description
     
     def get_available_actions(self) -> List[Action]:
         """Get all actions available in the current state."""
-        if not self.current_state:
-            return []
-        
         return [
             action for action in self.actions
             if action.state_before == self.current_state
@@ -165,18 +162,3 @@ class StateEngine:
         
         return True, message
     
-    def get_available_action_names(self) -> List[str]:
-        """Get list of available action names in current state."""
-        return [action.name for action in self.get_available_actions()]
-    
-    def get_available_actions_description(self) -> str:
-        """Get a formatted string of available actions with descriptions."""
-        actions = self.get_available_actions()
-        if not actions:
-            return "Keine Aktionen verfügbar."
-        
-        lines = []
-        for action in actions:
-            lines.append(f"- {action.name}: {action.description}")
-        
-        return "\n".join(lines)

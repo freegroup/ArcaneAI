@@ -12,11 +12,6 @@ class DeepSeekProvider(BaseLLMProvider):
     DeepSeek provider using OpenAI-compatible API.
     """
     
-    AVAILABLE_MODELS = [
-        "deepseek-chat",
-        "deepseek-coder"
-    ]
-    
     BASE_URL = "https://api.deepseek.com/v1"
     
     def __init__(self, api_key: str, model: str, temperature: float = 0.1, max_tokens: int = 2000):
@@ -80,22 +75,9 @@ class DeepSeekProvider(BaseLLMProvider):
         if not self.api_key:
             raise ValueError("DeepSeek API key is required")
         
-        if self.model not in self.AVAILABLE_MODELS:
-            raise ValueError(
-                f"Invalid DeepSeek model: {self.model}. "
-                f"Available models: {', '.join(self.AVAILABLE_MODELS)}"
-            )
-        
         if not 0.0 <= self.temperature <= 2.0:
             raise ValueError("Temperature must be between 0.0 and 2.0")
         
         if self.max_tokens <= 0:
             raise ValueError("max_tokens must be positive")
     
-    def get_provider_name(self) -> str:
-        """Return provider name."""
-        return "deepseek"
-    
-    def get_available_models(self) -> List[str]:
-        """Return list of available DeepSeek models."""
-        return self.AVAILABLE_MODELS.copy()
