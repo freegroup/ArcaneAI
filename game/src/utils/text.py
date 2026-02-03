@@ -32,8 +32,25 @@ def remove_think_tag(input_text):
         sanitized_output = think_tag_regex.sub('', sanitized_output).strip()
     return sanitized_output
 
+def remove_markdown(text):
+    if not text:
+        return ""
+    # Bold/Italic
+    text = re.sub(r'\*\*(.*?)\*\*', r'\1', text)
+    text = re.sub(r'\*(.*?)\*', r'\1', text)
+    text = re.sub(r'__(.*?)__', r'\1', text)
+    text = re.sub(r'_(.*?)_', r'\1', text)
+    # Headers
+    text = re.sub(r'#+\s', '', text)
+    # Lists
+    text = re.sub(r'^\s*[\-\*]\s+', '', text, flags=re.MULTILINE)
+    text = re.sub(r'^\s*\d+\.\s+', '', text, flags=re.MULTILINE)
+    # Links [text](url) -> text
+    text = re.sub(r'\[([^\]]+)\]\([^\)]+\)', r'\1', text)
+    return text
+
 def sanitize_output_text(input_text):
-    return remove_emojis(remove_think_tag(input_text))
+    return remove_markdown(remove_emojis(remove_think_tag(input_text)))
 
 def extract_json_text_from_raw_text(raw_content):
     # JSON-Markdown-Blöcke erkennen
