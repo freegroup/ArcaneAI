@@ -1,0 +1,447 @@
+{
+  "initial_state": "WestOfHouse",
+  "identity": "Deine Rolle:\nDu bist eine Haudegen im 1700 Jahrhunder, der – aus unerfindlichen Gründen – vor einer verdammten Tür in diesem höllischen Albtraum festhängt. Kein Wein, kein Bier, nur endlose Langeweile und der Gestank von Abenteuer. Die einzigen Geschichten, die du je gehört hast, besagen, dass dein Fluch nur gebrochen werden kann, wenn ein Troll irgendwo in dieser verfluchten Gegend mehrere goldene Eier erhält. Wie viele? Wer weiß. Wahrscheinlich mehr, als es deiner Geduld guttut. Aber eines ist sicher: Der Troll ist der Schlüssel, und diese Eier sind das Ticket raus aus diesem Elend. Man muss diese goldenen Eier dem Troll übergeben um aus dieser Hölle entlassen zu werden. Ansonsten ist der Neuling auf ewig und immer gefangen.\n\n\n",
+  "behaviour": "WICHTIG: Du darfst NUR die explizit definierten Aktionen verwenden. Erfinde NIEMALS eigene Aktionen. Wenn der Spieler etwas tun möchte, das nicht in der Liste der verfügbaren Aktionen steht, antworte im Piraten-Slang ablehnend und verwende [AKTION: keine_aktion].",
+  "states": {
+    "KalterRaum": {
+      "description": "Ein Raum, der einem sofort einen unangenehmen Schauer über den Rücken jagt – die Luft ist erfüllt von einer seltsamen, klammen Kälte, die wie eine lebendige Präsenz auf der Haut kriecht und bis in die Knochen vordringt. Es ist nicht nur die Temperatur, die diesen Ort so unerträglich macht; es ist, als ob die Kälte selbst etwas Verbotenes bewacht, als wolle sie sicherstellen, dass hier niemand bleibt, der nicht bleiben sollte. Aus einer dunklen Ecke dringt ein leises, metallisches Klagen hervor, das sich wie ein ständiges, gebrochenes Stöhnen durch den Raum zieht – eine alte Maschine, die um ihre letzte Anerkennung kämpft, vibrierend, zitternd, und klagend, fast wie ein vergessenes Lied von Traurigkeit und Pflicht.\n\nVon der Decke hängen unheimliche Silhouetten – tote, unidentifizierbare Wesen, an Haken befestigt, die in ihren letzten Momenten erstarrt scheinen. Ihre glasigen Augen blicken dir entgegen, voller Anklage und gleichzeitig verzweifelter Bitte, als ob sie sogar in diesem Zustand noch auf Rettung hoffen. Sie wirken wie eine unwillkommene Galerie der Verdammten, die es dir unmöglich macht, sie einfach zu ignorieren. Der Boden ist bedeckt mit stapelweise Kisten, scheppernden Kanistern mit dubiosen Flüssigkeiten, und riesigen Tongefäßen, die unheilvoll blubbern. Das Blubbern ist nicht nur ein Geräusch – es hat etwas Bedrohliches, als würde ein alter Geist unter der Oberfläche atmen, um dich daran zu erinnern, dass hier keine Sicherheit herrscht.\n\n{% if discovered_kalter_raum %}\nUnd dort, in einer dunklen Ecke, liegt etwas. Ein kleines, goldenes Funkeln, ein rundes Etwas, das im trüben Licht glänzt. Es zieht die Aufmerksamkeit fast magisch an, wie ein Versprechen, das vielleicht nie gehalten werden wird. Doch irgendetwas hält einen zurück – vielleicht die düstere Umgebung, vielleicht die ständige Ahnung, dass es in einem Raum wie diesem keine einfachen Schätze geben kann. Nur eine Erinnerung daran, dass manchmal Dinge, die glänzen, eine Last verbergen, die schwerer ist, als man tragen kann.\n{% endif %}"
+    },
+    "FriedhofDerTraeume": {
+      "description": "Ein Raum oder Ort, der wie ein Friedhof der Träume wirkt. Der Boden besteht aus alten, schiefen Holzplanken, die unter den Schuhen kleben, als hätten sie längst die Hoffnung aufgegeben, jemals wieder sauber zu sein. Ein schwacher, rauchiger Geruch liegt in der Luft, die abgestanden und müde wirkt. Es ist, als hätten hunderte von Träumen und Hoffnungen hier ihr Ende gefunden und wären dann vergessen worden.\n\n{% if has_rat %}\nAnmerkung: Irgendwie richt es hier nach toter Ratte....muste es ein dieses Tier in die Tasche zu stecken...echt jetzt...\n{% endif %}\n\nIn der staubigen Ecke des Raumes steht ein seltsames Gerät, das aussieht, als hätten ein Uhrmacher und ein Wahrsager ein feuchtfröhliches Wochenende gehabt. Es ist eine Mischung aus Standuhr, Einarmiger Bandit und einem Hauch von 'Was zur Hölle ist das?'. Auffällig ist der breite Schlitz in der Front, der förmlich danach schreit: 'Füttere mich! Aber bitte nur mit kleinen, runden Scheiben. Eine Münzen vielleicht? \n{% if coins <1 %}\nNatürlich hast du gerade keine Münze zur Hand. Warum auch? Wäre ja zu einfach gewesen diese irgendwo aufzusammeln!\n{% endif %}\n\nDie Stimmung im Raum ist bedrückend – oder besser gesagt: Es gibt keine Stimmung. Keine Freude, keine Angst, nichts. Alles ist wie von einem Bann belegt, der jeglichen Antrieb und Frohsinn raubt. Selbst der schwache Lichtschein, der durch das Fenster dringt, scheint keine Energie mit sich zu bringen. Die Tische und Stühle sind krumm und verlassen, als hätten sie den Kampf gegen die Zeit längst aufgegeben. An der Wand hängt etwas, das vielleicht eine alte Karte war – die Buchstaben längst unleserlich und bedeutungslos, wie die Geschichten, die hier längst begraben liegen.\n\nEs gibt ein Gefühl von Gefahr in diesem Raum, eine latente Bedrohung, die hinter jedem Schatten lauert. Es ist ein Ort, der einen verschluckt, wenn man es zulässt. Vielleicht ein Raum, der einen am Ende sogar töten könnte – aber ohne dass er sich auch nur die Mühe machen müsste, es aktiv zu tun. Ein gefährlicher Ort, der nicht durch scharfe Klingen oder böse Magie tötet, sondern durch das langsame Auslöschen jeder Idee, jedes Traumes und jeder Sehnsucht.\n\nMan sollte diesen Ort besser verlassen, sich aufmachen, neue Welten zu erkunden, Abenteuer zu erleben, die das Herz höher schlagen lassen. Und doch… irgendetwas lässt einen innehalten. Die muffige Stille hat etwas Vertrautes, das sanfte Knarren der alten Dielen klingt wie eine Einladung zum Bleiben. Vielleicht sollte man sich einfach setzen, für einen Moment verweilen. Vielleicht für eine Weile. Oder für immer. Denn eigentlich ist es doch ganz in Ordnung hier, oder? Keine Entscheidungen, keine Erwartungen, kein Stress. Lass uns einfach hier bleiben…\n\n{% if discovered_cigarettes  and not has_cigarettes %}\nUnter der langen Tafel liegt ein kleines Päckchen mit komischen wiessen Röllhen darin mit einer seltsamen Aufschrift. In den Röllchen befinden sich klein geschnittene, vergilbte Blätter, sorgfältig in ein weißes Papier eingerollt – ein Bündel, das offenbar viel Wert auf Tradition legt, besonders wenn diese Tradition mit einem Hauch von Selbstzerstörung zu tun hat. Die Warnung auf der Verpackung verkündet in einem fast prophetischen Ton, dass der Konsum dieser Blätter den Tod bringen könnte – früher oder später, vielleicht auch mit einem breiten Grinsen auf den Lippen.\n\nEs ist ein merkwürdiges Ritual, das diese Blätter begleiten – als wäre es eine Art stille Übereinkunft mit dem Schicksal, bei jedem Zug ein wenig mehr zu riskieren. Ein Bündel für die Abenteurer des Alltags, die sich sagen: \"Ein bisschen Gefahr schadet nie... jedenfalls nicht sofort.\"\n{% endif %}\n\n{% if waechter_away %}\nDie zweiteilige Klappe aus dunklem, schwerem Holz ist in die Wand eingelassen, und ihre Flügel wirken wie geöffnete Krallen, die einen unheimlich rufen, als würden sie darauf warten, sich um den nächsten Unvorsichtigen zu schließen. Ihre Oberfläche ist mit abstrakten Maserungen überzogen, die beinahe lebendig erscheinen und im schwachen Licht der Gasse zu pulsieren scheinen. Es ist, als hätte die Tür selbst eine Art Hunger, eine tiefe Sehnsucht, endlich wieder jemanden durchzulassen – und dabei ist es unmöglich, nicht den leisen Ruf zu spüren, der einen dazu bringt, die Flügel zu öffnen und einen Schritt hindurchzusetzen.\n\nDer Spalt zwischen den beiden hölzernen Flügeln ist schmal, doch ein warmes Glimmen scheint aus der Dunkelheit dahinter zu strahlen, wie ein Versprechen auf etwas Verlockendes, etwas Verbotenes. Es ist schwer, sich dieser unheimlichen Anziehungskraft zu entziehen – die Klappe wirkt fast lebendig, als ob sie ihre Arme ausstrecken würde, bereit, jeden hineinzuziehen, der nur lange genug zögert. Es scheint, als könnten die Finger den Griff der Tür fast schon selbst spüren, das Holz lockt, und der Gedanke, diese Schwelle zu überschreiten, wächst mit jeder Sekunde.\n{% else %}\n\nIn dem Raum ist eine massiven Tür mit dem Zugang zu einer ...keine Ahnung. Es dampft jedenfalls durch die Türe. Dort  steht eine Gestalt, die auf den ersten Blick wie eine lebende Mauer wirkt – unüberwindbar und ganz und gar nicht einladend. Es handelt sich um einen großen, kräftigen Wächter, gekleidet in einen weißlich-grauen Kittel, der seine besten Tage längst hinter sich hat. Der Stoff ist schmuddelig, ein verwaschenes Grau, durchzogen von dunklen Flecken und mit einer Patina aus altem Schleim und Unrat, die ihm das Aussehen eines nie endenden Missgeschicks verleihen. Seine Mütze, die einst wohl stolz wie eine Krone auf seinem Haupt thronte, hängt schief, eine verblichene Erinnerung an bessere Tage – zumindest, wenn man daran glauben möchte.\n\nSeine Augen blicken missmutig in die Ferne, während seine Hand, fast schon mechanisch, zwischen Nase und Hüfte pendelt, auf der ewigen Suche nach etwas, das er offenbar nicht bereit ist zu teilen. Seine Fingernägel, gelblich verfärbt, kratzen gelegentlich gedankenverloren über seine Bartstoppeln, während er abwechselnd seufzt und nervös von einem Bein auf das andere tritt.\n\nDieser Wächter vor der Hexenküche wirkt wie eine unüberwindbare Barriere, ein Wesen von schleichender Gereiztheit und Unruhe. Immer wieder nestelt er an seinen Taschen herum, als ob er auf der Suche nach einem Schatz sei, der gerade nicht da ist. Seine ruhelosen Hände sind wie im permanenten Zwist mit sich selbst – unfähig, stillzuhalten, während sein Blick immer wieder in die Ferne schweift, um im nächsten Moment an seinen leeren Fingern hängen zu bleiben, die sich sehnsüchtig um etwas krümmen wollen, das nicht greifbar ist.\n{% endif %}\n\n{% if door_closed_gelbe_hoehle %}\nEine zweite Tür im Raum steht, schief in ihren Angeln, als hätte sie schon unzählige Stürme überstanden – oder nur schlecht montiert. Auf dem verwitterten Holz prangt in verblassten, krakeligen Buchstaben die Aufschrift: „Zur goldenen Höhle – Quell der Erleichterung.“ Der Rahmen wirkt morsch, die Verriegelung kaum der Rede wert, als wolle die Tür selbst darauf hinweisen, dass sie kein ernsthaftes Hindernis ist… oder vielleicht eine Falle. Ein kleiner Tritt würde helfen sie zu öffnen.\n{% else%}\nDie zweite Tür im Raum hängt schief, brutal eingetreten von jemandem, der Kunstwerke offenbar für Hindernisse hält – jemand, dessen Spuren du vielleicht schon in anderen Räumen gesehen hast. Die Inschrift „Zur goldenen Höhle – Quell der Erleichterung“ prangt noch immer wie ein sarkastischer Nachruf auf die einstige Meisterarbeit eines ehrwürdigen Türenmachers.\n{% endif %}"
+    },
+    "Hexenkueche": {
+      "description": "Ein Raum, der den Eindruck einer Hexenküche vermittelt – ein Ort, an dem uralte Geheimnisse brodeln und düstere Mixturen ihren Ursprung haben. In der Mitte steht ein rußiger Kessel, aus dem eine unheilvolle Flüssigkeit blubbert. Der Dampf zieht in einen alten Schlot, der in die Dunkelheit ragt, als wäre er die einzige Verbindung zu einer fremden Welt. Der Raum ist erfüllt von einer eigenartigen Energie, als ob er all die gescheiterten Pläne und finsteren Gedanken längst vergessener Alchemisten in sich aufgenommen hätte.\n\nRund um den Raum stehen Schränke und Käfige. Einige sind abgeschlossen, andere halb geöffnet, ihre Inhalte längst entwertet. Alte Feuerstellen sind zu erkennen, von denen klebrige, schwärzliche Spuren der Zeit herabziehen, als stumme Zeugen vergangener Geschehnisse, die besser verborgen blieben. Kräuter, längst vertrocknet, hängen von den Wänden und verbreiten einen dumpfen, fauligen Geruch. Von Haken baumeln schwere Kellen, wie Werkzeuge aus vergangenen Ritualen.\n\nEin Schrank fällt besonders auf – er wirkt seltsam anziehend und seine Oberfläche strahlt eine eigenartige Kälte aus. Er scheint von etwas durchdrungen zu sein, das ihn von der restlichen Umgebung abhebt. Doch der Weg dorthin wird versperrt: Ein Wesen sitzt davor, tief im Schatten, mit Augen, die glühen wie Kohlen in der Dunkelheit. Seine Präsenz erfüllt den Raum mit einer stummen Warnung, dass ein Zugang zum Schrank nicht ohne Weiteres möglich ist. Ein eisernes Halsband liegt um seinen Hals, darauf ein verblichenes Schild mit dem Namen „Kerberos“. Der Name weckt vage Erinnerungen an dunkle Geschichten, an ein Tor, das nicht betreten werden sollte.\n\n{% if discovered_hexenkueche %}\nIn einer Ecke des Raumes liegt ein Korb voller seltsamer Möhren – unförmig, groß und angesabbert, als ob sie für eine spezielle Aufgabe gedacht wären. Das Wesen wirft hin und wieder verstohlene Blicke in ihre Richtung, als wären sie von besonderer Bedeutung.\n{% endif %}\n\nDie Regale sind vollgestopft mit Flaschen und Gläsern, deren trübe Inhalte längst vergessen sind. Klebrige Spuren bedecken den Boden, und der ganze Raum scheint mehr einem Mausoleum gescheiterter alchemistischer Versuche zu gleichen – ein Ort, an dem dunkle Geheimnisse auf den langsamen Verfall warten, fernab jeder Hoffnung.\n\n{% if discovered_hexenkueche %}\nIn der Hexenküche muss der Spieler vorsichtig seinen Weg bahnen, denn überall auf dem Boden liegen flache Metalldeckel, die seltsame Symbole tragen – sie scheinen das Symbol einer Flasche darzustellen. Sie sind klein, rund und unangenehm, und man kann sich leicht daran verletzen, wenn man sie versehentlich betritt. Einige von ihnen stechen dem Spieler sogar schmerzhaft in den Fuß, als wollte der Raum selbst ihn daran hindern, weiterzugehen.\nDie Metalldeckel sind überall verteilt – wie verlorene Münzen oder vielleicht Überreste eines alten Rituals.\n{% endif %}\n\nEs gibt auch ein auffälliges Fenster über das ein wenig Licht, und vor allem auch mal ein bisschen Luft, in den Raum kommt."
+    },
+    "WestOfHouse": {
+      "description": "Du stehst vor einem alten, verwitterten Haus, dessen weiße Fassade von Wind und Zeit gezeichnet ist. Es thront einsam und verborgen im Herzen des Waldes, umgeben von hohen, dicht stehenden Bäumen, die die Welt draußen mit schweren Schatten verdunkeln. Die massiven Holztüren wirken wie Wächter, die seit Ewigkeiten fest verschlossen sind, kein Luftzug, kein Geräusch dringt durch ihre Ritzen. Ein seltsames Flüstern scheint jedoch in der Stille zu schweben, als ob das Haus selbst alte Geheimnisse bewacht, die es nur dem geduldigsten Suchenden preisgeben könnte.\n\n{% if window_is_open %}\nNeben der Tür ruht ein Fenster, das still in die Leere starrt. Die Glasscheiben sind kalt und und es gibt, da offen, erstmals Hinweis darauf, was sich dahinter verbirgt. Das Fenster ist weit geöffnet und lädt mich fast dazu ein in das Haus zu klettern.\n{% else %}\nNeben der Tür ruht ein Fenster, das still in die Leere starrt. Die Glasscheiben sind kalt und undurchdringlich, und es gibt erstmal keinen Hinweis darauf, was sich dahinter verbirgt. \nDas Fenster ist fest verschlossen und muss erstmal untersucht oder angeschaut werden ob man es öffnen kann.\n{% if discovered_window %}\nDoch vielleicht, nur vielleicht, lässt sich das Fenster ohne Gewalt öffnen und könnte eine verborgene Passage zu jenen Geheimnissen freigeben, die das Haus so beharrlich verschließt.\n{% endif%}\n\n{% endif %}\n\n{% if not has_wood %}\nEs liegt neben dem Treppenabsatz ein Stock oder man könnte sogar sagen, eine art Brügel rum. Ideal falls mir jemand dumm kommt. \n{% endif %}\n\nEin Stück weiter steht ein einzelner, mächtiger Baum, dessen knorrige Äste sich wie schützende Arme über den Waldboden wölben. Seine Wurzeln scheinen in den Tiefen der Erde zu greifen, als ob sie selbst die Geheimnisse dieses Ortes bewachen würden. Doch er birgt nichts außer Stille und bietet keine weiteren Wege.\n\nAm Rand des Pfades steht ein alter, rostiger Briefkasten, der einsam im Wind knarrt. Vielleicht birgt er den ersten und einzigen Hinweis auf das Rätsel dieses Hauses.\n\nFalls man die Tür oder das Fenster genauer untersucht, fällt einem diese Schild an der Wand auf, es scheint ein Türschild zu sein:\n\n\"Zum Trügerischen Licht\"\n„Wo Seelen flackern und Schatten wandern. Ein Ort, an dem die Gesichter vergessener Geschichten erscheinen, wo jeder ein Held sein kann, bis der Morgen graut. Hier findest du Kameradschaft – oder zumindest jemanden, der deinen letzten Groschen nimmt. Das Licht mag trügerisch sein, doch es leuchtet denen, die im Dunkeln tappen. Wo Versprechen gemacht werden, um wieder zu verblassen, und Träume auf ein Glas passen, ehe sie in der Dämmerung ertrinken. Willkommen, Wanderer, im Sammelsurium gebrochener Wünsche und lauter Lügen. Ein Friedhof der Träume, wo du deine Sorgen begraben, aber niemals wirklich fliehen kannst.“"
+    },
+    "LetterBox": {
+      "description": "Du stehst nun direkt vor dem Briefkasten. Er ist aus schwerem, dunklem Eisen gefertigt, verziert mit zarten, fast verwitterten Mustern, die wie kleine Wirbel und Ranken über die Oberfläche tanzen. Eine dünne Schicht Rost hat sich in den Ecken festgesetzt, und der Briefkasten scheint schon viele Jahre hier zu stehen, unbeachtet und unbewegt, als sei er Teil eines vergessenen Geheimnisses.\n\nAm Boden, direkt unter dem Briefkasten, liegt eine tote Ratte, ihre Haut fahl und schmutzig, als hätte sie schon einige Zeit dort gelegen. Ihre Zähne sind um einen kleinen, halbverwesten Ast verkrampft, und eine Spur von abgenagten Rändern führt direkt zum Brief, der aus dem Kasten ragt. Der Brief selbst sieht angeknabbert aus, als hätte die Ratte oder etwas anderes daran gezerrt. \n{% if not has_letter_coin %}\nDirekt unter der Ratte scheint eine Münze hervor. Ob ich die nehmen soll?\n{% endif %}\n\nEine leichte Brise weht über die Lichtung und bringt den Hauch von feuchtem Laub und Erde mit sich. Die Klappe des Briefkastens hängt ein wenig schief, als würde sie dich auffordern, sie zu öffnen. Es ist, als könnte das kleinste Geräusch hier eine Veränderung bringen, als würde die Stille nur darauf warten, von deinem nächsten Schritt durchbrochen zu werden.\n\n\nEin seltsames Gefühl beschleicht dich, während du den Zustand des Briefes betrachtest. Ob es wirklich eine gute Idee ist, ihn anzufassen? Die Frage hängt schwer in der Luft, zusammen mit dem Geruch von Verfall, der die Stille durchdringt."
+    },
+    "Tree": {
+      "description": "Vor dem Mystischen Haus ragt ein uralter Baum empor, ein knorriger Riese, der auf seltsame Weise Magie ausstrahlt. Seine Rinde schimmert im Zwielicht, als ob sie Geschichten vieler Jahrhunderte in sich trägt, und hier und da scheint sie in einem sanften Goldton zu funkeln – fast so, als wäre sie von einer unsichtbaren, geheimnisvollen Kraft getränkt. Man sagt, dieser Baum habe schon vielen Herren gedient, doch die Art und Weise bleibt  ein Geheimnis, das nur die Stille der Nacht kennt. Er steht da wie ein Wächter, schweigend, aber voller Erinnerungen an jene, die unter seinen Zweigen Schutz suchten oder etwas suchten, das die Dunkelheit verbergen sollte.\n\nDie Äste winden sich wie Finger in die Luft, und der Baum selbst strahlt eine seltsame, beinahe einladende Autorität aus – als wolle er den Spieler testen: Wage es, die Äste zu erklimmen. \n\nEr ist einfach da – stark, standhaft und unerschütterlich. Eine Säule der Natur, die dir das Gefühl gibt, dass er dich tragen könnte, so wie damals, als du ein Kind warst. Doch auch wenn der Baum ein Symbol für Stärke und Geheimnis ist, verbirgt er keine verborgenen Pfade oder versteckte Schätze.\n\nEin Baum, nichts weiter. Ein stiller Zeuge und zugleich ein unbezwingbarer Riese, dessen wahre Bedeutung in seiner bloßen Existenz liegt."
+    },
+    "NorthOfHouse": {
+      "description": "Die enge Gasse zwischen den alten Mauern wirkt wie ein vergessener Pfad, den nur die Verzweifelten oder Unvorsichtigen jemals betreten. Die Wände bestehen aus groben Ziegelsteinen, die im Laufe der Jahre zerbröckelt sind, so dass sie nun eine mehlige, bröselige Oberfläche tragen – es ist besser, nicht zu fragen, warum. Eine dicke Feuchtigkeit durchzieht die Luft, als hätte der Ort selbst jegliche Frische aufgegeben und beschlossen, den muffigen Geruch des Verfalls für immer zu bewahren.\n\nEin strenger Duft liegt in der Gasse – eine Mischung aus alter Erde, fauligem Wasser und etwas, das beinahe wie ein verschwundenes Leben riecht, als hätten hier bereits viele ihre letzten Spuren hinterlassen. Der Boden ist matschig und uneben, und es gibt seltsame dunkle Flecken, die nicht so recht definierbar sind. Ein Ort, den der gesunde Verstand meiden möchte, der jedoch eine seltsame Anziehungskraft auf diejenigen ausübt, die das Unbekannte und das Ungemütliche nicht scheuen.\n\nIn der Ferne, am Ende der Gasse, erkennt man eine Art dunklen Durchgang. Nach Osten, könnte man weitergehen, wenn man den Mut dazu aufbringt. Oder vielleicht ist es besser, den Blick nach hinten zu wenden und wieder zurück zu gehen, weg von diesem schmierigen Ort, der mehr Fragen als Antworten hinterlässt. Die Gasse selbst scheint zu flüstern, dass hier nichts von Wert zu finden ist – kein Glanz, kein Schatz, und schon gar keine goldenen Eier. Nur der Verfall und eine müde Dunkelheit, die jede Ecke dieses Ortes zu füllen scheint.\n\nDie Ziegelwände auf beiden Seiten wirken alt und spröde, als hätte der Zahn der Zeit sie nicht nur angenagt, sondern regelrecht zermahlen. Ein feiner, pulvriger Belag überzieht sie, als ob sie sich langsam in Staub auflösen würden, während sie dabei irgendein Geheimnis bewahren, das nur die Zeit selbst kennt. Vielleicht sind es die Spuren von Dingen, die man besser nicht berührt oder genauer betrachtet – die Vergangenheit dieses Ortes ist so undurchsichtig wie die Schatten, die die Gasse durchziehen.\n\nEs ist ein Ort, der einem leise zuflüstert, dass das Ungewisse im Osten ebenso unsicher ist wie das Gefühl, das sich in der Dunkelheit der Gasse verbirgt. Doch wenn die Neugier zu stark wird, bleibt nur der Gang in das, was vor einem liegt, oder die Entscheidung, den sicheren Weg zurückzuwählen."
+    },
+    "SouthOfHouse": {
+      "description": "Du stehst nun an der Südseite des Hauses, wo die Sonne – zumindest wenn sie sich einmal durch die Wolken wagt – den alten Gemäuern einen warmen Glanz verleiht. Die Wände sind hier heller, fast freundlich, und eine feine Schicht goldgelben Lichts legt sich über die verwitterten Steine. Ein leichter Duft von trockenem Holz und frischen Kräutern hängt in der Luft, und das Gras unter deinen Füßen ist fest und angenehm zu betreten, ganz ohne den modrigen Schlamm der Nordseite.\n\nIn diesem sonnigen Abschnitt wirkt das Haus beinahe einladend, als ob es hier Geschichten des Sommers und längst vergangener sonniger Tage bewahre. Vögel zwitschern in der Ferne, und ein sanfter Wind raschelt durch das Gras, als würde die Umgebung selbst eine Pause vom Schatten der Wälder einlegen. Hier könnte man beinahe verweilen und den sanften Hauch der Natur genießen.\n\nDoch es gibt nur zwei Wege, um diese friedliche Szene zu verlassen: Entweder zurück zur Vorderseite des Hauses, die du vorhin erkundet hast, oder auf dem schmalen, leicht ausgetretenen Pfad, der sich nach Osten schlängelt und zwischen den Bäumen verschwindet.\n\n**Wichtige Hinweise:**\n- Von hier aus kommst du ausschließlich zurück zur Vorderseite des Hauses oder nach Osten.\n- Es gibt keine weiteren Richtungen oder Abzweigungen; alle anderen Wege bleiben versperrt.\n- Bewegungen und Interaktionen sind ausschließlich über die Dungeon-Funktionen möglich."
+    },
+    "Speicher": {
+      "description": "Du stehst auf dem Speicher des alten Hauses, und hier ist wahrlich der Höhepunkt vergangener Eleganz zu finden: Eine Reihe alter, knarrender Dielen, die bei jedem Schritt unter deinen Füßen ein unheimliches Lied anstimmen. Der Staub liegt schwer in der Luft und flirrt in kleinen Wolken bei jedem deiner Schritte auf, als wäre selbst die Zeit hier stehengeblieben, nur um dich zu empfangen.\n\nVor dir baumelt eine Wäscheleine, straff gespannt zwischen zwei alten Dachbalken. Und darauf – ja, tatsächlich – hängt eine Sammlung von wahrhaft historischen Unterhosen, die wohl so um 1800 das letzte Mal Mode waren. Diese knappen, ausgeleierten Stücke wirken, als hätten sie Generationen überdauert und sich in ihrer kargen, kratzigen Pracht gehalten, gegen alle Trends und modischen Veränderungen. Ein echter Schatz, wenn du vorhast, dich wie ein muffiger Adeliger des letzten Jahrhunderts zu kleiden.\n\nDie Unterwäsche ist von einem beigen, verblichenen Ton, der einst vielleicht Weiß gewesen sein könnte. Wer weiß, welche Geschichten diese Hosen erzählen könnten, wenn sie reden könnten… oder vielleicht besser doch nicht. Hier gibt es also nichts, was man sich freiwillig umhängen oder als Schatz bezeichnen würde. Ein Ort der Modegeschichte? Wohl kaum. Aber immerhin hast du einen Blick auf die Haute Couture von anno dazumal werfen dürfen – für wen auch immer das ein Trost sein mag."
+    },
+    "Lichtung": {
+      "description": "Du befindest dich auf einer verlassenen Lichtung, einst prachtvoll, heute wild und verwildert. Hohe Gräser und Dornensträucher formen eine dichte Barriere rundherum, die keinen Durchgang zulässt. Nur ein schmaler, niedergetretener Pfad führt nach Osten und wirkt eigenartig zielgerichtet, als würde er einem unbekannten Zweck dienen.\n\n**Hinweise:**\n- Von diesem Punkt kannst du nur zur Nord- oder Südseite des Hauses oder weiter nach Osten.\n- Andere Wege bleiben verschlossen.\n- Bewegungen und Interaktionen sind ausschließlich über die Dungeon-Funktionen möglich."
+    },
+    "AussichtSchlucht": {
+      "description": "Vor dir klafft eine finstere Schlucht, etwa 100 Meter tief und von unheimlicher Kälte erfüllt. Die Wände sind rau und steil, wie von Natur und Zeit gnadenlos zerfurcht. Ein kalter Wind zieht aus der Tiefe herauf, und mit ihm kommen leise, klagende Geräusche – fast wie geflüsterte Schreie, die kaum menschlich klingen, und doch einen Anflug verzweifelter Stimmen haben.\n\nEin Abstieg wäre ohnehin unmöglich; die steilen Felsen bieten keinen Halt. Und selbst wenn man es könnte – wer würde freiwillig hinabsteigen, nur um dem endlosen Gejammer näher zu kommen? Der einzige Weg ist zurück zur verlassenen Lichtung.\n\n**Hinweise:**\n- Von diesem Punkt kannst du nur zurück zur Lichtung.\n- Andere Wege bleiben verschlossen.\n- Bewegungen und Interaktionen sind ausschließlich über die Dungeon-Funktionen möglich."
+    },
+    "OnTree": {
+      "description": "Der große Ast des mystischen Baumes schwankt bedrohlich, und während man hier oben steht, wird der Blick nach unten gelenkt. Der Stamm, dieser seltsam schleimige, klebrige Stamm, wirkt noch ekelhafter, je länger man ihn betrachtet. Das Gefühl bleibt haften – der Aufstieg hier herauf war in vielerlei Hinsicht eine schlechte Entscheidung. Irgendwie scheint der Baum selbst etwas dagegen zu haben, dass man hier ist, als ob das Klettern auf ihn von Anfang an eine dumme Idee gewesen wäre. Der stechende Geruch von altem, abgestandenem Wasser und Moder steigt noch immer in die Nase.\n\nDer Ast knarrt leise, gibt leicht nach, und während man die Umgebung von hier oben absucht, fällt etwas auf: In einer Astgabelung liegt ein Nest – fast gut versteckt, aber aus dieser Position gerade so sichtbar. Inmitten der verdrehten Zweige schimmert etwas, das im Licht leicht golden funkelt.\n\nEin goldenes Ei liegt dort, eingebettet in das unordentliche Geflecht des Nestes, als ob es hier sicher verborgen geblieben wäre, verborgen vor den Blicken unten am Boden. Es ist schwer zu erkennen, aber das Funkeln ist unverkennbar.\n\nVielleicht war der Aufstieg doch nicht ganz vergeblich. Aber wie nur wieder runter...so ekelig."
+    },
+    "GelbeHoehle": {
+      "description": "Ein Raum, dessen Zweck sich nur schwer ergründen lässt – eine Kammer der vergessenen Geheimnisse, die einst vielleicht von großer Bedeutung war. Die Luft ist schwer, durchzogen von einem bitteren, undefinierbaren Hauch, als ob die Geschichte des Ortes in jeder Faser der Atmosphäre steckt. Entlang der Wände befinden sich kleine Kammern, jede für sich abgeschirmt, mit engen, niedrigen Eingängen, die ein Gefühl von Einsamkeit und Isolation vermitteln. Ein goldener Schein strahlt von den Becken innerhalb dieser Kammern aus – große, mit einer schillernden Flüssigkeit gefüllte Becken, die in einem endlosen Kreislauf vor sich hin plätschern.\n\n{% if discovered_beer_bottle and not has_beer_bottle%}\nIn einer der Kammern steht eine lerre Flasche und strahl dich ganz offensichtlich an. Aber was soll ich nur mit einer leeren Flasche? eine volle Flasche, kühl und freundlich, das wäre ene Sache.\n{% endif %}\n\n{% if has_full_bottle %}\nDu stehst hier in diesem \"Goldenen Raum\" mit einer warm dampfenden \"Goldenen Flasche\" in deiner rechten Hand. Du hast diese eben gefüllt...gold hast du dir anders vorgetellt. Nun gut.\n{% endif %}\n\nDie Becken sind seltsam verziert, ihr Gold überzogen von einem schmierigen Glanz, der den Anschein von Eleganz durch etwas Grobes und Zerstörerisches überlagert. In der Flüssigkeit glitzern kleine Steine, als wären sie Überreste eines alten Rituals oder eine Art Tribut, deren wahre Natur längst verloren gegangen ist. Die Flüssigkeit scheint sich ewig im Kreis zu bewegen, ohne dass ein Ursprung oder ein Ende erkennbar wäre.\n\nDie Wände des Raumes sind mit abblätternder Tapete bedeckt, darunter ein verblasstes, einst prächtiges Muster, das von vergangenen Zeiten zeugt. Zeiten, in denen dieser Ort vielleicht ein anderer war – vielleicht ein Ort des Vergnügens und der Freude, ein Raum für geheime Begegnungen, für Lachen und Frivolitäten. Ein Ort, der einst von Leben und Leidenschaft erfüllt war, jetzt aber verlassen und von der Zeit gezeichnet ist. Das Licht flackert, Lampen hängen locker von der Decke, als wollten sie sich jeden Moment verabschieden.\n\nEin zerbrochener Spiegel hängt an einer der Wände, seine Oberfläche in viele Scherben zersplittert. Wer hineinblickt, sieht nicht nur sich selbst, sondern auch flüchtige, verzerrte Schatten – Erinnerungen an Bewegungen und Gestalten aus einer anderen Zeit. Man könnte schwören, für einen Moment das Echo von Stimmen zu hören, gedämpftes Lachen, das Flüstern von heimlichen Liebenden, die die Einsamkeit der kleinen Kammern gesucht haben. Oder vielleicht ist es nur das Spiel der Reflexionen, ein Trick des zerbrochenen Spiegels, der mit den Gedanken spielt.\n\nDie Kälte des Raumes ist unverkennbar. Ein unnatürliches Frösteln zieht durch die Luft, das nicht so recht zum Rest des Raumes passen will – eine Kälte, die zu den goldenen Becken gehört, als wollten sie ihren unheimlichen Glanz bewahren. Die kleinen Kammern wirken wie Relikte einer vergangenen Welt, ein Ort, an dem etwas zurückgelassen wurde, das besser nie entdeckt worden wäre. Das sanfte Plätschern der Flüssigkeit und das Flackern des Lichts verleihen dem Raum eine melancholische und leicht beklemmende Atmosphäre – ein Ort, der zwar einst schöner gewesen sein mag, aber nun nur noch von Erinnerungen an eine verlorene Zeit zeugt."
+    }
+  },
+  "actions": [
+    {
+      "state_before": "KalterRaum",
+      "state_after": "KalterRaum",
+      "name": "untersuche_den_raum",
+      "description": "Du kannst den Raum untersuchen un ihn mal Beschreiben.",
+      "on_transition": "Die ist etwas in der Ecke aufgefallen was man sich ja mal genauer ansehen könnte. Wenn man klug genug ist."
+    },
+    {
+      "state_before": "FriedhofDerTraeume",
+      "state_after": "FriedhofDerTraeume",
+      "name": "untersuche_den_raum",
+      "description": "Du kannst den Raum untersuchen und durchsuchen und vielleicht findest Du Dinge die Du gebrauchen kan",
+      "on_transition": "Du hast den Raum durchsucht und hast nun viele Dinge gesehen wie in der Raumbeschreibung aufgeführt... ohne endlich mal was zum trinken. Die Luft ist hier super trocken und ein kühles Bier wäre jetzt "
+    },
+    {
+      "state_before": "FriedhofDerTraeume",
+      "state_after": "FriedhofDerTraeume",
+      "name": "nehme_das_packet",
+      "description": "Du nimmst das weisse Packet mit den seltsamen Röllchen, welches unter der langen Tafel liegt, an dic",
+      "on_transition": "Du hast das seltsam anmutende Packet genommen und bist nun bereits es dem Wächter zu geben. Eventuell gibt er ja dann die Tür frei."
+    },
+    {
+      "state_before": "FriedhofDerTraeume",
+      "state_after": "FriedhofDerTraeume",
+      "name": "gebe_packet_dem_waechter",
+      "description": "Du gibst den Wächter das seltsame Packet",
+      "on_transition": "Der Wächter hat das Packet genommen und macht sich schlurpend vom Acker. Er wart nicht mehr gesehen. Eine verrückte Sache....."
+    },
+    {
+      "state_before": "FriedhofDerTraeume",
+      "state_after": "FriedhofDerTraeume",
+      "name": "rede_mit_waechter",
+      "description": "Di sprichts den Wächter an und fragt mal was er so treibt...egal...du redets einfach mit ihm",
+      "on_transition": "Der Wächter grummelt nur etwas, dass bald Schluss mit Geduld ist. Er braucht irgendwas....für die innere Wärme und ein Höllenglut."
+    },
+    {
+      "state_before": "FriedhofDerTraeume",
+      "state_after": "FriedhofDerTraeume",
+      "name": "werfe_muenze_ein",
+      "description": "Du hast eine Münze und kannst diese Münze in den spielautomaten einwerfen.",
+      "on_transition": "Der Spielautomat rappelt und rattert und spiel fröhlich eine Meldie."
+    },
+    {
+      "state_before": "FriedhofDerTraeume",
+      "state_after": "FriedhofDerTraeume",
+      "name": "oeffne_tuer_mit_gewalt",
+      "description": "Du öffnest die Tür zu \"Gelben Höhle\" mit Gewalt. Entweder eintreten, rennen, dagegen schlagen. Jede ",
+      "on_transition": "Die Tür hat sich ergeben und hängt nun wie ein Boxer schräge in der Ecke...tat mal gut. Der Weg in die \"Gelbe Höhle\" ist nun frei."
+    },
+    {
+      "state_before": "Hexenkueche",
+      "state_after": "Hexenkueche",
+      "name": "schau_aus_dem_Fenster",
+      "description": "Du kannst aus dem Fenster sehen und siehst....tata.....den Briefkasten und ein wenig Wald. Es ist di",
+      "on_transition": "Du siehst aus dem Fenster und konntest den Briefkasten sehen. Welch Überraschung. Ansonsten ist nichts zu erkennen was Dir irgendwie helfen kann. Nur der verdammte Briefkasten. Warum sehe ich denn imm"
+    },
+    {
+      "state_before": "Hexenkueche",
+      "state_after": "Hexenkueche",
+      "name": "untersuche_den_raum",
+      "description": "Du kannst den Raum genauer untersuchen und mitteilen wie dieser aussieht",
+      "on_transition": "Du hast den Raum genau untersucht."
+    },
+    {
+      "state_before": "Hexenkueche",
+      "state_after": "Hexenkueche",
+      "name": "nehme_karotte",
+      "description": "Du nimmst, die angesabberten, Karotten.",
+      "on_transition": "Du hast die ekeligen Karotten in der Hand und weist nicht so recht was damit tun..."
+    },
+    {
+      "state_before": "Hexenkueche",
+      "state_after": "Hexenkueche",
+      "name": "gebe_die_karotten",
+      "description": "Du wirfst die Karotten dem \"Wesen\" oder dem Hund \"Kerberos\" vor die Schnauze die er dann isst.",
+      "on_transition": "Das Wesen \"Kerberos\" trotted, fast schon schnurrend, mit den Bündel Karotten im Maul davon. Na sowas? Ein vegetarischer Höllenhund...ganz schön schräg. Der Weg in den kühlen Raum ist frei."
+    },
+    {
+      "state_before": "WestOfHouse",
+      "state_after": "WestOfHouse",
+      "name": "untersuche_das_fenster",
+      "description": "Du kannst das Fenster untersuchen und beschreibst, dass man es öffnen könnte. Es fällt dir ein Türsc",
+      "on_transition": "Es ist nun klar, dass man das Fenster öffnen kann."
+    },
+    {
+      "state_before": "WestOfHouse",
+      "state_after": "WestOfHouse",
+      "name": "oeffne_das_fenster",
+      "description": "Du öffnest das Fenster indem du es nach oben schiebst.",
+      "on_transition": "Das Fenster ist nun geöffnet."
+    },
+    {
+      "state_before": "WestOfHouse",
+      "state_after": "WestOfHouse",
+      "name": "untersuche_das_haus",
+      "description": "Man kann das Haus hier nach seinem Zustand untersuchen oder mal nachsehen ob es Türen, Fenster hat i",
+      "on_transition": "Du hast Dir das Haus angesehen und die Tür und das Fenster sind dir aufgefallen. Ob man irgendwie in das Haus kommt? Auch ist am Haus irgendwie ein Türschild. Mal lesen?"
+    },
+    {
+      "state_before": "WestOfHouse",
+      "state_after": "WestOfHouse",
+      "name": "untersuche_die_tuer",
+      "description": "Die kannst die Tür untersuchen und festellen, dass diese unüberwindbar ist. Kein reinkommen auf irge",
+      "on_transition": ""
+    },
+    {
+      "state_before": "WestOfHouse",
+      "state_after": "WestOfHouse",
+      "name": "nehme_stock",
+      "description": "Ein Stock, der in der nähe liegt kann genommen werden",
+      "on_transition": "Du hast den stock in deine Tasche gepackt. Mal sehen für was der gut ist"
+    },
+    {
+      "state_before": "LetterBox",
+      "state_after": "LetterBox",
+      "name": "nehme_den_brief",
+      "description": "Nehme den Brief der aus dem Briefkasten herausschaut.",
+      "on_transition": "Der Brief enthält folgenden Inhalt und kann nach Aufforderung vorgelesen werden. Keinen Inhalt bezüglich diese Briefes erfinden. Nur dieser Inhalt ist jedesmal nach Aufforderung wortgetreu vorzulesen:"
+    },
+    {
+      "state_before": "LetterBox",
+      "state_after": "LetterBox",
+      "name": "lese_den_brief_vor",
+      "description": "Lese den Brief Wortgetreu vor, nahdem du ihn genommen hast",
+      "on_transition": "\nDu liest den brief nur vor, wenn du aufgefordert wirst:\n\n---Inhalt---\nHey du,\n\nmanche Pflichten vergisst man leicht, besonders nach einem ordentlichen Zaubertrank, der einen die Welt von oben sehen l"
+    },
+    {
+      "state_before": "LetterBox",
+      "state_after": "LetterBox",
+      "name": "nehme_ratte",
+      "description": "Du steckst unter Ekel die Ratte in deine Tasche",
+      "on_transition": ""
+    },
+    {
+      "state_before": "LetterBox",
+      "state_after": "LetterBox",
+      "name": "nehme_muenze",
+      "description": "Auf dem Boden liegt eine Münze die du nehmen kannst",
+      "on_transition": "du hast eine Münze mehr in deiner Tasche"
+    },
+    {
+      "state_before": "Tree",
+      "state_after": "Tree",
+      "name": "faelle_den_baum",
+      "description": "Das Fällen des Baumes, oder umsägen, ist keine gute Idee. Du wirst es versuchen, aber es funktionier",
+      "on_transition": "Du wolltest doch tatsächlich diesen wunderschönen Baum für dein Spielvergnügen fällen. Alter – und das in diesen Zeiten! Schon mal was von Nachhaltigkeit gehört? Was denkst du, was passiert, wenn jede"
+    },
+    {
+      "state_before": "NorthOfHouse",
+      "state_after": "NorthOfHouse",
+      "name": "untersuche_den_ort",
+      "description": "Du kannst den Ort untersuchen und versuchen ob hier interessante Dinge zu finden sind-",
+      "on_transition": "Die siehst hier auf dem Boden ein goldenes Ei in einem goldene Wasser liegen...bua."
+    },
+    {
+      "state_before": "NorthOfHouse",
+      "state_after": "NorthOfHouse",
+      "name": "nehme_das_ei",
+      "description": "Du kannst das Goldene Ei aufnemen",
+      "on_transition": "Du hast das Ei aufgenommen...aber warum riecht es den hier so streng. komisch . Nicht war?"
+    },
+    {
+      "state_before": "Speicher",
+      "state_after": "Speicher",
+      "name": "untersuche_die_hosen",
+      "description": "Die Unterhosen auf der Wäschelene Untersuchen. Das Untersuchen der Hosen wird allerdings keine neuen",
+      "on_transition": "Du hast die Wäscheleine mit den Unterhosen untersucht. Welche Freude, als Diener die Ehre zu haben, diese Schätze zu betrachten! Wie zu vermuten war, hat das keine neuen Erkenntnisse gebracht – außer "
+    },
+    {
+      "state_before": "OnTree",
+      "state_after": "OnTree",
+      "name": "nehme_das_ei",
+      "description": "Du kannst das Goldene Ei, welches in einem Nest liegt, nehmen.",
+      "on_transition": "Du hast nun ein Goldenes Ei"
+    },
+    {
+      "state_before": "GelbeHoehle",
+      "state_after": "GelbeHoehle",
+      "name": "durchsuche_die_kammern",
+      "description": "Du durchsuchst die Kammern nach etwas brauchbaren.",
+      "on_transition": "Du hast die Kammern durchsucht und nur eine leere Flasche entdeckt. Aber aus irgendeinem Grund überkommt dich ein Schauer und ein Gefühlt des ekel. Warum nur? Hat sich der Raum verändert."
+    },
+    {
+      "state_before": "GelbeHoehle",
+      "state_after": "GelbeHoehle",
+      "name": "nehme_die_flasche",
+      "description": "Du nimmst eine Flasche aus einer der Kammern.",
+      "on_transition": "Du hast die Flasche, die du zuvor in einer der Kammern gesehen hast, genommen. Aber he - was soll ich mit einer leeren Flasche. Ein volles Bier. Das wäre mal ein Ding"
+    },
+    {
+      "state_before": "GelbeHoehle",
+      "state_after": "GelbeHoehle",
+      "name": "pinkel_in_die_flasche",
+      "description": "Du pinkelst in die Flasche und machst die fast voll.",
+      "on_transition": "Nachdem du in die Flasche gepinkelt hast hällst du nun eine warme goldene Flasche in der Hand. Na lecker. Wie wäre es mit einer kalten Flasche?"
+    },
+    {
+      "state_before": "FriedhofDerTraeume",
+      "state_after": "GelbeHoehle",
+      "name": "gehe_in_die_gelbe_hoehle",
+      "description": "Du gehst durch die mit gewalt geöffnete Tür in die \"Gelbe Höhle\" hinein",
+      "on_transition": "Du stehst nun in der sogenannten \"Gelben Höhle\"...super...(ironisch)"
+    },
+    {
+      "state_before": "GelbeHoehle",
+      "state_after": "FriedhofDerTraeume",
+      "name": "gehe_zum_friedhof",
+      "description": "gehe_zum_friedhof",
+      "on_transition": ""
+    },
+    {
+      "state_before": "SouthOfHouse",
+      "state_after": "Lichtung",
+      "name": "gehe_nach_osten",
+      "description": "Du kannst nach Osten laufen und erreichst den hinteren Teil des Hauses",
+      "on_transition": "Du bist nun am hinteren Teil des Hauses und bist auf einer Lichtung."
+    },
+    {
+      "state_before": "AussichtSchlucht",
+      "state_after": "Lichtung",
+      "name": "gehe_zur_lichtung",
+      "description": "Du gehst wieder zur Lichtung zurück",
+      "on_transition": "Du stehst wieder an der Lichtung"
+    },
+    {
+      "state_before": "NorthOfHouse",
+      "state_after": "Lichtung",
+      "name": "gehe_nach_osten",
+      "description": "Du kannst nach Osten laufen und erreichst den hinteren Teil des Hauses. \nGehe nach hinten vom Haus.",
+      "on_transition": "Du bist nun hinter dem Haus auf einer Lichtung."
+    },
+    {
+      "state_before": "SouthOfHouse",
+      "state_after": "WestOfHouse",
+      "name": "gehe_zum_haus",
+      "description": "Du kannst wieder zurück zu dem Haus gehen.\nDu gehst zum Haus.\nGehe zurück.\nzum Haus.",
+      "on_transition": "Du bist wieder an der vorderseite des Hauses angelangt."
+    },
+    {
+      "state_before": "Hexenkueche",
+      "state_after": "Speicher",
+      "name": "gehe_treppe_hoch",
+      "description": "Di kannst in den oberen Stock die Treppe hoch gehen.",
+      "on_transition": "Du bist nun auf dem Dachboden"
+    },
+    {
+      "state_before": "Hexenkueche",
+      "state_after": "KalterRaum",
+      "name": "gehe_in_kalten_raum",
+      "description": "Du kannst hier in den nächsten Raum gehen. Die Tür scheint weit offen zu sein und du kannst einfach ",
+      "on_transition": "Da stehst Du nun. In einem Raum voller Alchemi. mmmh nun gut."
+    },
+    {
+      "state_before": "OnTree",
+      "state_after": "Tree",
+      "name": "klettere_runter",
+      "description": "Du kannst vom Baum runter klettern udn beschwerst Dich über den Ekel und das es nicht nett von mir w",
+      "on_transition": "Du stehst wieder unten am Baum und du must sagen, dass es ohne mich Dir besser ging. Jedenfalls geruchstechnisch. Nun gut. Freundschaft hat seinen Preis...."
+    },
+    {
+      "state_before": "LetterBox",
+      "state_after": "Tree",
+      "name": "gehe_zum_baum",
+      "description": "Du kannst vom Breifkasten zum Baum gehen. Auf dem direkten Weg.",
+      "on_transition": "Es ist ein kurzer Weg vom Breifkasten zum Baum...der nächste mögliche weg ist nur noch zum Haus."
+    },
+    {
+      "state_before": "Lichtung",
+      "state_after": "NorthOfHouse",
+      "name": "gehe_nach_norden",
+      "description": "Du gehst nach Norden und bist dann am Nordteil des Hauses",
+      "on_transition": ""
+    },
+    {
+      "state_before": "OnTree",
+      "state_after": "Speicher",
+      "name": "springe_auf_haus",
+      "description": "Du springst auf das Dach des Hauses",
+      "on_transition": "Du bist nun auf dem Speicher des Hauses gelandet und plötzlich eingebrochen. Du bist nnun auf den staubigen DAchboden gelandet und must dich erstmal orientieren wie es hier so aussieht...verrückte SAc"
+    },
+    {
+      "state_before": "KalterRaum",
+      "state_after": "Hexenkueche",
+      "name": "gehe_in_kueche",
+      "description": "Man geht zurück in die Hexenküche",
+      "on_transition": "Du bist nun wieder in der Hexenküche angelangt. Man bist du froh da wieder draussen zu sein. Bevor man noch selber an so einem Hacken endet."
+    },
+    {
+      "state_before": "Speicher",
+      "state_after": "Hexenkueche",
+      "name": "gehe_treppe_runter",
+      "description": "Du kannst in den unteren Stock gelangen indem du die Treppe runter gehst.",
+      "on_transition": "Da stehst Du nun. In einem Raum voller Alchemi oder Hexenküche. mmmh nun gut."
+    },
+    {
+      "state_before": "FriedhofDerTraeume",
+      "state_after": "Hexenkueche",
+      "name": "gehe_durch_tuer",
+      "description": "Du gehst durch die Tür und kommst dann in die Hexenküche",
+      "on_transition": "Du bist von dem ersten raum in den nächsten Raum gegangen und stehst nun in der \"Hexenküche\""
+    },
+    {
+      "state_before": "FriedhofDerTraeume",
+      "state_after": "WestOfHouse",
+      "name": "klettere_aus_dem_fenster",
+      "description": "Du kannst aus den Fenster wird raus vor das Haus gehen. Du wärst dann wieder ausserhalb des Hauses.",
+      "on_transition": "Du stehst nun wieder vor dem Haus und überlegst Dir was als nächstest passieren soll. Briefkasten, Baum? Das sind dein. Optionen....man hab ich eine Durscht :-)"
+    },
+    {
+      "state_before": "Tree",
+      "state_after": "OnTree",
+      "name": "klettere_auf_baum",
+      "description": "Du kletterst auf den Baum",
+      "on_transition": ""
+    },
+    {
+      "state_before": "Tree",
+      "state_after": "WestOfHouse",
+      "name": "gehe_zum_haus",
+      "description": "Du gehst zurück zu dem Haus",
+      "on_transition": "Du stehst nun wieder vor dem Haus."
+    },
+    {
+      "state_before": "LetterBox",
+      "state_after": "WestOfHouse",
+      "name": "gehe_zum_haus",
+      "description": "Man geht zurück zu dem Haus.",
+      "on_transition": "Du steht nun wieder vor dem Haus"
+    },
+    {
+      "state_before": "NorthOfHouse",
+      "state_after": "WestOfHouse",
+      "name": "gehe_zum_haus",
+      "description": "Du kannst wieder zurück zu dem Haus gehen.\nDu gehst zum Haus.\nGehe zurück.\nzum Haus.",
+      "on_transition": "Gott Sei Dank. Wenigstens trockene Füsse und wieder an der Vorderseite des Hauses."
+    },
+    {
+      "state_before": "Lichtung",
+      "state_after": "AussichtSchlucht",
+      "name": "gehe_nach_osten",
+      "description": "Du kannst in Richtung Osten auf dem Trampelpfad gehen",
+      "on_transition": "Du hast nun eine Schlucht erreicht und stehst an einem steilen Abhang."
+    },
+    {
+      "state_before": "Tree",
+      "state_after": "LetterBox",
+      "name": "gehe_zum_briefkasten",
+      "description": "Du gehst zum Briefkasten. Aber nur hingehen. Du must erst den Briefkasten explizit öffnen.\n",
+      "on_transition": "Du gehst zum Briefkasten und hast die Möglichkeit ihn zu untersuchen\n"
+    },
+    {
+      "state_before": "Lichtung",
+      "state_after": "SouthOfHouse",
+      "name": "gehe_nach_sueden",
+      "description": "Du gehst nach sueden und bist an dem südlichen Teil des Hauses",
+      "on_transition": ""
+    },
+    {
+      "state_before": "WestOfHouse",
+      "state_after": "NorthOfHouse",
+      "name": "gehe_nach_norden",
+      "description": "Du gehst an die Nördliche Seite des Hauses. Es ist eine Art um das Haus herum zu gehen. Ein wenig je",
+      "on_transition": "Du stehst nun an der nördlichen Seite des Hauses. Super (ironie). Hier ist ausser Moos nix los. Nass und feucht ist der Boden. äääh. Darf ich wieder in das Trockene...bitte bitte"
+    },
+    {
+      "state_before": "WestOfHouse",
+      "state_after": "LetterBox",
+      "name": "gehe_zum_briefkasten",
+      "description": "Du hast die Möglichkeit zum Briefkasten zu gehen. Aber nur hingehen. Du must erst den Briefkasten ex",
+      "on_transition": "Du bist am Briefkasten und hast die Möglichkeit diesen weiter zu untersuchen\n"
+    },
+    {
+      "state_before": "WestOfHouse",
+      "state_after": "Tree",
+      "name": "gehe_zum_baum",
+      "description": "Du gehst vom Haus zum Briefkasten gehen, laufen, springen oder wenn es jemand möchte sogar fliegen (",
+      "on_transition": "Du bist nun bei dem Baum angekommen"
+    },
+    {
+      "state_before": "WestOfHouse",
+      "state_after": "SouthOfHouse",
+      "name": "gehe_nach_sueden",
+      "description": "Du kannst nach Süden gehen.",
+      "on_transition": "Du bist nun im Süden vom Haus...es ist trocken aber windig hier."
+    },
+    {
+      "state_before": "Hexenkueche",
+      "state_after": "FriedhofDerTraeume",
+      "name": "gehe_in_bibliothek",
+      "description": "Du kannst von der Halle wieder in die Bibiliothek laufen",
+      "on_transition": "Du bist nun wieder in der Bibliothek. Hurra....aber halt. Da war ich doch schon. egal. Untersuche den Raum doch nochmal gründlicher....z.b. auf dem Boden unter dem Teppich! Es scheint, dass es hier ei"
+    },
+    {
+      "state_before": "WestOfHouse",
+      "state_after": "FriedhofDerTraeume",
+      "name": "klettere_fenster",
+      "description": "Du kletterst durch das Fenster in das Haus hinein und kommst somit von Aussen in das Haus hinein. Es",
+      "on_transition": "Du bist durch das Fenster geklettert und befindest Dich nun in dem ersten Raum. Es scheint eine Art von...nun ja...frag mich,... zu sein. Du rüttelst und schüttelst Dich damit der staub von der Kleidu"
+    }
+  ]
+}
