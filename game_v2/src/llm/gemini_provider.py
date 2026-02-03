@@ -12,14 +12,6 @@ class GeminiProvider(BaseLLMProvider):
     Gemini provider using Google's OpenAI-compatible API.
     """
     
-    AVAILABLE_MODELS = [
-        "gemini-1.5-flash",
-        "gemini-1.5-pro",
-        "gemini-3-pro-preview",
-        "gemini-3-flash-preview",
-        "gemini-3-flash"
-    ]
-    
     BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
     
     def __init__(self, api_key: str, model: str, temperature: float = 0.1, max_tokens: int = 2000):
@@ -44,10 +36,18 @@ class GeminiProvider(BaseLLMProvider):
             Exception: If the API call fails
         """
         # Convert LLMMessage objects to OpenAI format
-        formatted_messages = [
-            {"role": msg.role, "content": msg.content}
-            for msg in messages
-        ]
+        # Filter out messages with empty content (Gemini doesn't accept them)
+        formatted_messages = []
+        for msg in messages:
+            if msg.content and msg.content.strip():
+                # Gemini via OpenAI API doesn't support system role well
+                # Convert system messages to user messages
+                role = "user" if msg.role == "system" else msg.role
+                formatted_messages.append({"role": role, "content": msg.content})
+        
+        # Ensure we have at least one message
+        if not formatted_messages:
+            raise ValueError("No valid messages to send to Gemini")
         
         try:
             response = self.client.chat.completions.create(
@@ -83,22 +83,9 @@ class GeminiProvider(BaseLLMProvider):
         if not self.api_key:
             raise ValueError("Gemini API key is required")
         
-        if self.model not in self.AVAILABLE_MODELS:
-            raise ValueError(
-                f"Invalid Gemini model: {self.model}. "
-                f"Available models: {', '.join(self.AVAILABLE_MODELS)}"
-            )
-        
         if not 0.0 <= self.temperature <= 2.0:
             raise ValueError("Temperature must be between 0.0 and 2.0")
         
         if self.max_tokens <= 0:
             raise ValueError("max_tokens must be positive")
-    
-    def get_provider_name(self) -> str:
-        """Return provider name."""
-        return "gemini"
-    
-    def get_available_models(self) -> List[str]:
-        """Return list of available Gemini models."""
-        return self.AVAILABLE_MODELS.copy()
+        

@@ -1,0 +1,178 @@
+
+/* Basic Layout */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    background-color: #24293b;
+}
+
+/* Apply the font to all elements */
+body, input, button, select, textarea {
+    font-family: 'VT323', monospace;
+}
+
+.background-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('background.webp');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.3;
+    z-index: -1; /* Send it behind content */
+}
+
+
+#game-container {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width:100%;
+}
+
+#game-status-container{
+    width: 80%;
+    max-width: 600px;
+    color: #c2c2c2;
+    font-size: 2.25em;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+#welcome-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width:100%;
+    gap: 20px;;
+}
+
+.welcome-text {
+    font-size: 2vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    color: #f0f0f0;
+}
+
+.welcome-text div{
+    max-width:70%;
+}
+
+#startButton{
+    font-size:4em;
+}
+
+/* Chat Container */
+.chat-container {
+    width: 80%;
+    max-width: 600px;
+    height: 60vh;
+    padding: 10px;
+    display: flex;
+    flex-direction: column-reverse; /* New messages at bottom */
+    overflow-y: auto;
+    background-color: #333;
+    padding: 20px;
+    border: 4px solid #63908b;
+}
+
+/* Message Bubbles */
+.message {
+    max-width: 70%;
+    word-wrap: break-word;
+}
+
+/* User Message Bubble */
+.message.user {
+    align-self: flex-end;
+    background-color: linen
+}
+
+/* Bot Message Bubble */
+.message.bot {
+    align-self: flex-start;
+}
+
+/* Input Area */
+.input-area {
+    width: 80%;
+    max-width: 600px;
+    display: flex;
+    margin-top: 10px;
+
+}
+
+/* Text Input */
+input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    font-size: 2.25rem;
+    background-color: #333;
+    padding: 20px;
+    border: 4px solid #63908b;
+    color: white;
+}
+
+/* Buttons */
+button, #micButton {
+    padding: 0 15px;
+    margin-left: 8px;
+    border: none;
+    background-color: #e74c3c;
+    color: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: 4px solid #63908b;
+}
+
+button:active, #micButton:active {
+    background-color: #1289c8;
+}
+
+/* Mic Button Active Style */
+#micButton.active {
+    background-color: #ff4d4d;
+}
+
+/* Mic Button */
+#micButton {
+    background-color: transparent;
+    color:#1289c8;
+}
+
+#micIcon {
+    width: 25px;
+}
+
+
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 8px 0;
+}
+
+.typing-indicator .dot {
+    width: 8px;
+    height: 8px;
+    margin: 0 3px;
+    background-color: #606060;
+    border-radius: 0;
+    animation: bounce 1.4s infinite ease-in-out;
+}
+
+.typing-indicator .dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-indicator .dot:nth-child(2) { animation-delay: -0.16s; }
+.typing-indicator .dot:nth-child(3) { animation-delay: 0s; }
+
+@keyframes bounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+}

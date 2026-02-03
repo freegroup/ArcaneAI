@@ -69,21 +69,3 @@ class BaseLLMProvider(ABC):
         """
         pass
     
-    @abstractmethod
-    def get_provider_name(self) -> str:
-        """Return the name of the provider (e.g., 'gemini', 'openai')."""
-        pass
-    
-    def supports_streaming(self) -> bool:
-        """
-        Check if the provider supports streaming responses.
-        Override in subclass if streaming is supported.
-        """
-        return False
-    
-    def get_available_models(self) -> List[str]:
-        """
-        Get list of available models for this provider.
-        Override in subclass to provide actual model list.
-        """
-        return [self.model]
