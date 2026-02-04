@@ -9,6 +9,7 @@ from .base_provider import BaseLLMProvider
 from .gemini_provider import GeminiProvider
 from .openai_provider import OpenAIProvider
 from .deepseek_provider import DeepSeekProvider
+from .sap_aicore_provider import SAPAICoreProvider
 
 
 class LLMFactory:
@@ -21,7 +22,8 @@ class LLMFactory:
     PROVIDERS = {
         "gemini": GeminiProvider,
         "openai": OpenAIProvider,
-        "deepseek": DeepSeekProvider
+        "deepseek": DeepSeekProvider,
+        "sap_aicore": SAPAICoreProvider
     }
     
     def __init__(self, config_path: Optional[str] = None):
@@ -74,7 +76,39 @@ class LLMFactory:
                 f"Available providers: {available}"
             )
         
-        # Get API key - either directly from config or from environment variable
+        # Get model, temperature, and max_tokens from config
+        model = self.config.get('model')
+        temperature = self.config.get('temperature', 0.1)
+        max_tokens = self.config.get('max_tokens', 2000)
+        
+        if not model:
+            raise ValueError("No model specified in config")
+        
+        # Special handling for SAP AI Core
+        if provider == "sap_aicore":
+            client_id = self.config.get('client_id') or os.getenv(self.config.get('client_id_env', ''))
+            client_secret = self.config.get('client_secret') or os.getenv(self.config.get('client_secret_env', ''))
+            base_url = self.config.get('base_url')
+            auth_url = self.config.get('auth_url')
+            resource_group = self.config.get('resource_group', 'default')
+            deployment_id = self.config.get('deployment_id')  # Optional
+            
+            if not all([client_id, client_secret, base_url, auth_url]):
+                raise ValueError("SAP AI Core requires: client_id, client_secret, base_url, auth_url")
+            
+            return SAPAICoreProvider(
+                client_id=client_id,
+                client_secret=client_secret,
+                base_url=base_url,
+                auth_url=auth_url,
+                resource_group=resource_group,
+                model=model,
+                deployment_id=deployment_id,
+                temperature=temperature,
+                max_tokens=max_tokens
+            )
+        
+        # Standard providers (OpenAI, Gemini, DeepSeek)
         api_key = self.config.get('api_key')
         if not api_key:
             # Try to get from environment variable
@@ -84,14 +118,6 @@ class LLMFactory:
         
         if not api_key:
             raise ValueError("No API key found in config (api_key) or environment (api_key_env)")
-        
-        # Get model, temperature, and max_tokens from config
-        model = self.config.get('model')
-        temperature = self.config.get('temperature', 0.1)
-        max_tokens = self.config.get('max_tokens', 2000)
-        
-        if not model:
-            raise ValueError("No model specified in config")
         
         # Create and return provider instance
         provider_class = self.PROVIDERS[provider]
