@@ -16,9 +16,25 @@ class GameController:
         """
         self.session = session
         # LLM is implementation detail of this controller
-        llm_factory = LLMFactory()
-        self.llm_provider = llm_factory.create_provider()
-        self.conversation_history = []
+        self.llm_factory = LLMFactory()
+        self.llm_provider = self.llm_factory.create_provider()
+        self.chat_history = []
+        
+        # Get max history length from config
+        self.max_history_length = self.llm_factory.config.get('max_history_length', 20)
+    
+    def _trim_history(self):
+        """
+        Trim chat history to max_history_length.
+        Always keeps system prompt (index 0) + last N messages.
+        """
+        if len(self.chat_history) <= self.max_history_length:
+            return
+        
+        # Keep system prompt + last (max_history_length - 1) messages
+        system_prompt = self.chat_history[0]
+        recent_messages = self.chat_history[-(self.max_history_length - 1):]
+        self.chat_history = [system_prompt] + recent_messages
     
     def _build_system_prompt(self) -> str:
         """Build the system prompt for the LLM."""
@@ -92,51 +108,97 @@ Wenn keine Aktion passt:
         # Remove action marker
         response = re.sub(r'\[AKTION:\s*\w+\]', '', llm_response).strip()
         
-        # Remove thinking blocks (common patterns from reasoning models)
-        # Pattern 1: Text between quotes after "Wait" or "Looking"
-        response = re.sub(r'Wait,.*?(?="|$)', '', response, flags=re.DOTALL)
-        response = re.sub(r'Looking.*?(?="|$)', '', response, flags=re.DOTALL)
-        
-        # Pattern 2: Extract only quoted text if present
+        # Pattern 1: Extract quoted text first (most reliable)
         quoted = re.findall(r'"([^"]+)"', response)
         if quoted:
             # Return the last quoted text (usually the final answer)
             return quoted[-1].strip()
         
-        # Pattern 3: Remove lines that look like thinking
+        # Pattern 2: Remove thinking blocks (everything before first sentence)
+        # Remove lines that start with thinking patterns
         lines = response.split('\n')
         clean_lines = []
+        skip_mode = False
+        
         for line in lines:
             line = line.strip()
-            # Skip empty lines or thinking patterns
+            
+            # Skip empty lines
             if not line:
                 continue
-            if line.lower().startswith(('wait', 'looking', 'let me', 'i should')):
+            
+            # Check if this is a thinking line
+            lower_line = line.lower()
+            if any(lower_line.startswith(pattern) for pattern in [
+                'if ', 'wait', 'looking', 'let me', 'i should', 'the player',
+                'that\'s', 'let\'s', 'i need', 'i must', 'i will', 'i can'
+            ]):
+                skip_mode = True
                 continue
-            clean_lines.append(line)
+            
+            # If line ends with period/exclamation/question, we're past thinking
+            if line.endswith(('.', '!', '?', '…')):
+                skip_mode = False
+            
+            # Add line if not in skip mode
+            if not skip_mode:
+                clean_lines.append(line)
         
         if clean_lines:
             return ' '.join(clean_lines)
+        
+        # Fallback: return first sentence if nothing else works
+        sentences = re.split(r'[.!?]\s+', response)
+        for sentence in sentences:
+            sentence = sentence.strip()
+            if sentence and len(sentence) > 10:
+                return sentence
         
         return response.strip()
     
     def start_game(self) -> str:
         """
-        Start the game and return initial state description.
+        Start the game and return LLM's welcome message.
+        The LLM receives the game description and welcomes the player in character.
         
         Returns:
-            Initial state description
+            LLM's welcome message
         """
-        self.conversation_history = []
+        self.chat_history = []
         
         # Add system prompt
         system_prompt = self._build_system_prompt()
-        self.conversation_history.append(
+        self.chat_history.append(
             LLMMessage(role="system", content=system_prompt)
         )
         
-        # Return current state description
-        return self.session.game_engine.state_engine.get_current_state().get_description()
+        # Send initial state description to LLM and ask for welcome
+        state_description = self.session.game_engine.state_engine.get_current_state().get_description()
+        welcome_prompt = f"""Das Spiel beginnt. Hier ist die Situation:
+
+{state_description}
+
+Begrüße den Spieler in deiner Rolle und bereite ihn auf das Abenteuer vor. Beschreibe die Situation und gib ihm einen ersten Hinweis, was er tun könnte."""
+        
+        self.chat_history.append(
+            LLMMessage(role="user", content=welcome_prompt)
+        )
+        
+        # Get LLM's welcome response
+        try:
+            response = self.llm_provider.chat(self.chat_history)
+            welcome_text = response.content
+        except Exception as e:
+            # Fallback to state description if LLM fails
+            return state_description
+        
+        # Add to history
+        self.chat_history.append(
+            LLMMessage(role="assistant", content=welcome_text)
+        )
+        
+        # Clean and return welcome message
+        return self._clean_response(welcome_text)
     
     def process_input(self, user_input: str) -> str:
         """
@@ -149,27 +211,30 @@ Wenn keine Aktion passt:
             Response text
         """
         # Add user input to history
-        self.conversation_history.append(
+        self.chat_history.append(
             LLMMessage(role="user", content=user_input)
         )
         
         # Update system prompt with current actions
-        self.conversation_history[0] = LLMMessage(
+        self.chat_history[0] = LLMMessage(
             role="system",
             content=self._build_system_prompt()
         )
         
         # Get LLM response
         try:
-            response = self.llm_provider.chat(self.conversation_history)
+            response = self.llm_provider.chat(self.chat_history)
             llm_text = response.content
         except Exception as e:
             return f"Fehler beim LLM-Aufruf: {e}"
         
         # Add to history
-        self.conversation_history.append(
+        self.chat_history.append(
             LLMMessage(role="assistant", content=llm_text)
         )
+        
+        # Trim history if needed (keep system prompt + last N messages)
+        self._trim_history()
         
         # Extract action
         action_name = self._extract_action(llm_text)
