@@ -29,6 +29,9 @@ def convert_yaml_to_json(yaml_path: str, output_path: str):
     identity = data.get('metadata', {}).get('normal_prompt', '')
     behaviour = "WICHTIG: Du darfst NUR die explizit definierten Aktionen verwenden. Erfinde NIEMALS eigene Aktionen. Wenn der Spieler etwas tun möchte, das nicht in der Liste der verfügbaren Aktionen steht, antworte im Piraten-Slang ablehnend und verwende [AKTION: keine_aktion]."
     
+    # Extract inventory (can be at top level or in metadata)
+    inventory = data.get('inventory') or data.get('metadata', {}).get('inventory', {})
+    
     # Extract states
     states = {}
     for state in data.get('states', []):
@@ -60,16 +63,37 @@ def convert_yaml_to_json(yaml_path: str, output_path: str):
         if source == 'Start':
             continue
         
-        # Get system_prompt for on_transition context
+        # Get system_prompt for after_fire context
         system_prompt = metadata.get('system_prompt', '')
         
-        actions.append({
+        # Get scripts (called 'actions' in YAML triggers)
+        scripts = metadata.get('actions', [])
+        
+        # Get conditions (from YAML triggers)
+        conditions = metadata.get('conditions', [])
+        
+        # Build prompts object
+        prompts = {
+            "description": description[:100] if description else name,
+            "after_fire": system_prompt[:200] if system_prompt else ""
+        }
+        
+        action = {
             "state_before": source,
             "state_after": dest,
             "name": name,
-            "description": description[:100] if description else name,  # Limit description length
-            "on_transition": system_prompt[:200] if system_prompt else ""  # Context for LLM
-        })
+            "prompts": prompts
+        }
+        
+        # Add conditions if present
+        if conditions:
+            action["conditions"] = conditions
+        
+        # Add scripts if present
+        if scripts:
+            action["scripts"] = scripts
+        
+        actions.append(action)
     
     # Build output
     output = {
@@ -79,6 +103,10 @@ def convert_yaml_to_json(yaml_path: str, output_path: str):
         "states": states,
         "actions": actions
     }
+    
+    # Add inventory if present
+    if inventory:
+        output["inventory"] = inventory
     
     # Write JSON
     with open(output_path, 'w', encoding='utf-8') as f:

@@ -1,62 +1,45 @@
 from typing import Optional
 from llm import LLMFactory, LLMMessage
-from state_engine import StateEngine, Action
 
 
 class GameController:
     """
-    Controls the game flow by integrating StateEngine with LLM.
+    Controls the game flow by integrating GameEngine with LLM.
     """
     
-    def __init__(self, state_engine: StateEngine, llm_factory: LLMFactory):
+    def __init__(self, session):
         """
         Initialize the game controller.
         
         Args:
-            state_engine: StateEngine instance
-            llm_factory: LLMFactory instance
+            session: GameSession (has game_engine.state_engine)
         """
-        self.state_engine = state_engine
+        self.session = session
+        # LLM is implementation detail of this controller
+        llm_factory = LLMFactory()
         self.llm_provider = llm_factory.create_provider()
         self.conversation_history = []
-        
-        # Set up action hook
-        self.state_engine.set_action_hook(self._action_hook)
-    
-    def _action_hook(self, action: Action) -> bool:
-        """
-        Hook called before action execution.
-        Can be overridden to add custom logic.
-        
-        Args:
-            action: The action about to be executed
-            
-        Returns:
-            True to allow, False to veto
-        """
-        # Log the action (only state transition, no description)
-        print(f"[HOOK] {action.state_before} → {action.state_after}")
-        
-        # Default: always allow
-        # Override this method to add custom veto logic
-        return True
     
     def _build_system_prompt(self) -> str:
         """Build the system prompt for the LLM."""
-        actions = self.state_engine.get_available_actions()
+        state_engine = self.session.game_engine.state_engine
+        game_data = self.session.game_engine.game_data
+        actions = state_engine.get_available_actions()
         
-        # Combine identity and behaviour
+        # Combine identity and behaviour from game_data
         prompt = ""
         
-        if self.state_engine.identity:
-            prompt += self.state_engine.identity + "\n\n"
+        identity = game_data.get('identity', '')
+        if identity:
+            prompt += identity + "\n\n"
         
-        if self.state_engine.behaviour:
-            prompt += self.state_engine.behaviour + "\n\n"
+        behaviour = game_data.get('behaviour', '')
+        if behaviour:
+            prompt += behaviour + "\n\n"
         
         # Add current room description
-        current_state_desc = self.state_engine.get_current_state_description()
-        prompt += f"AKTUELLER RAUM:\n{current_state_desc}\n\n"
+        current_state = state_engine.get_current_state()
+        prompt += f"AKTUELLER RAUM:\n{current_state.get_description()}\n\n"
         
         prompt += """WICHTIG: Du musst IMMER mit einer der folgenden Aktionen antworten:
 
@@ -65,8 +48,8 @@ Verfügbare Aktionen:
         
         for action in actions:
             prompt += f"- {action.name}: {action.description}"
-            if action.on_transition:
-                prompt += f" [Wenn gewählt: {action.on_transition}]"
+            if action.after_fire:
+                prompt += f" [Wenn gewählt: {action.after_fire}]"
             prompt += "\n"
         
         prompt += """- keine_aktion: Wenn keine der Aktionen passt
@@ -103,9 +86,39 @@ Wenn keine Aktion passt:
         return None
     
     def _clean_response(self, llm_response: str) -> str:
-        """Remove action marker from response."""
+        """Remove action marker and thinking from response."""
         import re
-        return re.sub(r'\[AKTION:\s*\w+\]', '', llm_response).strip()
+        
+        # Remove action marker
+        response = re.sub(r'\[AKTION:\s*\w+\]', '', llm_response).strip()
+        
+        # Remove thinking blocks (common patterns from reasoning models)
+        # Pattern 1: Text between quotes after "Wait" or "Looking"
+        response = re.sub(r'Wait,.*?(?="|$)', '', response, flags=re.DOTALL)
+        response = re.sub(r'Looking.*?(?="|$)', '', response, flags=re.DOTALL)
+        
+        # Pattern 2: Extract only quoted text if present
+        quoted = re.findall(r'"([^"]+)"', response)
+        if quoted:
+            # Return the last quoted text (usually the final answer)
+            return quoted[-1].strip()
+        
+        # Pattern 3: Remove lines that look like thinking
+        lines = response.split('\n')
+        clean_lines = []
+        for line in lines:
+            line = line.strip()
+            # Skip empty lines or thinking patterns
+            if not line:
+                continue
+            if line.lower().startswith(('wait', 'looking', 'let me', 'i should')):
+                continue
+            clean_lines.append(line)
+        
+        if clean_lines:
+            return ' '.join(clean_lines)
+        
+        return response.strip()
     
     def start_game(self) -> str:
         """
@@ -123,7 +136,7 @@ Wenn keine Aktion passt:
         )
         
         # Return current state description
-        return self.state_engine.get_current_state_description()
+        return self.session.game_engine.state_engine.get_current_state().get_description()
     
     def process_input(self, user_input: str) -> str:
         """
@@ -167,7 +180,7 @@ Wenn keine Aktion passt:
             return clean_response
         
         # Execute action
-        success, message = self.state_engine.execute_action(action_name)
+        success, message = self.session.game_engine.state_engine.set_state(action_name)
         
         if success:
             # Return only LLM response, no state description
@@ -176,6 +189,3 @@ Wenn keine Aktion passt:
             # Action failed (hook veto or invalid)
             return f"{clean_response}\n\n(Action konnte nicht ausgeführt werden: {message})"
     
-    def get_current_state(self) -> str:
-        """Get current state name."""
-        return self.state_engine.get_current_state_name()
