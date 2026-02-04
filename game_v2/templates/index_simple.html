@@ -55,6 +55,70 @@
     const gameStatus = document.getElementById("game-status-value");
 
     let typingIndicator = null;
+    let websocket = null;
+    let token = null;
+    
+    // WebSocket connection
+    async function connectWebSocket() {
+        try {
+            // Get WebSocket token from server
+            const response = await fetch("{{ BASE_URI }}/websocket/connect", {
+                credentials: "include"
+            });
+            const data = await response.json();
+            token = data.token;
+            
+            console.log('[WS] Got token, connecting...');
+            
+            const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${wsProtocol}//${window.location.host}{{ BASE_URI }}/websocket/${token}`;
+            
+            console.log('[WS] Connecting to:', wsUrl);
+            websocket = new WebSocket(wsUrl);
+            
+            websocket.onopen = () => {
+                console.log('[WS] Connected!');
+            };
+            
+            websocket.onmessage = (event) => {
+            if (typeof event.data === "string") {
+                try {
+                    const message = JSON.parse(event.data);
+                    console.log('[WS] Received:', message.type, message.data);
+                    
+                    if (message.type === 'inventory_update') {
+                        console.log('[INVENTORY UPDATE]', message.data);
+                        // Display inventory in console
+                        console.table(message.data);
+                    } else if (message.type === 'state_change') {
+                        console.log('[STATE CHANGE]', message.data);
+                        updateGameStatus(message.data.state);
+                    } else if (message.type === 'connected') {
+                        console.log('[WS] Initial state:', message.data);
+                        updateGameStatus(message.data.state);
+                    } else if (message.type === 'error') {
+                        console.error('[WS ERROR]', message.data);
+                    }
+                } catch (error) {
+                    console.error('[WS] Error parsing message:', error);
+                }
+            }
+        };
+        
+            websocket.onerror = (error) => {
+                console.error('[WS] Error:', error);
+            };
+            
+            websocket.onclose = () => {
+                console.log('[WS] Disconnected, reconnecting in 3s...');
+                websocket = null;
+                // Reconnect after 3 seconds
+                setTimeout(connectWebSocket, 3000);
+            };
+        } catch (error) {
+            console.error('[WS] Connection error:', error);
+        }
+    }
 
     function handleKeyPress(event) {
         if (event.key === 'Enter') {
@@ -65,9 +129,14 @@
 
     async function startGame() {
         try {
+            // 1. FIRST: Connect WebSocket (gets token and creates session)
+            await connectWebSocket();
+            
+            // 2. THEN: Show UI
             toggleChatUI(true);
             showTypingIndicator();
             
+            // 3. Start game
             const response = await fetch("{{ BASE_URI }}/api/chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -79,6 +148,7 @@
             removeTypingIndicator();
             addMessage(data.response, "bot");
             updateGameStatus(data.state);
+            
             questionInput.focus();
         } catch (error) {
             console.error("Error starting game:", error);
