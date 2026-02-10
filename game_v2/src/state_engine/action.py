@@ -1,8 +1,9 @@
 """
 Action class for state transitions.
 """
-from typing import List
-from dataclasses import dataclass
+from __future__ import annotations
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
 
 
 @dataclass
@@ -11,17 +12,15 @@ class Action:
     state_before: str
     state_after: str
     name: str
-    prompts: dict  # Prompt information (description, after_fire)
-    conditions: List[str] = None  # Conditions that must be met (Lua expressions)
-    scripts: List[str] = None  # Scripts to execute when action is performed
+    prompts: Dict[str, str]  # Prompt information (description, after_fire)
+    conditions: List[str] = field(default_factory=list)  # Conditions that must be met (Lua expressions)
+    scripts: List[str] = field(default_factory=list)  # Scripts to execute when action is performed
+    sound_effect: Optional[str] = None  # Sound effect file to play
+    sound_effect_volume: int = 100
+    sound_effect_duration: Optional[float] = None  # 0 or None = play full
     
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Initialize conditions and scripts as empty lists if None."""
-        if self.conditions is None:
-            self.conditions = []
-        if self.scripts is None:
-            self.scripts = []
-        
         # Ensure prompts has required keys
         if not isinstance(self.prompts, dict):
             self.prompts = {"description": str(self.prompts), "after_fire": ""}

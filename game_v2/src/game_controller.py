@@ -1,256 +1,261 @@
-from typing import Optional
-from llm import LLMFactory, LLMMessage
+from __future__ import annotations
+from typing import TYPE_CHECKING, List, Optional
+
+from llm import LLMFactory, LLMMessage, LLMFunction, BaseLLMProvider
+from game_history import GameHistory
+from voice import VoiceFactory, BaseTTSProvider
+
+if TYPE_CHECKING:
+    from session import GameSession
 
 
 class GameController:
     """
     Controls the game flow by integrating GameEngine with LLM.
+    Uses structured history for debugging and analysis.
     """
-    
-    def __init__(self, session):
+
+    def __init__(self, session: GameSession) -> None:
         """
         Initialize the game controller.
-        
+
         Args:
-            session: GameSession (has game_engine.state_engine)
+            session: GameSession (has game_engine.state_engine, audio_sink)
         """
-        self.session = session
+        self.session: GameSession = session
         # LLM is implementation detail of this controller
-        self.llm_factory = LLMFactory()
-        self.llm_provider = self.llm_factory.create_provider()
-        self.chat_history = []
-        
-        # Get max history length from config
-        self.max_history_length = self.llm_factory.config.get('max_history_length', 20)
-    
-    def _trim_history(self):
+        self.llm_factory: LLMFactory = LLMFactory()
+        self.llm_provider: BaseLLMProvider = self.llm_factory.create_provider()
+
+        # Structured history instead of simple message list
+        max_length: int = self.llm_factory.config.get('llm', {}).get('max_history_length', 20)
+        self.history: GameHistory = GameHistory(max_length=max_length)
+
+        # Voice/TTS provider with audio sink from session
+        self.voice_factory: VoiceFactory = VoiceFactory()
+        self.voice_provider: BaseTTSProvider = self.voice_factory.create_provider(session.audio_sink)
+
+    def _build_base_prompt(self) -> str:
         """
-        Trim chat history to max_history_length.
-        Always keeps system prompt (index 0) + last N messages.
+        Build base system prompt (identity, behavior, current state).
+        Does NOT include function calling instructions.
         """
-        if len(self.chat_history) <= self.max_history_length:
-            return
+        from state_engine import StateEngine
         
-        # Keep system prompt + last (max_history_length - 1) messages
-        system_prompt = self.chat_history[0]
-        recent_messages = self.chat_history[-(self.max_history_length - 1):]
-        self.chat_history = [system_prompt] + recent_messages
-    
-    def _build_system_prompt(self) -> str:
-        """Build the system prompt for the LLM."""
-        state_engine = self.session.game_engine.state_engine
-        game_data = self.session.game_engine.game_data
-        actions = state_engine.get_available_actions()
-        
+        state_engine: StateEngine = self.session.game_engine.state_engine
+        game_data: dict = self.session.game_engine.game_data
+
         # Combine identity and behaviour from game_data
-        prompt = ""
-        
-        identity = game_data.get('identity', '')
+        prompt: str = ""
+
+        identity: str = game_data.get('identity', '')
         if identity:
             prompt += identity + "\n\n"
-        
-        behaviour = game_data.get('behaviour', '')
+
+        behaviour: str = game_data.get('behaviour', '')
         if behaviour:
             prompt += behaviour + "\n\n"
-        
+
         # Add current room description
-        current_state = state_engine.get_current_state()
-        prompt += f"AKTUELLER RAUM:\n{current_state.get_description()}\n\n"
-        
-        prompt += """WICHTIG: Du musst IMMER mit einer der folgenden Aktionen antworten:
+        from state_engine import State
+        current_state: State = state_engine.get_current_state()
+        prompt += f"AKTUELLER RAUM:\n{current_state.get_description()}\n"
 
-Verfügbare Aktionen:
-"""
-        
-        for action in actions:
-            prompt += f"- {action.name}: {action.description}"
-            if action.after_fire:
-                prompt += f" [Wenn gewählt: {action.after_fire}]"
-            prompt += "\n"
-        
-        prompt += """- keine_aktion: Wenn keine der Aktionen passt
-
-ANTWORT-FORMAT:
-1. Antworte dem Spieler in einem Satz
-2. Wähle EINE Aktion aus der Liste
-3. Format: [AKTION: action_name]
-
-Beispiel:
-"Du gehst nach Norden. [AKTION: gehe_to_B]"
-
-Wenn keine Aktion passt:
-"Ich verstehe nicht, was du tun möchtest. [AKTION: keine_aktion]"
-"""
-        
         return prompt
-    
-    def _extract_action(self, llm_response: str) -> Optional[str]:
+
+    def _build_functions(self) -> List[LLMFunction]:
         """
-        Extract action name from LLM response.
-        
-        Args:
-            llm_response: Response from LLM
-            
-        Returns:
-            Action name or None
+        Build list of available functions from current game state.
+        Each action becomes a callable function.
         """
-        # Look for [AKTION: action_name] pattern
-        import re
-        match = re.search(r'\[AKTION:\s*(\w+)\]', llm_response)
-        if match:
-            return match.group(1)
-        return None
-    
-    def _clean_response(self, llm_response: str) -> str:
-        """Remove action marker and thinking from response."""
-        import re
+        from state_engine import StateEngine, Action
         
-        # Remove action marker
-        response = re.sub(r'\[AKTION:\s*\w+\]', '', llm_response).strip()
-        
-        # Pattern 1: Extract quoted text first (most reliable)
-        quoted = re.findall(r'"([^"]+)"', response)
-        if quoted:
-            # Return the last quoted text (usually the final answer)
-            return quoted[-1].strip()
-        
-        # Pattern 2: Remove thinking blocks (everything before first sentence)
-        # Remove lines that start with thinking patterns
-        lines = response.split('\n')
-        clean_lines = []
-        skip_mode = False
-        
-        for line in lines:
-            line = line.strip()
-            
-            # Skip empty lines
-            if not line:
-                continue
-            
-            # Check if this is a thinking line
-            lower_line = line.lower()
-            if any(lower_line.startswith(pattern) for pattern in [
-                'if ', 'wait', 'looking', 'let me', 'i should', 'the player',
-                'that\'s', 'let\'s', 'i need', 'i must', 'i will', 'i can'
-            ]):
-                skip_mode = True
-                continue
-            
-            # If line ends with period/exclamation/question, we're past thinking
-            if line.endswith(('.', '!', '?', '…')):
-                skip_mode = False
-            
-            # Add line if not in skip mode
-            if not skip_mode:
-                clean_lines.append(line)
-        
-        if clean_lines:
-            return ' '.join(clean_lines)
-        
-        # Fallback: return first sentence if nothing else works
-        sentences = re.split(r'[.!?]\s+', response)
-        for sentence in sentences:
-            sentence = sentence.strip()
-            if sentence and len(sentence) > 10:
-                return sentence
-        
-        return response.strip()
-    
+        state_engine: StateEngine = self.session.game_engine.state_engine
+        actions: List[Action] = state_engine.get_available_actions()
+
+        functions: List[LLMFunction] = []
+        for action in actions:
+            # Build description with after_fire hint if available
+            description: str = action.description
+            if action.after_fire:
+                description += f". Falls du diese Aktion auswählst, dann bitte dies in deiner Antwort berücksichtigen: {action.after_fire}"
+
+            functions.append(LLMFunction(
+                name=action.name,
+                description=description,
+                parameters={
+                    "type": "object",
+                    "properties": {
+                        "response": {
+                            "type": "string",
+                            "description": "Deine narrative Antwort an den Spieler (kurz, in character)"
+                        }
+                    },
+                    "required": ["response"]
+                }
+            ))
+
+        # Always add fallback action
+        functions.append(LLMFunction(
+            name="keine_aktion",
+            description="Keine der Aktionen passt zur Eingabe des Spielers",
+            parameters={
+                "type": "object",
+                "properties": {
+                    "response": {
+                        "type": "string",
+                        "description": "Erkläre dem Spieler, warum du seine Eingabe nicht verstehst"
+                    }
+                },
+                "required": ["response"]
+            }
+        ))
+
+        return functions
+
     def start_game(self) -> str:
         """
         Start the game and return LLM's welcome message.
-        The LLM receives the game description and welcomes the player in character.
-        
+
         Returns:
             LLM's welcome message
         """
-        self.chat_history = []
-        
-        # Add system prompt
-        system_prompt = self._build_system_prompt()
-        self.chat_history.append(
-            LLMMessage(role="system", content=system_prompt)
-        )
-        
-        # Send initial state description to LLM and ask for welcome
-        state_description = self.session.game_engine.state_engine.get_current_state().get_description()
-        welcome_prompt = f"""Das Spiel beginnt. Hier ist die Situation:
+        self.history.clear()
 
-{state_description}
+        # Build base prompt and functions
+        base_prompt: str = self._build_base_prompt()
+        functions: List[LLMFunction] = self._build_functions()
 
-Begrüße den Spieler in deiner Rolle und bereite ihn auf das Abenteuer vor. Beschreibe die Situation und gib ihm einen ersten Hinweis, was er tun könnte."""
-        
-        self.chat_history.append(
+        # Get welcome prompt from game definition
+        # NOTE: Room description is already in base_prompt (AKTUELLER RAUM section)
+        game_data: dict = self.session.game_engine.game_data
+        welcome_prompt: str = game_data.get('welcome_prompt', 'Das Spiel beginnt!')
+
+        # Create messages for LLM call
+        messages: List[LLMMessage] = [
+            LLMMessage(role="system", content=base_prompt),
             LLMMessage(role="user", content=welcome_prompt)
-        )
-        
+        ]
+
         # Get LLM's welcome response
+        from llm import LLMResponse
         try:
-            response = self.llm_provider.chat(self.chat_history)
-            welcome_text = response.content
-        except Exception as e:
+            response: LLMResponse = self.llm_provider.chat_with_functions(
+                messages,
+                functions,
+                base_prompt
+            )
+            welcome_text: str = response.content
+        except Exception:
             # Fallback to state description if LLM fails
-            return state_description
-        
-        # Add to history
-        self.chat_history.append(
-            LLMMessage(role="assistant", content=welcome_text)
+            current_state = self.session.game_engine.state_engine.get_current_state()
+            return current_state.get_description()
+
+        # Add to structured history
+        self.history.add_entry(
+            user_input=welcome_prompt,
+            base_prompt=base_prompt,
+            available_functions=functions,
+            llm_response=welcome_text,
+            chosen_function="keine_aktion",
+            metadata={"type": "welcome"}
         )
-        
-        # Clean and return welcome message
-        return self._clean_response(welcome_text)
-    
+
+        # Send initial ambient sound for starting state
+        self._send_initial_ambient()
+
+        # Convert to speech
+        self.voice_provider.speak(self.session, welcome_text)
+
+        return welcome_text
+
     def process_input(self, user_input: str) -> str:
         """
         Process user input and return LLM response.
-        
+
         Args:
             user_input: User's input text
-            
+
         Returns:
             Response text
         """
-        # Add user input to history
-        self.chat_history.append(
-            LLMMessage(role="user", content=user_input)
-        )
+        from llm import LLMResponse
         
-        # Update system prompt with current actions
-        self.chat_history[0] = LLMMessage(
-            role="system",
-            content=self._build_system_prompt()
-        )
-        
-        # Get LLM response
+        # Build current functions and base prompt
+        base_prompt: str = self._build_base_prompt()
+        functions: List[LLMFunction] = self._build_functions()
+
+        # Convert history to LLM messages
+        messages: List[LLMMessage] = self.history.to_llm_messages(base_prompt)
+
+        # Add current user input
+        messages.append(LLMMessage(role="user", content=user_input))
+
+        # Get LLM response with function calling
         try:
-            response = self.llm_provider.chat(self.chat_history)
-            llm_text = response.content
+            response: LLMResponse = self.llm_provider.chat_with_functions(messages, functions, base_prompt)
         except Exception as e:
             return f"Fehler beim LLM-Aufruf: {e}"
+
+        # Extract narrative response and function call
+        from llm import LLMFunctionCall
         
-        # Add to history
-        self.chat_history.append(
-            LLMMessage(role="assistant", content=llm_text)
-        )
-        
-        # Trim history if needed (keep system prompt + last N messages)
-        self._trim_history()
-        
-        # Extract action
-        action_name = self._extract_action(llm_text)
-        clean_response = self._clean_response(llm_text)
-        
-        # Handle no action
-        if action_name == "keine_aktion" or action_name is None:
-            return clean_response
-        
-        # Execute action
-        success, message = self.session.game_engine.state_engine.set_state(action_name)
-        
-        if success:
-            # Return only LLM response, no state description
-            return clean_response
+        narrative_response: str = response.content
+        function_call: Optional[LLMFunctionCall] = response.function_call
+
+        # Handle function call result
+        chosen_function_name: Optional[str] = None
+        if function_call:
+            chosen_function_name = function_call.name
         else:
-            # Action failed (hook veto or invalid)
-            return f"{clean_response}\n\n(Action konnte nicht ausgeführt werden: {message})"
-    
+            # Parsing failed - provide fallback message instead of raw output
+            narrative_response = "Ich bin verwirrt... Kannst du das anders formulieren?"
+
+        # Execute the action if one was chosen
+        function_success: bool = True
+        if function_call and function_call.name != "keine_aktion":
+            action_name: str = function_call.name
+            success: bool
+            message: str
+            success, message = self.session.game_engine.state_engine.set_state(action_name)
+            function_success = success
+
+            if not success:
+                # Action failed (hook veto or invalid)
+                narrative_response = f"{narrative_response}\n\n(Action konnte nicht ausgeführt werden: {message})"
+
+        # Add to structured history
+        self.history.add_entry(
+            user_input=user_input,
+            base_prompt=base_prompt,
+            available_functions=functions,
+            llm_response=narrative_response,
+            chosen_function=chosen_function_name,
+            function_success=function_success
+        )
+
+        # Stop any current speech before starting new one
+        self.voice_provider.stop(self.session)
+
+        # Convert to speech
+        self.voice_provider.speak(self.session, narrative_response)
+
+        return narrative_response
+
+    def _send_initial_ambient(self) -> None:
+        """Play ambient sound for the initial game state via jukebox."""
+        from typing import Any
+        from state_engine import State
+        
+        jukebox: Optional[Any] = self.session.jukebox
+        if not jukebox:
+            return
+
+        state: State = self.session.game_engine.state_engine.get_current_state()
+        if state.ambient_sound:
+            jukebox.play_sound(
+                self.session,
+                state.ambient_sound,
+                volume=state.ambient_sound_volume,
+                loop=True
+            )

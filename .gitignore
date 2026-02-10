@@ -10,3 +10,4 @@ history-**.json
 .venv
 
 game_v2/config.yaml
+**/venv311

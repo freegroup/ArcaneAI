@@ -4,6 +4,12 @@ Console interface for playing the game.
 """
 from pathlib import Path
 from session import GameSession
+from config_loader import load_config
+from audio import PyAudioSink
+from sound import LocalJukebox
+
+# Base directory for game_v2
+GAME_V2_DIR: Path = Path(__file__).parent.parent
 
 
 def main():
@@ -17,14 +23,33 @@ def main():
     try:
         print("Initialisiere Spiel...")
         
-        definition_path = Path(__file__).parent.parent / "game_definition_tipsy_full.json"
+        # Load config once
+        config = load_config()
         
-        # Create session - it creates everything else!
+        # Get game definition path from config
+        game_def = config.get('game_definition')
+        if not game_def:
+            raise ValueError("No game_definition specified in config.yaml")
+        definition_path = GAME_V2_DIR / game_def
+        print(f"Lade Spieldefinition: {definition_path}")
+        
+        # Create session - pass config so all components can use it
         session = GameSession(
             session_id="console",
-            definition_path=str(definition_path)
+            definition_path=str(definition_path),
+            config=config,
+            audio_sink=PyAudioSink(sample_rate=24000),
+            jukebox=LocalJukebox(config=config)
         )
-        
+
+        # Show LLM model info
+        llm_provider = session.game_engine.controller.llm_provider
+        provider_name = llm_provider.__class__.__name__.replace("Provider", "")
+        print(f"LLM: {provider_name} - {llm_provider.model}")
+        if hasattr(llm_provider, 'supports_native_function_calling'):
+            fc_support = "Native Function Calling" if llm_provider.supports_native_function_calling() else "JSON Function Calling"
+            print(f"Function Calling: {fc_support}")
+
         print("Spiel bereit!")
         print()
         

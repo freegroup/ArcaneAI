@@ -10,19 +10,32 @@ from .base_provider import BaseLLMProvider, LLMMessage, LLMResponse
 class DeepSeekProvider(BaseLLMProvider):
     """
     DeepSeek provider using OpenAI-compatible API.
+
+    Note: DeepSeek supports function calling but it's marked as UNSTABLE
+    in their documentation. We use JSON-in-prompt approach by default.
     """
-    
+
     BASE_URL = "https://api.deepseek.com/v1"
-    
-    def __init__(self, api_key: str, model: str, temperature: float = 0.1, max_tokens: int = 2000):
-        """Initialize DeepSeek provider."""
+
+    def __init__(self, api_key: str, model: str, temperature: float = 0.1, max_tokens: int = 2000, enable_native_functions: bool = False):
+        """
+        Initialize DeepSeek provider.
+
+        Args:
+            api_key: DeepSeek API key
+            model: Model name (e.g., "deepseek-chat")
+            temperature: Sampling temperature
+            max_tokens: Maximum tokens in response
+            enable_native_functions: Enable native function calling (unstable, not recommended)
+        """
+        self.enable_native_functions = enable_native_functions
         super().__init__(api_key, model, temperature, max_tokens)
         self.client = OpenAI(
             base_url=self.BASE_URL,
             api_key=self.api_key
         )
-    
-    def chat(self, messages: List[LLMMessage]) -> LLMResponse:
+
+    def call_chat(self, messages: List[LLMMessage]) -> LLMResponse:
         """
         Send messages to DeepSeek and get a response.
         

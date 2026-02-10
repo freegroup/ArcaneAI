@@ -42,9 +42,19 @@ def convert_yaml_to_json(yaml_path: str, output_path: str):
         if state.get('metadata', {}).get('state_type') == 'start':
             continue
             
-        states[state_name] = {
+        state_data = {
             "description": system_prompt
         }
+
+        # Add ambient sound if present
+        ambient_sound = state.get('metadata', {}).get('ambient_sound')
+        if ambient_sound:
+            state_data["ambient_sound"] = ambient_sound
+        ambient_sound_volume = state.get('metadata', {}).get('ambient_sound_volume')
+        if ambient_sound_volume is not None:
+            state_data["ambient_sound_volume"] = ambient_sound_volume
+
+        states[state_name] = state_data
     
     # Extract actions (transitions)
     actions = []
@@ -74,8 +84,8 @@ def convert_yaml_to_json(yaml_path: str, output_path: str):
         
         # Build prompts object
         prompts = {
-            "description": description[:100] if description else name,
-            "after_fire": system_prompt[:200] if system_prompt else ""
+            "description": description if description else name,
+            "after_fire": system_prompt if system_prompt else ""
         }
         
         action = {
@@ -85,10 +95,21 @@ def convert_yaml_to_json(yaml_path: str, output_path: str):
             "prompts": prompts
         }
         
+        # Add sound effect if present
+        sound_effect = metadata.get('sound_effect')
+        if sound_effect:
+            action["sound_effect"] = sound_effect
+        sound_effect_volume = metadata.get('sound_effect_volume')
+        if sound_effect_volume is not None:
+            action["sound_effect_volume"] = sound_effect_volume
+        sound_effect_duration = metadata.get('sound_effect_duration')
+        if sound_effect_duration is not None:
+            action["sound_effect_duration"] = sound_effect_duration
+
         # Add conditions if present
         if conditions:
             action["conditions"] = conditions
-        
+
         # Add scripts if present
         if scripts:
             action["scripts"] = scripts

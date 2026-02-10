@@ -2,14 +2,17 @@
 Game Engine - Central coordinator for game components.
 Loads game definition and coordinates StateEngine, Inventory, and LLM.
 """
+from __future__ import annotations
 import json
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any, Dict, TYPE_CHECKING
 
 from state_engine import StateEngine
 from inventory import Inventory
 from game_controller import GameController
-from llm import LLMFactory
+
+if TYPE_CHECKING:
+    from session import GameSession
 
 
 class GameEngine:
@@ -18,7 +21,7 @@ class GameEngine:
     Loads game definition and delegates to specialized components.
     """
     
-    def __init__(self, session, definition_path: str):
+    def __init__(self, session: GameSession, definition_path: str) -> None:
         """
         Initialize the game engine.
         
@@ -26,20 +29,20 @@ class GameEngine:
             session: GameSession for message passing (REQUIRED)
             definition_path: Path to game_definition.json
         """
-        self.session = session
+        self.session: GameSession = session
         
         # Load game definition
-        self.game_data = self._load_game_definition(definition_path)
+        self.game_data: Dict[str, Any] = self._load_game_definition(definition_path)
         
         # Initialize components (pass session to all)
-        self.state_engine = StateEngine(
+        self.state_engine: StateEngine = StateEngine(
             session=session,
             states=self.game_data.get('states', {}),
             actions=self.game_data.get('actions', []),
             initial_state=self.game_data.get('initial_state')
         )
         
-        self.inventory = Inventory(
+        self.inventory: Inventory = Inventory(
             session=session,
             items=self.game_data.get('inventory', {})
         )
@@ -48,7 +51,7 @@ class GameEngine:
         self.state_engine.add_action_hook(self.inventory.on_action)
         
         # Create GameController (decides its own LLM implementation)
-        self.controller = GameController(session=session)
+        self.controller: GameController = GameController(session=session)
     
     def process_input(self, user_input: str) -> str:
         """
@@ -81,7 +84,7 @@ class GameEngine:
         Returns:
             Game data dictionary
         """
-        path = Path(definition_path)
+        path: Path = Path(definition_path)
         if not path.exists():
             raise FileNotFoundError(f"Game definition not found: {path}")
         

@@ -1,8 +1,10 @@
 """
 Base class for message queues.
 """
+from __future__ import annotations
 from abc import ABC, abstractmethod
-from typing import Dict, Any, Union
+from typing import Any, Dict, Optional, Union
+
 from .messages import Message
 
 
@@ -13,7 +15,7 @@ class MessageQueue(ABC):
     """
     
     @abstractmethod
-    def send(self, message: Union[Message, str], data: Dict[str, Any] = None):
+    def send(self, message: Union[Message, str], data: Optional[Dict[str, Any]] = None) -> None:
         """
         Send a message to the client.
         

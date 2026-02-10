@@ -1,15 +1,16 @@
 """
 Factory for creating LLM provider instances based on configuration.
 """
-import os
+from __future__ import annotations
 import yaml
-from typing import Optional
 from pathlib import Path
+from typing import Dict, List, Optional, Type
+
 from .base_provider import BaseLLMProvider
 from .gemini_provider import GeminiProvider
 from .openai_provider import OpenAIProvider
 from .deepseek_provider import DeepSeekProvider
-from .sap_aicore_provider import SAPAICoreProvider
+from .ollama_provider import OllamaProvider
 
 
 class LLMFactory:
@@ -19,14 +20,14 @@ class LLMFactory:
     """
     
     # Map provider names to their classes
-    PROVIDERS = {
+    PROVIDERS: Dict[str, Type[BaseLLMProvider]] = {
         "gemini": GeminiProvider,
         "openai": OpenAIProvider,
         "deepseek": DeepSeekProvider,
-        "sap_aicore": SAPAICoreProvider
+        "ollama": OllamaProvider
     }
     
-    def __init__(self, config_path: Optional[str] = None):
+    def __init__(self, config_path: Optional[str] = None) -> None:
         """
         Initialize the factory with a config file.
         
@@ -37,62 +38,68 @@ class LLMFactory:
             # Default to game_v2/config.yaml
             config_path = Path(__file__).parent.parent.parent / "config.yaml"
         
-        self.config_path = Path(config_path)
-        self.config = self._load_config()
+        self.config_path: Path = Path(config_path)
+        self.config: Dict = self._load_config()
     
-    def _load_config(self) -> dict:
+    def _load_config(self) -> Dict:
         """Load configuration from YAML file."""
         if not self.config_path.exists():
             raise FileNotFoundError(f"Config file not found: {self.config_path}")
-        
-        with open(self.config_path, 'r') as f:
-            config = yaml.safe_load(f)
-        
+
+        with open(self.config_path, 'r', encoding='utf-8') as f:
+            config: Dict = yaml.safe_load(f)
+
         return config
-    
+
     def create_provider(self, provider_name: Optional[str] = None) -> BaseLLMProvider:
         """
         Create an LLM provider instance.
-        
+
         Args:
             provider_name: Name of the provider to create. If None, uses config default.
-            
+
         Returns:
             Instance of the requested provider
-            
+
         Raises:
             ValueError: If provider is not supported or configuration is invalid
         """
+        # Get LLM configuration scope
+        llm_config: Dict = self.config.get('llm', {})
+
         # Use provided provider name or fall back to config
-        provider = provider_name or self.config.get('provider')
-        
+        provider: Optional[str] = provider_name or llm_config.get('provider')
+
         if not provider:
             raise ValueError("No provider specified in config or arguments")
-        
+
         if provider not in self.PROVIDERS:
             available = ', '.join(self.PROVIDERS.keys())
             raise ValueError(
                 f"Unsupported provider: {provider}. "
                 f"Available providers: {available}"
             )
-        
-        # Get model, temperature, and max_tokens from config
-        model = self.config.get('model')
-        temperature = self.config.get('temperature', 0.1)
-        max_tokens = self.config.get('max_tokens', 2000)
+
+        # Get model, temperature, max_tokens from LLM config
+        model: Optional[str] = llm_config.get('model')
+        temperature: float = llm_config.get('temperature', 0.1)
+        max_tokens: int = llm_config.get('max_tokens', 2000)
+
+        # Get debug flag from debug scope
+        debug_mode: bool = self.config.get('debug', {}).get('llm', False)
         
         if not model:
             raise ValueError("No model specified in config")
         
         # Special handling for SAP AI Core
         if provider == "sap_aicore":
-            client_id = self.config.get('client_id') or os.getenv(self.config.get('client_id_env', ''))
-            client_secret = self.config.get('client_secret') or os.getenv(self.config.get('client_secret_env', ''))
-            base_url = self.config.get('base_url')
-            auth_url = self.config.get('auth_url')
-            resource_group = self.config.get('resource_group', 'default')
-            deployment_id = self.config.get('deployment_id')  # Optional
-            
+            client_id: Optional[str] = llm_config.get('client_id')
+            client_secret: Optional[str] = llm_config.get('client_secret')
+            base_url: Optional[str] = llm_config.get('base_url')
+            auth_url: Optional[str] = llm_config.get('auth_url')
+            resource_group: str = llm_config.get('resource_group', 'default')
+            deployment_id: Optional[str] = llm_config.get('deployment_id')  # Optional
+
             if not all([client_id, client_secret, base_url, auth_url]):
                 raise ValueError("SAP AI Core requires: client_id, client_secret, base_url, auth_url")
             
@@ -107,35 +114,45 @@ class LLMFactory:
                 temperature=temperature,
                 max_tokens=max_tokens
             )
-        
+            
+        # Special handling for Ollama
+        if provider == "ollama":
+            base_url: Optional[str] = llm_config.get('base_url')
+            provider_instance: BaseLLMProvider = OllamaProvider(
+                api_key="ollama",  # Dummy key
+                model=model,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                base_url=base_url
+            )
+            provider_instance.debug_mode = debug_mode
+            return provider_instance
+
         # Standard providers (OpenAI, Gemini, DeepSeek)
-        api_key = self.config.get('api_key')
+        api_key: Optional[str] = llm_config.get('api_key')
+
         if not api_key:
-            # Try to get from environment variable
-            api_key_env = self.config.get('api_key_env')
-            if api_key_env:
-                api_key = os.getenv(api_key_env)
-        
-        if not api_key:
-            raise ValueError("No API key found in config (api_key) or environment (api_key_env)")
+            raise ValueError("No API key found in config (api_key)")
         
         # Create and return provider instance
-        provider_class = self.PROVIDERS[provider]
-        return provider_class(
+        provider_class: Type[BaseLLMProvider] = self.PROVIDERS[provider]
+        provider_instance: BaseLLMProvider = provider_class(
             api_key=api_key,
             model=model,
             temperature=temperature,
             max_tokens=max_tokens
         )
+        provider_instance.debug_mode = debug_mode
+        return provider_instance
     
-    def get_available_providers(self) -> list:
+    def get_available_providers(self) -> List[str]:
         """Get list of available provider names."""
         return list(self.PROVIDERS.keys())
     
-    def get_config(self) -> dict:
+    def get_config(self) -> Dict:
         """Get the loaded configuration."""
         return self.config.copy()
     
-    def reload_config(self):
+    def reload_config(self) -> None:
         """Reload configuration from file."""
         self.config = self._load_config()

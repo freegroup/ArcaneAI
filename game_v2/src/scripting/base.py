@@ -1,23 +1,58 @@
-import abc
+"""
+Abstract base class for scripting sandboxes.
+"""
+from __future__ import annotations
+from abc import ABC, abstractmethod
+from typing import Any, Dict
 
-# Abstract base class for sandboxes
-class BaseSandbox(abc.ABC):
+
+class BaseSandbox(ABC):
+    """Abstract base class for script execution sandboxes."""
     
-    @abc.abstractmethod
-    def set_var(self, name, value):
-        """Sets a variable in the sandbox."""
+    @abstractmethod
+    def set_var(self, name: str, value: Any) -> None:
+        """
+        Set a variable in the sandbox.
+        
+        Args:
+            name: Variable name
+            value: Value to set
+        """
         pass
 
-    @abc.abstractmethod
-    def get_var(self, name):
-        """Gets a variable from the sandbox."""
+    @abstractmethod
+    def get_var(self, name: str) -> Any:
+        """
+        Get a variable from the sandbox.
+        
+        Args:
+            name: Variable name
+            
+        Returns:
+            Variable value
+        """
         pass
 
-    def get_all_vars(self):
+    @abstractmethod
+    def get_all_vars(self) -> Dict[str, Any]:
+        """
+        Get all user-defined variables.
+        
+        Returns:
+            Dictionary of all variables
+        """
         pass
 
-    @abc.abstractmethod
-    def eval(self, code):
-        """Evaluates code in the sandbox."""
+    @abstractmethod
+    def eval(self, code: str) -> Any:
+        """
+        Evaluate code in the sandbox.
+        
+        Args:
+            code: Code to evaluate
+            
+        Returns:
+            Result of evaluation
+        """
         pass
 

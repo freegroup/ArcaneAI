@@ -2,8 +2,14 @@
 Inventory System for managing game items and flags.
 Uses Lua scripting engine for powerful expression evaluation.
 """
-from typing import Dict, Any
+from __future__ import annotations
+from typing import Any, Dict, List, Optional, TYPE_CHECKING
+
 from scripting.lua import LuaSandbox
+
+if TYPE_CHECKING:
+    from session import GameSession
+    from state_engine import Action
 
 
 class Inventory:
@@ -12,7 +18,7 @@ class Inventory:
     Uses Lua scripting for flexible action execution.
     """
     
-    def __init__(self, session, items: Dict[str, Any] = None):
+    def __init__(self, session: GameSession, items: Optional[Dict[str, Any]] = None) -> None:
         """
         Initialize inventory with session and optional items.
         
@@ -20,11 +26,11 @@ class Inventory:
             session: GameSession for sending messages (REQUIRED)
             items: Dictionary of inventory items from game definition
         """
-        self.session = session
-        self.lua = LuaSandbox()
+        self.session: GameSession = session
+        self.lua: LuaSandbox = LuaSandbox()
         
         # Store items from game definition (used as base for to_dict)
-        self.items = items or {}
+        self.items: Dict[str, Any] = items or {}
         
         # Set values in Lua environment
         if items:
@@ -57,7 +63,7 @@ class Inventory:
         """
         self.lua.set_var(key, value)
     
-    def execute(self, actions: list[str]) -> None:
+    def execute(self, actions: List[str]) -> None:
         """
         Execute a list of inventory actions using Lua.
         Inventory is master - any new variables created in Lua are synced back.
@@ -83,12 +89,12 @@ class Inventory:
         # Sync: Pull all Lua variables back into inventory items
         self._sync_from_lua()
     
-    def _sync_from_lua(self):
+    def _sync_from_lua(self) -> None:
         """
         Sync Lua variables back to inventory.
         Inventory is master - all Lua variables are synced to items.
         """
-        all_vars = self.lua.get_all_vars()
+        all_vars: Dict[str, Any] = self.lua.get_all_vars()
         # Update ALL items (existing + new)
         for key, value in all_vars.items():
             self.items[key] = value
@@ -136,7 +142,7 @@ class Inventory:
         """
         return self.lua.get_all_vars()
     
-    def on_action(self, action) -> bool:
+    def on_action(self, action: Action) -> bool:
         """
         Callback method for StateEngine action hook.
         Executes inventory actions when an action is performed.

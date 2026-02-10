@@ -3,16 +3,17 @@ OpenAI LLM Provider implementation.
 """
 from typing import List
 from openai import OpenAI
-from .base_provider import BaseLLMProvider, LLMMessage, LLMResponse
+from .base_provider import BaseLLMProvider, LLMMessage, LLMResponse, LLMFunction, LLMFunctionCall
 
 
 class OpenAIProvider(BaseLLMProvider):
     """
     OpenAI provider for GPT models.
+    Supports native function calling for GPT-4 and GPT-3.5 models.
     """
-    
+
     BASE_URL = "https://api.openai.com/v1"
-    
+
     def __init__(self, api_key: str, model: str, temperature: float = 0.1, max_tokens: int = 2000):
         """Initialize OpenAI provider."""
         super().__init__(api_key, model, temperature, max_tokens)
@@ -20,8 +21,8 @@ class OpenAIProvider(BaseLLMProvider):
             base_url=self.BASE_URL,
             api_key=self.api_key
         )
-    
-    def chat(self, messages: List[LLMMessage]) -> LLMResponse:
+
+    def call_chat(self, messages: List[LLMMessage]) -> LLMResponse:
         """
         Send messages to OpenAI and get a response.
         

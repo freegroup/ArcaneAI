@@ -1,8 +1,14 @@
 """
 State class for game states.
 """
+from __future__ import annotations
 from dataclasses import dataclass
+from typing import Optional, TYPE_CHECKING
+
 from jinja2 import Template
+
+if TYPE_CHECKING:
+    from session import GameSession
 
 
 @dataclass
@@ -10,7 +16,9 @@ class State:
     """Represents a game state."""
     name: str
     description: str
-    session: any
+    session: GameSession
+    ambient_sound: Optional[str] = None  # Ambient sound file (looping)
+    ambient_sound_volume: int = 100
     
     def get_raw_description(self) -> str:
         """Get the raw description without template rendering."""

@@ -1,9 +1,15 @@
 """
 State Engine for managing game states and actions.
 """
-from typing import Dict, List, Optional, Callable
+from __future__ import annotations
+from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING
+
 from .state import State
 from .action import Action
+
+if TYPE_CHECKING:
+    from session import GameSession
+    from scripting.lua import LuaSandbox
 
 
 class StateEngine:
@@ -14,11 +20,11 @@ class StateEngine:
     
     def __init__(
         self,
-        session,
-        states: Dict[str, dict],
-        actions: List[dict],
+        session: GameSession,
+        states: Dict[str, Dict[str, Any]],
+        actions: List[Dict[str, Any]],
         initial_state: str
-    ):
+    ) -> None:
         """
         Initialize the state engine with game data.
         
@@ -28,17 +34,20 @@ class StateEngine:
             actions: List of action definitions
             initial_state: Name of the initial state
         """
-        self.session = session
+        self.session: GameSession = session
         self.states: Dict[str, State] = {}
         self.actions: List[Action] = []
         self.action_hooks: List[Callable[[Action], bool]] = []
+        self.current_state: str = ""
         
         # Load states with session reference for template rendering
         for state_name, state_data in states.items():
             self.states[state_name] = State(
                 name=state_name,
                 description=state_data['description'],
-                session=session
+                session=session,
+                ambient_sound=state_data.get('ambient_sound'),
+                ambient_sound_volume=state_data.get('ambient_sound_volume', 100)
             )
         
         # Load actions
@@ -63,7 +72,10 @@ class StateEngine:
                 name=action_data['name'],
                 prompts=prompts,
                 conditions=action_data.get('conditions', []),
-                scripts=action_data.get('scripts', [])
+                scripts=action_data.get('scripts', []),
+                sound_effect=action_data.get('sound_effect'),
+                sound_effect_volume=action_data.get('sound_effect_volume', 100),
+                sound_effect_duration=action_data.get('sound_effect_duration')
             ))
         
         # Set initial state
@@ -78,7 +90,7 @@ class StateEngine:
         if not self.current_state:
             raise ValueError("No initial_state defined")
     
-    def add_action_hook(self, hook: Callable[[Action], bool]):
+    def add_action_hook(self, hook: Callable[[Action], bool]) -> None:
         """
         Add a hook that is called before state transitions.
         Multiple hooks can be registered.
@@ -113,7 +125,7 @@ class StateEngine:
         
         return available
     
-    def _check_conditions(self, conditions: List[str], lua_sandbox) -> bool:
+    def _check_conditions(self, conditions: List[str], lua_sandbox: LuaSandbox) -> bool:
         """
         Check if all conditions are met.
         
@@ -177,11 +189,50 @@ class StateEngine:
         # Perform state transition
         old_state = self.current_state
         self.current_state = action.state_after
-        
+
+        # Send sound events via message queue
+        self._send_sound_events(action, old_state)
+
         # Build message
         if old_state == action.state_after:
             message = f"Action '{name}' ausgeführt (State bleibt {self.current_state})."
         else:
             message = f"State gewechselt von {old_state} nach {self.current_state}."
-        
+
         return True, message
+
+    def _send_sound_events(self, action: Action, old_state: str) -> None:
+        """Play sound effect and ambient sound after a state transition via jukebox."""
+        jukebox: Optional[Any] = self.session.jukebox
+        if not jukebox:
+            return
+
+        # Play sound effect for the action (one-shot)
+        if action.sound_effect:
+            jukebox.play_sound(
+                self.session,
+                action.sound_effect,
+                volume=action.sound_effect_volume,
+                loop=False,
+                duration=action.sound_effect_duration or 0
+            )
+
+        # Play ambient sound for the new state (looping)
+        new_state = self.states.get(self.current_state)
+        old_state_obj = self.states.get(old_state)
+
+        if new_state:
+            new_ambient = new_state.ambient_sound
+            old_ambient = old_state_obj.ambient_sound if old_state_obj else None
+
+            if new_ambient != old_ambient or old_state != self.current_state:
+                # Stop old ambient first
+                jukebox.stop_ambient(self.session)
+                # Start new ambient if any
+                if new_ambient:
+                    jukebox.play_sound(
+                        self.session,
+                        new_ambient,
+                        volume=new_state.ambient_sound_volume,
+                        loop=True
+                    )
