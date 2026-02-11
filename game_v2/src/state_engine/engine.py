@@ -6,6 +6,8 @@ from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING
 
 from .state import State
 from .action import Action
+from .trigger import Trigger
+from .transition import Transition
 
 if TYPE_CHECKING:
     from session import GameSession
@@ -50,7 +52,7 @@ class StateEngine:
                 ambient_sound_volume=state_data.get('ambient_sound_volume', 100)
             )
         
-        # Load actions
+        # Load actions - Create Trigger or Transition based on state_before/state_after
         for action_data in actions:
             # Build prompts dict from action data
             prompts = action_data.get('prompts', {})
@@ -66,17 +68,35 @@ class StateEngine:
                     "after_fire": action_data.get('on_transition', '')
                 }
             
-            self.actions.append(Action(
-                state_before=action_data['state_before'],
-                state_after=action_data['state_after'],
-                name=action_data['name'],
-                prompts=prompts,
-                conditions=action_data.get('conditions', []),
-                scripts=action_data.get('scripts', []),
-                sound_effect=action_data.get('sound_effect'),
-                sound_effect_volume=action_data.get('sound_effect_volume', 100),
-                sound_effect_duration=action_data.get('sound_effect_duration')
-            ))
+            # Determine if this is a Trigger or Transition
+            state_before = action_data['state_before']
+            state_after = action_data['state_after']
+            
+            if state_before == state_after:
+                # Same state = Trigger (only has 'state' field)
+                self.actions.append(Trigger(
+                    name=action_data['name'],
+                    prompts=prompts,
+                    conditions=action_data.get('conditions', []),
+                    scripts=action_data.get('scripts', []),
+                    sound_effect=action_data.get('sound_effect'),
+                    sound_effect_volume=action_data.get('sound_effect_volume', 100),
+                    sound_effect_duration=action_data.get('sound_effect_duration'),
+                    state=state_before  # Trigger has single 'state' field
+                ))
+            else:
+                # Different state = Transition (has 'state_before' and 'state_after')
+                self.actions.append(Transition(
+                    name=action_data['name'],
+                    prompts=prompts,
+                    conditions=action_data.get('conditions', []),
+                    scripts=action_data.get('scripts', []),
+                    sound_effect=action_data.get('sound_effect'),
+                    sound_effect_volume=action_data.get('sound_effect_volume', 100),
+                    sound_effect_duration=action_data.get('sound_effect_duration'),
+                    state_before=state_before,
+                    state_after=state_after
+                ))
         
         # Set initial state
         if initial_state and initial_state in self.states:
@@ -110,45 +130,14 @@ class StateEngine:
         Only returns actions whose conditions are met.
         """
         lua_sandbox = self.session.game_engine.inventory.lua
-        available = []
         
-        for action in self.actions:
-            # Check if action is in current state
-            if action.state_before != self.current_state:
-                continue
-            
-            # Check if all conditions are met
-            if not self._check_conditions(action.conditions, lua_sandbox):
-                continue
-            
-            available.append(action)
-        
-        return available
-    
-    def _check_conditions(self, conditions: List[str], lua_sandbox: LuaSandbox) -> bool:
-        """
-        Check if all conditions are met.
-        
-        Args:
-            conditions: List of Lua condition expressions
-            lua_sandbox: LuaSandbox to evaluate conditions
-            
-        Returns:
-            True if all conditions are met, False otherwise
-        """
-        if not conditions:
-            return True  # No conditions = always available
-        
-        for condition in conditions:
-            try:
-                result = lua_sandbox.eval(f"return ({condition})")
-                if not result:
-                    return False
-            except Exception as e:
-                print(f"[WARNING] Failed to evaluate condition '{condition}': {e}")
-                return False
-        
-        return True
+        # Use Action's check_conditions (polymorphic!)
+        # - Trigger checks only Lua conditions
+        # - Transition checks state + Lua conditions (via super())
+        return [
+            action for action in self.actions 
+            if action.check_conditions(self.current_state, lua_sandbox)
+        ]
     
     def get_action(self, name: str) -> Optional[Action]:
         """
@@ -166,9 +155,10 @@ class StateEngine:
                 return action
         return None
     
-    def set_state(self, name: str) -> tuple[bool, str]:
+    def execute_action(self, name: str) -> tuple[bool, str]:
         """
-        Set state by executing the named action.
+        Execute the named action (Trigger or Transition).
+        Triggers stay in same state, Transitions change state.
         
         Args:
             name: Name of the action to execute
@@ -186,20 +176,22 @@ class StateEngine:
             if not hook(action):
                 return False, f"Action '{name}' wurde durch Hook blockiert."
         
-        # Perform state transition
-        old_state = self.current_state
-        self.current_state = action.state_after
-
-        # Send sound events via message queue
-        self._send_sound_events(action, old_state)
-
-        # Build message
-        if old_state == action.state_after:
-            message = f"Action '{name}' ausgeführt (State bleibt {self.current_state})."
-        else:
-            message = f"State gewechselt von {old_state} nach {self.current_state}."
-
-        return True, message
+        # Fire the action (Trigger or Transition handles state change internally)
+        success, message = action.fire(self)
+        
+        # DEBUG: Show available actions in new state
+        if success:
+            available = self.get_available_actions()
+            print(f"\n[DEBUG] Available actions in '{self.current_state}':")
+            for act in available:
+                print(f"  - {act}")
+        
+        return success, message
+    
+    # Backward compatibility alias
+    def set_state(self, name: str) -> tuple[bool, str]:
+        """Deprecated: Use execute_action() instead."""
+        return self.execute_action(name)
 
     def _send_sound_events(self, action: Action, old_state: str) -> None:
         """Play sound effect and ambient sound after a state transition via jukebox."""
