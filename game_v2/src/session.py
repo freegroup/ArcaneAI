@@ -24,7 +24,6 @@ class GameSession:
     def __init__(
         self,
         session_id: str,
-        definition_path: str,
         config: Optional[Dict[str, Any]] = None,
         message_queue: Optional[MessageQueue] = None,
         audio_sink: Optional[BaseAudioSink] = None,
@@ -32,10 +31,10 @@ class GameSession:
     ) -> None:
         """
         Initialize a game session.
+        Game definition is loaded from config.yaml (maps_directory + game_name).
 
         Args:
             session_id: Unique session identifier
-            definition_path: Path to game_definition.json
             config: Loaded configuration dictionary (if None, loads from default path)
             message_queue: MessageQueue for sending messages (set when WebSocket connects)
             audio_sink: Audio output sink (PyAudioSink, WebSocketSink, etc.)
@@ -55,7 +54,8 @@ class GameSession:
         self.ws_token: Optional[str] = None
         
         # GameEngine creates and manages all game components
-        self.game_engine: GameEngine = GameEngine(session=self, definition_path=definition_path)
+        # Reads game definition from config.yaml (maps_directory + game_name)
+        self.game_engine: GameEngine = GameEngine(session=self)
     
     def update_activity(self) -> None:
         """Update last activity timestamp."""

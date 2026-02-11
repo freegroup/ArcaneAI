@@ -188,10 +188,6 @@ class StateEngine:
         
         return success, message
     
-    # Backward compatibility alias
-    def set_state(self, name: str) -> tuple[bool, str]:
-        """Deprecated: Use execute_action() instead."""
-        return self.execute_action(name)
 
     def _send_sound_events(self, action: Action, old_state: str) -> None:
         """Play sound effect and ambient sound after a state transition via jukebox."""

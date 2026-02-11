@@ -75,14 +75,11 @@ class LoginData(BaseModel):
 # ============ Session Management ============
 
 def create_session(session_id: str) -> GameSession:
-    """Create a new game session."""
-    game_def = CONFIG.get('game_definition')
-    if not game_def:
-        raise ValueError("No game_definition specified in config.yaml")
-    
+    """Create a new game session.
+    Game definition is loaded from config.yaml (maps_directory + game_name).
+    """
     return GameSession(
         session_id=session_id,
-        definition_path=str(GAME_V2_DIR / game_def),
         config=CONFIG,
         audio_sink=WebSocketSink(),
         jukebox=WebJukebox()

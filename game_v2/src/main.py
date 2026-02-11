@@ -26,17 +26,12 @@ def main():
         # Load config once
         config = load_config()
         
-        # Get game definition path from config
-        game_def = config.get('game_definition')
-        if not game_def:
-            raise ValueError("No game_definition specified in config.yaml")
-        definition_path = GAME_V2_DIR / game_def
-        print(f"Lade Spieldefinition: {definition_path}")
+        # Game definition path is read from config.yaml (maps_directory + game_name)
+        print("Lade Spieldefinition aus config.yaml...")
         
-        # Create session - pass config so all components can use it
+        # Create session - GameEngine reads from config.yaml
         session = GameSession(
             session_id="console",
-            definition_path=str(definition_path),
             config=config,
             audio_sink=PyAudioSink(sample_rate=24000),
             jukebox=LocalJukebox(config=config)

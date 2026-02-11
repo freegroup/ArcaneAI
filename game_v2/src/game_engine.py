@@ -4,8 +4,9 @@ Loads game definition and coordinates StateEngine, Inventory, and LLM.
 """
 from __future__ import annotations
 import json
+import yaml
 from pathlib import Path
-from typing import Any, Dict, TYPE_CHECKING
+from typing import Any, Dict, Optional, TYPE_CHECKING
 
 from state_engine import StateEngine
 from inventory import Inventory
@@ -21,17 +22,18 @@ class GameEngine:
     Loads game definition and delegates to specialized components.
     """
     
-    def __init__(self, session: GameSession, definition_path: str) -> None:
+    def __init__(self, session: GameSession) -> None:
         """
         Initialize the game engine.
+        Reads maps_directory and game_name from config.yaml.
         
         Args:
             session: GameSession for message passing (REQUIRED)
-            definition_path: Path to game_definition.json
         """
         self.session: GameSession = session
         
-        # Load game definition
+        # Load game definition from config
+        definition_path = self._get_definition_path_from_config()
         self.game_data: Dict[str, Any] = self._load_game_definition(definition_path)
         
         # Initialize components (pass session to all)
@@ -73,6 +75,34 @@ class GameEngine:
             Initial state description
         """
         return self.controller.start_game()
+    
+    def _get_definition_path_from_config(self) -> str:
+        """
+        Read config.yaml and construct path to game definition.
+        
+        Returns:
+            Full path to game definition file (maps_directory/game_name/index.json)
+        """
+        # Config is in game_v2/config.yaml
+        config_path = Path(__file__).parent.parent / "config.yaml"
+        
+        with open(config_path, 'r', encoding='utf-8') as f:
+            config = yaml.safe_load(f)
+        
+        # Get maps directory and game name
+        maps_dir = config.get('maps_directory', '../maps')
+        game_name = config.get('game_name', 'TheTipsyQuest')
+        
+        # Construct path: game_v2/src/../{maps_directory}/{game_name}/index.json
+        base_dir = Path(__file__).parent.parent  # game_v2/
+        game_path = base_dir / maps_dir / game_name / "index.json"
+        
+        # Resolve to absolute path
+        resolved_path = game_path.resolve()
+        
+        print(f"[CONFIG] Loading game from: {resolved_path}")
+        
+        return str(resolved_path)
     
     def _load_game_definition(self, definition_path: str) -> Dict[str, Any]:
         """
