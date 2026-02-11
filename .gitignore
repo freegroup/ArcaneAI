@@ -14,3 +14,6 @@ config.yaml
 game_v2/organize_soundfx.py
 game_v2/soundfx_zip
 
+# Large sound files (21GB) - keep local but not in git
+game_v2/soundfx/
+
