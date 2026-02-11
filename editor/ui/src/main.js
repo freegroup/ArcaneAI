@@ -7,6 +7,9 @@ import { InstallCodeMirror } from "codemirror-editor-vue3";
 
 import SoundManager from '@/utils/SoundManager'
 
+// Import Game Theme CSS Variables
+import './assets/game-theme.css'
+
 SoundManager.initialize(store);
 
 const app = createApp(App)

@@ -53,7 +53,7 @@ export default {
       navigationItems: [
         { title: 'Personality',  route: (mapName) => `/gamesetup/${mapName || ''}`, icon: 'mdi-account-alert-outline'},
         { title: 'Inventory',    route: (mapName) => `/inventory/${mapName || ''}`, icon: 'mdi-hand-coin-outline' },
-        { title: 'State Engine', route: (mapName) => `/diagram/${mapName   || ''}`, icon: 'mdi-state-machine'     },
+        { title: 'Game Map', route: (mapName) => `/diagram/${mapName   || ''}`, icon: 'mdi-state-machine'     },
       ],
       isCompact: false, // Initially, the drawer is expanded
     };

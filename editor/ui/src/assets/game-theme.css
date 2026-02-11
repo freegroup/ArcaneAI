@@ -1,0 +1,106 @@
+/* 
+ * Game Theme - Dark Fantasy RPG Style
+ * Central design variables for consistent game-like appearance
+ */
+
+/* Import Retro 8-Bit Font */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:root {
+  /* Color Palette - Dark Fantasy Theme */
+  --game-bg-primary: #1a1a2e;          /* Deep dark blue-black */
+  --game-bg-secondary: #16213e;        /* Slightly lighter dark blue */
+  --game-bg-tertiary: #0f3460;         /* Muted deep blue */
+  
+  --game-accent-primary: #e94560;      /* Vibrant red/pink - for important actions */
+  --game-accent-secondary: #f39c12;    /* Golden yellow - for highlights */
+  --game-accent-tertiary: #8e44ad;     /* Purple - for special items */
+  
+  --game-text-primary: #e0e0e0;        /* Light gray - main text */
+  --game-text-secondary: #a0a0a0;      /* Medium gray - secondary text */
+  --game-text-muted: #6b6b6b;          /* Dark gray - labels */
+  
+  --game-border-color: #2c3e50;        /* Subtle border */
+  --game-border-highlight: #34495e;    /* Highlighted border */
+  
+  --game-success: #27ae60;             /* Green - success states */
+  --game-warning: #f39c12;             /* Orange - warnings */
+  --game-danger: #e74c3c;              /* Red - errors */
+  --game-info: #3498db;                /* Blue - info */
+  
+  /* Spacing */
+  --game-spacing-xs: 4px;
+  --game-spacing-sm: 8px;
+  --game-spacing-md: 16px;
+  --game-spacing-lg: 24px;
+  --game-spacing-xl: 32px;
+  
+  /* Border Radius */
+  --game-radius-sm: 4px;
+  --game-radius-md: 8px;
+  --game-radius-lg: 12px;
+  
+  /* Shadows - Game-like depth */
+  --game-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --game-shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+  --game-shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5);
+  --game-shadow-glow: 0 0 20px rgba(233, 69, 96, 0.3);
+  
+  /* Transitions */
+  --game-transition-fast: 0.15s ease;
+  --game-transition-normal: 0.3s ease;
+  --game-transition-slow: 0.5s ease;
+  
+  /* Typography */
+  --game-font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --game-font-family-mono: 'Courier New', Courier, monospace;
+  --game-font-family-retro: 'Press Start 2P', cursive;
+  
+  --game-font-size-xs: 11px;
+  --game-font-size-sm: 13px;
+  --game-font-size-md: 15px;
+  --game-font-size-lg: 18px;
+  --game-font-size-xl: 24px;
+  
+  /* Input/Controls */
+  --game-input-bg: #0f3460;
+  --game-input-border: #2c3e50;
+  --game-input-focus: #e94560;
+  --game-input-hover: #16213e;
+  
+  /* Scrollbar */
+  --game-scrollbar-thumb: #2c3e50;
+  --game-scrollbar-track: #16213e;
+}
+
+/* Global Scrollbar Styling - Game Theme */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--game-scrollbar-track);
+  border-radius: var(--game-radius-sm);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--game-scrollbar-thumb);
+  border-radius: var(--game-radius-sm);
+  border: 2px solid var(--game-scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--game-border-highlight);
+}
+
+/* Selection Colors */
+::selection {
+  background: var(--game-accent-primary);
+  color: var(--game-text-primary);
+}
+
+::-moz-selection {
+  background: var(--game-accent-primary);
+  color: var(--game-text-primary);
+}
