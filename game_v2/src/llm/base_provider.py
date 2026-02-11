@@ -143,16 +143,23 @@ WICHTIG:
 - Der "response"-Text ist für den Spieler, der "function"-Name ist internes System-Metadata"""
 
     @abstractmethod
-    def call_chat(self, messages: List[LLMMessage]) -> LLMResponse:
+    def call_chat(
+        self,
+        messages: List[LLMMessage],
+        functions: Optional[List[LLMFunction]] = None
+    ) -> LLMResponse:
         """
         Low-level API call to LLM.
         Must be implemented by each provider.
 
         Args:
             messages: Complete messages (including system prompt)
+            functions: Optional list of functions for native function calling support.
+                      Providers that support native function calling should use this.
+                      Providers using JSON-based function calling can ignore this.
 
         Returns:
-            Raw LLMResponse from API
+            Raw LLMResponse from API (potentially with function_call if native support)
 
         Raises:
             Exception: If the API call fails
@@ -222,19 +229,28 @@ WICHTIG:
             except ImportError:
                 print("[DEBUG] Could not import debug_utils")
 
-        # STEP 2: Call LLM API
-        response: LLMResponse = self.call_chat(complete_messages)
+        # STEP 2: Call LLM API (pass functions for native function calling support)
+        response: LLMResponse = self.call_chat(complete_messages, functions)
 
-        # STEP 3: Parse response
-        try:
-            function_call: LLMFunctionCall = self.parse_response(response.content)
-            # Update response with parsed function call
-            response.function_call = function_call
-            # Set content to the narrative response
-            response.content = function_call.arguments.get("response", response.content)
-        except ValueError:
-            # Parsing failed, return response as-is
-            pass
+        # STEP 3: Parse response (only if function_call not already set by native function calling)
+        if not response.function_call:
+            try:
+                function_call: LLMFunctionCall = self.parse_response(response.content)
+                # Update response with parsed function call
+                response.function_call = function_call
+                # Set content to the narrative response
+                response.content = function_call.arguments.get("response", response.content)
+            except ValueError as e:
+                # Parsing failed, return response as-is
+                if self.debug_mode:
+                    print(f"[DEBUG] Function parsing failed: {e}")
+        else:
+            # Native function calling was used - extract narrative response from arguments if present
+            if response.function_call and "response" in response.function_call.arguments:
+                response.content = response.function_call.arguments["response"]
+            elif self.debug_mode:
+                print(f"[DEBUG] Native function call present but no 'response' in arguments")
+                print(f"  Arguments: {response.function_call.arguments if response.function_call else 'None'}")
 
         # DEBUG: Print LLM response if debug_mode is enabled
         if self.debug_mode:
@@ -250,9 +266,9 @@ WICHTIG:
     def chat(self, messages: List[LLMMessage]) -> LLMResponse:
         """
         Backward compatibility wrapper for chat().
-        Delegates to call_chat().
+        Delegates to call_chat() without functions.
         """
-        return self.call_chat(messages)
+        return self.call_chat(messages, functions=None)
 
     def _parse_function_call(self, llm_response: str) -> LLMFunctionCall:
         """

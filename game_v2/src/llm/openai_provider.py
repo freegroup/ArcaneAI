@@ -1,7 +1,7 @@
 """
 OpenAI LLM Provider implementation.
 """
-from typing import List
+from typing import List, Optional
 from openai import OpenAI
 from .base_provider import BaseLLMProvider, LLMMessage, LLMResponse, LLMFunction, LLMFunctionCall
 
@@ -22,12 +22,17 @@ class OpenAIProvider(BaseLLMProvider):
             api_key=self.api_key
         )
 
-    def call_chat(self, messages: List[LLMMessage]) -> LLMResponse:
+    def call_chat(
+        self,
+        messages: List[LLMMessage],
+        functions: Optional[List[LLMFunction]] = None
+    ) -> LLMResponse:
         """
         Send messages to OpenAI and get a response.
         
         Args:
             messages: List of LLMMessage objects
+            functions: Optional list of functions (ignored - uses JSON-based function calling)
             
         Returns:
             LLMResponse object

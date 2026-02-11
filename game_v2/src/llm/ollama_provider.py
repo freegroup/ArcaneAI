@@ -110,12 +110,17 @@ BEISPIEL - Spieler sagt "geh nach Norden":
 Schreibe NUR das JSON, keine weiteren Texte!
 NIEMALS den Function-Namen im "response"-Text verwenden - das ist nur Systeminfo!"""
     
-    def call_chat(self, messages: List[LLMMessage]) -> LLMResponse:
+    def call_chat(
+        self,
+        messages: List[LLMMessage],
+        functions: Optional[List[LLMFunction]] = None
+    ) -> LLMResponse:
         """
         Send messages to Ollama and get a response.
         
         Args:
             messages: List of LLMMessage objects
+            functions: Optional list of functions (ignored - uses JSON-based function calling)
             
         Returns:
             LLMResponse object

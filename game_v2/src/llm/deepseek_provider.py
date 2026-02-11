@@ -2,9 +2,9 @@
 DeepSeek LLM Provider implementation.
 Uses OpenAI-compatible API endpoint.
 """
-from typing import List
+from typing import List, Optional
 from openai import OpenAI
-from .base_provider import BaseLLMProvider, LLMMessage, LLMResponse
+from .base_provider import BaseLLMProvider, LLMMessage, LLMResponse, LLMFunction
 
 
 class DeepSeekProvider(BaseLLMProvider):
@@ -35,12 +35,17 @@ class DeepSeekProvider(BaseLLMProvider):
             api_key=self.api_key
         )
 
-    def call_chat(self, messages: List[LLMMessage]) -> LLMResponse:
+    def call_chat(
+        self,
+        messages: List[LLMMessage],
+        functions: Optional[List[LLMFunction]] = None
+    ) -> LLMResponse:
         """
         Send messages to DeepSeek and get a response.
         
         Args:
             messages: List of LLMMessage objects
+            functions: Optional list of functions (ignored - uses JSON-based function calling)
             
         Returns:
             LLMResponse object

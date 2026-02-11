@@ -217,7 +217,7 @@ class GameController:
             action_name: str = function_call.name
             success: bool
             message: str
-            success, message = self.session.game_engine.state_engine.set_state(action_name)
+            success, message = self.session.game_engine.state_engine.execute_action(action_name)
             function_success = success
 
             if not success:
