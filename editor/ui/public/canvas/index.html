@@ -56,6 +56,10 @@ document.addEventListener("DOMContentLoaded",function () {
 
     var app  = new Application();
 
+      // Notify parent that canvas is ready
+      window.parent.postMessage({ type: 'canvasReady' }, window.location.origin);
+      console.log('✅ [Canvas] Ready - sent ready message to parent');
+
       function receiveMessage(event) {
 
         if (event.origin !== window.location.origin) return;

@@ -15,6 +15,7 @@ export default {
     mapName: "unknown",
     loading: false,
     error: null,
+    _updateSource: null, // Track update source: 'canvas' | 'vue' | null
   },
   mutations: {
     SET_MAPS(state, maps) {
@@ -43,6 +44,9 @@ export default {
     },
     SET_MAP_NAME(state, newName) {
       state.mapName = newName;
+    },
+    SET_UPDATE_SOURCE(state, source) {
+      state._updateSource = source;
     },
   },
   actions: {
@@ -131,7 +135,14 @@ export default {
       commit('REMOVE_INVENTORY_ITEM', index);
     },
     async updateMapDiagram({ commit }, data) {
+      // Mark that this update came from canvas
+      commit('SET_UPDATE_SOURCE', 'canvas');
       commit('SET_MAP_DIAGRAM', data);
+      
+      // Auto-reset source after a short delay to allow watch to process
+      setTimeout(() => {
+        commit('SET_UPDATE_SOURCE', null);
+      }, 100);
     },
 
     async saveMap({ commit, state }) {
@@ -169,5 +180,6 @@ export default {
     mapName: (state) => state.mapName,
     isLoading: (state) => state.loading,
     error: (state) => state.error,
+    updateSource: (state) => state._updateSource,
   },
 };
