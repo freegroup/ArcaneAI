@@ -11,3 +11,6 @@ history-**.json
 
 game_v2/config.yaml
 **/venv311
+game_v2/organize_soundfx.py
+game_v2/soundfx_zip
+
