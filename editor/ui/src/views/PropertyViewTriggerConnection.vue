@@ -66,39 +66,59 @@
           />
         </div>
         
-        <div style="flex:1;display:flex;flex-direction: column;">
+        <div style="flex:1;display:flex;flex-direction: column;min-height:0;">
           <div class="label-with-help" v-if="jsonData.userData">
             <label for="triggerDescription">Action Description</label>
             <v-btn icon size="x-small" @click="openHelp('actionDescription')" class="help-btn">
               <v-icon size="small">mdi-information-outline</v-icon>
             </v-btn>
           </div>
-          <textarea
-              style="flex:1"
-              id="triggerDescription"
-              type="text"
-              placeholder="Describe what possible happen on this action"
-              v-model="jsonData.userData.description"
-              @input="onDataChange"
-          ></textarea>
+          <div class="editor-container" style="flex:1;min-height:0;" v-if="jsonData.userData">
+            <textarea
+                id="triggerDescription"
+                type="text"
+                placeholder="Describe what possible happen on this action"
+                v-model="jsonData.userData.description"
+                @input="onDataChange"
+            ></textarea>
+            <v-btn 
+              icon 
+              size="small" 
+              class="expand-btn" 
+              @click="showActionEditor = true"
+              title="Open in fullscreen editor"
+            >
+              <v-icon size="small">mdi-arrow-expand</v-icon>
+            </v-btn>
+          </div>
         </div>
 
-        <div style="flex:1;display:flex;flex-direction: column;">
+        <div style="flex:1;display:flex;flex-direction: column;min-height:0;">
           <div class="label-with-help" v-if="jsonData.userData">
             <label for="systemPrompt">On Success</label>
             <v-btn icon size="x-small" @click="openHelp('onSuccess')" class="help-btn">
               <v-icon size="small">mdi-information-outline</v-icon>
             </v-btn>
           </div>
-          <textarea
-              style="flex:1"
-              v-if="jsonData.userData" 
-              id="systemPrompt"
-              v-model="jsonData.userData.system_prompt"
-              @input="onDataChange"
-              placeholder="Enter what happens on success of the action"
-          ></textarea>
+          <div class="editor-container" style="flex:1;min-height:0;" v-if="jsonData.userData">
+            <textarea
+                v-if="jsonData.userData" 
+                id="systemPrompt"
+                v-model="jsonData.userData.system_prompt"
+                @input="onDataChange"
+                placeholder="Enter what happens on success of the action"
+            ></textarea>
+            <v-btn 
+              icon 
+              size="small" 
+              class="expand-btn" 
+              @click="showSuccessEditor = true"
+              title="Open in fullscreen editor"
+            >
+              <v-icon size="small">mdi-arrow-expand</v-icon>
+            </v-btn>
           </div>
+        </div>
 
         <!-- Textarea for Conditions -->
         <div>
@@ -138,6 +158,18 @@
           :helpText="helpText"
         />
 
+        <!-- Jinja Editor Dialogs -->
+        <JinjaEditorDialog
+          v-model="showActionEditor"
+          :text="jsonData.userData?.description || ''"
+          @save="updateActionDescription"
+        />
+        <JinjaEditorDialog
+          v-model="showSuccessEditor"
+          :text="jsonData.userData?.system_prompt || ''"
+          @save="updateOnSuccess"
+        />
+
     </div>
   </template>
   
@@ -146,11 +178,12 @@
   import { mapGetters } from 'vuex';
   import MessageTypes from '../../public/canvas/MessageTypes.js';
   import ExtendedHelpDialog from '@/components/ExtendedHelpDialog.vue';
+  import JinjaEditorDialog from '@/components/JinjaEditorDialog.vue';
   import "codemirror/theme/material-darker.css";
 
   export default {
     name: 'PropertyView',
-    components: { ExtendedHelpDialog },
+    components: { ExtendedHelpDialog, JinjaEditorDialog },
     props: {
         draw2dFrame: {
             type: Object,
@@ -176,12 +209,31 @@
         isPlaying: false,
         // Help Dialog
         showHelpDialog: false,
+        // Jinja Editor Dialogs
+        showActionEditor: false,
+        showSuccessEditor: false,
         helpTitle: '',
         helpText: '',
         helpTexts: {
           triggerName: {
             title: 'Trigger Name',
-            text: 'The unique identifier for this trigger action. Use descriptive names like "open_door" or "take_key". This name is used internally and helps you organize your game logic.'
+            text: `<strong>The Unique Identifier for this Action</strong><br><br>
+            Use descriptive names like <code>open_door</code> or <code>take_key</code>. This name is used internally and helps you organize your game logic.<br><br>
+            <strong>🎯 AI Matching Importance:</strong><br>
+            A well-chosen, descriptive name also helps the AI match this action with player input more accurately. The clearer and more specific the name, the better the AI can identify and execute the correct trigger when the player expresses their intent.<br><br>
+            <strong>Good Examples:</strong>
+            <ul>
+              <li><code>open_door</code> - Clear and specific ✅</li>
+              <li><code>take_key</code> - Describes exact action ✅</li>
+              <li><code>examine_chest</code> - Detailed action ✅</li>
+              <li><code>talk_to_merchant</code> - Specific interaction ✅</li>
+            </ul>
+            <strong>Bad Examples:</strong>
+            <ul>
+              <li><code>action1</code> - Not descriptive ❌</li>
+              <li><code>do_something</code> - Too vague ❌</li>
+              <li><code>x</code> - No meaning ❌</li>
+            </ul>`
           },
           soundEffect: {
             title: 'Sound Effect',
@@ -302,6 +354,16 @@
           this.helpText = help.text;
           this.showHelpDialog = true;
         }
+      },
+
+      updateActionDescription(newText) {
+        this.jsonData.userData.description = newText;
+        this.onDataChange();
+      },
+
+      updateOnSuccess(newText) {
+        this.jsonData.userData.system_prompt = newText;
+        this.onDataChange();
       },
     },
     watch: {
@@ -460,10 +522,16 @@
     font-size: var(--game-font-size-md);
     font-family: var(--game-font-family-mono);
     resize: vertical;
-    flex: 1;
     min-height: 80px;
     transition: all var(--game-transition-fast);
     outline: none;
+    overflow-y: auto;
+  }
+
+  /* Textareas in flex containers */
+  .editor-container textarea {
+    height: 100%;
+    resize: none;
   }
 
   .property-view textarea:hover {
@@ -545,6 +613,37 @@
 
   :deep(.v-slider-thumb:hover .v-slider-thumb__surface) {
     transform: scale(1.1);
+  }
+
+  /* Editor Container with Expand Button */
+  .editor-container {
+    position: relative;
+  }
+
+  .expand-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 10;
+    background: var(--game-accent-primary) !important;
+    color: var(--game-text-primary) !important;
+    box-shadow: var(--game-shadow-md);
+    transition: all var(--game-transition-fast);
+    opacity: 0.33;
+    min-width: 28px !important;
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .expand-btn:hover {
+    background: var(--game-accent-tertiary) !important;
+    box-shadow: var(--game-shadow-glow);
+    transform: scale(1.1);
+    opacity: 1;
+  }
+
+  .expand-btn :deep(.v-icon) {
+    font-size: 18px !important;
   }
 
   /* Label with Help Icon */

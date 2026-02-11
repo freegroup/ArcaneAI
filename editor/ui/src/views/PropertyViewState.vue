@@ -401,12 +401,17 @@
     color: var(--game-text-primary) !important;
     box-shadow: var(--game-shadow-md);
     transition: all var(--game-transition-fast);
+    opacity: 0.33;
+    min-width: 28px !important;
+    width: 28px !important;
+    height: 28px !important;
   }
 
   .expand-btn:hover {
     background: var(--game-accent-tertiary) !important;
     box-shadow: var(--game-shadow-glow);
     transform: scale(1.1);
+    opacity: 1;
   }
 
   .expand-btn :deep(.v-icon) {

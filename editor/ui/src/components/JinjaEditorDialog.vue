@@ -11,12 +11,12 @@
       </v-card-title>
 
       <v-card-text class="dialog-content">
-        <Codemirror
-          ref="cmEditor"
-          class="code-editor"
+        <MonacoEditor
           v-model:value="editedText"
-          :options="cmOptions"
-          placeholder="Enter scene description with Jinja2 syntax..."
+          language="jinja2"
+          :options="editorOptions"
+          class="monaco-editor"
+          @editorDidMount="handleEditorDidMount"
         />
       </v-card-text>
 
@@ -34,14 +34,72 @@
 </template>
 
 <script>
-import Codemirror from "codemirror-editor-vue3";
-import "codemirror/addon/display/placeholder.js";
-import "codemirror/mode/jinja2/jinja2.js";
-import "codemirror/theme/material-darker.css";
+import MonacoEditor from 'monaco-editor-vue3';
+import * as monaco from 'monaco-editor';
+
+// Register Jinja2 language
+monaco.languages.register({ id: 'jinja2' });
+
+monaco.languages.setMonarchTokensProvider('jinja2', {
+  tokenizer: {
+    root: [
+      // Jinja2 comments
+      [/\{#/, 'comment', '@comment'],
+      // Jinja2 statements
+      [/\{%/, 'delimiter.jinja', '@statement'],
+      // Jinja2 expressions
+      [/\{\{/, 'delimiter.jinja', '@expression'],
+      // Everything else is text
+      [/./, 'text'],
+    ],
+    comment: [
+      [/#\}/, 'comment', '@pop'],
+      [/./, 'comment'],
+    ],
+    statement: [
+      [/%\}/, 'delimiter.jinja', '@pop'],
+      [/\b(if|elif|else|endif|for|endfor|block|endblock|extends|include|macro|endmacro|set|raw|endraw)\b/, 'keyword'],
+      [/\b(in|not|and|or|is)\b/, 'operator'],
+      [/"([^"\\]|\\[\s\S])*"/, 'string'],
+      [/'([^'\\]|\\[\s\S])*'/, 'string'],
+      [/\d+/, 'number'],
+      [/[<>=!]+/, 'operator'],
+      [/[\w.]+/, 'variable'],
+      [/./, 'text'],
+    ],
+    expression: [
+      [/\}\}/, 'delimiter.jinja', '@pop'],
+      [/"([^"\\]|\\[\s\S])*"/, 'string'],
+      [/'([^'\\]|\\[\s\S])*'/, 'string'],
+      [/\d+/, 'number'],
+      [/[\w.]+/, 'variable'],
+      [/./, 'text'],
+    ],
+  },
+});
+
+// Define theme colors for Jinja2
+monaco.editor.defineTheme('jinja2-dark', {
+  base: 'vs-dark',
+  inherit: true,
+  rules: [
+    { token: 'delimiter.jinja', foreground: 'C586C0', fontStyle: 'bold' },
+    { token: 'keyword', foreground: 'C586C0' },
+    { token: 'operator', foreground: 'D4D4D4' },
+    { token: 'variable', foreground: '9CDCFE' },
+    { token: 'string', foreground: 'CE9178' },
+    { token: 'number', foreground: 'B5CEA8' },
+    { token: 'comment', foreground: '6A9955', fontStyle: 'italic' },
+    { token: 'text', foreground: 'D4D4D4' },
+  ],
+  colors: {},
+});
 
 export default {
   name: 'JinjaEditorDialog',
-  components: { Codemirror },
+  components: {
+    MonacoEditor
+  },
   props: {
     modelValue: {
       type: Boolean,
@@ -55,14 +113,20 @@ export default {
   data() {
     return {
       editedText: '',
-      cmOptions: {
-        mode: "jinja2",
-        lineNumbers: false,
-        lineWrapping: true,
-        theme: "default",
-        styleActiveLine: false,
-        indentUnit: 2,
-        tabSize: 2,
+      editor: null,
+      editorOptions: {
+        theme: 'jinja2-dark',
+        minimap: { enabled: false },
+        lineNumbers: 'off',
+        wordWrap: 'on',
+        scrollBeyondLastLine: false,
+        fontSize: 16,
+        fontFamily: 'Consolas, Monaco, "Courier New", monospace',
+        padding: { top: 10, bottom: 10 },
+        automaticLayout: false,
+        // Disable suggestions
+        quickSuggestions: false,
+        suggestOnTriggerCharacters: false,
       }
     };
   },
@@ -81,23 +145,25 @@ export default {
       if (newVal) {
         // Dialog opened - initialize with current text
         this.editedText = this.text;
-        // Set focus to editor and refresh after dialog opens
-        this.$nextTick(() => {
-          if (this.$refs.cmEditor && this.$refs.cmEditor.cminstance) {
-            // Refresh CodeMirror to recalculate dimensions
-            this.$refs.cmEditor.cminstance.refresh();
-            // Then set focus
-            this.$refs.cmEditor.cminstance.focus();
-          }
-        });
       }
     }
   },
   methods: {
+    handleEditorDidMount(editor) {
+      this.editor = editor;
+      // Focus the editor after mount
+      this.$nextTick(() => {
+        if (this.editor) {
+          this.editor.focus();
+        }
+      });
+    },
+
     save() {
       this.$emit('save', this.editedText);
       this.isOpen = false;
     },
+
     cancel() {
       this.isOpen = false;
     }
@@ -143,49 +209,13 @@ export default {
 .dialog-content {
   padding: 0;
   height: 500px;
-  overflow: auto;
+  overflow: hidden;
   background: var(--game-bg-secondary);
 }
 
-.code-editor {
+.monaco-editor {
+  width: 100%;
   height: 100%;
-}
-
-/* CodeMirror Game Theme - EXAKT wie PropertyViewState */
-.code-editor :deep(.CodeMirror) {
-  font-size: var(--game-font-size-md);
-  font-family: var(--game-font-family-mono);
-  background: var(--game-bg-secondary);
-  color: var(--game-text-primary);
-  border: 1px solid var(--game-input-border);
-  border-radius: var(--game-radius-md);
-  padding: var(--game-spacing-sm);
-  min-height: 120px;
-}
-
-.code-editor :deep(.CodeMirror-gutters) {
-  display: none;
-}
-
-.code-editor :deep(.CodeMirror-cursor) {
-  border-left-color: var(--game-accent-primary);
-}
-
-.code-editor :deep(.CodeMirror-selected) {
-  background: rgba(233, 69, 96, 0.2);
-}
-
-/* Jinja2 Syntax Highlighting */
-.code-editor :deep(.cm-variable-2) {
-  color: #ffa07a;
-}
-
-.code-editor :deep(.cm-keyword) {
-  color: #f39c12;
-}
-
-.code-editor :deep(.cm-string) {
-  color: #98c379;
 }
 
 .dialog-actions {
