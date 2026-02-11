@@ -104,9 +104,9 @@
   
 <script>
   import SoundManager from '@/utils/SoundManager'
-  import "codemirror/theme/material-darker.css";
-
   import { mapGetters } from 'vuex';
+  import MessageTypes from '../../public/canvas/MessageTypes.js';
+  import "codemirror/theme/material-darker.css";
 
   export default {
     name: 'PropertyView',
@@ -159,7 +159,7 @@
               hasActions: this.jsonData.userData?.actions?.length > 0
             });
             var data = JSON.parse(JSON.stringify( this.jsonData ));
-            this.draw2dFrame.postMessage({ type: 'setShapeData', data: data },'*');
+            this.draw2dFrame.postMessage({ type: MessageTypes.SET_SHAPE_DATA, data: data },'*');
         }
       },
 
@@ -226,7 +226,7 @@
       this.messageHandler = (event) => {
           if (event.origin !== window.location.origin) return;
           const message = event.data;
-          if (message.event === 'onSelect' && message.type === "TriggerConnection") {
+          if (message.event === MessageTypes.SELECT && message.type === MessageTypes.SHAPE_TRIGGER_CONNECTION) {
               console.log('🎯 [SYNC] Canvas → Vue: TriggerConnection selected', {
                 name: message.data?.name,
                 source: message.data?.source?.name,
@@ -242,7 +242,7 @@
                 }
 
           }
-          else if (message.event === 'onUnselect') {
+          else if (message.event === MessageTypes.UNSELECT) {
               console.log('❌ [SYNC] Canvas → Vue: Selection cleared');
               SoundManager.stopCurrentSound()
               this.jsonData = {}

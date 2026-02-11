@@ -32,6 +32,7 @@ import 'splitpanes/dist/splitpanes.css';
 import PropertyViewState from './PropertyViewState.vue';
 import PropertyViewTriggerLabel from './PropertyViewTriggerLabel.vue';
 import PropertyViewTriggerConnection from './PropertyViewTriggerConnection.vue';
+import MessageTypes from '../../public/canvas/MessageTypes.js';
 
 export default {
   components: {
@@ -108,7 +109,7 @@ export default {
         diagramItemCount: document?.length || 0
       });
       const iframe = this.draw2dFrame.contentWindow;
-      iframe.postMessage({ type: 'setDocument', data: JSON.parse(JSON.stringify(document)) }, '*');
+      iframe.postMessage({ type: MessageTypes.SET_DOCUMENT, data: JSON.parse(JSON.stringify(document)) }, '*');
     },
     handleResize(event) {
       this.paneSize = event[0].size;
@@ -133,7 +134,7 @@ export default {
       const message = event.data;
       
       // Handle canvas ready message
-      if (message.type === 'canvasReady') {
+      if (message.type === MessageTypes.CANVAS_READY) {
         console.log('✅ [SYNC] Canvas is ready, iframe fully loaded');
         this.canvasReady = true;
         this.updateDraw2dFrame();
@@ -149,14 +150,14 @@ export default {
           this.sendDocumentToCanvas(this.mapDiagram);
         }
       }
-      else if (message.type === 'updateDocumentData') {
+      else if (message.type === MessageTypes.DOCUMENT_UPDATED) {
         console.log('🔄 [SYNC] Canvas → Vuex: Document updated from canvas', {
           diagramItemCount: message.data?.length || 0
         });
         // No need for blocked flag anymore - updateMapDiagram sets source to 'canvas'
         this.updateMapDiagram(message.data)
       }
-      else if(message.type === "toggleFullScreen"){
+      else if(message.type === MessageTypes.TOGGLE_FULLSCREEN){
         var element = document.getElementById('state-editor');
 
         var requestFullScreen =

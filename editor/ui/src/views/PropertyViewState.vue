@@ -51,6 +51,7 @@
 <script>
   import SoundManager from '@/utils/SoundManager'
   import { mapGetters } from 'vuex';
+  import MessageTypes from '../../public/canvas/MessageTypes.js';
 
   import Codemirror from "codemirror-editor-vue3";
   import "codemirror/addon/display/placeholder.js";
@@ -112,7 +113,7 @@
               ambientSound: this.jsonData.userData?.ambient_sound || 'none'
             });
             var data = JSON.parse(JSON.stringify( this.jsonData ));
-            this.draw2dFrame.postMessage({ type: 'setShapeData', data: data },'*');
+            this.draw2dFrame.postMessage({ type: MessageTypes.SET_SHAPE_DATA, data: data },'*');
         }
       },
 
@@ -137,7 +138,7 @@
         this.messageHandler = (event) => {
             if (event.origin !== window.location.origin) return;
             const message = event.data;
-            if (message.event === 'onSelect' && message.type == "StateShape") {
+            if (message.event === MessageTypes.SELECT && message.type === MessageTypes.SHAPE_STATE) {
                 console.log('🎯 [SYNC] Canvas → Vue: StateShape selected', {
                   name: message.data?.name,
                   hasAmbientSound: !!message.data?.userData?.ambient_sound
@@ -148,7 +149,7 @@
                   this.jsonData.userData.ambient_sound_volume = 100;
                 }
             }
-            else if (message.event === 'onUnselect') {
+            else if (message.event === MessageTypes.UNSELECT) {
                 console.log('❌ [SYNC] Canvas → Vue: Selection cleared');
                 SoundManager.stopCurrentSound()
                 this.jsonData = {}

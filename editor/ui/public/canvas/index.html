@@ -14,6 +14,7 @@
 
   <script src="./lib/draw2d.js"></script>
 
+  <script src="./MessageTypes.js"></script>
   <script src="./app/Application.js"></script>
   <script src="./app/EditPolicy.js"></script>
   <script src="./app/View.js"></script>
@@ -56,8 +57,8 @@ document.addEventListener("DOMContentLoaded",function () {
 
     var app  = new Application();
 
-      // Notify parent that canvas is ready
-      window.parent.postMessage({ type: 'canvasReady' }, window.location.origin);
+      // Notify parent that canvas is ready (using MessageTypes)
+      window.parent.postMessage({ type: MessageTypes.CANVAS_READY }, window.location.origin);
       console.log('✅ [Canvas] Ready - sent ready message to parent');
 
       function receiveMessage(event) {
@@ -66,7 +67,7 @@ document.addEventListener("DOMContentLoaded",function () {
 
         const message = event.data;
 
-        if (message.type === 'setDocument') {
+        if (message.type === MessageTypes.SET_DOCUMENT) {
             const mapJson = message.data;
             var reader = new draw2d.io.json.Reader();
             app.view.clear();
@@ -74,7 +75,7 @@ document.addEventListener("DOMContentLoaded",function () {
             console.log("setDocument")
             app.view.centerDocument()
         }
-        else if (message.type === 'setShapeData') {
+        else if (message.type === MessageTypes.SET_SHAPE_DATA) {
           app.view.setShapeData(message.data)
         }
       }
