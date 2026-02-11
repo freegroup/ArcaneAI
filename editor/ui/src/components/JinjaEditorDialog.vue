@@ -21,10 +21,10 @@
       </v-card-text>
 
       <v-card-actions class="dialog-actions">
+        <v-spacer></v-spacer>
         <v-btn @click="cancel" class="cancel-btn">
           Cancel
         </v-btn>
-        <v-spacer></v-spacer>
         <v-btn @click="save" class="save-btn">
           Save Changes
         </v-btn>
@@ -172,38 +172,70 @@ export default {
 </script>
 
 <style scoped>
+/* Override Vuetify defaults */
+.jinja-editor-dialog :deep(.v-card) {
+  background: var(--game-bg-secondary) !important;
+  color: var(--game-text-primary) !important;
+}
+
 .jinja-editor-dialog {
   background: var(--game-bg-secondary);
   color: var(--game-text-primary);
   border: 2px solid var(--game-border-highlight);
   border-radius: var(--game-radius-lg);
+  box-shadow: var(--game-shadow-lg);
 }
 
 .dialog-title {
-  background: var(--game-bg-tertiary);
-  color: var(--game-accent-secondary);
-  font-size: var(--game-font-size-lg);
-  font-weight: 600;
-  padding: var(--game-spacing-lg);
-  border-bottom: 1px solid var(--game-border-color);
-  display: flex;
-  align-items: center;
-  gap: var(--game-spacing-sm);
+  background: linear-gradient(135deg, var(--game-bg-tertiary) 0%, #1a1a2e 100%) !important;
+  color: var(--game-accent-secondary) !important;
+  font-family: var(--game-font-family-retro) !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 3px !important;
+  padding: var(--game-spacing-lg) !important;
+  border-bottom: 3px solid var(--game-accent-primary) !important;
+  border-top: 3px solid var(--game-accent-secondary) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: var(--game-spacing-sm) !important;
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8), 
+               0 0 10px var(--game-accent-secondary) !important;
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.3) !important;
 }
 
 .title-icon {
   color: var(--game-accent-secondary);
-  font-size: 28px;
+  font-size: 32px;
+  filter: drop-shadow(0 0 8px var(--game-accent-secondary));
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 8px var(--game-accent-secondary));
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 12px var(--game-accent-secondary));
+  }
 }
 
 .dialog-title :deep(.v-btn) {
-  background: transparent;
-  color: var(--game-text-secondary);
+  background: rgba(233, 69, 96, 0.2);
+  color: var(--game-text-primary);
+  border: 2px solid var(--game-accent-primary);
+  transition: all var(--game-transition-fast);
 }
 
 .dialog-title :deep(.v-btn:hover) {
-  background: var(--game-input-hover);
+  background: var(--game-accent-primary);
   color: var(--game-text-primary);
+  border-color: var(--game-accent-tertiary);
+  box-shadow: 0 0 15px var(--game-accent-primary);
+  transform: scale(1.1);
 }
 
 .dialog-content {

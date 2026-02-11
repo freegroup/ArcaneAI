@@ -53,7 +53,7 @@
   
   /* Typography */
   --game-font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --game-font-family-mono: 'Courier New', Courier, monospace;
+  --game-font-family-mono: 'Consolas', 'Monaco', 'Lucida Console', monospace;
   --game-font-family-retro: 'Press Start 2P', cursive;
   
   --game-font-size-xs: 11px;

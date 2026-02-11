@@ -9,9 +9,10 @@
       :mini-variant="isCompact"
       :width="isCompact ? 56 : 240"
       :mini-variant-width="56"
+      class="nav-drawer"
     >
       <!-- Toggle button to control compact state -->
-      <v-list-item @click="toggleDrawerCompact" style="cursor: pointer;">
+      <v-list-item @click="toggleDrawerCompact" class="nav-drawer__toggle">
         <v-list-item-icon>
           <v-icon>{{ isCompact ? 'mdi-chevron-right' : 'mdi-chevron-left' }}</v-icon>
         </v-list-item-icon>
@@ -19,13 +20,14 @@
 
       <v-divider></v-divider>
 
-      <v-list dense>
+      <v-list dense class="nav-drawer__list">
         <v-list-item
           v-for="item in navigationItems"
           :key="item.title"
           :to="item.route($route.params.mapName)"
           :prepend-icon="item.icon"
           router
+          class="nav-drawer__item"
         >
           <v-list-item-content v-if="!isCompact">
             <v-list-item-title>{{ item.title }}</v-list-item-title>
@@ -55,7 +57,7 @@ export default {
         { title: 'Inventory',    route: (mapName) => `/inventory/${mapName || ''}`, icon: 'mdi-hand-coin-outline' },
         { title: 'Game Map', route: (mapName) => `/diagram/${mapName   || ''}`, icon: 'mdi-state-machine'     },
       ],
-      isCompact: false, // Initially, the drawer is expanded
+      isCompact: false,
     };
   },
   created() {
@@ -92,13 +94,72 @@ export default {
       }
     },
     toggleDrawerCompact() {
-      // Toggle compact state and save to localStorage
       this.isCompact = !this.isCompact;
       localStorage.setItem('drawerCompactState', JSON.stringify(this.isCompact));
     },
   },
 };
 </script>
+
+<style>
+/* Navigation Drawer - Einfaches 8-Bit Styling */
+.nav-drawer {
+  background: var(--game-bg-secondary) !important;
+  border-right: 3px solid var(--game-accent-primary) !important;
+  border-radius: 0 !important;
+}
+
+/* Toggle Button */
+.nav-drawer__toggle {
+  background: transparent !important;
+  min-height: 64px !important;
+}
+
+.nav-drawer__toggle .v-icon {
+  color: var(--game-accent-secondary) !important;
+  font-size: 28px !important;
+  filter: drop-shadow(0 0 8px var(--game-accent-secondary)) !important;
+  transition: all var(--game-transition-fast) !important;
+}
+
+.nav-drawer__toggle:hover .v-icon {
+  filter: drop-shadow(0 0 12px var(--game-accent-secondary)) !important;
+  transform: scale(1.1) !important;
+}
+
+/* Divider verstecken */
+.nav-drawer .v-divider {
+  display: none !important;
+}
+
+/* List Items */
+.nav-drawer__list {
+  background: transparent !important;
+  padding: var(--game-spacing-md) 0 !important;
+}
+
+.nav-drawer__item {
+  border-radius: 0 !important;
+  margin: var(--game-spacing-xs) var(--game-spacing-sm) !important;
+}
+
+/* Active Item - NUR dieser bekommt Styling */
+.nav-drawer__item.v-list-item--active {
+  background: rgba(233, 69, 96, 0.15) !important;
+  border-left: 3px solid var(--game-accent-secondary) !important;
+  border-top: 2px solid var(--game-accent-secondary) !important;
+  border-bottom: 2px solid var(--game-accent-primary) !important;
+}
+
+.nav-drawer__item.v-list-item--active .v-icon {
+  color: var(--game-accent-secondary) !important;
+}
+
+.nav-drawer__item.v-list-item--active .v-list-item-title {
+  color: var(--game-accent-secondary) !important;
+  font-weight: 600 !important;
+}
+</style>
 
 <style scoped>
 #app {
@@ -112,7 +173,5 @@ export default {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: start;
-  align-items: center;
 }
 </style>
