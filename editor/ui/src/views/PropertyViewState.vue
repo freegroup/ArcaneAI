@@ -32,7 +32,7 @@
             outlined
           ></v-select>
           
-          <v-btn icon size="small" @click="toggleSound">
+          <v-btn icon size="small" @click="toggleSound" :disabled="!jsonData.userData.ambient_sound">
             <v-icon size="small">{{ isPlaying ? 'mdi-stop' : 'mdi-play' }}</v-icon>
           </v-btn>
         </div>
@@ -268,7 +268,7 @@
     background: var(--game-bg-primary);
     color: var(--game-text-primary);
     height: 100%;
-    overflow-y: auto;
+    overflow: hidden;
     padding: var(--game-spacing-lg);
     box-sizing: border-box; 
     display: flex;
@@ -299,7 +299,7 @@
     padding: var(--game-spacing-sm) var(--game-spacing-md);
     background: var(--game-input-bg);
     border: 1px solid var(--game-input-border);
-    border-radius: var(--game-radius-md);
+    border-radius: 0;
     color: var(--game-text-primary);
     font-size: var(--game-font-size-md);
     transition: all var(--game-transition-fast);
@@ -340,7 +340,7 @@
   .sound-selection :deep(.v-field) {
     background: var(--game-input-bg);
     border: 1px solid var(--game-input-border);
-    border-radius: var(--game-radius-md);
+    border-radius: 0;
   }
 
   .sound-selection :deep(.v-field:hover) {
@@ -349,15 +349,37 @@
   }
 
   .sound-selection :deep(.v-btn) {
-    background: var(--game-accent-primary);
-    color: var(--game-text-primary);
-    border-radius: var(--game-radius-md);
-    transition: all var(--game-transition-fast);
+    background: var(--game-accent-primary) !important;
+    color: var(--game-text-primary) !important;
+    border-radius: 0 !important;
+    min-width: 36px !important;
+    height: 36px !important;
+    box-shadow: inset -4px -4px 0px 0px #8c2022,
+                0 0 0 3px black !important;
+    transition: all var(--game-transition-fast) !important;
   }
 
   .sound-selection :deep(.v-btn:hover) {
-    background: var(--game-accent-tertiary);
-    box-shadow: var(--game-shadow-glow);
+    background: var(--game-accent-tertiary) !important;
+    box-shadow: inset -6px -6px 0px 0px #8c2022,
+                0 0 0 3px black !important;
+  }
+
+  .sound-selection :deep(.v-btn:active) {
+    box-shadow: inset 4px 4px 0px 0px #8c2022,
+                0 0 0 3px black !important;
+  }
+
+  .sound-selection :deep(.v-btn:disabled) {
+    background: var(--game-text-muted) !important;
+    box-shadow: inset -4px -4px 0px 0px #555,
+                0 0 0 3px #555 !important;
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+  }
+
+  .sound-selection :deep(.v-btn:disabled .v-icon) {
+    color: #888 !important;
   }
 
   /* Slider Styling - Vuetify 3 */
@@ -390,6 +412,11 @@
   /* Editor Container with Expand Button */
   .editor-container {
     position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
   }
 
   .expand-btn {
@@ -419,15 +446,27 @@
   }
 
   /* CodeMirror Game Theme */
+  .code-editor {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
   .code-editor :deep(.CodeMirror) {
     font-size: var(--game-font-size-md);
     font-family: var(--game-font-family-mono);
     background: var(--game-input-bg);
     color: var(--game-text-primary);
     border: 1px solid var(--game-input-border);
-    border-radius: var(--game-radius-md);
+    border-radius: 0;
     padding: var(--game-spacing-sm);
-    min-height: 120px;
+    height: 100%;
+  }
+
+  .code-editor :deep(.CodeMirror-scroll) {
+    overflow-y: auto !important;
+    overflow-x: auto !important;
   }
 
   .code-editor :deep(.CodeMirror-gutters) {
