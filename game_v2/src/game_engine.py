@@ -83,26 +83,17 @@ class GameEngine:
         Returns:
             Full path to game definition file (maps_directory/game_name/index.json)
         """
-        # Config is in game_v2/config.yaml
-        config_path = Path(__file__).parent.parent / "config.yaml"
+        from config_loader import GameConfig
         
-        with open(config_path, 'r', encoding='utf-8') as f:
-            config = yaml.safe_load(f)
+        # Load configuration
+        config = GameConfig()
         
-        # Get maps directory and game name
-        maps_dir = config.get('maps_directory', '../maps')
-        game_name = config.get('game_name', 'TheTipsyQuest')
+        # Get game definition path (already validated and resolved)
+        game_path = config.game_definition_path
         
-        # Construct path: game_v2/src/../{maps_directory}/{game_name}/index.json
-        base_dir = Path(__file__).parent.parent  # game_v2/
-        game_path = base_dir / maps_dir / game_name / "index.json"
+        print(f"[CONFIG] Loading game from: {game_path}")
         
-        # Resolve to absolute path
-        resolved_path = game_path.resolve()
-        
-        print(f"[CONFIG] Loading game from: {resolved_path}")
-        
-        return str(resolved_path)
+        return str(game_path)
     
     def _load_game_definition(self, definition_path: str) -> Dict[str, Any]:
         """

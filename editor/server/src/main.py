@@ -2,6 +2,7 @@ import os
 import shutil
 import uvicorn
 import json
+from pathlib import Path
 from typing import List
 
 from fastapi import FastAPI, HTTPException, UploadFile, File
@@ -11,13 +12,22 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-# Aktueller Dateipfad (__file__) und das src-Verzeichnis ermitteln
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(BASE_DIR)))
+# Load configuration using EditorConfig
+BASE_DIR = Path(__file__).parent
 
-# Verzeichnis für YAML-Dateien und statische Dateien definieren
-MAPS_ROOT_DIR = os.path.join(PROJECT_DIR, 'maps')
-STATIC_FILES_DIR = os.path.join(BASE_DIR, 'static')
+# Import local config_loader
+from config_loader import EditorConfig
+
+# Load config
+editor_config = EditorConfig()
+
+# Get directories from config (already validated and resolved)
+MAPS_ROOT_DIR = str(editor_config.maps_directory)
+SOUNDFX_ROOT_DIR = str(editor_config.soundfx_directory)
+STATIC_FILES_DIR = str(BASE_DIR / 'static')
+
+print(f"[EDITOR CONFIG] Maps directory: {MAPS_ROOT_DIR}")
+print(f"[EDITOR CONFIG] SoundFX directory: {SOUNDFX_ROOT_DIR}")
 
 
 # FastAPI App initialisieren
@@ -50,22 +60,26 @@ app.add_middleware(NoCacheMiddleware)
 
 @app.post("/api/v1/maps/{map_name}")
 async def create_file(map_name: str):
-    """Speichert eine hochgeladene Datei im angegebenen Verzeichnis"""
+    """
+    Erstellt eine neue Map aus dem Template.
+    Note: soundfx sind zentral und werden NICHT mehr pro Map erstellt.
+    """
     # Path to the template.json file in the current directory
     template_path = os.path.join(BASE_DIR, "template.json")
-     # Verify the template.json exists
+    
+    # Verify the template.json exists
     if not os.path.exists(template_path):
         raise HTTPException(status_code=500, detail="template.json not found")
-    # Directory structure to be created
+    
+    # Create map directory (no soundfx subdirectory - sounds are central)
     map_dir = os.path.join(MAPS_ROOT_DIR, map_name)
-    soundfx_dir = os.path.join(map_dir, "soundfx")
     
-
     try:
-        os.makedirs(soundfx_dir, exist_ok=True)
+        os.makedirs(map_dir, exist_ok=True)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to create directories: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to create map directory: {e}")
     
+    # Copy template to map directory
     map_file_path = os.path.join(map_dir, "index.json")
     try:
         shutil.copy(template_path, map_file_path)
@@ -117,24 +131,47 @@ async def get_file(map_name: str):
 
 @app.get("/api/v1/sounds/{map_name}")
 async def list_sound_files(map_name: str) -> List[str]:
-    """Listet alle Sound-Dateien im definierten Verzeichnis auf"""
+    """
+    Listet alle Sound-Dateien aus dem zentralen soundfx Verzeichnis.
+    Note: map_name parameter wird für Kompatibilität beibehalten, aber soundfx_dir ist zentral.
+    """
     try:
-        sound_dir = os.path.join(MAPS_ROOT_DIR, map_name, "soundfx")
-        files = [f for f in os.listdir(sound_dir) if f.endswith((".mp3", ".wav"))]
-        return files
+        # Use central soundfx directory from config
+        files = []
+        for root, dirs, filenames in os.walk(SOUNDFX_ROOT_DIR):
+            for filename in filenames:
+                if filename.endswith((".mp3", ".wav", ".ogg")):
+                    # Get relative path from soundfx root
+                    rel_path = os.path.relpath(os.path.join(root, filename), SOUNDFX_ROOT_DIR)
+                    files.append(rel_path)
+        return sorted(files)
     except FileNotFoundError:
-        raise HTTPException(status_code=500, detail="Verzeichnis nicht gefunden")
+        raise HTTPException(status_code=500, detail="SoundFX directory not found")
 
 
-@app.get("/api/v1/sounds/{map_name}/{file_name}")
+@app.get("/api/v1/sounds/{map_name}/{file_name:path}")
 async def get_sound_file(map_name: str, file_name: str):
-    """Lädt eine Sound-Datei anhand ihres Namens"""
-    file_location = os.path.join(MAPS_ROOT_DIR, map_name, "soundfx", file_name)
-    if not os.path.exists(file_location):
-        raise HTTPException(status_code=404, detail="Datei nicht gefunden")
+    """
+    Lädt eine Sound-Datei aus dem zentralen soundfx Verzeichnis.
+    Note: map_name parameter wird für Kompatibilität beibehalten, aber soundfx_dir ist zentral.
+    file_name kann Unterverzeichnisse enthalten (z.B. "ambient/wind.wav")
+    """
+    # Use central soundfx directory from config
+    file_location = os.path.join(SOUNDFX_ROOT_DIR, file_name)
     
-    # Return the file as a response with the appropriate MIME type for MP3
-    return FileResponse(file_location, media_type="audio/mpeg", filename=file_name)
+    if not os.path.exists(file_location):
+        raise HTTPException(status_code=404, detail=f"Sound file not found: {file_name}")
+    
+    # Determine media type based on extension
+    ext = os.path.splitext(file_name)[1].lower()
+    media_types = {
+        '.mp3': 'audio/mpeg',
+        '.wav': 'audio/wav',
+        '.ogg': 'audio/ogg'
+    }
+    media_type = media_types.get(ext, 'audio/mpeg')
+    
+    return FileResponse(file_location, media_type=media_type, filename=os.path.basename(file_name))
 
 
 # Static files für /editor - liefert Dateien aus dem src/static Verzeichnis

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import yaml from 'js-yaml';
 
 const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
 
@@ -139,109 +138,17 @@ export default {
       commit('SET_LOADING', true);
       commit('SET_ERROR', null);
       try {
+        // Simple: Just save the JSON with config and diagram
         const formattedJson = JSON.stringify({
           "config": state.mapConfig,
           "diagram": state.mapDiagram
         }, null, 4);
 
-        let blob = new Blob([formattedJson], { type: 'application/json' });
-        let formData = new FormData();
+        const blob = new Blob([formattedJson], { type: 'application/json' });
+        const formData = new FormData();
         formData.append('file', blob, state.mapName + ".json");
 
-        // Send PUT request to backend
-        await axios.put(`${API_BASE_URL}/maps/`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-
-        // Find the starting state shape
-        const startStateShape = state.mapDiagram.find(
-          (shape) => shape.type === "StateShape" && shape.stateType === "START"
-        );
-        const startStateName = startStateShape ? startStateShape.name : null;
-        
-        // Prepare data for the YAML file
-        const stateShapes = state.mapDiagram
-          .filter((item) => item.type === "StateShape")
-          .map((shape) => ({
-            name: shape.name,
-            metadata: {
-              // kopiere erstmal alles...
-              ...shape.userData,
-              //...und ein paar Felder benötigen ein "trim"
-              system_prompt: (shape.userData?.system_prompt ?? "").trim(),
-              ambient_sound: shape.userData?.ambient_sound?.trim(),
-              state_type:  shape.stateType?.toLowerCase()
-            },
-          }));
-
-        const trans = state.mapDiagram
-          .filter((shape) => shape.type === "StateShape" && shape.trigger && shape.trigger.length > 0)
-          .flatMap((shape) => 
-            shape.trigger.map((trigger) => ({
-              trigger: trigger.id.replace(/-/g, "_"),
-              source: shape.name,
-              dest: shape.name,
-              metadata: {
-                name: trigger.name,
-                system_prompt: trigger.system_prompt || "",
-                description: trigger.description || "",
-                sound_effect: trigger.sound_effect || "",
-                sound_effect_volume: trigger.sound_effect_volume || 100,
-                sound_effect_duration: trigger.sound_effect_duration,
-                conditions: trigger.conditions || [],
-                actions: trigger.actions || []
-              }
-            }))
-          );
-
-        const trans2 = state.mapDiagram
-          .filter((item) => item.type === "TriggerConnection")
-          .map((triggerConnection) => ({
-            trigger: triggerConnection.id.replace(/-/g, "_"),
-            source: triggerConnection.source.name,
-            dest: triggerConnection.target.name,
-            metadata: {
-              name: triggerConnection.name,
-              system_prompt: triggerConnection.userData?.system_prompt || "",
-              description: triggerConnection.userData?.description || "",
-              sound_effect: triggerConnection.userData?.sound_effect || "",
-              sound_effect_volume: triggerConnection.userData?.sound_effect_volume || 100,
-              sound_effect_duration: triggerConnection.userData?.sound_effect_duration,
-              conditions: triggerConnection.userData?.conditions || [],
-              actions: triggerConnection.userData?.actions || []
-            }
-          }));
-
-
-        // Transform inventory items to the specified object format
-        const formattedInventory = {};
-        state.mapConfig.inventory.forEach((item) => {
-          let formattedValue;
-          if (item.type === 'boolean') {
-            formattedValue = item.value === 'true' || item.value === true;
-          } else if (item.type === 'integer') {
-            formattedValue = parseInt(item.value, 10);
-          } else {
-            formattedValue = item.value;
-          }
-          formattedInventory[item.key] = formattedValue;
-        });
-
-        
-        let formatedYaml = yaml.dump({
-          initial: startStateName,
-          metadata: {
-            ...state.mapConfig,
-            inventory: formattedInventory // Use the formatted inventory here
-          },
-          states: stateShapes,
-          transitions: [...trans, ...trans2]
-          })
-        blob = new Blob([formatedYaml], { type: 'application/json' });
-        formData = new FormData();
-        formData.append('file', blob, state.mapName + ".yaml");
+        // Send PUT request to backend - that's it!
         await axios.put(`${API_BASE_URL}/maps/`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',

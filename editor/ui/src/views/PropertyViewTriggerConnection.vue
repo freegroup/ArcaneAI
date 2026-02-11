@@ -217,7 +217,7 @@
     },
     mounted() {
       // Event listener for messages from the iframe
-      window.addEventListener('message', (event) => {
+      this.messageHandler = (event) => {
           if (event.origin !== window.location.origin) return;
           const message = event.data;
           if (message.event === 'onSelect' && message.type === "TriggerConnection") {
@@ -234,7 +234,17 @@
               SoundManager.stopCurrentSound()
               this.jsonData = {}
           }
-      });
+      };
+      window.addEventListener('message', this.messageHandler);
+    },
+    beforeUnmount() {
+        // Clean up event listener to prevent memory leaks
+        if (this.messageHandler) {
+            window.removeEventListener('message', this.messageHandler);
+            this.messageHandler = null;
+        }
+        // Stop any playing sounds when component is destroyed
+        SoundManager.stopCurrentSound();
     }
   };
 </script>

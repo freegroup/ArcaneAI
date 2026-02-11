@@ -27,8 +27,8 @@ class VoiceFactory:
             config_path: Path to config.yaml. If None, looks for config.yaml in game_v2/
         """
         if config_path is None:
-            # Default to game_v2/config.yaml
-            config_path = Path(__file__).parent.parent.parent / "config.yaml"
+            # Default to dungeon/config.yaml (project root)
+            config_path = Path(__file__).parent.parent.parent.parent / "config.yaml"
 
         self.config_path: Path = Path(config_path)
         self.config: Dict[str, Any] = self._load_config()

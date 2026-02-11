@@ -24,21 +24,25 @@ GAME_V2_DIR: Path = Path(__file__).parent.parent.parent
 class LocalJukebox(BaseJukebox):
     """Jukebox implementation that plays sounds locally via pygame mixer."""
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None) -> None:
+    def __init__(self, config: Dict[str, Any]) -> None:
         """
         Initialize LocalJukebox.
         
         Args:
-            config: Configuration dictionary with sound.soundfx_dir setting
+            config: Configuration dictionary with sound.soundfx_dir setting (required)
+        
+        Raises:
+            ValueError: If config is missing or soundfx_dir is not configured
         """
+        if not config:
+            raise ValueError("Configuration is required for LocalJukebox")
+            
         self.playing_channels: Dict[Any, Dict[str, Any]] = {}
         
-        # Get soundfx_dir from config or use default
-        if config:
-            soundfx_dir = config.get('sound', {}).get('soundfx_dir', 'soundfx')
-        else:
-            soundfx_dir = 'soundfx'
-        self.soundfx_dir: Path = GAME_V2_DIR / soundfx_dir
+        # Load GameConfig to get soundfx directory
+        from config_loader import GameConfig
+        game_config = GameConfig()
+        self.soundfx_dir: Path = game_config.soundfx_directory
 
     def play_sound(
         self,
