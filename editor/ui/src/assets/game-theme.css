@@ -263,17 +263,12 @@
   --btn-shadow: #8C2022;
 }
 
-/* Secondary/Dark variant (for dark backgrounds) */
+/* Secondary/Dark variant (gray background) */
 .retro-btn--secondary {
-  --btn-bg: var(--game-bg-tertiary);
-  --btn-bg-hover: rgba(233, 69, 96, 0.3);
-  --btn-shadow: rgba(0, 0, 0, 0.5);
-  color: var(--game-text-primary);
-}
-
-.retro-btn--secondary:hover {
-  color: var(--game-accent-secondary);
-  text-shadow: 0 0 8px var(--game-accent-secondary);
+  --btn-bg: #4a5568;
+  --btn-bg-hover: #5a6578;
+  --btn-shadow: #2d3748;
+  color: white;
 }
 
 /* Small size variant */
