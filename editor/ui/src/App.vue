@@ -7,7 +7,7 @@
       app
       :permanent="true"
       :mini-variant="isCompact"
-      :width="isCompact ? 56 : 240"
+      :width="isCompact ? 56 : drawerWidth"
       :mini-variant-width="56"
       class="nav-drawer"
     >
@@ -58,7 +58,18 @@ export default {
         { title: 'Game Map', route: (mapName) => `/diagram/${mapName   || ''}`, icon: 'mdi-state-machine'     },
       ],
       isCompact: false,
+      windowWidth: window.innerWidth,
     };
+  },
+  computed: {
+    drawerWidth() {
+      // Laptop screens (< 1440px): 25% narrower (180px instead of 240px)
+      // Larger screens: full width (240px)
+      if (this.windowWidth < 1440) {
+        return 180;
+      }
+      return 240;
+    },
   },
   created() {
     // Load the drawer state from localStorage
@@ -67,12 +78,19 @@ export default {
       this.isCompact = JSON.parse(storedState);
     }
 
+    // Listen for window resize to update drawer width responsively
+    window.addEventListener('resize', this.handleResize);
+
     // Initialize Map and Sounds
     setTimeout(async () => {
       this.initializeMap();
       this.initializeSounds();
       await this.downloadMap(this.$route.params.mapName || '');
     }, 500);
+  },
+  beforeUnmount() {
+    // Clean up resize listener
+    window.removeEventListener('resize', this.handleResize);
   },
   methods: {
     ...mapActions('maps', {
@@ -96,6 +114,9 @@ export default {
     toggleDrawerCompact() {
       this.isCompact = !this.isCompact;
       localStorage.setItem('drawerCompactState', JSON.stringify(this.isCompact));
+    },
+    handleResize() {
+      this.windowWidth = window.innerWidth;
     },
   },
 };
@@ -141,6 +162,17 @@ export default {
 .nav-drawer__item {
   border-radius: 0 !important;
   margin: var(--game-spacing-xs) var(--game-spacing-sm) !important;
+}
+
+/* Responsive padding and spacer for laptop screens */
+@media (max-width: 1439px) {
+  .nav-drawer__item {
+    padding-left: 5px !important;
+  }
+  
+  .nav-drawer__item .v-list-item__spacer {
+    width: 5px !important;
+  }
 }
 
 /* Active Item - NUR dieser bekommt Styling */

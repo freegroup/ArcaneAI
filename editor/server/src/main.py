@@ -132,32 +132,65 @@ async def get_file(map_name: str):
 @app.get("/api/v1/sounds/{map_name}")
 async def list_sound_files(map_name: str) -> List[str]:
     """
-    Listet alle Sound-Dateien aus dem zentralen soundfx Verzeichnis.
-    Note: map_name parameter wird für Kompatibilität beibehalten, aber soundfx_dir ist zentral.
+    Listet alle Sound-Dateien aus dem zentralen soundfx Verzeichnis (global/)
+    und aus dem Map-spezifischen sounds Verzeichnis (map/).
+    
+    Returns:
+        Liste von Pfaden mit Prefix:
+        - global/... für zentrale Sound-Dateien
+        - map/... für Map-spezifische Sound-Dateien
     """
+    files = []
+    
+    # 1. Globale Sounds aus dem zentralen soundfx Verzeichnis
     try:
-        # Use central soundfx directory from config
-        files = []
-        for root, dirs, filenames in os.walk(SOUNDFX_ROOT_DIR):
-            for filename in filenames:
-                if filename.endswith((".mp3", ".wav", ".ogg")):
-                    # Get relative path from soundfx root
-                    rel_path = os.path.relpath(os.path.join(root, filename), SOUNDFX_ROOT_DIR)
-                    files.append(rel_path)
-        return sorted(files)
-    except FileNotFoundError:
-        raise HTTPException(status_code=500, detail="SoundFX directory not found")
+        if os.path.exists(SOUNDFX_ROOT_DIR):
+            for root, dirs, filenames in os.walk(SOUNDFX_ROOT_DIR):
+                for filename in filenames:
+                    if filename.endswith((".mp3", ".wav", ".ogg")):
+                        # Get relative path from soundfx root
+                        rel_path = os.path.relpath(os.path.join(root, filename), SOUNDFX_ROOT_DIR)
+                        files.append(f"global/{rel_path}")
+    except Exception as e:
+        print(f"[WARNING] Could not read global soundfx directory: {e}")
+    
+    # 2. Map-spezifische Sounds aus dem Map-Verzeichnis (soundfx Ordner)
+    map_sounds_dir = os.path.join(MAPS_ROOT_DIR, map_name, "soundfx")
+    try:
+        if os.path.exists(map_sounds_dir):
+            for root, dirs, filenames in os.walk(map_sounds_dir):
+                for filename in filenames:
+                    if filename.endswith((".mp3", ".wav", ".ogg")):
+                        # Get relative path from map soundfx root
+                        rel_path = os.path.relpath(os.path.join(root, filename), map_sounds_dir)
+                        files.append(f"map/{rel_path}")
+    except Exception as e:
+        print(f"[WARNING] Could not read map soundfx directory for '{map_name}': {e}")
+    
+    return sorted(files)
 
 
 @app.get("/api/v1/sounds/{map_name}/{file_name:path}")
 async def get_sound_file(map_name: str, file_name: str):
     """
-    Lädt eine Sound-Datei aus dem zentralen soundfx Verzeichnis.
-    Note: map_name parameter wird für Kompatibilität beibehalten, aber soundfx_dir ist zentral.
-    file_name kann Unterverzeichnisse enthalten (z.B. "ambient/wind.wav")
+    Lädt eine Sound-Datei basierend auf dem Prefix:
+    - global/... -> aus dem zentralen soundfx Verzeichnis
+    - map/... -> aus dem Map-spezifischen sounds Verzeichnis
+    
+    file_name kann Unterverzeichnisse enthalten (z.B. "global/ambient/wind.wav")
     """
-    # Use central soundfx directory from config
-    file_location = os.path.join(SOUNDFX_ROOT_DIR, file_name)
+    # Determine source based on prefix
+    if file_name.startswith("global/"):
+        # Remove "global/" prefix and get from central soundfx directory
+        relative_path = file_name[7:]  # len("global/") = 7
+        file_location = os.path.join(SOUNDFX_ROOT_DIR, relative_path)
+    elif file_name.startswith("map/"):
+        # Remove "map/" prefix and get from map-specific soundfx directory
+        relative_path = file_name[4:]  # len("map/") = 4
+        file_location = os.path.join(MAPS_ROOT_DIR, map_name, "soundfx", relative_path)
+    else:
+        # Fallback: assume it's from map soundfx (backwards compatibility - nur Dateiname)
+        file_location = os.path.join(MAPS_ROOT_DIR, map_name, "soundfx", file_name)
     
     if not os.path.exists(file_location):
         raise HTTPException(status_code=404, detail=f"Sound file not found: {file_name}")
