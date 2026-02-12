@@ -5,9 +5,9 @@
         <v-icon class="help-icon">mdi-help-circle</v-icon>
         {{ title }}
         <v-spacer></v-spacer>
-        <v-btn icon size="small" @click="close" class="close-icon-btn">
-          X
-        </v-btn>
+        <button @click="close" class="retro-btn retro-btn--icon">
+          ✕
+        </button>
       </v-card-title>
 
       <v-card-text class="help-dialog-content" v-html="helpText">
@@ -15,9 +15,9 @@
 
       <v-card-actions class="help-dialog-actions">
         <v-spacer></v-spacer>
-        <v-btn @click="close" class="close-btn">
+        <button @click="close" class="retro-btn retro-btn--proceed retro-btn--sm">
           Got it!
-        </v-btn>
+        </button>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -88,20 +88,6 @@ export default {
   font-size: 28px;
 }
 
-.close-icon-btn {
-  background: transparent !important;
-  color: var(--game-text-secondary) !important;
-  font-family: var(--game-font-family-retro) !important;
-  font-size: 16px !important;
-  min-width: 32px !important;
-  height: 32px !important;
-  border-radius: 0 !important;
-}
-
-.close-icon-btn:hover {
-  background: var(--game-input-hover) !important;
-  color: var(--game-text-primary) !important;
-}
 
 .help-dialog-content {
   padding: var(--game-spacing-xl);
@@ -152,28 +138,4 @@ export default {
   border-top: 1px solid var(--game-border-color);
 }
 
-.close-btn {
-  background: var(--game-accent-primary) !important;
-  color: var(--game-text-primary) !important;
-  font-family: var(--game-font-family-retro) !important;
-  font-size: 12px !important;
-  text-transform: uppercase !important;
-  letter-spacing: 1px !important;
-  padding: 12px 24px !important;
-  border-radius: 0 !important;
-  box-shadow: inset -4px -4px 0px 0px #8c2022,
-              0 0 0 3px black !important;
-  transition: all var(--game-transition-fast) !important;
-}
-
-.close-btn:hover {
-  background: var(--game-accent-tertiary) !important;
-  box-shadow: inset -6px -6px 0px 0px #8c2022,
-              0 0 0 3px black !important;
-}
-
-.close-btn:active {
-  box-shadow: inset 4px 4px 0px 0px #8c2022,
-              0 0 0 3px black !important;
-}
 </style>

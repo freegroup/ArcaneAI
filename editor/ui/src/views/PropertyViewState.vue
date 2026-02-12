@@ -310,7 +310,7 @@
   .property-view input#stateName {
     font-family: var(--game-font-family-retro);
     font-size: 18px;
-    text-transform: uppercase;
+
     letter-spacing: 2px;
     color: var(--game-accent-secondary);
     text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);

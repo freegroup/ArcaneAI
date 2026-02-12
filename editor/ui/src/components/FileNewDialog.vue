@@ -11,10 +11,19 @@
           @input="validateName"
         ></v-text-field>
       </v-card-text>
-      <v-card-actions>
+      <v-card-actions class="dialog-actions">
         <v-spacer></v-spacer>
-        <v-btn :disabled="isCreateDisabled" color="primary" text @click="createDialog">Create</v-btn>
-        <v-btn text @click="closeDialog">Cancel</v-btn>
+        <button @click="closeDialog" class="retro-btn retro-btn--secondary retro-btn--sm">
+          Cancel
+        </button>
+        <button 
+          @click="createDialog" 
+          :disabled="isCreateDisabled" 
+          class="retro-btn retro-btn--sm"
+          :class="{ 'retro-btn--disabled': isCreateDisabled }"
+        >
+          Create
+        </button>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -99,4 +108,28 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.v-card {
+  background: var(--game-bg-secondary) !important;
+  color: var(--game-text-primary) !important;
+  border: 2px solid var(--game-border-highlight);
+}
+
+.headline {
+  background: linear-gradient(135deg, var(--game-bg-tertiary) 0%, #1a1a2e 100%) !important;
+  color: var(--game-accent-secondary) !important;
+  font-family: var(--game-font-family-retro) !important;
+  font-size: 14px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 2px !important;
+  padding: var(--game-spacing-lg) !important;
+  border-bottom: 3px solid var(--game-accent-primary) !important;
+}
+
+.dialog-actions {
+  padding: var(--game-spacing-lg);
+  border-top: 1px solid var(--game-border-color);
+  background: var(--game-bg-tertiary);
+  gap: var(--game-spacing-md);
+}
+</style>

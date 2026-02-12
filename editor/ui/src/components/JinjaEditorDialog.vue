@@ -5,9 +5,9 @@
         <v-icon class="title-icon">mdi-code-braces</v-icon>
         Scene Description Editor
         <v-spacer></v-spacer>
-        <v-btn icon size="small" @click="cancel">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
+        <button @click="cancel" class="retro-btn retro-btn--icon">
+          ✕
+        </button>
       </v-card-title>
 
       <v-card-text class="dialog-content">
@@ -22,12 +22,12 @@
 
       <v-card-actions class="dialog-actions">
         <v-spacer></v-spacer>
-        <v-btn @click="cancel" class="cancel-btn">
+        <button @click="cancel" class="retro-btn retro-btn--secondary retro-btn--sm">
           Cancel
-        </v-btn>
-        <v-btn @click="save" class="save-btn">
-          Save Changes
-        </v-btn>
+        </button>
+        <button @click="save" class="retro-btn retro-btn--sm">
+          Save
+        </button>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -223,20 +223,6 @@ export default {
   }
 }
 
-.dialog-title :deep(.v-btn) {
-  background: rgba(233, 69, 96, 0.2);
-  color: var(--game-text-primary);
-  border: 2px solid var(--game-accent-primary);
-  transition: all var(--game-transition-fast);
-}
-
-.dialog-title :deep(.v-btn:hover) {
-  background: var(--game-accent-primary);
-  color: var(--game-text-primary);
-  border-color: var(--game-accent-tertiary);
-  box-shadow: 0 0 15px var(--game-accent-primary);
-  transform: scale(1.1);
-}
 
 .dialog-content {
   padding: 0;
@@ -256,33 +242,7 @@ export default {
   background: var(--game-bg-tertiary);
 }
 
-.cancel-btn {
-  background: var(--game-bg-secondary);
-  color: var(--game-text-primary);
-  border: 1px solid var(--game-border-color);
-  font-weight: 600;
-  padding: var(--game-spacing-sm) var(--game-spacing-xl);
-  border-radius: var(--game-radius-md);
-  transition: all var(--game-transition-fast);
-}
-
-.cancel-btn:hover {
-  background: var(--game-input-hover);
-  border-color: var(--game-border-highlight);
-}
-
-.save-btn {
-  background: var(--game-accent-primary);
-  color: var(--game-text-primary);
-  font-weight: 600;
-  padding: var(--game-spacing-sm) var(--game-spacing-xl);
-  border-radius: var(--game-radius-md);
-  transition: all var(--game-transition-fast);
-}
-
-.save-btn:hover {
-  background: var(--game-accent-tertiary);
-  box-shadow: var(--game-shadow-glow);
-  transform: translateY(-2px);
+.dialog-actions .retro-btn {
+  margin-left: var(--game-spacing-md);
 }
 </style>

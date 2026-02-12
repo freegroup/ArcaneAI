@@ -1,17 +1,18 @@
 <template>
-  <v-app-bar border dark >
-    <v-btn icon>
+  <v-app-bar border dark class="app-toolbar">
+    <v-btn icon class="home-btn">
       <v-icon>mdi-home</v-icon>
     </v-btn>
-    <v-btn text @click="newFileDialog">New Game</v-btn>
-    <v-btn text @click="openFileDialog">Load Game</v-btn>
-    <v-btn text @click="save">Save Game</v-btn>
+    
+    <button @click="newFileDialog" class="retro-btn retro-btn--secondary retro-btn--sm">New Game</button>
+    <button @click="openFileDialog" class="retro-btn retro-btn--secondary retro-btn--sm">Load Game</button>
+    <button @click="save" class="retro-btn retro-btn--secondary retro-btn--sm">Save Game</button>
+    
     <v-spacer></v-spacer>
 
     <FilePickerDialog v-model:dialog="filePickerDialog" />
     <FileNewDialog    v-model:dialog="fileNewDialog" />
-
-</v-app-bar>
+  </v-app-bar>
 </template>
 
 <script>
@@ -95,34 +96,8 @@ export default {
   filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
 }
 
-/* Text Buttons (NEW, LOAD, SAVE) - 8-Bit Style with black border */
-.v-toolbar .v-btn:not(.v-btn--icon) {
-  font-family: var(--game-font-family-retro) !important;
-  font-size: 16px !important;
-  font-weight: 700 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 2px !important;
-  color: var(--game-text-primary) !important;
-  background: rgba(233, 69, 96, 0.1) !important;
-  border: 2px solid transparent !important;
-  margin: 0 4px !important;
-  padding: 0 20px !important;
-  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.8) !important;
-  transition: all var(--game-transition-fast) !important;
-}
-
-.v-toolbar .v-btn:not(.v-btn--icon):hover {
-  background: rgba(233, 69, 96, 0.3) !important;
-  border-color: var(--game-accent-primary) !important;
-  color: var(--game-accent-secondary) !important;
-  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.8),
-               0 0 8px var(--game-accent-secondary) !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 4px 8px rgba(233, 69, 96, 0.4) !important;
-}
-
-.v-toolbar .v-btn:not(.v-btn--icon):active {
-  transform: translateY(0px) !important;
-  box-shadow: 0 2px 4px rgba(233, 69, 96, 0.6) !important;
+/* Toolbar Retro Buttons */
+.app-toolbar .retro-btn {
+  margin: 0 var(--game-spacing-sm) !important;
 }
 </style>

@@ -5,9 +5,9 @@
           <v-icon class="title-icon">mdi-map</v-icon>
           Select a Map
           <v-spacer></v-spacer>
-          <v-btn icon size="small" @click="closeDialog">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
+          <button @click="closeDialog" class="retro-btn retro-btn--icon">
+            ✕
+          </button>
         </v-card-title>
         <v-card-text>
           <div class="scrollable-list">
@@ -23,9 +23,11 @@
             </ul>
           </div>
         </v-card-text>
-        <v-card-actions>
+        <v-card-actions class="dialog-actions">
           <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="closeDialog">Cancel</v-btn>
+          <button @click="closeDialog" class="retro-btn retro-btn--secondary retro-btn--sm">
+            Cancel
+          </button>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -126,21 +128,6 @@
   }
 }
 
-/* Close Button in Title - Identisch zu JinjaEditor */
-.v-dialog .v-card-title .v-btn {
-  background: rgba(233, 69, 96, 0.2) !important;
-  color: var(--game-text-primary) !important;
-  border: 2px solid var(--game-accent-primary) !important;
-  transition: all var(--game-transition-fast) !important;
-}
-
-.v-dialog .v-card-title .v-btn:hover {
-  background: var(--game-accent-primary) !important;
-  color: var(--game-text-primary) !important;
-  border-color: var(--game-accent-tertiary) !important;
-  box-shadow: 0 0 15px var(--game-accent-primary) !important;
-  transform: scale(1.1) !important;
-}
 
 /* Card Text */
 .v-dialog .v-card-text {
@@ -228,24 +215,11 @@
   border-top: 1px solid var(--game-border-color) !important;
 }
 
-/* Cancel Button - Identisch zu JinjaEditor .cancel-btn */
-.v-dialog .v-card-actions .v-btn {
-  background: var(--game-bg-secondary) !important;
-  color: var(--game-text-primary) !important;
-  border: 1px solid var(--game-border-color) !important;
-  font-weight: 600 !important;
-  padding: var(--game-spacing-sm) var(--game-spacing-xl) !important;
-  border-radius: var(--game-radius-md) !important;
-  transition: all var(--game-transition-fast) !important;
-  font-family: var(--game-font-family-retro) !important;
-  font-size: 14px !important;
-  text-transform: uppercase !important;
-  letter-spacing: 2px !important;
-}
-
-.v-dialog .v-card-actions .v-btn:hover {
-  background: var(--game-input-hover) !important;
-  border-color: var(--game-border-highlight) !important;
+/* Dialog Actions */
+.dialog-actions {
+  background: var(--game-bg-tertiary) !important;
+  padding: var(--game-spacing-lg) !important;
+  border-top: 1px solid var(--game-border-color) !important;
 }
 </style>
   

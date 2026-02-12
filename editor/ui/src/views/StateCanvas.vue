@@ -17,7 +17,7 @@
     </pane>
 
     <!-- Sidebar-Bereich -->
-    <pane min-size="20%"  :size="100-paneSize">
+    <pane min-size="20%"  :size="100-paneSize" class="scroll-y">
       <PropertyViewState v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
       <PropertyViewTriggerLabel v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
       <PropertyViewTriggerConnection v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
@@ -201,6 +201,7 @@ export default {
 }
 .splitpanes.default-theme .splitpanes__pane {
   background-color: transparent;
+  overflow-y: auto;
 }
 
 .iframe-container {

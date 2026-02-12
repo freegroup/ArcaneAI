@@ -461,6 +461,7 @@
     gap: var(--game-spacing-md);
     font-size: var(--game-font-size-sm);
     border-left: 1px solid var(--game-border-color);
+    min-height:900px;
   }
 
   .property-view label {
@@ -495,7 +496,6 @@
   .property-view input#triggerName {
     font-family: var(--game-font-family-retro);
     font-size: 18px;
-    text-transform: uppercase;
     letter-spacing: 2px;
     color: var(--game-accent-secondary);
     text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);

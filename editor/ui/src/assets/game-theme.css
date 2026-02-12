@@ -181,3 +181,142 @@
   background: var(--game-accent-primary);
   color: var(--game-text-primary);
 }
+
+/* ===========================================
+ * RETRO BUTTON - 8-Bit Style
+ * Use class "retro-btn" for consistent styling
+ * Modifiers: --proceed (gold), --reset (red), --secondary (dark)
+ * =========================================== */
+.retro-btn {
+  --btn-bg: #92CD41;
+  --btn-bg-hover: #76c442;
+  --btn-shadow: #4AA52E;
+  --btn-outline: 4px;
+  --btn-shadow-width: 3px;
+  
+  background: var(--btn-bg);
+  display: inline-block;
+  position: relative;
+  text-align: center;
+  font-size: 12px;
+  padding: 10px 16px;
+  font-family: var(--game-font-family-retro);
+  text-decoration: none;
+  color: white;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  box-shadow: inset calc(var(--btn-shadow-width) * -1) calc(var(--btn-shadow-width) * -1) 0px 0px var(--btn-shadow);
+  transition: all var(--game-transition-fast);
+}
+
+.retro-btn:hover,
+.retro-btn:focus {
+  background: var(--btn-bg-hover);
+  box-shadow: inset calc(var(--btn-shadow-width) * -1.5) calc(var(--btn-shadow-width) * -1.5) 0px 0px var(--btn-shadow);
+  outline: none;
+}
+
+.retro-btn:active {
+  box-shadow: inset var(--btn-shadow-width) var(--btn-shadow-width) 0px 0px var(--btn-shadow);
+}
+
+/* Pixel border effect using pseudo-elements */
+.retro-btn::before,
+.retro-btn::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  box-sizing: content-box;
+  pointer-events: none;
+}
+
+.retro-btn::before {
+  top: calc(var(--btn-outline) * -1);
+  left: 0;
+  border-top: var(--btn-outline) black solid;
+  border-bottom: var(--btn-outline) black solid;
+}
+
+.retro-btn::after {
+  left: calc(var(--btn-outline) * -1);
+  top: 0;
+  border-left: var(--btn-outline) black solid;
+  border-right: var(--btn-outline) black solid;
+}
+
+/* Golden/Proceed variant */
+.retro-btn--proceed {
+  --btn-bg: #F7D51D;
+  --btn-bg-hover: #F2C409;
+  --btn-shadow: #E59400;
+  color: #1a1a2e;
+  text-shadow: none;
+}
+
+/* Red/Reset/Danger variant */
+.retro-btn--reset {
+  --btn-bg: #E76E55;
+  --btn-bg-hover: #CE372B;
+  --btn-shadow: #8C2022;
+}
+
+/* Secondary/Dark variant (for dark backgrounds) */
+.retro-btn--secondary {
+  --btn-bg: var(--game-bg-tertiary);
+  --btn-bg-hover: rgba(233, 69, 96, 0.3);
+  --btn-shadow: rgba(0, 0, 0, 0.5);
+  color: var(--game-text-primary);
+}
+
+.retro-btn--secondary:hover {
+  color: var(--game-accent-secondary);
+  text-shadow: 0 0 8px var(--game-accent-secondary);
+}
+
+/* Small size variant */
+.retro-btn--sm {
+  --btn-outline: 3px;
+  --btn-shadow-width: 2px;
+  font-size: 10px;
+  padding: 6px 10px;
+}
+
+/* Large size variant */
+.retro-btn--lg {
+  --btn-outline: 5px;
+  --btn-shadow-width: 4px;
+  font-size: 16px;
+  padding: 14px 24px;
+}
+
+/* Disabled state */
+.retro-btn:disabled,
+.retro-btn--disabled {
+  --btn-bg: #666;
+  --btn-bg-hover: #666;
+  --btn-shadow: #444;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Icon button variant (square, for close buttons etc.) */
+.retro-btn--icon {
+  --btn-outline: 3px;
+  --btn-shadow-width: 2px;
+  --btn-bg: var(--game-accent-primary);
+  --btn-bg-hover: #CE372B;
+  --btn-shadow: #8C2022;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+

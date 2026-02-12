@@ -247,7 +247,6 @@ export default {
   color: var(--game-accent-secondary);
   font-family: var(--game-font-family-retro);
   font-size: var(--screen-wide-header-font-size, 16px);
-  text-transform: uppercase;
   letter-spacing: var(--screen-wide-header-letter-spacing, 2px);
   text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8),
                0 0 10px var(--game-accent-secondary);
