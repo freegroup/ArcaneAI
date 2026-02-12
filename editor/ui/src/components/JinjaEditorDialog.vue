@@ -1,14 +1,11 @@
 <template>
   <v-dialog v-model="isOpen" max-width="900px" persistent>
     <v-card class="jinja-editor-dialog">
-      <v-card-title class="dialog-title">
-        <v-icon class="title-icon">mdi-code-braces</v-icon>
-        Scene Description Editor
-        <v-spacer></v-spacer>
-        <button @click="cancel" class="retro-btn retro-btn--icon">
-          ✕
-        </button>
-      </v-card-title>
+      <DialogHeader 
+        title="Scene Description Editor" 
+        icon="mdi-code-braces"
+        @close="cancel" 
+      />
 
       <v-card-text class="dialog-content">
         <MonacoEditor
@@ -36,6 +33,7 @@
 <script>
 import MonacoEditor from 'monaco-editor-vue3';
 import * as monaco from 'monaco-editor';
+import DialogHeader from './DialogHeader.vue';
 
 // Register Jinja2 language
 monaco.languages.register({ id: 'jinja2' });
@@ -98,7 +96,8 @@ monaco.editor.defineTheme('jinja2-dark', {
 export default {
   name: 'JinjaEditorDialog',
   components: {
-    MonacoEditor
+    MonacoEditor,
+    DialogHeader
   },
   props: {
     modelValue: {
@@ -184,43 +183,6 @@ export default {
   border: 2px solid var(--game-border-highlight);
   border-radius: var(--game-radius-lg);
   box-shadow: var(--game-shadow-lg);
-}
-
-.dialog-title {
-  background: linear-gradient(135deg, var(--game-bg-tertiary) 0%, #1a1a2e 100%) !important;
-  color: var(--game-accent-secondary) !important;
-  font-family: var(--game-font-family-retro) !important;
-  font-size: 20px !important;
-  font-weight: 700 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 3px !important;
-  padding: var(--game-spacing-lg) !important;
-  border-bottom: 3px solid var(--game-accent-primary) !important;
-  border-top: 3px solid var(--game-accent-secondary) !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: var(--game-spacing-sm) !important;
-  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8), 
-               0 0 10px var(--game-accent-secondary) !important;
-  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.3) !important;
-}
-
-.title-icon {
-  color: var(--game-accent-secondary);
-  font-size: 32px;
-  filter: drop-shadow(0 0 8px var(--game-accent-secondary));
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-    filter: drop-shadow(0 0 8px var(--game-accent-secondary));
-  }
-  50% {
-    transform: scale(1.05);
-    filter: drop-shadow(0 0 12px var(--game-accent-secondary));
-  }
 }
 
 

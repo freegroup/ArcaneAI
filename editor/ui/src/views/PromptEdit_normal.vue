@@ -5,12 +5,7 @@
       <div class="personality-header__title">
         <v-icon class="personality-header__icon">mdi-account-alert</v-icon>
         <span>AI CHARACTER IDENTITY</span>
-        <v-icon 
-          class="personality-header__info"
-          @click="showHelp = true"
-        >
-          mdi-information
-        </v-icon>
+        <HelpButton @click="showHelp = true" />
       </div>
     </div>
 
@@ -34,6 +29,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import ExtendedHelpDialog from '../components/ExtendedHelpDialog.vue';
+import HelpButton from '../components/HelpButton.vue';
 
 import Codemirror from "codemirror-editor-vue3";
 import "codemirror/addon/display/placeholder.js";
@@ -46,20 +42,21 @@ export default {
   name: 'PropertyView',
   components: { 
     Codemirror,
-    ExtendedHelpDialog
+    ExtendedHelpDialog,
+    HelpButton
   },
   data(){
     return {
       showHelp: false,
       helpContent: `
-Define how your AI game companion behaves:
-
-• Their personality & language style
-• Length of their responses
-• How they interact with you
-• Their behavior in the game world
-
-This defines their complete identity!
+<p>Define how your AI game companion behaves:</p>
+<ul>
+  <li><strong>Personality & language style</strong> - How they talk and express themselves</li>
+  <li><strong>Response length</strong> - Short and snappy or detailed descriptions</li>
+  <li><strong>Interaction style</strong> - Friendly, mysterious, grumpy, etc.</li>
+  <li><strong>Game world behavior</strong> - Their role in the story</li>
+</ul>
+<p>This defines their complete identity!</p>
       `,
       cmOptions: {
         mode: "jinja2",

@@ -1,14 +1,11 @@
 <template>
   <v-dialog :model-value="dialog" max-width="600" @click:outside="closeDialog" @update:model-value="updateDialog">
     <v-card class="file-picker-dialog">
-      <v-card-title class="dialog-title">
-        <v-icon class="title-icon">mdi-map</v-icon>
-        Select a Map
-        <v-spacer></v-spacer>
-        <button @click="closeDialog" class="retro-btn retro-btn--icon">
-          ✕
-        </button>
-      </v-card-title>
+      <DialogHeader 
+        title="Select a Map" 
+        icon="mdi-map"
+        @close="closeDialog" 
+      />
       <v-card-text class="dialog-content">
         <div class="scrollable-list">
           <ul>
@@ -35,8 +32,10 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import DialogHeader from './DialogHeader.vue';
 
 export default {
+  components: { DialogHeader },
   props: {
     dialog: {
       type: Boolean,
@@ -93,42 +92,6 @@ export default {
   box-shadow: var(--game-shadow-lg);
 }
 
-.dialog-title {
-  background: linear-gradient(135deg, var(--game-bg-tertiary) 0%, #1a1a2e 100%) !important;
-  color: var(--game-accent-secondary) !important;
-  font-family: var(--game-font-family-retro) !important;
-  font-size: 20px !important;
-  font-weight: 700 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 3px !important;
-  padding: var(--game-spacing-lg) !important;
-  border-bottom: 3px solid var(--game-accent-primary) !important;
-  border-top: 3px solid var(--game-accent-secondary) !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: var(--game-spacing-sm) !important;
-  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8), 
-               0 0 10px var(--game-accent-secondary) !important;
-  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.3) !important;
-}
-
-.title-icon {
-  color: var(--game-accent-secondary);
-  font-size: 32px;
-  filter: drop-shadow(0 0 8px var(--game-accent-secondary));
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-    filter: drop-shadow(0 0 8px var(--game-accent-secondary));
-  }
-  50% {
-    transform: scale(1.05);
-    filter: drop-shadow(0 0 12px var(--game-accent-secondary));
-  }
-}
 
 .dialog-content {
   padding: var(--game-spacing-lg);

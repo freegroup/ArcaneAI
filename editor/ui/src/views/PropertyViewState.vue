@@ -1,11 +1,9 @@
- <template>
+<template>
     <div class="property-view" v-if="jsonData.type === 'StateShape'">
 
         <div class="label-with-help">
           <label>State Name</label>
-          <v-btn icon size="x-small" @click="openHelp('stateName')" class="help-btn">
-            <v-icon size="small">mdi-information-outline</v-icon>
-          </v-btn>
+          <HelpButton @click="openHelp('stateName')" />
         </div>
         <input
             id="stateName"
@@ -14,28 +12,30 @@
             @input="onDataChange"
         />
 
-        <!-- Ambient Sound ComboBox and Play Button -->
+        <!-- Ambient Sound Selection with Finder Dialog -->
         <div class="label-with-help">
           <label>Ambient Sound</label>
-          <v-btn icon size="x-small" @click="openHelp('ambientSound')" class="help-btn">
-            <v-icon size="small">mdi-information-outline</v-icon>
-          </v-btn>
+          <HelpButton @click="openHelp('ambientSound')" />
         </div>
         <div class="sound-selection">
-          <v-select
-            v-model="jsonData.userData.ambient_sound"
-            :items="soundFiles"
-            density="compact"
-            label="Ambient Sound"
-            :items-per-page="1000"
-            :list-props="{maxWidth:'350px', minWidth: '350px'}"
-            outlined
-          ></v-select>
+          <div class="sound-display" @click="showSoundPicker = true">
+            <v-icon size="small" class="sound-icon">mdi-music-note</v-icon>
+            <span class="sound-name">{{ jsonData.userData.ambient_sound || 'No sound selected' }}</span>
+            <v-icon size="small" class="browse-icon">mdi-folder-open</v-icon>
+          </div>
           
           <v-btn icon size="small" @click="toggleSound" :disabled="!jsonData.userData.ambient_sound">
             <v-icon size="small">{{ isPlaying ? 'mdi-stop' : 'mdi-play' }}</v-icon>
           </v-btn>
         </div>
+
+        <!-- Sound Picker Dialog -->
+        <SoundPickerDialog
+          v-model="showSoundPicker"
+          :files="soundFiles"
+          :currentValue="jsonData.userData.ambient_sound"
+          @select="onSoundSelected"
+        />
         <div>
           <v-slider
             v-if="jsonData.userData"
@@ -48,10 +48,8 @@
         </div>
         
         <div class="label-with-help" v-if="jsonData.userData">
-          <label for="systemPrompt">Sceen Description</label>
-          <v-btn icon size="x-small" @click="openHelp('sceneDescription')" class="help-btn">
-            <v-icon size="small">mdi-information-outline</v-icon>
-          </v-btn>
+          <label for="systemPrompt">Scene Description</label>
+          <HelpButton @click="openHelp('sceneDescription')" />
         </div>
         <div class="editor-container" v-if="jsonData.userData">
           <Codemirror
@@ -95,6 +93,8 @@
   import MessageTypes from '../../public/canvas/MessageTypes.js';
   import ExtendedHelpDialog from '@/components/ExtendedHelpDialog.vue';
   import JinjaEditorDialog from '@/components/JinjaEditorDialog.vue';
+  import SoundPickerDialog from '@/components/SoundPickerDialog.vue';
+  import HelpButton from '@/components/HelpButton.vue';
 
   import Codemirror from "codemirror-editor-vue3";
   import "codemirror/addon/display/placeholder.js";
@@ -105,7 +105,7 @@
 
   export default {
     name: 'PropertyView',
-    components: { Codemirror, ExtendedHelpDialog, JinjaEditorDialog },
+    components: { Codemirror, ExtendedHelpDialog, JinjaEditorDialog, SoundPickerDialog, HelpButton },
     props: {
         draw2dFrame: {
             type: Object,
@@ -134,6 +134,8 @@
         showHelpDialog: false,
         // Jinja Editor Dialog
         showJinjaEditor: false,
+        // Sound Picker Dialog
+        showSoundPicker: false,
         helpTitle: '',
         helpText: '',
         helpTexts: {
@@ -211,6 +213,11 @@
         this.jsonData.userData.system_prompt = newText;
         this.onDataChange();
       },
+
+      onSoundSelected(soundPath) {
+        this.jsonData.userData.ambient_sound = soundPath;
+        this.onDataChange();
+      },
     },
 
     mounted() {
@@ -257,7 +264,7 @@
         SoundManager.stopCurrentSound();
     }
   };
-  </script>
+</script>
   
 <style scoped>
   ::v-deep .v-input__details {
@@ -310,7 +317,6 @@
   .property-view input#stateName {
     font-family: var(--game-font-family-retro);
     font-size: 18px;
-
     letter-spacing: 2px;
     color: var(--game-accent-secondary);
     text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
@@ -331,6 +337,51 @@
     display: flex;
     align-items: flex-start;
     gap: var(--game-spacing-sm);
+  }
+
+  /* Sound Display - clickable field to open picker */
+  .sound-display {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--game-spacing-sm);
+    padding: var(--game-spacing-sm) var(--game-spacing-md);
+    background: var(--game-input-bg);
+    border: 1px solid var(--game-input-border);
+    cursor: pointer;
+    transition: all var(--game-transition-fast);
+    min-height: 36px;
+  }
+
+  .sound-display:hover {
+    background: var(--game-input-hover);
+    border-color: var(--game-border-highlight);
+  }
+
+  .sound-display .sound-icon {
+    color: var(--game-accent-secondary);
+    flex-shrink: 0;
+  }
+
+  .sound-display .sound-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: var(--game-font-size-sm);
+    color: var(--game-text-primary);
+  }
+
+  .sound-display .browse-icon {
+    color: var(--game-text-muted);
+    flex-shrink: 0;
+    opacity: 0.6;
+    transition: opacity var(--game-transition-fast);
+  }
+
+  .sound-display:hover .browse-icon {
+    opacity: 1;
+    color: var(--game-accent-secondary);
   }
 
   .sound-selection :deep(.v-select) {
@@ -493,24 +544,4 @@
     margin: 0;
     display: inline-block;
   }
-
-  .help-btn {
-    background: transparent !important;
-    color: var(--game-text-secondary) !important;
-    transition: all var(--game-transition-fast);
-    min-width: unset !important;
-    padding: 0 !important;
-    width: 20px !important;
-    height: 20px !important;
-  }
-
-  .help-btn :deep(.v-icon) {
-    font-size: 20px !important;
-  }
-
-  .help-btn:hover {
-    color: var(--game-accent-secondary) !important;
-    transform: scale(1.15);
-  }
 </style>
-  

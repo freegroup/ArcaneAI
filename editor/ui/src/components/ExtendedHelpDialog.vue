@@ -1,14 +1,11 @@
 <template>
   <v-dialog v-model="isOpen" max-width="600px" @click:outside="close">
     <v-card class="help-dialog">
-      <v-card-title class="help-dialog-title">
-        <v-icon class="help-icon">mdi-help-circle</v-icon>
-        {{ title }}
-        <v-spacer></v-spacer>
-        <button @click="close" class="retro-btn retro-btn--icon">
-          ✕
-        </button>
-      </v-card-title>
+      <DialogHeader 
+        :title="title" 
+        icon="mdi-help-circle"
+        @close="close" 
+      />
 
       <v-card-text class="help-dialog-content" v-html="helpText">
       </v-card-text>
@@ -24,8 +21,11 @@
 </template>
 
 <script>
+import DialogHeader from './DialogHeader.vue';
+
 export default {
   name: 'ExtendedHelpDialog',
+  components: { DialogHeader },
   props: {
     modelValue: {
       type: Boolean,
@@ -70,24 +70,6 @@ export default {
   border: 3px solid var(--game-border-highlight);
   border-radius: 0;
 }
-
-.help-dialog-title {
-  background: var(--game-bg-tertiary);
-  color: var(--game-accent-secondary);
-  font-size: var(--game-font-size-lg);
-  font-weight: 600;
-  padding: var(--game-spacing-lg);
-  border-bottom: 1px solid var(--game-border-color);
-  display: flex;
-  align-items: center;
-  gap: var(--game-spacing-sm);
-}
-
-.help-icon {
-  color: var(--game-accent-secondary);
-  font-size: 28px;
-}
-
 
 .help-dialog-content {
   padding: var(--game-spacing-xl);
@@ -137,5 +119,4 @@ export default {
   padding: var(--game-spacing-lg);
   border-top: 1px solid var(--game-border-color);
 }
-
 </style>

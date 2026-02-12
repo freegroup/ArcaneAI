@@ -5,12 +5,7 @@
       <div class="inventory-header__title">
         <v-icon class="inventory-header__icon">mdi-treasure-chest</v-icon>
         <span>GAME INVENTORY</span>
-        <v-icon 
-          class="inventory-header__info"
-          @click="showHelp = true"
-        >
-          mdi-information
-        </v-icon>
+        <HelpButton @click="showHelp = true" />
       </div>
     </div>
 
@@ -107,11 +102,13 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import ExtendedHelpDialog from '../components/ExtendedHelpDialog.vue';
+import HelpButton from '../components/HelpButton.vue';
 
 export default {
   name: 'InventoryView',
   components: {
-    ExtendedHelpDialog
+    ExtendedHelpDialog,
+    HelpButton
   },
   data() {
     return {

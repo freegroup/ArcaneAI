@@ -1,7 +1,11 @@
 <template>
   <v-dialog :model-value="dialog" max-width="400" @click:outside="closeDialog" @update:model-value="updateDialog">
-    <v-card>
-      <v-card-title class="headline">Create Map</v-card-title>
+    <v-card class="file-new-dialog">
+      <DialogHeader 
+        title="Create Map" 
+        icon="mdi-plus-box"
+        @close="closeDialog" 
+      />
       <v-card-text>
         <v-text-field
           ref="nameInput"
@@ -31,8 +35,10 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import DialogHeader from './DialogHeader.vue';
 
 export default {
+  components: { DialogHeader },
   props: {
     dialog: {
       type: Boolean,
@@ -109,21 +115,11 @@ export default {
 </script>
 
 <style scoped>
-.v-card {
+.file-new-dialog {
   background: var(--game-bg-secondary) !important;
   color: var(--game-text-primary) !important;
   border: 2px solid var(--game-border-highlight);
-}
-
-.headline {
-  background: linear-gradient(135deg, var(--game-bg-tertiary) 0%, #1a1a2e 100%) !important;
-  color: var(--game-accent-secondary) !important;
-  font-family: var(--game-font-family-retro) !important;
-  font-size: 14px !important;
-  text-transform: uppercase !important;
-  letter-spacing: 2px !important;
-  padding: var(--game-spacing-lg) !important;
-  border-bottom: 3px solid var(--game-accent-primary) !important;
+  border-radius: 0;
 }
 
 .dialog-actions {
