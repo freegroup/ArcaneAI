@@ -117,14 +117,14 @@ export default {
     return {
       showHelp: false,
       helpContent: `
-Store game state variables that persist across states:
-
-• <strong>Item counters</strong> - coins, eggs, etc.
-• <strong>Discovery flags</strong> - discovered_room, has_key
-• <strong>Player state</strong> - health, level, equipped items
-• <strong>Quest progress</strong> - door_closed, window_open
-
-Use these variables in your Jinja2 templates to create dynamic gameplay!
+<p>Store game state variables that persist across states:</p>
+<ul>
+  <li><strong>Item counters</strong> - coins, eggs, etc.</li>
+  <li><strong>Discovery flags</strong> - discovered_room, has_key</li>
+  <li><strong>Player state</strong> - health, level, equipped items</li>
+  <li><strong>Quest progress</strong> - door_closed, window_open</li>
+</ul>
+<p>Use these variables in your Jinja2 templates to create dynamic gameplay!</p>
       `,
       newItem: { key: '', value: '', type: 'string' },
       showToast: false,
@@ -233,7 +233,7 @@ Use these variables in your Jinja2 templates to create dynamic gameplay!
 
 /* 8-Bit Retro Header */
 .inventory-header {
-  padding: var(--game-spacing-lg);
+  padding: var(--screen-wide-header-padding-y, var(--game-spacing-lg)) var(--game-spacing-lg);
   background: linear-gradient(135deg, var(--game-bg-tertiary) 0%, #1a1a2e 100%);
   border-bottom: 3px solid var(--game-accent-primary);
   border-top: 2px solid var(--game-accent-secondary);
@@ -243,19 +243,19 @@ Use these variables in your Jinja2 templates to create dynamic gameplay!
 .inventory-header__title {
   display: flex;
   align-items: center;
-  gap: var(--game-spacing-md);
+  gap: var(--screen-wide-header-gap, var(--game-spacing-md));
   color: var(--game-accent-secondary);
   font-family: var(--game-font-family-retro);
-  font-size: 16px;
+  font-size: var(--screen-wide-header-font-size, 16px);
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: var(--screen-wide-header-letter-spacing, 2px);
   text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8),
                0 0 10px var(--game-accent-secondary);
 }
 
 .inventory-header__icon {
   color: var(--game-accent-secondary);
-  font-size: 32px;
+  font-size: var(--screen-wide-header-icon-size, 32px);
   filter: drop-shadow(0 0 8px var(--game-accent-secondary));
   animation: pulse 2s ease-in-out infinite;
 }
@@ -273,7 +273,7 @@ Use these variables in your Jinja2 templates to create dynamic gameplay!
 
 .inventory-header__info {
   color: var(--game-text-secondary);
-  font-size: 24px;
+  font-size: var(--screen-wide-header-info-size, 24px);
   cursor: pointer;
   transition: all var(--game-transition-fast);
 }
@@ -282,6 +282,48 @@ Use these variables in your Jinja2 templates to create dynamic gameplay!
   color: var(--game-accent-secondary);
   filter: drop-shadow(0 0 8px var(--game-accent-secondary));
   transform: scale(1.1);
+}
+
+/* Responsive header for laptop screens (60% height) */
+@media (max-width: 1439px) {
+  .inventory-header {
+    padding: var(--screen-medium-header-padding-y) var(--game-spacing-lg);
+  }
+  
+  .inventory-header__title {
+    font-size: var(--screen-medium-header-font-size);
+    gap: var(--screen-medium-header-gap);
+    letter-spacing: var(--screen-medium-header-letter-spacing);
+  }
+  
+  .inventory-header__icon {
+    font-size: var(--screen-medium-header-icon-size);
+  }
+  
+  .inventory-header__info {
+    font-size: var(--screen-medium-header-info-size);
+  }
+}
+
+/* Responsive header for small screens */
+@media (max-width: 1023px) {
+  .inventory-header {
+    padding: var(--screen-small-header-padding-y) var(--game-spacing-md);
+  }
+  
+  .inventory-header__title {
+    font-size: var(--screen-small-header-font-size);
+    gap: var(--screen-small-header-gap);
+    letter-spacing: var(--screen-small-header-letter-spacing);
+  }
+  
+  .inventory-header__icon {
+    font-size: var(--screen-small-header-icon-size);
+  }
+  
+  .inventory-header__info {
+    font-size: var(--screen-small-header-info-size);
+  }
 }
 
 /* Input Row (First Row in Table) - Hervorgehoben */

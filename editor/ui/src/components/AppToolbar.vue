@@ -52,7 +52,7 @@ export default {
 <style>
 /* Remove scoped to ensure styles apply */
 
-/* Override Vuetify App Bar */
+/* Override Vuetify App Bar - Fixed height of 48px */
 .v-toolbar {
   background: linear-gradient(135deg, var(--game-bg-tertiary) 0%, #0a0a14 100%) !important;
   border-bottom: 3px solid var(--game-accent-primary) !important;
@@ -95,7 +95,7 @@ export default {
   filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
 }
 
-/* Text Buttons (NEW, LOAD, SAVE) */
+/* Text Buttons (NEW, LOAD, SAVE) - 8-Bit Style with black border */
 .v-toolbar .v-btn:not(.v-btn--icon) {
   font-family: var(--game-font-family-retro) !important;
   font-size: 16px !important;

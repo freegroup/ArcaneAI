@@ -164,14 +164,25 @@ export default {
   margin: var(--game-spacing-xs) var(--game-spacing-sm) !important;
 }
 
-/* Responsive padding and spacer for laptop screens */
+/* Responsive padding and spacer for medium screens (Laptops) */
 @media (max-width: 1439px) {
   .nav-drawer__item {
-    padding-left: 5px !important;
+    padding-left: var(--screen-medium-drawer-item-padding, 5px) !important;
   }
   
   .nav-drawer__item .v-list-item__spacer {
-    width: 5px !important;
+    width: var(--screen-medium-drawer-spacer, 5px) !important;
+  }
+}
+
+/* Responsive padding and spacer for small screens */
+@media (max-width: 1023px) {
+  .nav-drawer__item {
+    padding-left: var(--screen-small-drawer-item-padding, 4px) !important;
+  }
+  
+  .nav-drawer__item .v-list-item__spacer {
+    width: var(--screen-small-drawer-spacer, 4px) !important;
   }
 }
 

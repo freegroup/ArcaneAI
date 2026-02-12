@@ -3,8 +3,8 @@
  * Central design variables for consistent game-like appearance
  */
 
-/* Import Retro 8-Bit Font */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+/* Import Noto Sans for regular text and Press Start 2P for retro headers */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Noto+Sans+Mono:wght@400;500;600;700&family=Press+Start+2P&display=swap');
 
 :root {
   /* Color Palette - Dark Fantasy Theme */
@@ -52,8 +52,8 @@
   --game-transition-slow: 0.5s ease;
   
   /* Typography */
-  --game-font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --game-font-family-mono: 'Consolas', 'Monaco', 'Lucida Console', monospace;
+  --game-font-family: 'Noto Sans', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --game-font-family-mono: 'Noto Sans Mono', 'Consolas', 'Monaco', 'Lucida Console', monospace;
   --game-font-family-retro: 'Press Start 2P', cursive;
   
   --game-font-size-xs: 11px;
@@ -71,6 +71,83 @@
   /* Scrollbar */
   --game-scrollbar-thumb: #2c3e50;
   --game-scrollbar-track: #16213e;
+  
+  /* ===========================================
+   * RESPONSIVE SCREEN SIZE VARIABLES
+   * screen-wide: >= 1440px (Large monitors)
+   * screen-medium: 1024px - 1439px (Laptops)
+   * screen-small: < 1024px (Tablets/Small)
+   * =========================================== */
+  
+  /* Header Sizes - Wide Screens (Default) */
+  --screen-wide-header-padding-y: var(--game-spacing-lg);
+  --screen-wide-header-font-size: 16px;
+  --screen-wide-header-icon-size: 32px;
+  --screen-wide-header-info-size: 24px;
+  --screen-wide-header-letter-spacing: 2px;
+  --screen-wide-header-gap: var(--game-spacing-md);
+  
+  /* Navigation Drawer - Wide Screens (Default) */
+  --screen-wide-drawer-width: 240px;
+  --screen-wide-drawer-item-padding: 16px;
+  --screen-wide-drawer-spacer: 16px;
+  
+  /* App Toolbar - Wide Screens (Default) */
+  --screen-wide-toolbar-height: 64px;
+  --screen-wide-toolbar-font-size: 16px;
+  --screen-wide-toolbar-icon-size: 28px;
+  --screen-wide-toolbar-btn-padding: 0 20px;
+  --screen-wide-toolbar-letter-spacing: 2px;
+}
+
+/* Medium Screens (Laptops: 1024px - 1439px) */
+@media (max-width: 1439px) {
+  :root {
+    /* Header Sizes - Medium Screens (60% of wide) */
+    --screen-medium-header-padding-y: calc(var(--game-spacing-lg) * 0.6);
+    --screen-medium-header-font-size: 13px;
+    --screen-medium-header-icon-size: 24px;
+    --screen-medium-header-info-size: 18px;
+    --screen-medium-header-letter-spacing: 1px;
+    --screen-medium-header-gap: var(--game-spacing-sm);
+    
+    /* Navigation Drawer - Medium Screens (25% narrower) */
+    --screen-medium-drawer-width: 180px;
+    --screen-medium-drawer-item-padding: 5px;
+    --screen-medium-drawer-spacer: 5px;
+    
+    /* App Toolbar - Medium Screens (smaller) */
+    --screen-medium-toolbar-height: 48px;
+    --screen-medium-toolbar-font-size: 12px;
+    --screen-medium-toolbar-icon-size: 22px;
+    --screen-medium-toolbar-btn-padding: 0 12px;
+    --screen-medium-toolbar-letter-spacing: 1px;
+  }
+}
+
+/* Small Screens (Tablets: < 1024px) */
+@media (max-width: 1023px) {
+  :root {
+    /* Header Sizes - Small Screens (50% of wide) */
+    --screen-small-header-padding-y: calc(var(--game-spacing-lg) * 0.5);
+    --screen-small-header-font-size: 11px;
+    --screen-small-header-icon-size: 20px;
+    --screen-small-header-info-size: 16px;
+    --screen-small-header-letter-spacing: 1px;
+    --screen-small-header-gap: var(--game-spacing-xs);
+    
+    /* Navigation Drawer - Small Screens */
+    --screen-small-drawer-width: 150px;
+    --screen-small-drawer-item-padding: 4px;
+    --screen-small-drawer-spacer: 4px;
+    
+    /* App Toolbar - Small Screens */
+    --screen-small-toolbar-height: 40px;
+    --screen-small-toolbar-font-size: 10px;
+    --screen-small-toolbar-icon-size: 18px;
+    --screen-small-toolbar-btn-padding: 0 8px;
+    --screen-small-toolbar-letter-spacing: 1px;
+  }
 }
 
 /* Global Scrollbar Styling - Game Theme */

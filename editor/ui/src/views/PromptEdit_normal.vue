@@ -110,7 +110,7 @@ This defines their complete identity!
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--game-spacing-lg);
+  padding: var(--screen-wide-header-padding-y, var(--game-spacing-lg)) var(--game-spacing-lg);
   background: linear-gradient(135deg, var(--game-bg-tertiary) 0%, #1a1a2e 100%);
   border-bottom: 3px solid var(--game-accent-primary);
   border-top: 2px solid var(--game-accent-secondary);
@@ -120,21 +120,63 @@ This defines their complete identity!
 .personality-header__title {
   display: flex;
   align-items: center;
-  gap: var(--game-spacing-md);
+  gap: var(--screen-wide-header-gap, var(--game-spacing-md));
   color: var(--game-accent-secondary);
   font-family: var(--game-font-family-retro);
-  font-size: 16px;
+  font-size: var(--screen-wide-header-font-size, 16px);
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: var(--screen-wide-header-letter-spacing, 2px);
   text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8),
                0 0 10px var(--game-accent-secondary);
 }
 
 .personality-header__icon {
   color: var(--game-accent-secondary);
-  font-size: 32px;
+  font-size: var(--screen-wide-header-icon-size, 32px);
   filter: drop-shadow(0 0 8px var(--game-accent-secondary));
   animation: pulse 2s ease-in-out infinite;
+}
+
+/* Responsive header for laptop screens (60% height) */
+@media (max-width: 1439px) {
+  .personality-header {
+    padding: var(--screen-medium-header-padding-y) var(--game-spacing-lg);
+  }
+  
+  .personality-header__title {
+    font-size: var(--screen-medium-header-font-size);
+    gap: var(--screen-medium-header-gap);
+    letter-spacing: var(--screen-medium-header-letter-spacing);
+  }
+  
+  .personality-header__icon {
+    font-size: var(--screen-medium-header-icon-size);
+  }
+  
+  .personality-header__info {
+    font-size: var(--screen-medium-header-info-size);
+  }
+}
+
+/* Responsive header for small screens */
+@media (max-width: 1023px) {
+  .personality-header {
+    padding: var(--screen-small-header-padding-y) var(--game-spacing-md);
+  }
+  
+  .personality-header__title {
+    font-size: var(--screen-small-header-font-size);
+    gap: var(--screen-small-header-gap);
+    letter-spacing: var(--screen-small-header-letter-spacing);
+  }
+  
+  .personality-header__icon {
+    font-size: var(--screen-small-header-icon-size);
+  }
+  
+  .personality-header__info {
+    font-size: var(--screen-small-header-info-size);
+  }
 }
 
 @keyframes pulse {
@@ -150,7 +192,7 @@ This defines their complete identity!
 
 .personality-header__info {
   color: var(--game-text-secondary);
-  font-size: 24px;
+  font-size: var(--screen-wide-header-info-size, 24px);
   cursor: pointer;
   transition: all var(--game-transition-fast);
 }
