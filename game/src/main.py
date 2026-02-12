@@ -1,78 +1,145 @@
-import os
-import sys 
-import signal
-import json
-import traceback
-from dotenv import load_dotenv
-load_dotenv() 
+"""
+Main entry point for the text adventure game.
+Console interface for playing the game.
+"""
+from pathlib import Path
+from session import GameSession
+from config_loader import load_config
+from audio import PyAudioSink
+from sound import LocalJukebox
 
-from status.local import LocalStatus
-
-from state_engine import StateEngine
-from tts.factory import TTSEngineFactory
-from llm.factory import LLMFactory
-from stt.factory import STTFactory
-from session import Session
-from sound.local_jukebox import LocalJukebox
-from audio.pyaudio import PyAudioSink
-from history import HistoryLog
-from chat import process_chat
-from logger_setup import logger
-
-status_manager  = LocalStatus()
-history_manager = HistoryLog()
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_DIR = os.path.dirname(os.path.dirname(BASE_DIR))
-MAPS_ROOT_DIR  = os.path.join(PROJECT_DIR, 'maps')
-
-MAP_FILE =  os.getenv("MAP_FILE")
-
-logger.info(MAPS_ROOT_DIR)
-
-stop_requested = False
+# Base directory for game
+GAME_DIR: Path = Path(__file__).parent.parent
 
 
-def stop():
-    global stop_requested
-    logger.debug("Stopping gracefully...")
-    stop_requested = True
-    status_manager.stop()
-    sys.exit(0)
-signal.signal(signal.SIGINT, lambda sig, frame: stop())
-
-
-def session_factory():
-    return Session(
-        ws_token = "local",
-        map_name =  MAP_FILE,
-        map_dir = MAPS_ROOT_DIR,
-        state_engine=StateEngine(f"{MAPS_ROOT_DIR}/{MAP_FILE}/index.yaml"),
-        llm = LLMFactory.create(),
-        tts = TTSEngineFactory.create(PyAudioSink()),
-        stt = STTFactory.create(),
-        jukebox = LocalJukebox(),
-        status_manager = status_manager,
-        history_manager = history_manager
-    )
-
-if __name__ == '__main__':
-
-    session = session_factory()
-
-    # Start the game for this new session
-    #
-    initial_dialog = session.state_engine.get_action_system_prompt(session.state_engine.get_action_id("start"))
-    session.state_engine.trigger(session, session.state_engine.get_action_id("start"))
-    process_chat(session, initial_dialog, session_factory)
-   
+def main():
+    """Main game loop."""
+    print("=" * 60)
+    print("TEXT ADVENTURE GAME")
+    print("=" * 60)
+    print()
+    
+    # Initialize session (creates all components)
     try:
-        for text in session.stt.start_recording():
-            if stop_requested:
-                break
-            session.tts.stop(session)
-            process_chat(session, text, session_factory)
+        print("Initialisiere Spiel...")
+        
+        # Load config once
+        config = load_config()
+        
+        # Game definition path is read from config.yaml (maps_directory + game_name)
+        print("Lade Spieldefinition aus config.yaml...")
+        
+        # Create session - GameEngine reads from config.yaml
+        session = GameSession(
+            session_id="console",
+            config=config,
+            audio_sink=PyAudioSink(sample_rate=24000),
+            jukebox=LocalJukebox(config=config)
+        )
+
+        # Show LLM model info
+        llm_provider = session.game_engine.controller.llm_provider
+        provider_name = llm_provider.__class__.__name__.replace("Provider", "")
+        print(f"LLM: {provider_name} - {llm_provider.model}")
+        if hasattr(llm_provider, 'supports_native_function_calling'):
+            fc_support = "Native Function Calling" if llm_provider.supports_native_function_calling() else "JSON Function Calling"
+            print(f"Function Calling: {fc_support}")
+
+        print("Spiel bereit!")
+        print()
+        
     except Exception as e:
+        print(f"Fehler beim Initialisieren: {e}")
+        import traceback
         traceback.print_exc()
-        logger.error(f"An error occurred: {e}")
-        stop()
+        return
+    
+    # Start game
+    initial_desc = session.game_engine.start_game()
+    print(initial_desc)
+    print()
+    print("(Tippe 'quit' zum Beenden, 'help' für Hilfe)")
+    print()
+    
+    # Game loop
+    while True:
+        try:
+            # Get user input
+            user_input = input("> ").strip()
+            
+            if not user_input:
+                continue
+            
+            # Handle special commands
+            if user_input.lower() == 'quit':
+                print("Auf Wiedersehen!")
+                break
+            
+            if user_input.lower() == 'help':
+                print("\nVerfügbare Befehle:")
+                print("- quit: Spiel beenden")
+                print("- state: Aktuellen State anzeigen")
+                print("- inventory: Inventar anzeigen")
+                print("- vars: Alle Lua-Variablen anzeigen (Debug)")
+                print("- actions: Verfügbare Actions anzeigen")
+                print("- help: Diese Hilfe anzeigen")
+                print()
+                continue
+            
+            if user_input.lower() == 'state':
+                state = session.game_engine.state_engine.get_current_state()
+                print(f"\n{state}")  # Uses __str__
+                print(f"Description: {state.get_description()}")
+                print()
+                continue
+            
+            if user_input.lower() == 'inventory':
+                inv = session.game_engine.inventory.to_dict()
+                print("\n" + "=" * 50)
+                print("INVENTAR")
+                print("=" * 50)
+                
+                for key, value in sorted(inv.items()):
+                    # Format value
+                    if isinstance(value, bool):
+                        val_str = "true" if value else "false"
+                    else:
+                        val_str = str(value)
+                    print(f"  {key:.<40} {val_str:>5}")
+                print("=" * 50 + "\n")
+                continue
+            
+            if user_input.lower() == 'vars':
+                print(f"\nAlle Lua-Variablen: {session.game_engine.inventory.get_all_vars()}\n")
+                continue
+            
+            if user_input.lower() == 'actions':
+                actions = session.game_engine.state_engine.get_available_actions()
+                print(f"\nVerfügbare Actions ({len(actions)}):")
+                for action in actions:
+                    print(f"  - {action.name}")
+                    if action.description:
+                        print(f"    → {action.description[:80]}")
+                    if action.conditions:
+                        print(f"    Conditions: {action.conditions}")
+                print()
+                continue
+            
+            # Process input through game engine
+            print()
+            response = session.game_engine.process_input(user_input)
+            print(response)
+            print()
+            
+        except KeyboardInterrupt:
+            print("\n\nSpiel unterbrochen.")
+            break
+        except Exception as e:
+            print(f"\nFehler: {e}")
+            import traceback
+            traceback.print_exc()
+            print()
+
+
+if __name__ == "__main__":
+    main()

@@ -24,7 +24,7 @@ class VoiceFactory:
         Initialize factory with configuration.
 
         Args:
-            config_path: Path to config.yaml. If None, looks for config.yaml in game_v2/
+            config_path: Path to config.yaml. If None, looks for config.yaml in game/
         """
         if config_path is None:
             # Default to dungeon/config.yaml (project root)

@@ -1,3 +1,4 @@
+
 /* Basic Layout */
 body {
     display: flex;
@@ -29,18 +30,89 @@ body, input, button, select, textarea {
 #game-container {
     display: none;
     flex-direction: column;
-    align-items: center;
-    width:100%;
+    width: 90%;
+    max-width: 1200px;
+    height: 90vh;
+    margin: 0 auto;
 }
 
-#game-status-container{
-    width: 80%;
-    max-width: 600px;
-    color: #c2c2c2;
+/* Game Content - Inventory (1/3) + Chat (2/3) side by side */
+.game-content {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    gap: 15px;
+    min-height: 0; /* Important for flex children to scroll */
+}
+
+/* Inventory Panel - 1/3 width */
+#inventory-panel {
+    flex: 1;
+    background-color: rgba(51, 51, 51, 0.95);
+    border: 4px solid #63908b;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.inventory-title {
     font-size: 1.5em;
+    color: #63908b;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #63908b;
+}
+
+#inventory-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.inventory-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background-color: rgba(99, 144, 139, 0.2);
+    border-left: 3px solid #63908b;
+    color: #f0f0f0;
+    font-size: 1.2em;
+}
+
+.inventory-item:hover {
+    background-color: rgba(99, 144, 139, 0.4);
+}
+
+.item-icon {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.item-count {
+    background-color: #63908b;
+    color: #24293b;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.inventory-empty {
+    color: #888;
+    font-style: italic;
+    font-size: 1.1em;
+}
+
+#game-status-container {
     display: flex;
     flex-direction: row;
     gap: 10px;
+    color: #c2c2c2;
+    font-size: 2.25em;
+    margin-bottom: 10px;
+    flex-shrink: 0;
 }
 
 #welcome-container {
@@ -68,12 +140,9 @@ body, input, button, select, textarea {
     font-size:4em;
 }
 
-/* Chat Container */
+/* Chat Container - 2/3 width */
 .chat-container {
-    width: 80%;
-    max-width: 600px;
-    height: 60vh;
-    padding: 10px;
+    flex: 2;
     display: flex;
     flex-direction: column-reverse; /* New messages at bottom */
     overflow-y: auto;
@@ -99,20 +168,18 @@ body, input, button, select, textarea {
     align-self: flex-start;
 }
 
-/* Input Area */
+/* Input Area - full width at bottom */
 .input-area {
-    width: 80%;
-    max-width: 600px;
     display: flex;
-    margin-top: 10px;
-
+    width: 100%;
+    margin-top: 15px;
+    flex-shrink: 0;
 }
 
-/* Text Input */
+/* Text Input - takes full width */
 input[type="text"] {
     flex: 1;
-    padding: 10px;
-    font-size: 1.5rem;
+    font-size: 2.25rem;
     background-color: #333;
     padding: 20px;
     border: 4px solid #63908b;

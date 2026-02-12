@@ -1,6 +1,6 @@
 initial: Start
 metadata:
-  normal_prompt: >+
+  identity: >+
     **Du bist eine Finit State Engine und Regeln für Interaktion**
 
 

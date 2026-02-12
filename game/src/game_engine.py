@@ -133,7 +133,7 @@ class GameEngine:
         diagram = designer_data.get("diagram", [])
         
         # 1. Parse Config (Identity, Behaviour, Inventory)
-        identity = config.get("normal_prompt", "")
+        identity = config.get("identity", "")
         behaviour = "WICHTIG: Du darfst NUR die explizit definierten Aktionen verwenden. Erfinde NIEMALS eigene Aktionen. Wenn der Spieler etwas tun möchte, das nicht in der Liste der verfügbaren Aktionen steht, antworte im Piraten-Slang ablehnend und verwende [AKTION: keine_aktion]."
         
         # Convert Inventory list to dict

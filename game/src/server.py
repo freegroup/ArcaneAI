@@ -1,246 +1,266 @@
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Request, Response, status, Form
-from fastapi.responses import JSONResponse, HTMLResponse, FileResponse, RedirectResponse
+"""
+FastAPI Web Server for the text adventure game.
+Provides REST API and web interface.
+
+Run with: python server.py
+Or: uvicorn server:app --host 0.0.0.0 --port 9000
+"""
+from pathlib import Path
+from typing import Dict, Optional
+from uuid import uuid4
+import secrets
+import os
+
+from fastapi import FastAPI, HTTPException, Request, Response, status, WebSocket, WebSocketDisconnect
+from fastapi.responses import JSONResponse, HTMLResponse, RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-
 from pydantic import BaseModel
-from typing import Dict
-from uuid import uuid4
-import mimetypes
-import secrets
-import os
-import json
-import asyncio
-
 from dotenv import load_dotenv
-load_dotenv() 
 
-from status.websocket import WebSocketStatus as Status
-from state_engine import StateEngine
-from tts.factory import TTSEngineFactory
-from llm.factory import LLMFactory
-from stt.factory import STTFactory
-from session import Session as ChatSession
-from sound.web_jukebox import WebJukebox
-from websocketmanager import WebSocketManager
-from audio.websocket import WebSocketSink
-from history import HistoryLog
-from chat import process_chat
-from logger_setup import logger
+load_dotenv()
 
-BASE_URI = "/game"
-PORT = 9000
-#SAME_SITE_VALUE = "None" # cross origin and https
-SAME_SITE_VALUE = "Lax" # local http
+from session import GameSession
+from config_loader import load_config
+from audio import WebSocketSink
+from sound import WebJukebox
+from messaging import WebSocketMessageQueue
 
+# Base directory for game
+GAME_DIR: Path = Path(__file__).parent.parent
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_DIR = os.path.dirname(os.path.dirname(BASE_DIR))
-MAPS_ROOT_DIR  = os.path.join(PROJECT_DIR, 'maps')
+# Load config once at startup
+CONFIG = load_config()
 
-MAP_FILE =  os.getenv("MAP_FILE")
+# Configuration from environment
+BASE_URI = os.getenv("BASE_URI", "")
+PORT = int(os.getenv("PORT", "9000"))
+SAME_SITE_VALUE = os.getenv("SAME_SITE", "Lax")
+VALID_USERNAME = os.getenv("USERNAME", "user")
+VALID_PASSWORD = os.getenv("PASSWORD", "pass")
 
+# Initialize FastAPI
+app = FastAPI(title="Text Adventure Game", version="2.0.0", root_path=BASE_URI)
 
-status_manager = Status()
-history_manager = HistoryLog()
+# Templates and static files
+templates = Jinja2Templates(directory=str(GAME_DIR / "templates"))
+app.mount("/assets", StaticFiles(directory=str(GAME_DIR / "static")), name="static")
+app.mount("/soundfx", StaticFiles(directory=str(GAME_DIR / "soundfx")), name="soundfx")
 
-app = FastAPI(title="Chat Application", version="1.0.0", root_path=BASE_URI)
-templates = Jinja2Templates(directory="templates")
-
+# CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:9000"],  # Adjust if using a different port
+    allow_origins=[f"http://127.0.0.1:{PORT}", f"http://localhost:{PORT}"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-VALID_USERNAME = os.getenv("USERNAME", "user")
-VALID_PASSWORD = os.getenv("PASSWORD", "pass")
-
-session_store: Dict[str, Dict] = {}
-
-
-from fastapi.middleware.cors import CORSMiddleware
+# Session store and token mapping
+session_store: Dict[str, GameSession] = {}
+token_to_session: Dict[str, str] = {}  # ws_token -> session_id
 
 
+# Pydantic models
 class ChatMessage(BaseModel):
     text: str
+
 
 class LoginData(BaseModel):
     username: str
     password: str
 
 
-def session_factory():
-    return ChatSession(
-            map_name =  MAP_FILE,
-            map_dir = MAPS_ROOT_DIR,
-            state_engine = StateEngine(f"{MAPS_ROOT_DIR}/{MAP_FILE}/index.yaml"),
-            llm = LLMFactory.create(),
-            tts = TTSEngineFactory.create(WebSocketSink()),
-            stt = STTFactory.create(),
-            jukebox= WebJukebox(),
-            status_manager = status_manager,
-            history_manager = history_manager
-        )
+# ============ Session Management ============
 
-def create_proxy_aware_redirect(request: Request, target_route: str) -> RedirectResponse:
-    logger.debug("Request Headers in /ui route:")
-    for header, value in request.headers.items():
-        logger.debug(f"{header}: {value}")
-
-    # Get forwarded headers or defaults
-    forwarded_proto = request.headers.get("x-dungeon-proto", "http")
-    forwarded_host = request.headers.get("x-dungeon-host", "localhost")
-    forwarded_port = request.headers.get("x-dungeon-port", f"{PORT}")
-    logger.debug(f"dungeon_proto {forwarded_proto}")
-    logger.debug(f"dungeon_host {forwarded_host}")
-    logger.debug(f"dungeon_port {forwarded_port}")
-    # Construct the base URL manually
-    base_url = f"{forwarded_proto}://{forwarded_host}"
-    if forwarded_port and forwarded_port not in ["80", "443"]:
-        base_url += f":{forwarded_port}"
-
-    # Manually create the target URL, ensuring both parts are strings
-    target_path = request.app.url_path_for(target_route)  # Provides just the path
-    target_url = f"{base_url}{BASE_URI}{target_path}"  # Combine the base URL and target path
-    logger.debug(f"Target URL for Redirect: {target_url}")
-
-    return target_url
+def create_session(session_id: str) -> GameSession:
+    """Create a new game session.
+    Game definition is loaded from config.yaml (maps_directory + game_name).
+    """
+    return GameSession(
+        session_id=session_id,
+        config=CONFIG,
+        audio_sink=WebSocketSink(),
+        jukebox=WebJukebox()
+    )
 
 
-# Middleware to retrieve or create a session
-def get_session(request: Request, response: Response) -> Dict:
-    session_id = request.cookies.get("session_id")
-    logger.debug(f"Current session_id (get_session): {session_id}")
+def get_session(session_id: Optional[str]) -> Optional[GameSession]:
+    """Get session by ID if it exists."""
+    if session_id and session_id in session_store:
+        return session_store[session_id]
+    return None
 
+
+def get_or_create_session(session_id: Optional[str]) -> tuple[GameSession, str]:
+    """Get existing session or create new one. Returns (session, session_id)."""
     if session_id and session_id in session_store:
         return session_store[session_id], session_id
-
-    if session_id is None:
+    
+    # Create new session
+    if not session_id:
         session_id = str(uuid4())
     
-    session_store[session_id] = session_factory()
-    response.set_cookie("session_id", session_id, httponly=True, samesite=SAME_SITE_VALUE)
-    return session_store[session_id], session_id
+    session = create_session(session_id)
+    session_store[session_id] = session
+    return session, session_id
 
 
-# Mount the static directory to serve CSS, JavaScript, and images
-app.mount("/assets", StaticFiles(directory="static"), name="static")
+def require_auth(request: Request) -> None:
+    """Check if user is authenticated, raise HTTPException if not."""
+    if request.cookies.get("authenticated") != "yes":
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
-# GET route for the login page
+
+# ============ Routes ============
+
 @app.get("/login", response_class=HTMLResponse, name="login_page")
 async def login_page(request: Request):
-    return templates.TemplateResponse("login.html",  {"request": request, "BASE_URI": BASE_URI})
+    """Show login page."""
+    return templates.TemplateResponse("login.html", {"request": request, "BASE_URI": BASE_URI})
 
 
 @app.post("/login_post", name="login")
-async def login(request: Request, data: LoginData, response: Response):
-    # Manually validate username and password
-    if not (secrets.compare_digest(data.username, VALID_USERNAME) and secrets.compare_digest(data.password, VALID_PASSWORD)):
+async def login(request: Request, data: LoginData):
+    """Handle login."""
+    if not (secrets.compare_digest(data.username, VALID_USERNAME) and 
+            secrets.compare_digest(data.password, VALID_PASSWORD)):
         return JSONResponse({"error": "Invalid username or password"}, status_code=400)
-
-    # Set the session cookie and redirect to the main UI
-    response = RedirectResponse(url=create_proxy_aware_redirect(request, "ui"), status_code=status.HTTP_307_TEMPORARY_REDIRECT)
+    
+    response = RedirectResponse(url=request.url_for("ui"), status_code=status.HTTP_307_TEMPORARY_REDIRECT)
     response.set_cookie("authenticated", "yes", httponly=True, samesite=SAME_SITE_VALUE)
     return response
 
 
-# Updated /ui route to require authentication
 @app.get("/ui", response_class=HTMLResponse, name="ui")
-async def ui(request: Request, response: Response):
-    # Check if user is authenticated by looking for the "authenticated" cookie
+async def ui(request: Request):
+    """Show game UI."""
     if request.cookies.get("authenticated") != "yes":
-        return RedirectResponse(url=create_proxy_aware_redirect(request, "login_page")) 
+        return RedirectResponse(url=request.url_for("login_page"))
+    return templates.TemplateResponse("index.html", {"request": request, "BASE_URI": BASE_URI})
 
-    # Proceed to load the UI if authenticated
-    session, session_id = get_session(request, response)
 
-    template_response = templates.TemplateResponse("index.html", {"request": request, "session": session, "BASE_URI": BASE_URI})
-    template_response.set_cookie("session_id", session_id, httponly=True, samesite=SAME_SITE_VALUE)
+@app.get("/websocket/connect", name="websocket_connect")
+async def websocket_connect(request: Request):
+    """Create WebSocket token for client."""
+    require_auth(request)
     
-    logger.debug(f"Using session with session_id: {session_id} for /ui request")
-    return template_response
+    session_id = request.cookies.get("session_id")
+    session, session_id = get_or_create_session(session_id)
+    
+    # Generate and store WebSocket token
+    ws_token = secrets.token_urlsafe(32)
+    session.ws_token = ws_token
+    token_to_session[ws_token] = session_id
+    
+    response = JSONResponse({"token": ws_token})
+    response.set_cookie("session_id", session_id, httponly=False, samesite=SAME_SITE_VALUE)
+    return response
 
 
-# Chat endpoint with cookie-based authentication
 @app.post("/api/chat", name="chat")
-async def chat(request: Request, data: ChatMessage, response: Response):
-    if request.cookies.get("authenticated") != "yes":
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
-
-    session, session_id = get_session(request, response)
-    logger.debug(f"Using session with session_id: {session_id} for /chat request")
-
-    # new user input. Stop curent TTS output
-    #
-    session.tts.stop(session)
-    WebSocketManager.send_message(session, json.dumps({"function":"speak.stop"}))
-
-    text = data.text
-    response_text = ""
-
+async def chat(request: Request, data: ChatMessage):
+    """Process chat message."""
+    require_auth(request)
+    
+    session_id = request.cookies.get("session_id")
+    session, session_id = get_or_create_session(session_id)
+    
+    text = data.text.strip()
+    
     if text.lower() == "start":
+        # Restart game - preserve WebSocket state
         old_ws_token = session.ws_token
-        session_store[session_id] = session_factory()
-        session, session_id = get_session(request, response)
+        old_message_queue = session.message_queue
+        session = create_session(session_id)
+        session_store[session_id] = session
         session.ws_token = old_ws_token
-        text = session.state_engine.get_action_system_prompt(session.state_engine.get_action_id("start"))
-        session.state_engine.trigger(session, session.state_engine.get_action_id("start"))
-
-    response_text = process_chat(session, text, session_factory)
-    return JSONResponse({"response": response_text})
-
-
-
-# REST endpoint to serve audio files
-@app.get("/api/audio/{filename}", name="audio_get")
-async def get_audio(filename: str, request: Request, response: Response):
-    if request.cookies.get("authenticated") != "yes":
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
-
-    session, session_id = get_session(request, response)
-
-    file_path = f"{session.map_dir}/{session.map_name}/soundfx/{filename}"
-    mime_type, _ = mimetypes.guess_type(file_path)
-    mime_type = mime_type or "application/octet-stream"
-    if os.path.isfile(file_path):
-        return FileResponse(path=file_path, filename=filename, media_type=mime_type)
+        session.message_queue = old_message_queue
+        response_text = session.game_engine.controller.start_game()
     else:
-        raise HTTPException(status_code=404, detail="Audio file not found")
+        session.update_activity()
+        response_text = session.game_engine.controller.process_input(text)
+    
+    # Flush WebSocket messages if connected
+    if hasattr(session.message_queue, 'flush'):
+        await session.message_queue.flush()
+    
+    # Get buffered messages (for REST fallback)
+    messages = []
+    if hasattr(session.message_queue, 'get_messages'):
+        messages = session.message_queue.get_messages()
+    
+    response = JSONResponse({
+        "response": response_text,
+        "state": session.game_engine.state_engine.get_current_state().name,
+        "inventory": session.game_engine.inventory.to_dict(),
+        "messages": messages,
+        "session_id": session_id
+    })
+    response.set_cookie("session_id", session_id, httponly=False, samesite=SAME_SITE_VALUE)
+    return response
 
 
-@app.get("/websocket/connect", name="ws_connect")
-async def ws_connect(request: Request, response: Response):
-    session, session_id = get_session(request, response)
-    logger.debug(f"Using session with session_id: {session_id} for /ws/connect request")
-
-    if not session.ws_token:
-        session.ws_token = str(uuid4())
-
-    logger.debug(f"Retrieved or created ws_token: {session.ws_token}")
-    return {"token": session.ws_token}
-
-
-# WebSocket handling
 @app.websocket("/websocket/{token}")
 async def websocket_endpoint(websocket: WebSocket, token: str):
-    logger.debug("WZ_TOKEN", token)
-    await WebSocketManager.connect(websocket, token)
+    """WebSocket endpoint for real-time game updates."""
+    import asyncio
+    
+    await websocket.accept()
+    
+    # Find session by token (O(1) lookup)
+    session_id = token_to_session.get(token)
+    session = session_store.get(session_id) if session_id else None
+    
+    if not session:
+        await websocket.send_json({"type": "error", "data": {"message": "Invalid token"}})
+        await websocket.close()
+        return
+    
+    # Set up WebSocket message queue with event loop
+    # This allows other threads (like audio playback) to send messages
+    old_queue = session.message_queue
+    loop = asyncio.get_event_loop()
+    session.message_queue = WebSocketMessageQueue(websocket, loop=loop)
+    
+    print(f"[WEBSOCKET] Client connected for session {session_id}")
+    
     try:
-        while True:
-            await WebSocketManager.process_queue(token)
-            await asyncio.sleep(0.1)  # Small delay to prevent a tight loop, adjust as needed
-    except WebSocketDisconnect:
-        logger.info("WebSocket disconnected")
-        await WebSocketManager.remove(token)
+        # Send initial state
+        await websocket.send_json({
+            "type": "connected",
+            "data": {
+                "state": session.game_engine.state_engine.get_current_state().name,
+                "inventory": session.game_engine.inventory.to_dict()
+            }
+        })
         
+        # Keep connection alive
+        while True:
+            message = await websocket.receive_json()
+            if message.get("type") == "ping":
+                await websocket.send_json({"type": "pong"})
+                
+    except WebSocketDisconnect:
+        print(f"[WEBSOCKET] Client disconnected for session {session_id}")
+    except Exception as e:
+        print(f"[WEBSOCKET ERROR] {e}")
+    finally:
+        # Restore old message queue
+        session.message_queue = old_queue
+        # Clean up token mapping
+        if token in token_to_session:
+            del token_to_session[token]
+
+
+@app.get("/health")
+async def health():
+    """Health check endpoint."""
+    return {"status": "ok"}
+
 
 if __name__ == "__main__":
     import uvicorn
-    #uvicorn.run(app, host="0.0.0.0", port=PORT,  log_level="trace")
+    print(f"Starting server on http://0.0.0.0:{PORT}{BASE_URI}")
     uvicorn.run(app, host="0.0.0.0", port=PORT)
-
-

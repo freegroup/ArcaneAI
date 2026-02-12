@@ -17,7 +17,7 @@
     <!-- Editor -->
     <Codemirror
       class="full-height-editor"
-      v-model:value="normalPrompt"
+      v-model:value="identityPrompt"
       :options="cmOptions"
       placeholder="Du bist ein Haudegen im 1700 Jahrhundert..."
     />
@@ -72,13 +72,13 @@ This defines their complete identity!
   },
   computed: {
     ...mapGetters('maps', ['mapConfig']),
-    normalPrompt: {
+    identityPrompt: {
       get() {
-        return this.mapConfig.normal_prompt;
+        return this.mapConfig.identity;
       },
       set(value) {
         // Commit the updated system prompt to the store
-        this.updateMapConfig({ ...this.mapConfig, normal_prompt: value });
+        this.updateMapConfig({ ...this.mapConfig, identity: value });
       },
     },
     

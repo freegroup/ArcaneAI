@@ -24,7 +24,7 @@ class GameConfig:
             ValueError: If required configuration is missing
         """
         if config_path is None:
-            # Default to dungeon/config.yaml (project root, 2 levels up from game_v2/src)
+            # Default to dungeon/config.yaml (project root, 2 levels up from game/src)
             config_path = Path(__file__).parent.parent.parent / "config.yaml"
         
         self._config_path = Path(config_path)

@@ -1,21 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Interface</title>
+    <title>Text Adventure Game</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-
     <link href="./assets/main.css" rel="stylesheet"/>
     <link href="./assets/bubbles.css" rel="stylesheet"/>
-
 </head>
 <body>
 
 <div id="welcome-container">
     <div class="background-image"></div>
-  
     <div class="welcome-text">
         <div>
             Ein mysteriöser Fluch hält dich hier gefangen – dieser düstere Dungeon ist 
@@ -27,418 +24,59 @@
             Aber keine Sorge, du musst dich nicht selbst in Gefahr begeben! Ein treuer 
             Gefährte steht dir zur Seite und erledigt jede Herausforderung, die euch 
             begegnet. Gib ihm einfach klare Anweisungen – wie „Untersuche das Haus 
-            mal genauer“ oder „Schau dir den Baum an“ – und er wird alles für dich erledigen.
+            mal genauer" oder „Schau dir den Baum an" – und er wird alles für dich erledigen.
         </div>
         <div>
-            Bist du bereit? Drücke auf „Start“ und tauche ein in die Welt des Dungeon Escape!
+            Bist du bereit? Drücke auf „Start" und tauche ein in die Welt des Dungeon Escape!
         </div>
     </div>
-    <button id="startButton" onclick="startGame()">Start Game</button>
+    <button id="startButton">Start Game</button>
 </div>
 
 <div id="game-container">
     <div class="background-image"></div>
-    <div id="game-status-container"><div>Deine Position:</div> <div id="game-status-value"></div></div>
-    <div class="chat-container" id="chatContainer"></div>
+    <div id="game-status-container">
+        <div>Deine Position:</div> 
+        <div id="game-status-value"></div>
+    </div>
+    
+    <div class="game-content">
+        <!-- Inventory Panel (left side) -->
+        <div id="inventory-panel">
+            <div class="inventory-title">📦 Inventar</div>
+            <div id="inventory-list"></div>
+        </div>
+        
+        <!-- Chat Container (right side) -->
+        <div class="chat-container" id="chatContainer"></div>
+    </div>
 
     <div class="input-area" id="inputArea">
-        <input type="text" id="question" placeholder="Type a message..." onkeypress="handleKeyPress(event)">
-        <button id="micButton" onclick="toggleRecognition()">
-            <svg xmlns="http://www.w3.org/2000/svg" version="1.0"  width="50" height="50" viewBox="0 0 75 75">
-                <path d="M39.389,13.769 L22.235,28.606 L6,28.606 L6,47.699 L21.989,47.699 L39.389,62.75 L39.389,13.769z"
-                style="stroke:#63908b;stroke-width:5;stroke-linejoin:miter;fill:#63908b;"/>
-                <path d="M48,27.6a19.5,19.5 0 0 1 0,21.4M55.1,20.5a30,30 0 0 1 0,35.6M61.6,14a38.8,38.8 0 0 1 0,48.6" style="fill:none;stroke:#63908b;stroke-width:5;stroke-linecap:square"/>
-            </svg>
-        </button>
+        <input type="text" id="question" placeholder="Type a message...">
     </div>
 </div>
 
+<!-- Load JS modules: Controllers -->
+<script src="./assets/js/inventory.js"></script>
+
+<!-- Load JS modules: Handlers -->
+<script src="./assets/js/handlers/messageHandler.js"></script>
+<script src="./assets/js/handlers/jukeboxHandler.js"></script>
+<script src="./assets/js/handlers/speechHandler.js"></script>
+<script src="./assets/js/handlers/stateHandler.js"></script>
+
+<!-- Load JS modules: Main App -->
+<script src="./assets/js/app.js"></script>
+
 <script>
- 
-    let websocket = null;
-    let token = null;
-    let reconnectAttempts = 0;
-    const maxReconnectAttempts = 10;
-    let audioContext = null;
-    let audioPlayers = {};
-    let currentSource = null;  // Reference to the current AudioBufferSourceNode
+    // Initialize app with server config
+    const app = new GameApp({
+        baseUri: '{{ BASE_URI }}'
+    });
 
-
-    let audioQueue = [];  // Queue for audio chunks
-    let isPlaying = false;  // Flag to indicate if audio is currently playing
-    let accumulatedChunks = [];  // Temporary storage for accumulating chunks
-    
-    let final_transcript = '';
-    let recognizing = false;
-    let shouldRestart = false;
-    let recognition;
-    let inactivityTimeout;  // Timer for inactivity
-    const inactivityTime = 800;
-
-    const welcomeContainer = document.getElementById("welcome-container");
-    const gameContainer = document.getElementById("game-container");
-    const chatContainer = document.getElementById("chatContainer");
-    const inputArea = document.getElementById("inputArea");
-    const startButton = document.getElementById("startButton");
-    const questionInput = document.getElementById("question");
-    const micButton = document.getElementById("micButton");
-    const gameStatus = document.getElementById("game-status-value");
-
-    let typingIndicator = null;
-
-
-    function handleKeyPress(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            sendQuestion();
-        }
-    }
-
-    async function startGame() {
-        try {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const response = await fetch("{{ BASE_URI }}/websocket/connect",{
-                credentials: "include"  // Ensure cookies are included
-            });
-            const data = await response.json();
-            token = data.token;
-
-            createWebSocketConnection();
-            toggleChatUI(true);
-            showTypingIndicator();            
-
-        } catch (error) {
-            console.error("Error initializing WebSocket:", error);
-        }
-    }
-
-
-    async function sendQuestion() {
-        const userMessage = questionInput.value.trim();
-        questionInput.value = "";
-
-        if (userMessage) {
-            addMessage(userMessage, "user");
-            showTypingIndicator();
-
-            try {
-                const response = await fetch("{{ BASE_URI }}/api/chat", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    credentials: "include",
-                    body: JSON.stringify({ text: userMessage })
-                });
-
-                if (!response.ok) throw new Error(`Server error: ${response.status}`);
-
-                const data = await response.json();
-                removeTypingIndicator();
-                addMessage(data.response, "bot");
-            } catch (error) {
-                console.error("Error:", error);
-                removeTypingIndicator();
-                addMessage("Error connecting to server.", "bot");
-            }
-        }
-    }
-
-    function showTypingIndicator() {
-        if (!typingIndicator) {
-            typingIndicator = document.createElement("div");
-            typingIndicator.classList.add("typing-indicator");
-
-            for (let i = 0; i < 3; i++) {
-                const dot = document.createElement("div");
-                dot.classList.add("dot");
-                typingIndicator.appendChild(dot);
-            }
-            chatContainer.insertBefore(typingIndicator, chatContainer.firstChild);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-    }
-
-    function removeTypingIndicator() {
-        if (typingIndicator) {
-            chatContainer.removeChild(typingIndicator);
-            typingIndicator = null;
-        }
-    }
-
-    // Function to play sound based on WebSocket message
-    function playSound(message) {
-        const soundUrl = `${window.location.protocol}//${window.location.host}{{ BASE_URI }}/api/audio/${message.file_name}`;
-        const audio = new Audio(soundUrl);
-        audio.loop = message.loop;
-        if (typeof message.volume === "number") {
-             // Ensure the value is between 0.0 and 1.0
-            audio.volume = Math.max(0, Math.min(1, message.volume / 100));
-        }
-
-        audioPlayers[message.file_name] = audio;
-        audio.play().catch(error => console.error("Error playing audio:", error));
-        
-        audio.addEventListener('ended', () => {
-            if (!audio.loop) {
-                delete audioPlayers[message.file_name];
-                console.log(`Sound ${message.file_name} ended and was removed.`);
-            }
-        });
-
-        if (message.duration > 0 && !message.loop) {
-            setTimeout(() => {
-                if (!audio.ended) {
-                    audio.pause();
-                    audio.currentTime = 0;
-                    delete audioPlayers[message.file_name];
-                    console.log(`Sound ${message.file_name} stopped after duration limit.`);
-                }
-            }, message.duration * 1000);
-        }
-    }
-
-
-    // Function to stop all currently playing sound effects
-    function stopAllSounds() {
-        for (const fileName in audioPlayers) {
-            const audio = audioPlayers[fileName];
-            audio.pause();
-            audio.currentTime = 0;
-        
-            delete audioPlayers[fileName];
-        }
-        console.log("All sound effects stopped.");
-    }
-
-    function stopAmbientSounds() {
-        for (const fileName in audioPlayers) {
-            const audio = audioPlayers[fileName];
-
-            if (audio.loop) {
-                audio.pause();
-                audio.currentTime = 0;
-                delete audioPlayers[fileName];
-            }
-        }
-        console.log("All ambient sound effects stopped.");
-    }
-
-    async function toggleChatUI(show) {
-        welcomeContainer.style.display = show ? "none" : "flex";
-        gameContainer.style.display = show ? "flex" : "none";
-
-        try {
-            inputArea.focus();
-            const response = await fetch("{{ BASE_URI }}/api/chat", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                credentials: "include",
-                body: JSON.stringify({ text: "start" })
-            });
-
-            const data = await response.json();
-            addMessage(data.response, "bot");
-            removeTypingIndicator()
-            questionInput.focus()
-        } catch (error) {
-            console.error("Error starting game:", error);
-        }
-    }
-
-
-
-    function createWebSocketConnection()     {
-        const wsProtocol = window.location.protocol === "https:" ? "wss://" : "ws://";
-        const wsUrl = `${wsProtocol}${window.location.host}{{ BASE_URI }}/websocket/${token}`;
-        websocket = new WebSocket(wsUrl);
-
-        websocket.onopen = () => {
-            reconnectAttempts = 0;
-            console.log("WebSocket connection established.");
-        };
-
-        websocket.onmessage =  handleWebSocketMessage;
-        websocket.onerror = (error) => console.error("WebSocket error:", error);
-        websocket.onclose = () => reconnectWebSocket();
-    }
-
-
-    // Handle WebSocket reconnection attempts
-    function reconnectWebSocket() {
-        if (reconnectAttempts < maxReconnectAttempts) {
-            setTimeout(() => {
-                reconnectAttempts++;
-                console.log("Attempting to reconnect WebSocket...");
-                reconnectWebSocket(); 
-            }, 5000);
-        } else {
-            addMessage("Unable to reconnect WebSocket.", "bot");
-        }
-    }
-
-    // Function to handle WebSocket messages
-    async function handleWebSocketMessage(event) {
-        if (typeof event.data === "string") {
-            try {
-                const message = JSON.parse(event.data);
-                if (message.function === "sound.play_sound") {
-                    playSound(message);
-                } else if (message.function === "sound.stop_all") {
-                    stopAllSounds();
-                } else if (message.function === "sound.stop_ambient") {
-                    stopAmbientSounds();
-                } else if (message.function === "speak.stop") {
-                    stopSpeak();
-                } else if (message.function === "state.inventory") {
-                    gameStatus.innerHTML = message.data.state;
-                }
-            } catch (error) {
-                console.error("Error parsing text message:", error);
-            }
-        } else if (event.data instanceof Blob) {
-            const arrayBuffer = await event.data.arrayBuffer();
-            enqueueChunk(arrayBuffer);
-        }
-    }
-
-
-    function addMessage(text, sender) {
-        const messageBubble = document.createElement("div");
-        messageBubble.classList.add("message", sender, "cbbl");
-        if(sender === "user"){
-            messageBubble.classList.add("-right");
-        }
-        messageBubble.textContent = text;
-        chatContainer.insertBefore(messageBubble, chatContainer.firstChild);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-
-    function enqueueChunk(arrayBuffer) {
-        accumulatedChunks.push(new Int16Array(arrayBuffer));
-        if (!isPlaying) playNextInQueue();
-    }
-
-    function playNextInQueue() {
-        if (accumulatedChunks.length === 0) {
-            isPlaying = false;
-            return;
-        }
-
-        const totalLength = accumulatedChunks.reduce((acc, chunk) => acc + chunk.length, 0);
-        const concatenatedData = new Int16Array(totalLength);
-        let offset = 0;
-        for (const chunk of accumulatedChunks) {
-            concatenatedData.set(chunk, offset);
-            offset += chunk.length;
-        }
-
-        accumulatedChunks = [];
-
-        const sampleRate = 24000;
-        const audioBuffer = audioContext.createBuffer(1, concatenatedData.length, sampleRate);
-        const channelData = audioBuffer.getChannelData(0);
-        for (let i = 0; i < concatenatedData.length; i++) {
-            channelData[i] = concatenatedData[i] / 32768;
-        }
-
-        const source = audioContext.createBufferSource();
-        source.buffer = audioBuffer;
-        source.connect(audioContext.destination);
-
-        source.playbackRate.value = 1.05;
-        source.onended = playNextInQueue;
-        source.start();
-
-        currentSource = source;
-        isPlaying = true;
-    }
-
-    function stopSpeak() {
-        console.log("stopSpeak")
-        accumulatedChunks = [];
-        audioQueue = [];
-        isPlaying = false;
-
-        if (currentSource) {
-            currentSource.onended = null;
-            currentSource.stop();
-            currentSource = null;
-        }
-    }
-
-    if (!('webkitSpeechRecognition' in window)) {
-        alert("Web Speech API is not supported by this browser. Please use Chrome.");
-    } else {
-        recognition = new webkitSpeechRecognition();
-        recognition.continuous = true;
-        recognition.interimResults = true;
-        recognition.lang = 'de-DE';
-
-        recognition.onstart = function() {
-            recognizing = true;
-            micButton.classList.add("active"); // Set mic button to active state
-        };
-
-        recognition.onerror = function(event) {
-            if (event.error === 'no-speech') {
-                console.warn("No speech detected. Trying again.");
-            } else if (event.error === 'audio-capture') {
-                alert("No microphone found. Please check microphone settings.");
-            } else if (event.error === 'not-allowed') {
-                alert("Microphone access denied.");
-                shouldRestart = false;
-            }
-        };
-
-        recognition.onend = function() {
-            recognizing = false;
-            micButton.classList.remove("active"); // Remove active state from mic button
-            if (shouldRestart) {
-                recognition.start();
-            }
-        };
-
-        recognition.onresult = function(event) {
-            clearTimeout(inactivityTimeout); // Reset inactivity timer
-            let interim_transcript = '';
-
-            for (let i = event.resultIndex; i < event.results.length; ++i) {
-                if (event.results[i].isFinal) {
-                    final_transcript += event.results[i][0].transcript;
-                } else {
-                    interim_transcript += event.results[i][0].transcript;
-                }
-            }
-            questionInput.value = final_transcript + " " + interim_transcript;
-
-            inactivityTimeout = setTimeout(() => {
-                if (final_transcript || interim_transcript) {
-                    finalizeSpeech();
-                }
-            }, inactivityTime);
-        };
-    }
-
-    function toggleRecognition() {
-        if (recognizing) {
-            shouldRestart = false;
-            recognition.stop();
-        } else {
-            final_transcript = '';
-            recognition.start();
-            shouldRestart = true;
-        }
-    }
-
-    function finalizeSpeech() {
-        questionInput.value = final_transcript.trim();
-        sendQuestion(); // Send final message
-        final_transcript = ''; // Reset transcript for the next speech segment
-        recognition.stop();
-    }
-
-
+    // Event listeners
+    document.getElementById('startButton').addEventListener('click', () => app.startGame());
+    document.getElementById('question').addEventListener('keypress', (e) => app.handleKeyPress(e));
 </script>
 
 </body>
