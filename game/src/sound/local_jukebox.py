@@ -56,7 +56,21 @@ class LocalJukebox(BaseJukebox):
         if not file_name or not file_name.strip():
             return
 
-        file_path: str = str(self.soundfx_dir / file_name)
+        # Handle global/ and map/ prefixes from editor
+        # global/ -> use central soundfx directory
+        # map/ -> use map-specific soundfx directory
+        if file_name.startswith("global/"):
+            # Remove "global/" prefix - file is in central soundfx dir
+            relative_path = file_name[7:]  # len("global/") = 7
+            file_path: str = str(self.soundfx_dir / relative_path)
+        elif file_name.startswith("map/"):
+            # Remove "map/" prefix - file is in map-specific soundfx dir
+            relative_path = file_name[4:]  # len("map/") = 4
+            map_soundfx_dir = session.map_directory / "soundfx" if hasattr(session, 'map_directory') else self.soundfx_dir.parent / "maps" / session.map_name / "soundfx"
+            file_path: str = str(map_soundfx_dir / relative_path)
+        else:
+            # No prefix - assume central soundfx directory (backwards compatibility)
+            file_path: str = str(self.soundfx_dir / file_name)
         
         # Log sound playback
         sound_type: str = "ambient" if loop else "effect"

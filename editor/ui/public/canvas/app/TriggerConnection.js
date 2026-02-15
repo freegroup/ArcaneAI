@@ -6,7 +6,10 @@
  * @author Andreas Herz
  * @extend draw2d.Connection
  */
-var routerToUse = new draw2d.layout.connection.InteractiveManhattanConnectionRouter();
+var routerToUse = new draw2d.layout.connection.InteractiveManhattanBridgedConnectionRouter();
+    routerToUse = new draw2d.layout.connection.InteractiveCircuitConnectionRouter()
+    //routerToUse = new draw2d.layout.connection.CircuitConnectionRouter()
+    //routerToUse = new draw2d.layout.connection.InteractiveManhattanConnectionRouter()
     //routerToUse = new draw2d.layout.connection.FanConnectionRouter()
     //routerToUse = new draw2d.layout.connection.MazeConnectionRouter()
 
@@ -16,19 +19,19 @@ var TriggerConnection= draw2d.Connection.extend({
     init:function(attr, setter, getter)
     {
       this._super(
-            extend({
+            {
                 targetDecorator: new draw2d.decoration.connection.ArrowDecorator(),
                 stroke:3,
-                color:"#cce5bc",
+                color:"#a97f60",
                 radius: 20,
                 router:routerToUse
-            }, attr),
-            extend({
-                name: this.setName,
-            }, setter),
-            extend({
-                name: this.getName,
-            }, getter));
+            , ...attr},
+            {
+                name: this.setName
+            , ...setter},
+            {
+                name: this.getName
+            , ...getter});
     
       // Create any Draw2D figure as decoration for the connection
       //
@@ -37,9 +40,10 @@ var TriggerConnection= draw2d.Connection.extend({
           padding:{left:10, top:5, right:10, bottom:5},
           radius: 10,
           fontColor:"#3f3f34",
-          fontSize: 8,
+          fontSize: 10,
           bgColor: "#cce5bc",
-          color : "#7fc256"
+          color : "#5c8d3e",
+          cssClass: "cursor-pointer"
       });
       
       // add the new decoration to the connection with a position locator.
@@ -144,6 +148,8 @@ var TriggerConnection= draw2d.Connection.extend({
       */
      setPersistentAttributes : function(memento)
      {
+        delete memento.color
+
         this._super(memento);
          
         this.setName(memento.name);

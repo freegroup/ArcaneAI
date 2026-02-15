@@ -4,10 +4,11 @@ Raft = draw2d.shape.composite.Raft.extend({
 
     init : function(attr, setter, getter)
     {
-        this._super(extend({
-            bgColor:"#555555", 
-            color:"#000000"
-        },attr), setter, getter);
+        this._super({
+            bgColor:"#c3eae4", 
+            color:"#000000",
+            radius: 10
+        , ...attr}, setter, getter);
     },
 
     getParameterSettings: function()
@@ -60,6 +61,7 @@ Raft = draw2d.shape.composite.Raft.extend({
         delete memento.alpha
         delete memento.bgColor
         delete memento.color
+        delete memento.radius
 
         this._super(memento);
         

@@ -7,7 +7,8 @@ View = draw2d.Canvas.extend({
 		    this._super(id, 8000,8000);
         this.zoomingFactor = 1.2
 
-        this.installEditPolicy(new draw2d.policy.canvas.ShowGridEditPolicy({bgColor: "#333", color:"#222"}));
+        // 8-bit Retro style - phosphor green dots on dark background (like old CRT monitors)
+        this.installEditPolicy(new draw2d.policy.canvas.ShowDotEditPolicy(20, 1, "#33ff33", "#1a1a2e"));
         this.installEditPolicy(new EditPolicy())
         this.installEditPolicy(new draw2d.policy.connection.DragConnectionCreatePolicy({
             createConnection: function(){
@@ -43,7 +44,6 @@ View = draw2d.Canvas.extend({
         })
 
 
-
     
         // OneToOne Button
         $("#canvas_zoom_normal").on("click", () => {
@@ -71,12 +71,14 @@ View = draw2d.Canvas.extend({
             })
             
           this.getLines().each( (i,line)=>{
+            line.routingRequired = true
             line.setAlpha(0.1)
           })
           this.getSelection().each((i, f) => {
             f.setAlpha(1)
             f.getPorts().each((i, port) =>{
               port.getConnections().each( (i,con)=>{
+                con.routingRequired = true
                 con.setAlpha(1)
                 con.getSourceParent().setAlpha(1.0)
                 con.getTargetParent().setAlpha(1.0)

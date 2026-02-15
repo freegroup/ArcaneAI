@@ -9,8 +9,8 @@ body {
 	padding: 0px;
 	margin: 0px;
 	border: 0px;
-	background-color: #f9f9f9;
-	color: #212121;
+	background-color: #1e1e2e;
+	color: #e0e0e0;
 	overflow: hidden;
 	-webkit-text-size-adjust: 100%;
 }
@@ -117,3 +117,10 @@ body {
 	pointer-events: none; /* Mausinteraktionen ignorieren */
   }
 
+.cursor-pointer {
+	cursor: pointer;
+}
+
+.cursor-move {
+	cursor: move;
+}

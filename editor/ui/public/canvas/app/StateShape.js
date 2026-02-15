@@ -1,20 +1,20 @@
 
 let NORMAL_STYLE = {
-    stroke: 1,
+    stroke: 4,
     fontColor: "#4f4f4f",  
     bgColor: "#add6f5", 
     color: "#349be8",
 }
 
 let START_STYLE = {
-    stroke: 2,
+    stroke: 4,
     fontColor: "#6f6f6f",  
     bgColor: "#c3bae5", 
     color: "#654cb7",
 }
 
 let END_STYLE = {
-    stroke: 2,
+    stroke: 4,
     fontColor: "#3f3f3f",
     bgColor: "#ffcccb",
     color: "#d9534f",
@@ -26,43 +26,46 @@ const StateType = Object.freeze({
     END: "END"
 });
 
-StateShape = draw2d.shape.layout.VerticalLayout.extend({
+StateShape = draw2d.shape.box.VBox.extend({
 
 	NAME: "StateShape",
 	
     init : function(attr, setter, getter)
     {
         this.start = false
-        this.classLabel = new draw2d.shape.basic.Label({
-            text:"TriggerName", 
+        this.stateNameLabel = new draw2d.shape.basic.Label({
+            text:"StateName", 
             ...NORMAL_STYLE,
-            radius: 10, 
+            radius: 5, 
             padding:10,
             bold:true,
             resizeable:true,
+            cssClass: "cursor-move",
+            fontFamily: "'Press Start 2P', monospace", 
             editor:new draw2d.ui.LabelInplaceEditor()
         })
   
     	this._super(
-            extend({
-                bgColor:null, 
+            {
+                bgColor:"#0000001F", 
                 color:"#d7d7d7", 
                 stroke:0, 
                 gap: 5,
-                radius:3,
+                radius:10,
+                padding: 8,
                 stateType: StateType.NORMAL,
                 userData: {
                     system_prompt: ""
                 }
-            },attr),
-            extend({
+            ,...attr},
+            {
               name: this.setName,
-              stateType: this.setStateType,
-            }, setter),
-            extend({
+              stateType: this.setStateType
+            , ...setter},
+            {
               name: this.getName,
-              stateType: this.getStateType,
-            }, getter))
+              stateType: this.getStateType
+            , ...getter})
                  
         // flag which indicates if the figure should read/write ports to
         // JSON
@@ -70,8 +73,8 @@ StateShape = draw2d.shape.layout.VerticalLayout.extend({
         this.createPort("input")
         this.createPort("output")
 
-        this.add(this.classLabel);
-        this.classLabel.on("contextmenu", (emitter, event)=>{
+        this.add(this.stateNameLabel);
+        this.stateNameLabel.on("contextmenu", (emitter, event)=>{
             $.contextMenu({
                 selector: 'body', 
                 events:{  
@@ -139,11 +142,11 @@ StateShape = draw2d.shape.layout.VerticalLayout.extend({
         this.stateType = stateType;
 
         if (this.stateType === StateType.START) {
-            this.classLabel.attr(START_STYLE);
+            this.stateNameLabel.attr(START_STYLE);
         } else if (this.stateType === StateType.END) {
-            this.classLabel.attr(END_STYLE);
+            this.stateNameLabel.attr(END_STYLE);
         } else {
-            this.classLabel.attr(NORMAL_STYLE);
+            this.stateNameLabel.attr(NORMAL_STYLE);
         }
 
         return this;
@@ -159,7 +162,7 @@ StateShape = draw2d.shape.layout.VerticalLayout.extend({
     setAlpha: function(alpha)
     {
         this._super(alpha)
-        this.classLabel.setAlpha(alpha)
+        this.stateNameLabel.setAlpha(alpha)
         this.children.each(function(i,e){
             e.figure.setAlpha(alpha)
         })
@@ -265,14 +268,14 @@ StateShape = draw2d.shape.layout.VerticalLayout.extend({
       */
     setName: function(name)
     {
-        this.classLabel.setText(name);
+        this.stateNameLabel.setText(name);
         return this;
     },
      
      
     getName: function()
     {
-        return this.classLabel.getText();
+        return this.stateNameLabel.getText();
     },
      
      /**
@@ -285,7 +288,7 @@ StateShape = draw2d.shape.layout.VerticalLayout.extend({
      {
         var memento= this._super();
 
-        memento.name = this.classLabel.getText();
+        memento.name = this.stateNameLabel.getText();
         memento.stateType = this.stateType ?? StateType.NORMAL
         memento.trigger   = [];
 
@@ -322,11 +325,14 @@ StateShape = draw2d.shape.layout.VerticalLayout.extend({
      {
         delete memento.alpha
         delete memento.stroke
+        delete memento.bgColor
+        delete memento.radius
 
         this._super(memento);
          
         this.setName(memento.name);
         this.setStateType(memento.stateType ?? StateType.NORMAL)
+        this.stateNameLabel.setCssClass("cursor-move");
 
          if(typeof memento.trigger !== "undefined"){
              $.each(memento.trigger, $.proxy(function(i,e){

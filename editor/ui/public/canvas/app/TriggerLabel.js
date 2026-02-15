@@ -9,10 +9,11 @@ var TriggerLabel = draw2d.shape.basic.Label.extend({
             resizeable:true,
             radius: 10,
             fontColor:"#3f3f34",
-            fontSize: 8,
+            fontSize: 10,
             bgColor: "#cce5bc",
-            color : "#7fc256",
+            color : "#417222",
             editor:new draw2d.ui.LabelEditor(),
+            cssClass: "cursor-pointer",
             userData: {
                 actions: [],
                 conditions: [],
