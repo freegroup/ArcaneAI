@@ -404,17 +404,34 @@
               });
               SoundManager.stopCurrentSound()
               this.jsonData = message.data
+              // Ensure userData exists
+              if (!this.jsonData.userData) {
+                  this.jsonData.userData = {};
+              }
               this.jsonData.userData.sound_effect_volume ??= 100;
-                // 0 is allowed as well
-                if (this.jsonData.userData.sound_effect_duration === null) {
-                    this.jsonData.userData.sound_effect_duration = 2;
-                }
+              // 0 is allowed as well
+              if (this.jsonData.userData.sound_effect_duration === null || this.jsonData.userData.sound_effect_duration === undefined) {
+                  this.jsonData.userData.sound_effect_duration = 2;
+              }
 
           }
           else if (message.event === MessageTypes.UNSELECT) {
               console.log('❌ [SYNC] Canvas → Vue: Selection cleared');
               SoundManager.stopCurrentSound()
-              this.jsonData = {}
+              // Reset to initial state with userData to prevent null access
+              this.jsonData = {
+                name: '',
+                type: '',
+                userData: {
+                  system_prompt: '',
+                  actions: [], 
+                  conditions: [],
+                  sound_effect: '',
+                  sound_effect_volume: 100,
+                  sound_effect_duration: 2,
+                  description: '',
+                }
+              };
           }
       };
       window.addEventListener('message', this.messageHandler);

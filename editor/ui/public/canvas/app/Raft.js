@@ -72,11 +72,12 @@ Raft = draw2d.shape.composite.Raft.extend({
         // and add all children of the JSON document.
         //
         $.each(memento.labels, $.proxy(function(i,json){
+
             // create the figure stored in the JSON
             var figure =  eval("new "+json.type+"()");
 
             // apply all attributes
-            figure.attr(json);
+            figure.attr({...json, fontFamily: "'Press Start 2P', monospace"});
 
             // instantiate the locator
             var locator =  eval("new "+json.locator+"()");

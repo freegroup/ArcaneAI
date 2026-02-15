@@ -18,11 +18,18 @@ var TriggerConnection= draw2d.Connection.extend({
 
     init:function(attr, setter, getter)
     {
+      // Speichere die Standardfarbe
+      this.defaultColor = "#14997c";
+      
+      // Erstelle den Arrow Decorator mit der gleichen Farbe wie die Connection
+      this.arrowDecorator = new draw2d.decoration.connection.ArrowDecorator();
+      this.arrowDecorator.setBackgroundColor(this.defaultColor);
+      
       this._super(
             {
-                targetDecorator: new draw2d.decoration.connection.ArrowDecorator(),
+                targetDecorator: this.arrowDecorator,
                 stroke:3,
-                color:"#a97f60",
+                color: this.defaultColor,
                 radius: 20,
                 router:routerToUse
             , ...attr},
@@ -131,6 +138,7 @@ var TriggerConnection= draw2d.Connection.extend({
      {
         var memento= this._super();
         delete memento.router
+        delete memento.target.decorator
 
         memento.name = this.getName();
         memento.source.name= this.getSource().getParent().getName()
@@ -149,6 +157,7 @@ var TriggerConnection= draw2d.Connection.extend({
      setPersistentAttributes : function(memento)
      {
         delete memento.color
+        delete memento.target.decoration
 
         this._super(memento);
          

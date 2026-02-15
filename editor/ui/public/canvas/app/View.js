@@ -136,7 +136,14 @@ View = draw2d.Canvas.extend({
                         const saveHandler = () => {
                           const userInput = inputField.value.trim();
                           if (userInput) {
-                            let label = new draw2d.shape.basic.Label({text: userInput,stroke: 0, x: -20,y: -40,bold: true,});
+                            let label = new draw2d.shape.basic.Label({
+                              text: userInput,
+                              stroke: 0, 
+                              x: 20,
+                              y: 40,
+                              bold: true,
+                              fontFamily: "'Press Start 2P', monospace", 
+                            });
                             let locator = new draw2d.layout.locator.SmartDraggableLocator();
                             label.installEditor(new LabelInplaceEditor());
                             figure.add(label, locator);

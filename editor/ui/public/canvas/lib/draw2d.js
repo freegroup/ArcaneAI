@@ -2080,6 +2080,11 @@ _packages.default.Connection = _packages.default.shape.basic.PolyLine.extend(/**
           stroke: this.sourceDecorator.getColor().hash()
         });
       }
+      if (this.sourceDecorator.getBackgroundColor() != null) {
+        this.sourceDecoratorNode.attr({
+          fill: this.sourceDecorator.getBackgroundColor().hash()
+        });
+      }
       this.sourceDecoratorNode.forEach(shape => {
         shape.node.setAttribute("class", this.cssClass !== null ? this.cssClass : "");
       });
@@ -2098,6 +2103,11 @@ _packages.default.Connection = _packages.default.shape.basic.PolyLine.extend(/**
       } else {
         this.targetDecoratorNode.attr({
           stroke: this.targetDecorator.getColor().hash()
+        });
+      }
+      if (this.targetDecorator.getBackgroundColor() != null) {
+        this.targetDecoratorNode.attr({
+          fill: this.targetDecorator.getBackgroundColor().hash()
         });
       }
       this.targetDecoratorNode.forEach(shape => {
@@ -10960,7 +10970,6 @@ _packages.default.decoration.connection.CircleDecorator = _packages.default.deco
 
 
 var _packages = _interopRequireDefault(__webpack_require__(/*! ../../packages */ "./src/packages.js"));
-var _Color = _interopRequireDefault(__webpack_require__(/*! ../../util/Color */ "./src/util/Color.js"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 /**
  * @class
@@ -10984,7 +10993,7 @@ _packages.default.decoration.connection.Decorator = Class.extend(/** @lends draw
     }
     this.parent = null;
     this.color = null; // null => use the color of the connection
-    this.backgroundColor = new _Color.default(250, 250, 250);
+    this.backgroundColor = new _packages.default.util.Color(250, 250, 250);
   },
   /**
    *
@@ -11020,6 +11029,7 @@ _packages.default.decoration.connection.Decorator = Class.extend(/** @lends draw
    */
   setParent: function (parent) {
     this.parent = parent;
+    return this;
   },
   /**
    *
@@ -11029,7 +11039,7 @@ _packages.default.decoration.connection.Decorator = Class.extend(/** @lends draw
    * @returns {this}
    */
   setColor: function (c) {
-    this.color = new _Color.default(c);
+    this.color = new _packages.default.util.Color(c);
     this.parent?.repaint();
     return this;
   },
@@ -11049,7 +11059,7 @@ _packages.default.decoration.connection.Decorator = Class.extend(/** @lends draw
    * @returns {this}
    */
   setBackgroundColor: function (c) {
-    this.backgroundColor = new _Color.default(c);
+    this.backgroundColor = new _packages.default.util.Color(c);
     this.parent?.repaint();
     return this;
   },
@@ -15587,7 +15597,6 @@ _packages.default.layout.connection.InteractiveCircuitConnectionRouter = _packag
             } else {
               vertexAttrs.stroke = "none";
             }
-            console.log(vertexAttrs);
             let vRadius = this._getVertexRadius(conn);
             let vertexNode = conn.canvas.paper.ellipse(interP.x, interP.y, vRadius, vRadius).attr(vertexAttrs);
             conn.vertexNodes.push(vertexNode);
