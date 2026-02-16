@@ -1,6 +1,7 @@
 
 let NORMAL_STYLE = {
     stroke: 4,
+    fontSize:10,
     fontColor: "#4f4f4f",  
     bgColor: "#add6f5", 
     color: "#349be8",
@@ -8,9 +9,11 @@ let NORMAL_STYLE = {
 
 let START_STYLE = {
     stroke: 4,
-    fontColor: "#6f6f6f",  
-    bgColor: "#c3bae5", 
-    color: "#654cb7",
+    fontSize:16,
+    padding:20,
+    fontColor: "#03c524",  
+    bgColor: "#281b58", 
+    color: "#c6bee1",
 }
 
 let END_STYLE = {
@@ -37,12 +40,12 @@ StateShape = draw2d.shape.box.VBox.extend({
             text:"StateName", 
             ...NORMAL_STYLE,
             radius: 5, 
-            padding:10,
-            bold:true,
+            padding:6,
+            bold:false,
             resizeable:true,
             cssClass: "cursor-move",
-            fontFamily: "'Press Start 2P', monospace", 
-            editor:new draw2d.ui.LabelInplaceEditor()
+            textAlign: "center",
+            fontFamily: "'Press Start 2P', monospace"
         })
   
     	this._super(
