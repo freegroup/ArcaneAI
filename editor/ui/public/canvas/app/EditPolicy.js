@@ -32,7 +32,7 @@ EditPolicy = draw2d.policy.canvas.BoundingboxSelectionPolicy.extend({
       else {
         this._super(canvas, x, y, shiftKey, ctrlKey)
       }
-    },
+    }
 
   })
   

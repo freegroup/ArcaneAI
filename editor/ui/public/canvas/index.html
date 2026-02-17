@@ -20,6 +20,8 @@
   <script src="./app/View.js"></script>
   <script src="./app/Toolbar.js"></script>
   <script src="./app/TriggerLabel.js"></script>
+  <script src="./app/TriggerSelectionFeedbackPolicy.js"></script>
+  <script src="./app/TriggerRouter.js"></script>
   <script src="./app/TriggerConnection.js"></script>
   <script src="./app/StateShape.js"></script>
   <script src="./app/Raft.js"></script>
@@ -60,7 +62,6 @@ document.addEventListener("DOMContentLoaded",function () {
 
       // Notify parent that canvas is ready (using MessageTypes)
       window.parent.postMessage({ type: MessageTypes.CANVAS_READY }, window.location.origin);
-      console.log('✅ [Canvas] Ready - sent ready message to parent');
 
       function receiveMessage(event) {
 
@@ -73,7 +74,6 @@ document.addEventListener("DOMContentLoaded",function () {
             var reader = new draw2d.io.json.Reader();
             app.view.clear();
             reader.unmarshal(app.view, mapJson);
-            console.log("setDocument")
             app.view.centerDocument()
         }
         else if (message.type === MessageTypes.SET_SHAPE_DATA) {

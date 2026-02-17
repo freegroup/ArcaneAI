@@ -11,7 +11,8 @@ var routerToUse = new draw2d.layout.connection.InteractiveManhattanBridgedConnec
     //routerToUse = new draw2d.layout.connection.CircuitConnectionRouter()
     //routerToUse = new draw2d.layout.connection.InteractiveManhattanConnectionRouter()
     //routerToUse = new draw2d.layout.connection.FanConnectionRouter()
-    //routerToUse = new draw2d.layout.connection.MazeConnectionRouter()
+    routerToUse = new draw2d.layout.connection.MazeConnectionRouter()
+    routerToUse = new TriggerRouter();
 
 var TriggerConnection= draw2d.Connection.extend({
     NAME: "TriggerConnection",
@@ -45,20 +46,21 @@ var TriggerConnection= draw2d.Connection.extend({
       this.label = new draw2d.shape.basic.Label({
           text:"trigger_name_to_fire",
           padding:{left:10, top:5, right:10, bottom:5},
-          radius: 10,
+          radius: 5,
           fontColor:"#3f3f34",
           fontSize: 10,
+          stroke: 2,
           bgColor: "#cce5bc",
-          color : "#5c8d3e",
+          color : this.defaultColor,
           cssClass: "cursor-pointer"
       });
       
       // add the new decoration to the connection with a position locator.
       //
       this.add(this.label, new draw2d.layout.locator.ManhattanMidpointLocator());
-      this.setRouter(routerToUse)
+      //this.setRouter(routerToUse)
 
-      this.label.installEditor(new draw2d.ui.LabelInplaceEditor());
+      //this.label.installEditor(new draw2d.ui.LabelInplaceEditor());
 
       this.on("change:userData", (emitter, event)=>{
         this.updateStyle()
@@ -97,6 +99,84 @@ var TriggerConnection= draw2d.Connection.extend({
 
     getTargetParent: function(){
         return this.getTarget().getParent()
+    },
+
+    setHighlight: function(){
+        this.resetHighlight()
+        this.toFront();
+
+        // Store original state if not already stored
+        if (!this._selectionFeedbackState) {
+            this._selectionFeedbackState = {
+                stroke: this.getStroke(),
+                color: this.getColor(),
+                outlineStroke: this.getOutlineStroke(),
+                outlineColor: this.getOutlineColor()
+            };
+        }
+        
+        // Store label state directly on the label object
+        if(!this.label._selectionFeedbackState){
+            this.label._selectionFeedbackState = {
+                color: this.label.getColor(),
+                stroke: this.label.getStroke(),
+                bold: this.label.attr("bold") // Store original bold state
+            };
+        }
+
+        // Store decorator state
+        if(!this.arrowDecorator._selectionFeedbackState){
+            this.arrowDecorator._selectionFeedbackState = {
+                backgroundColor: this.arrowDecorator.getBackgroundColor(),
+                width: this.arrowDecorator.width,
+                height: this.arrowDecorator.height
+            };
+        }
+
+        // Apply selection feedback
+        var originalStroke = this._selectionFeedbackState.stroke;
+        var lighterColor = new draw2d.util.Color("#df2f4c");
+
+        // Apply the visual feedback using attr() for batch update
+        this.attr({
+            stroke: originalStroke * 3,        // Double the stroke width
+            color: lighterColor,               // Lighter color
+            outlineStroke: 0,                  // Add outline
+            outlineColor: "#000000"            // Black outline
+        });
+
+        // Apply visual feedback to the label (border color and stroke)
+        this.label.attr({
+            color: lighterColor,
+            stroke: this.label._selectionFeedbackState.stroke * 2,
+            bold: true
+        });
+
+        // Apply visual feedback to the decorator
+        this.arrowDecorator.setBackgroundColor(lighterColor);
+        this.arrowDecorator.setDimension(this.arrowDecorator._selectionFeedbackState.width * 1.5, this.arrowDecorator._selectionFeedbackState.height * 1.5);
+    },
+
+    resetHighlight: function(){
+        // Restore original attributes if we have stored state
+        if (this._selectionFeedbackState) {
+            // Restore original attributes using attr() for batch update
+            this.attr(this._selectionFeedbackState);
+            
+            // Clean up stored state
+            delete this._selectionFeedbackState;
+        }
+        
+        if (this.label._selectionFeedbackState) {
+            this.label.attr(this.label._selectionFeedbackState);
+            delete this.label._selectionFeedbackState;
+        }
+
+        if (this.arrowDecorator._selectionFeedbackState) {
+            this.arrowDecorator.setBackgroundColor(this.arrowDecorator._selectionFeedbackState.backgroundColor);
+            this.arrowDecorator.setDimension(this.arrowDecorator._selectionFeedbackState.width, this.arrowDecorator._selectionFeedbackState.height);
+            delete this.arrowDecorator._selectionFeedbackState;
+        }
     },
 
     onContextMenu:function(x,y){
@@ -139,6 +219,7 @@ var TriggerConnection= draw2d.Connection.extend({
         var memento= this._super();
         delete memento.router
         delete memento.target.decorator
+        delete memento.policy
 
         memento.name = this.getName();
         memento.source.name= this.getSource().getParent().getName()
@@ -158,7 +239,9 @@ var TriggerConnection= draw2d.Connection.extend({
      {
         delete memento.color
         delete memento.target.decoration
-
+        delete memento.policy
+        delete memento.router
+        
         this._super(memento);
          
         this.setName(memento.name);

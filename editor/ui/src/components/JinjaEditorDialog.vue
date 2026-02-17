@@ -1,13 +1,35 @@
 <template>
   <v-dialog v-model="isOpen" max-width="900px" persistent>
     <v-card class="jinja-editor-dialog">
+      <!-- Dialog Header -->
       <DialogHeader 
         title="Scene Description Editor" 
         icon="mdi-code-braces"
         @close="cancel" 
       />
 
-      <v-card-text class="dialog-content">
+      <!-- Editor Toolbar -->
+      <div class="editor-toolbar">
+        <button 
+          class="toolbar-btn" 
+          :disabled="!canUndo"
+          @click="undo"
+          title="Undo (Ctrl+Z)"
+        >
+          <span class="undo-icon">↵</span>
+        </button>
+        <button 
+          class="toolbar-btn" 
+          :disabled="!canRedo"
+          @click="redo"
+          title="Redo (Ctrl+Shift+Z)"
+        >
+          <span class="redo-icon">↵</span>
+        </button>
+      </div>
+
+      <!-- Jinja Editor -->
+      <v-card-text class="dialog-content" :style="{ height: editorHeight }">
         <MonacoEditor
           v-model:value="editedText"
           language="jinja2"
@@ -17,6 +39,95 @@
         />
       </v-card-text>
 
+      <!-- AI Assist Expandable Panel -->
+      <div class="ai-assist-panel">
+        <div 
+          class="ai-assist-header"
+          @click="toggleAiAssist"
+        >
+          <v-icon size="small">{{ aiAssistExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+          <span class="ai-assist-title">
+            <v-icon size="small" color="primary">mdi-robot</v-icon>
+            AI Assist
+          </span>
+        </div>
+
+        <transition name="expand">
+          <div v-if="aiAssistExpanded" class="ai-assist-content">
+            <!-- Response/Explanation Area -->
+            <div class="ai-response-area">
+              <div v-if="!aiResponse && !aiLoading" class="ai-helper-text">
+                <v-icon size="small" color="primary">mdi-information-outline</v-icon>
+                <div>
+                  <strong>Wie funktioniert AI Assist?</strong>
+                  <p>Gib der AI eine Anweisung, wie sie deinen Text verbessern soll:</p>
+                  <ul>
+                    <li>"Verbessere die Grammatik und Rechtschreibung"</li>
+                    <li>"Übersetze ins Englische"</li>
+                    <li>"Mache den Text dramatischer"</li>
+                    <li>"Vereinfache die Sprache"</li>
+                  </ul>
+                  <p class="jinja-note">
+                    <v-icon size="x-small">mdi-shield-check</v-icon>
+                    Alle Jinja-Tags bleiben erhalten!
+                  </p>
+                </div>
+              </div>
+
+              <div v-if="aiLoading" class="ai-loading">
+                <v-progress-circular indeterminate color="primary" size="20"></v-progress-circular>
+                <span>AI arbeitet...</span>
+              </div>
+
+              <div v-if="aiResponse" class="ai-result">
+                <div class="ai-result-header">
+                  <strong>Verbesserter Text:</strong>
+                  <button 
+                    @click="applyAiResult" 
+                    class="retro-btn retro-btn--sm"
+                    title="Text in Editor übernehmen"
+                  >
+                    <v-icon size="small">mdi-check</v-icon>
+                    Apply to Editor
+                  </button>
+                </div>
+                <div class="ai-result-text">{{ aiResponse }}</div>
+                <div v-if="aiComment || wordCountInfo" class="ai-comment">
+                  <v-icon size="small" color="info">mdi-comment-text-outline</v-icon>
+                  <div>
+                    <div v-if="wordCountInfo" class="word-count-info">{{ wordCountInfo }}</div>
+                    <div v-if="aiComment">{{ aiComment }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Prompt Input -->
+            <div class="ai-prompt-input">
+              <input
+                ref="promptInput"
+                v-model="aiPrompt"
+                type="text"
+                placeholder="z.B. 'Verbessere die Grammatik' oder 'Übersetze ins Englische'"
+                @keyup.enter="improveText"
+                :disabled="aiLoading"
+                class="prompt-field"
+              />
+              <button 
+                @click="improveText" 
+                class="retro-btn retro-btn--sm"
+                :disabled="!aiPrompt.trim() || aiLoading"
+                title="Text verbessern"
+              >
+                <v-icon size="small">mdi-magic-staff</v-icon>
+                Send
+              </button>
+            </div>
+          </div>
+        </transition>
+      </div>
+
+      <!-- Editor Action Bar -->
       <v-card-actions class="dialog-actions">
         <v-spacer></v-spacer>
         <button @click="cancel" class="retro-btn retro-btn--secondary retro-btn--sm">
@@ -41,7 +152,8 @@ monaco.languages.register({ id: 'jinja2' });
 monaco.languages.setMonarchTokensProvider('jinja2', {
   tokenizer: {
     root: [
-      // Jinja2 comments
+
+    // Jinja2 comments
       [/\{#/, 'comment', '@comment'],
       // Jinja2 statements
       [/\{%/, 'delimiter.jinja', '@statement'],
@@ -126,7 +238,22 @@ export default {
         // Disable suggestions
         quickSuggestions: false,
         suggestOnTriggerCharacters: false,
-      }
+      },
+      // AI Assist state
+      aiAssistExpanded: false,
+      aiPrompt: '',
+      aiResponse: '',
+      aiComment: '',
+      aiLoading: false,
+      wordCountInfo: '',
+      // Undo/Redo state
+      undoStack: [],
+      redoStack: [],
+      debounceTimer: null,
+      debounceDelay: 500, // ms - delay before pushing to history
+      isUndoRedoOperation: false, // flag to prevent history updates during undo/redo
+      lastSavedText: '', // track text for debouncing
+      isInitializing: false // flag to prevent history updates during initialization
     };
   },
   computed: {
@@ -137,14 +264,55 @@ export default {
       set(value) {
         this.$emit('update:modelValue', value);
       }
+    },
+    editorHeight() {
+      // Adjust editor height based on AI assist panel state
+      return this.aiAssistExpanded ? '300px' : '500px';
+    },
+    canUndo() {
+      return this.undoStack.length > 0;
+    },
+    canRedo() {
+      return this.redoStack.length > 0;
     }
   },
   watch: {
     modelValue(newVal) {
       if (newVal) {
-        // Dialog opened - initialize with current text
+        // Dialog opened - initialize with current text and history
+        this.isInitializing = true;
         this.editedText = this.text;
+        this.lastSavedText = this.text;
+        this.undoStack = [];
+        this.redoStack = [];
+        // Reset initialization flag after initial render
+        this.$nextTick(() => {
+          this.isInitializing = false;
+        });
       }
+    },
+    editedText(newVal) {
+      // Skip if this is an undo/redo operation or initialization
+      if (this.isUndoRedoOperation || this.isInitializing) {
+        return;
+      }
+
+      // Debounce history updates
+      if (this.debounceTimer) {
+        clearTimeout(this.debounceTimer);
+      }
+
+      // Store the state that we want to save (before the change started)
+      const stateToSave = this.lastSavedText;
+
+      this.debounceTimer = setTimeout(() => {
+        // Only push to history if text actually changed from last saved state
+        if (stateToSave !== newVal) {
+          this.undoStack.push(stateToSave);
+          this.redoStack = []; // Clear redo stack on new change
+          this.lastSavedText = newVal;
+        }
+      }, this.debounceDelay);
     }
   },
   methods: {
@@ -165,6 +333,164 @@ export default {
 
     cancel() {
       this.isOpen = false;
+    },
+
+    // AI Assist methods
+    toggleAiAssist() {
+      this.aiAssistExpanded = !this.aiAssistExpanded;
+      
+      // Focus the prompt input after expansion
+      if (this.aiAssistExpanded) {
+        this.$nextTick(() => {
+          if (this.$refs.promptInput) {
+            this.$refs.promptInput.focus();
+          }
+        });
+      }
+    },
+
+    countWords(text) {
+      // Simple word count - split by whitespace and filter empty strings
+      return text.trim().split(/\s+/).filter(word => word.length > 0).length;
+    },
+
+    async improveText() {
+      if (!this.aiPrompt.trim() || !this.editedText.trim()) {
+        return;
+      }
+
+      this.aiLoading = true;
+      this.aiResponse = '';
+      this.aiComment = '';
+      this.wordCountInfo = '';
+
+      // Count words before improvement
+      const wordsBefore = this.countWords(this.editedText);
+
+      try {
+        const response = await fetch('http://localhost:8000/api/v1/improve-text', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            text: this.editedText,
+            instruction: this.aiPrompt,
+            include_comment: true
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        this.aiResponse = data.improved_text;
+        this.aiComment = data.comment || '';
+        
+        // Count words after improvement and create info
+        const wordsAfter = this.countWords(data.improved_text);
+        this.wordCountInfo = `Wörter: ${wordsBefore} → ${wordsAfter}`;
+        
+        // Clear prompt after successful response
+        this.aiPrompt = '';
+      } catch (error) {
+        console.error('AI Improve Text Error:', error);
+        this.aiResponse = '';
+        this.aiComment = 'Fehler bei der Textverbesserung. Bitte versuche es erneut.';
+      } finally {
+        this.aiLoading = false;
+      }
+    },
+
+    applyAiResult() {
+      if (this.aiResponse) {
+        this.editedText = this.aiResponse;
+        // Clear AI response after applying
+        this.aiResponse = '';
+        this.aiComment = '';
+        this.aiPrompt = '';
+      }
+    },
+
+    // Undo/Redo methods
+    undo() {
+      if (this.undoStack.length === 0) {
+        return;
+      }
+
+      // Get previous state from undo stack
+      const previousText = this.undoStack.pop();
+      
+      // Push current state to redo stack
+      this.redoStack.push(this.editedText);
+      
+      // Set flag to prevent watcher from adding to history
+      this.isUndoRedoOperation = true;
+      this.editedText = previousText;
+      this.lastSavedText = previousText;
+      
+      // Reset flag after update
+      this.$nextTick(() => {
+        this.isUndoRedoOperation = false;
+      });
+    },
+
+    redo() {
+      if (this.redoStack.length === 0) {
+        return;
+      }
+
+      // Get next state from redo stack
+      const nextText = this.redoStack.pop();
+      
+      // Push current state to undo stack
+      this.undoStack.push(this.editedText);
+      
+      // Set flag to prevent watcher from adding to history
+      this.isUndoRedoOperation = true;
+      this.editedText = nextText;
+      this.lastSavedText = nextText;
+      
+      // Reset flag after update
+      this.$nextTick(() => {
+        this.isUndoRedoOperation = false;
+      });
+    },
+
+    handleKeyDown(event) {
+      // Ctrl+Z for Undo
+      if (event.ctrlKey && event.key === 'z' && !event.shiftKey) {
+        event.preventDefault();
+        this.undo();
+      }
+      // Ctrl+Shift+Z for Redo
+      else if (event.ctrlKey && event.shiftKey && event.key === 'z') {
+        event.preventDefault();
+        this.redo();
+      }
+      // Cmd+Z for Undo (Mac)
+      else if (event.metaKey && event.key === 'z' && !event.shiftKey) {
+        event.preventDefault();
+        this.undo();
+      }
+      // Cmd+Shift+Z for Redo (Mac)
+      else if (event.metaKey && event.shiftKey && event.key === 'z') {
+        event.preventDefault();
+        this.redo();
+      }
+    }
+  },
+  mounted() {
+    // Add keyboard shortcuts
+    window.addEventListener('keydown', this.handleKeyDown);
+  },
+  beforeUnmount() {
+    // Clean up keyboard shortcuts
+    window.removeEventListener('keydown', this.handleKeyDown);
+    // Clear debounce timer
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
     }
   }
 };
@@ -206,5 +532,247 @@ export default {
 
 .dialog-actions .retro-btn {
   margin-left: var(--game-spacing-md);
+}
+
+/* Editor Toolbar */
+.editor-toolbar {
+  display: flex;
+  gap: var(--game-spacing-sm);
+  padding: var(--game-spacing-sm) var(--game-spacing-md);
+  background: var(--game-bg-tertiary);
+  border-bottom: 1px solid var(--game-border-color);
+}
+
+.toolbar-btn {
+  background: var(--game-bg-secondary);
+  border: 3px solid var(--game-border-color);
+  padding: 6px 8px;
+  cursor: not-allowed;
+  opacity: 0.5;
+  border-radius: 0; /* Eckiger Rahmen für 8-bit Look */
+  color: var(--game-text-secondary);
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-size: 10px;
+  transition: all 0.1s ease;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.toolbar-btn:not(:disabled) {
+  cursor: pointer;
+  opacity: 1;
+  color: var(--game-text-primary);
+  background: var(--game-bg-primary);
+  border-color: var(--game-border-highlight);
+}
+
+.toolbar-btn:not(:disabled):hover {
+  background: var(--game-accent-color);
+  border-color: var(--game-accent-color);
+  color: var(--game-bg-primary);
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.toolbar-btn:not(:disabled):active {
+  transform: translate(3px, 3px);
+  box-shadow: none;
+}
+
+/* Undo/Redo Icons */
+.undo-icon {
+  display: inline-block;
+  font-size: 32px;
+  line-height: 0.5;
+}
+
+.redo-icon {
+  display: inline-block;
+  font-size: 32px;
+  line-height: 0.5;
+  transform: scaleX(-1); /* Horizontale Spiegelung für Redo */
+}
+
+/* AI Assist Panel */
+.ai-assist-panel {
+  border-top: 1px solid var(--game-border-color);
+  background: var(--game-bg-tertiary);
+}
+
+.ai-assist-header {
+  display: flex;
+  align-items: center;
+  gap: var(--game-spacing-sm);
+  padding: var(--game-spacing-md);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.ai-assist-header:hover {
+  background: var(--game-bg-hover);
+}
+
+.ai-assist-title {
+  display: flex;
+  align-items: center;
+  gap: var(--game-spacing-sm);
+  font-weight: 600;
+  color: var(--game-text-primary);
+}
+
+.ai-assist-content {
+  padding: var(--game-spacing-md);
+  background: var(--game-bg-secondary);
+}
+
+/* Expand transition */
+.expand-enter-active,
+.expand-leave-active {
+  transition: all 0.3s ease;
+  max-height: 400px;
+  overflow: hidden;
+}
+
+.expand-enter-from,
+.expand-leave-to {
+  max-height: 0;
+  opacity: 0;
+}
+
+/* AI Response Area */
+.ai-response-area {
+  min-height: 120px;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: var(--game-spacing-md);
+  padding: var(--game-spacing-md);
+  background: var(--game-bg-primary);
+  border: 1px solid var(--game-border-color);
+  border-radius: var(--game-radius-md);
+}
+
+.ai-helper-text {
+  display: flex;
+  gap: var(--game-spacing-md);
+  color: var(--game-text-secondary);
+  font-size: 0.9em;
+}
+
+.ai-helper-text strong {
+  color: var(--game-text-primary);
+  display: block;
+  margin-bottom: var(--game-spacing-sm);
+}
+
+.ai-helper-text p {
+  margin: var(--game-spacing-sm) 0;
+}
+
+.ai-helper-text ul {
+  margin: var(--game-spacing-sm) 0;
+  padding-left: 20px;
+}
+
+.ai-helper-text li {
+  margin: 4px 0;
+}
+
+.jinja-note {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: var(--game-spacing-sm);
+  padding: var(--game-spacing-sm);
+  background: var(--game-bg-secondary);
+  border-radius: var(--game-radius-sm);
+  font-size: 0.85em;
+  color: var(--game-accent-color);
+}
+
+.ai-loading {
+  display: flex;
+  align-items: center;
+  gap: var(--game-spacing-md);
+  justify-content: center;
+  padding: var(--game-spacing-lg);
+  color: var(--game-text-secondary);
+}
+
+.ai-result {
+  display: flex;
+  flex-direction: column;
+  gap: var(--game-spacing-sm);
+}
+
+.ai-result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--game-spacing-sm);
+}
+
+.ai-result-text {
+  padding: var(--game-spacing-md);
+  background: var(--game-bg-secondary);
+  border: 1px solid var(--game-border-highlight);
+  border-radius: var(--game-radius-sm);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.95em;
+  line-height: 1.5;
+}
+
+.ai-comment {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--game-spacing-sm);
+  padding: var(--game-spacing-sm);
+  background: var(--game-bg-tertiary);
+  border-left: 3px solid var(--game-accent-color);
+  border-radius: var(--game-radius-sm);
+  font-size: 0.9em;
+  color: var(--game-text-secondary);
+  font-style: italic;
+}
+
+.word-count-info {
+  font-weight: 600;
+  color: var(--game-accent-color);
+  font-style: normal;
+  margin-bottom: 4px;
+}
+
+/* AI Prompt Input */
+.ai-prompt-input {
+  display: flex;
+  gap: var(--game-spacing-sm);
+  align-items: center;
+}
+
+.prompt-field {
+  flex: 1;
+  padding: var(--game-spacing-sm) var(--game-spacing-md);
+  background: var(--game-bg-primary);
+  border: 1px solid var(--game-border-color);
+  border-radius: var(--game-radius-sm);
+  color: var(--game-text-primary);
+  font-size: 0.95em;
+  transition: border-color 0.2s;
+}
+
+.prompt-field:focus {
+  outline: none;
+  border-color: var(--game-border-highlight);
+}
+
+.prompt-field:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.prompt-field::placeholder {
+  color: var(--game-text-muted);
 }
 </style>

@@ -25,10 +25,8 @@ export default {
     },
   },
   actions: {
-    async initialize({ dispatch }) {
-      // Call fetchSounds to initialize the sound files on app start
-      //await dispatch('fetchSounds');
-      console.log(dispatch)
+    async initialize() {
+      // Placeholder for future initialization
     },
 
     async fetchSounds({ commit }, mapName) {

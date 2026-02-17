@@ -52,12 +52,10 @@ export default {
   actions: {
     async initialize({ dispatch }) {
       try {
-        console.log(dispatch)
-        //await dispatch('downloadConversation', 'zork.json');
-        //await dispatch('downloadConversation', 'fsm_fun.json');
-        //await dispatch('downloadConversation', 'fsm_techi.json');
+        // Placeholder for future initialization
+        void dispatch; // Suppress unused variable warning
       } catch (error) {
-        console.error('Failed to load default map:', error);
+        // Silent error handling
       }
     },
 

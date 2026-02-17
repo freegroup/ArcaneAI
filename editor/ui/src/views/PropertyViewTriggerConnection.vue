@@ -290,12 +290,6 @@
       onDataChange() { 
         this.jsonData.name = this.jsonData?.name?.replace(/[^a-zA-Z0-9_-]/g, '');
         if (this.draw2dFrame ) {
-            console.log('📝 [SYNC] Vue → Canvas: TriggerConnection data changed', {
-              name: this.jsonData.name,
-              soundEffect: this.jsonData.userData?.sound_effect || 'none',
-              hasConditions: this.jsonData.userData?.conditions?.length > 0,
-              hasActions: this.jsonData.userData?.actions?.length > 0
-            });
             var data = JSON.parse(JSON.stringify( this.jsonData ));
             this.draw2dFrame.postMessage({ type: MessageTypes.SET_SHAPE_DATA, data: data },'*');
         }
@@ -396,12 +390,6 @@
           if (event.origin !== window.location.origin) return;
           const message = event.data;
           if (message.event === MessageTypes.SELECT && message.type === MessageTypes.SHAPE_TRIGGER_CONNECTION) {
-              console.log('🎯 [SYNC] Canvas → Vue: TriggerConnection selected', {
-                name: message.data?.name,
-                source: message.data?.source?.name,
-                target: message.data?.target?.name,
-                hasSoundEffect: !!message.data?.userData?.sound_effect
-              });
               SoundManager.stopCurrentSound()
               this.jsonData = message.data
               // Ensure userData exists
@@ -416,7 +404,6 @@
 
           }
           else if (message.event === MessageTypes.UNSELECT) {
-              console.log('❌ [SYNC] Canvas → Vue: Selection cleared');
               SoundManager.stopCurrentSound()
               // Reset to initial state with userData to prevent null access
               this.jsonData = {
@@ -715,4 +702,3 @@
   }
 
 </style>
-  

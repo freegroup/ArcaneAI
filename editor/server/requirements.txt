@@ -1,2 +1,8 @@
 uvicorn==0.32.0
 fastapi==0.115.3
+pyyaml>=6.0
+requests>=2.31.0
+
+# LLM providers
+openai>=1.0.0
+google-generativeai>=0.3.0

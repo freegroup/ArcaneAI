@@ -12,10 +12,11 @@
       class="nav-drawer"
     >
       <!-- Toggle button to control compact state -->
-      <v-list-item @click="toggleDrawerCompact" class="nav-drawer__toggle">
-        <v-list-item-icon>
-          <v-icon>{{ isCompact ? 'mdi-chevron-right' : 'mdi-chevron-left' }}</v-icon>
-        </v-list-item-icon>
+      <v-list-item 
+        @click="toggleDrawerCompact" 
+        class="nav-drawer__toggle"
+        :prepend-icon="isCompact ? 'mdi-chevron-right' : 'mdi-chevron-left'"
+      >
       </v-list-item>
 
       <v-divider></v-divider>
@@ -26,12 +27,10 @@
           :key="item.title"
           :to="item.route($route.params.mapName)"
           :prepend-icon="item.icon"
+          :title="isCompact ? undefined : item.title"
           router
           class="nav-drawer__item"
         >
-          <v-list-item-content v-if="!isCompact">
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -106,9 +105,6 @@ export default {
 
       if (iframeComponent && iframeComponent.requestDraw2dDocument) {
         iframeComponent.requestDraw2dDocument();
-        console.log('Request sent to iframe component');
-      } else {
-        console.error('Iframe component or requestDraw2dDocument method not found');
       }
     },
     toggleDrawerCompact() {

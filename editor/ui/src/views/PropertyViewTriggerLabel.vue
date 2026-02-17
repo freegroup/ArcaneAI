@@ -285,12 +285,6 @@
       onDataChange() { 
         this.jsonData.text = this.jsonData?.text?.replace(/[^a-zA-Z0-9_-]/g, '');
         if (this.draw2dFrame ) {
-            console.log('📝 [SYNC] Vue → Canvas: TriggerLabel data changed', {
-              name: this.jsonData.text,
-              soundEffect: this.jsonData.userData?.sound_effect || 'none',
-              hasConditions: this.jsonData.userData?.conditions?.length > 0,
-              hasActions: this.jsonData.userData?.actions?.length > 0
-            });
             var data = JSON.parse(JSON.stringify( this.jsonData ));
             this.draw2dFrame.postMessage({ type: MessageTypes.SET_SHAPE_DATA, data: data },'*');
         }
@@ -387,10 +381,6 @@
             if (event.origin !== window.location.origin) return;
             const message = event.data;
             if (message.event === MessageTypes.SELECT && message.type === MessageTypes.SHAPE_TRIGGER_LABEL) {
-                console.log('🎯 [SYNC] Canvas → Vue: TriggerLabel selected', {
-                  name: message.data?.text,
-                  hasSoundEffect: !!message.data?.userData?.sound_effect
-                });
                 SoundManager.stopCurrentSound()
 
                 this.jsonData = message.data
@@ -402,7 +392,6 @@
 
             }
             else if (message.event === MessageTypes.UNSELECT) {
-                console.log('❌ [SYNC] Canvas → Vue: Selection cleared');
                 SoundManager.stopCurrentSound()
                 this.jsonData = {}
             }

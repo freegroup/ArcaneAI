@@ -58,7 +58,7 @@ class GameConfig:
         
         if 'llm' not in self._data:
             raise ValueError("'llm' section is required in config.yaml")
-    
+
     @property
     def project_root(self) -> Path:
         """Project root directory (where config.yaml is located)."""

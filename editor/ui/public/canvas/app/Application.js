@@ -26,7 +26,6 @@ Application = Class.extend(
 
         this.view.on("select", this.onSelectCallback.bind(this));
         this.view.on("unselect", this.onUnselectCallback.bind(this));
-
     },
 
 	/**
@@ -39,6 +38,7 @@ Application = Class.extend(
 	 */
 	onSelectCallback : function(emitter, event)
 	{
+        console.log(".....")
 		this.selectedFigure = event.figure;
 
         var data = this.selectedFigure.getPersistentAttributes()

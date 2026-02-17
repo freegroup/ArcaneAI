@@ -173,11 +173,6 @@
       onDataChange() { 
         this.jsonData.name = this.jsonData?.name?.replace(/[^a-zA-Z0-9]/g, '');
         if (this.draw2dFrame ) {
-            console.log('📝 [SYNC] Vue → Canvas: StateShape data changed', {
-              name: this.jsonData.name,
-              hasSystemPrompt: !!this.jsonData.userData?.system_prompt,
-              ambientSound: this.jsonData.userData?.ambient_sound || 'none'
-            });
             var data = JSON.parse(JSON.stringify( this.jsonData ));
             this.draw2dFrame.postMessage({ type: MessageTypes.SET_SHAPE_DATA, data: data },'*');
         }
@@ -231,10 +226,6 @@
             if (event.origin !== window.location.origin) return;
             const message = event.data;
             if (message.event === MessageTypes.SELECT && message.type === MessageTypes.SHAPE_STATE) {
-                console.log('🎯 [SYNC] Canvas → Vue: StateShape selected', {
-                  name: message.data?.name,
-                  hasAmbientSound: !!message.data?.userData?.ambient_sound
-                });
                 SoundManager.stopCurrentSound()
                 this.jsonData = message.data;
                 if (!this.jsonData.userData.ambient_sound_volume) {
@@ -242,7 +233,6 @@
                 }
             }
             else if (message.event === MessageTypes.UNSELECT) {
-                console.log('❌ [SYNC] Canvas → Vue: Selection cleared');
                 SoundManager.stopCurrentSound()
                 this.jsonData = {}
             }

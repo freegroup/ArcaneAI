@@ -8,6 +8,7 @@ from typing import List
 from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
+from pydantic import BaseModel
 
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -17,6 +18,7 @@ BASE_DIR = Path(__file__).parent
 
 # Import local config_loader
 from config_loader import EditorConfig
+from text_improver import TextImprover
 
 # Load config
 editor_config = EditorConfig()
@@ -205,6 +207,55 @@ async def get_sound_file(map_name: str, file_name: str):
     media_type = media_types.get(ext, 'audio/mpeg')
     
     return FileResponse(file_location, media_type=media_type, filename=os.path.basename(file_name))
+
+
+# ===== TEXT IMPROVEMENT ENDPOINT =====
+
+# Pydantic model for request validation
+class TextImprovementRequest(BaseModel):
+    text: str
+    instruction: str
+    include_comment: bool = False
+
+# Initialize TextImprover (lazy initialization)
+text_improver: TextImprover = None
+
+def get_text_improver() -> TextImprover:
+    """Get or create TextImprover instance."""
+    global text_improver
+    if text_improver is None:
+        text_improver = TextImprover()
+    return text_improver
+
+
+@app.post("/api/v1/improve-text")
+async def improve_text(request: TextImprovementRequest):
+    """
+    Verbessert Text mit Jinja-Template-Syntax unter Beibehaltung der Tags.
+    
+    Request Body:
+        text: Der zu verbessernde Text (kann Jinja-Tags enthalten)
+        instruction: Anweisung für das LLM (z.B. "Verbessere die Grammatik", "Übersetze ins Englische")
+        include_comment: Optional - wenn true, wird eine Erklärung der Änderungen mitgeliefert
+    
+    Response:
+        improved_text: Der verbesserte Text mit erhaltenen Jinja-Tags
+        comment: Optional - Erklärung der Änderungen (wenn include_comment=true)
+        model: Name des verwendeten LLM-Modells
+    """
+    try:
+        improver = get_text_improver()
+        result = improver.improve_text(
+            text=request.text,
+            user_instruction=request.instruction,
+            include_comment=request.include_comment
+        )
+        return result
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Text improvement failed: {str(e)}"
+        )
 
 
 # Static files für /editor - liefert Dateien aus dem src/static Verzeichnis

@@ -61,7 +61,6 @@ export default {
       handler(newMapDiagram) {
         // Check if update came from canvas - if so, skip sending back
         if(this.updateSource === 'canvas'){
-          console.log('🚫 [SYNC] Vuex → Canvas: BLOCKED (update came from canvas, preventing loop)');
           return;
         }
 
@@ -89,32 +88,25 @@ export default {
     sendDocumentToCanvas(document) {
       // Only send if canvas is ready
       if (!this.canvasReady) {
-        console.log('⏳ [SYNC] Canvas not ready yet, queueing document');
         this.pendingDocument = document;
         return;
       }
       
       if (!this.draw2dFrameContent) {
-        console.warn('⚠️ [SYNC] draw2dFrameContent not available');
         return;
       }
       
       // Extra safety check for draw2dFrame ref
       if (!this.draw2dFrame || !this.draw2dFrame.contentWindow) {
-        console.warn('⚠️ [SYNC] draw2dFrame ref not available yet');
         return;
       }
       
-      console.log('📤 [SYNC] Sending document to canvas', {
-        diagramItemCount: document?.length || 0
-      });
       const iframe = this.draw2dFrame.contentWindow;
       iframe.postMessage({ type: MessageTypes.SET_DOCUMENT, data: JSON.parse(JSON.stringify(document)) }, '*');
     },
     handleResize(event) {
       this.paneSize = event[0].size;
       localStorage.setItem('paneSize', this.paneSize);
-      console.log(this.paneSize)
     },
     loadDividerPosition() {
       // Load pane size from local storage
@@ -135,27 +127,21 @@ export default {
       
       // Handle canvas ready message
       if (message.type === MessageTypes.CANVAS_READY) {
-        console.log('✅ [SYNC] Canvas is ready, iframe fully loaded');
         this.canvasReady = true;
         this.updateDraw2dFrame();
         
         // Send pending document if any
         if (this.pendingDocument) {
-          console.log('📤 [SYNC] Sending queued document to canvas');
           this.sendDocumentToCanvas(this.pendingDocument);
           this.pendingDocument = null;
-        }
-        // Or send current diagram if available
-        else if (this.mapDiagram) {
+        } else if (this.mapDiagram) {
+          // Or send current diagram if available
           this.sendDocumentToCanvas(this.mapDiagram);
         }
       }
       else if (message.type === MessageTypes.DOCUMENT_UPDATED) {
-        console.log('🔄 [SYNC] Canvas → Vuex: Document updated from canvas', {
-          diagramItemCount: message.data?.length || 0
-        });
         // No need for blocked flag anymore - updateMapDiagram sets source to 'canvas'
-        this.updateMapDiagram(message.data)
+        this.updateMapDiagram(message.data);
       }
       else if(message.type === MessageTypes.TOGGLE_FULLSCREEN){
         var element = document.getElementById('state-editor');
