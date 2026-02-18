@@ -70,7 +70,10 @@ export default {
         commit('SET_GAME_CONFIG', gameData.config); 
         commit('SET_GAME_DIAGRAM', gameData.diagram); 
         commit('SET_GAME_NAME', gameName);
+        
+        // Load related resources for this game
         await dispatch('sounds/fetchSounds', gameName, { root: true });
+        await dispatch('encounters/fetchEncounters', gameName, { root: true });
       } catch (error) {
         commit('SET_ERROR', error.response?.data?.detail || 'Error loading game');
         throw error;

@@ -7,7 +7,7 @@ from typing import List
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
 
-router = APIRouter(prefix="/api/v1/sounds", tags=["sounds"])
+router = APIRouter(prefix="/api/v1/game", tags=["sounds"])
 
 # These will be set by main.py
 MAPS_ROOT_DIR = None
@@ -20,7 +20,7 @@ def init_routes(maps_dir: str, soundfx_dir: str):
     SOUNDFX_ROOT_DIR = soundfx_dir
 
 
-@router.get("/{game_name}", response_model=List[str])
+@router.get("/{game_name}/sounds", response_model=List[str])
 async def list_sounds(game_name: str):
     """
     List all available sounds for a game.
@@ -62,7 +62,7 @@ async def list_sounds(game_name: str):
     return sorted(files)
 
 
-@router.get("/{game_name}/{file_path:path}")
+@router.get("/{game_name}/sounds/{file_path:path}")
 async def get_sound(game_name: str, file_path: str):
     """
     Get a specific sound file.

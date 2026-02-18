@@ -33,7 +33,7 @@ export default {
       commit('SET_LOADING', true)
       commit('SET_ERROR', null)
       try {
-        const response = await axios.get(`${API_BASE_URL}/sounds/${mapName}`)
+        const response = await axios.get(`${API_BASE_URL}/game/${mapName}/sounds`)
         const sortedFiles = response.data.sort((a, b) => a.localeCompare(b));
         
         commit('SET_FILES', sortedFiles);
@@ -48,7 +48,7 @@ export default {
       commit('SET_LOADING', true);
       commit('SET_ERROR', null);
       try {
-        const response = await axios.get(`${API_BASE_URL}/sounds/${mapName}/${soundName}`, {
+        const response = await axios.get(`${API_BASE_URL}/game/${mapName}/sounds/${soundName}`, {
           responseType: 'blob',
         });
         

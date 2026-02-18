@@ -63,7 +63,7 @@ class SoundManager {
 
     SoundManager.stopCurrentSound()
 
-    const mapName = storeInstance.getters['maps/mapName']
+    const mapName = storeInstance.getters['game/gameName']
     await storeInstance.dispatch('sounds/downloadSound', {mapName, soundName})
     const soundUrl = storeInstance.getters['sounds/currentSoundUrl']
 
