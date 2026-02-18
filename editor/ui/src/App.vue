@@ -92,10 +92,13 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
-    ...mapActions('maps', {
+    ...mapActions('games', {
       initializeMap: 'initialize',
-      downloadMap: 'downloadMap',
+      downloadGame: 'downloadGame',
     }),
+    downloadMap(gameName) {
+      return this.downloadGame(gameName);
+    },
     ...mapActions('sounds', {
       initializeSounds: 'initialize',
     }),

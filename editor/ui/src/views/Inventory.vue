@@ -130,7 +130,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('maps', ['mapConfig']),
+    ...mapGetters('games', ['gameConfig']),
+    mapConfig() {
+      return this.gameConfig;
+    },
     inventory: {
       get() {
         // Return inventory items sorted by key
@@ -139,7 +142,7 @@ export default {
         );
       },
       set(value) {
-        this.updateMapConfig({
+        this.updateGameConfig({
           ...this.mapConfig,
           inventory: value,
         });
@@ -150,7 +153,10 @@ export default {
     },
   },
   methods: {
-    ...mapActions('maps', ['updateMapConfig']),
+    ...mapActions('games', ['updateGameConfig']),
+    updateMapConfig(config) {
+      return this.updateGameConfig(config);
+    },
     
     addItem() {
       if (this.newItem.key && this.newItem.value !== undefined) {

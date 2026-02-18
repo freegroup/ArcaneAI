@@ -10,41 +10,41 @@
     
     <v-spacer></v-spacer>
 
-    <FilePickerDialog v-model:dialog="filePickerDialog" />
-    <FileNewDialog    v-model:dialog="fileNewDialog" />
+    <GameSelectDialog v-model:dialog="gameSelectDialog" />
+    <GameNewDialog    v-model:dialog="gameNewDialog" />
   </v-app-bar>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
-import FileNewDialog from './FileNewDialog.vue';
-import FilePickerDialog from './FilePickerDialog.vue';
+import GameNewDialog from './GameNewDialog.vue';
+import GameSelectDialog from './GameSelectDialog.vue';
 
 export default {
   components: {
-    FilePickerDialog,
-    FileNewDialog,
+    GameSelectDialog,
+    GameNewDialog,
   },
   data() {
     return {
-      filePickerDialog: false,
-      fileNewDialog: false,
+      gameSelectDialog: false,
+      gameNewDialog: false,
     };
   },
   methods: {
-    ...mapActions('maps', ['saveMap']),
+    ...mapActions('games', ['saveGame']),
     
     newFileDialog() {
-      this.fileNewDialog = true;
+      this.gameNewDialog = true;
     },
     
     openFileDialog() {
-      this.filePickerDialog = true;
+      this.gameSelectDialog = true;
     },
     
     save() {
-      console.log("Save Map");
-      this.saveMap();
+      console.log("Save Game");
+      this.saveGame();
     },
   },
 };

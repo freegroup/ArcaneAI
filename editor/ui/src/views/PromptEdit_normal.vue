@@ -68,20 +68,26 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('maps', ['mapConfig']),
+    ...mapGetters('games', ['gameConfig']),
+    mapConfig() {
+      return this.gameConfig;
+    },
     identityPrompt: {
       get() {
         return this.mapConfig.identity;
       },
       set(value) {
         // Commit the updated system prompt to the store
-        this.updateMapConfig({ ...this.mapConfig, identity: value });
+        this.updateGameConfig({ ...this.mapConfig, identity: value });
       },
     },
     
   },
   methods: {
-    ...mapActions('maps', ['updateMapConfig']),
+    ...mapActions('games', ['updateGameConfig']),
+    updateMapConfig(config) {
+      this.updateGameConfig(config);
+    },
     onChange: (val, cm) => {
       console.log(val);
       console.log(cm.getValue());

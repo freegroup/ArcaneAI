@@ -1,9 +1,9 @@
 <template>
   <v-dialog :model-value="dialog" max-width="600" @click:outside="closeDialog" @update:model-value="updateDialog">
-    <v-card class="file-picker-dialog">
+    <v-card class="game-select-dialog">
       <DialogHeader 
-        title="Select a Map" 
-        icon="mdi-map"
+        title="Select a Game" 
+        icon="mdi-gamepad-variant"
         @close="closeDialog" 
       />
       <v-card-text class="dialog-content">
@@ -43,18 +43,21 @@ export default {
     },
   },
   computed: {
-    ...mapGetters('maps', ['maps']),
+    ...mapGetters('games', ['games']),
+    maps() {
+      return this.games;
+    },
   },
   methods: {
-    ...mapActions('maps', ['fetchMaps', 'downloadMap']),
+    ...mapActions('games', ['fetchGames', 'downloadGame']),
 
     async loadMaps() {
-      await this.fetchMaps();
+      await this.fetchGames();
     },
 
     async selectMap(map) {
-      // Download the selected map content and store it in Vuex
-      await this.downloadMap(map);
+      // Download the selected game content and store it in Vuex
+      await this.downloadGame(map);
       this.$router.replace({ name: this.$route.name, params: { mapName: map } });
       this.$emit('update:dialog', false); // Close the dialog
     },
@@ -79,12 +82,12 @@ export default {
 
 <style scoped>
 /* Override Vuetify defaults */
-.file-picker-dialog :deep(.v-card) {
+.game-select-dialog :deep(.v-card) {
   background: var(--game-bg-secondary) !important;
   color: var(--game-text-primary) !important;
 }
 
-.file-picker-dialog {
+.game-select-dialog {
   background: var(--game-bg-secondary);
   color: var(--game-text-primary);
   border: 2px solid var(--game-border-highlight);

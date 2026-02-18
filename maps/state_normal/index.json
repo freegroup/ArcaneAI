@@ -8,22 +8,13 @@
             "type": "StateShape",
             "id": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
             "x": 3822,
-            "y": 3775.5,
-            "width": 30.671875,
-            "height": 35.5,
-            "selectable": true,
-            "draggable": true,
-            "angle": 0,
+            "y": 3763,
+            "width": 46,
+            "height": 46,
             "userData": {
                 "system_prompt": "Du bist in Zustand A. Der Anfang",
                 "ambient_sound_volume": 100
             },
-            "cssClass": "StateShape",
-            "bgColor": "rgba(0,0,0,0)",
-            "color": "rgba(215,215,215,1)",
-            "radius": 3,
-            "dasharray": null,
-            "gap": 5,
             "name": "A",
             "stateType": "NORMAL",
             "trigger": []
@@ -32,22 +23,13 @@
             "type": "StateShape",
             "id": "6033ed21-0161-48e1-8bf2-f5c5075a8c7c",
             "x": 4063,
-            "y": 3764.5,
-            "width": 30.671875,
-            "height": 35.5,
-            "selectable": true,
-            "draggable": true,
-            "angle": 0,
+            "y": 3764,
+            "width": 46,
+            "height": 46,
             "userData": {
                 "system_prompt": "Dies ist der Zustand \"B\". Nichts Besonderes ...ein Zustand halt",
                 "ambient_sound_volume": 100
             },
-            "cssClass": "StateShape",
-            "bgColor": "rgba(0,0,0,0)",
-            "color": "rgba(215,215,215,1)",
-            "radius": 3,
-            "dasharray": null,
-            "gap": 5,
             "name": "B",
             "stateType": "NORMAL",
             "trigger": []
@@ -56,22 +38,13 @@
             "type": "StateShape",
             "id": "7536a309-49b6-70b9-bbd1-7b31a7e4d8af",
             "x": 4281,
-            "y": 3779.5,
-            "width": 30.671875,
-            "height": 35.5,
-            "selectable": true,
-            "draggable": true,
-            "angle": 0,
+            "y": 3761,
+            "width": 46,
+            "height": 46,
             "userData": {
                 "system_prompt": "Du bist im Zustnad C. Dies ist ein Zustand von dem man in zwei unterschiedliche Zustände wechseln kann",
                 "ambient_sound_volume": 100
             },
-            "cssClass": "StateShape",
-            "bgColor": "rgba(0,0,0,0)",
-            "color": "rgba(215,215,215,1)",
-            "radius": 3,
-            "dasharray": null,
-            "gap": 5,
             "name": "C",
             "stateType": "NORMAL",
             "trigger": []
@@ -79,65 +52,185 @@
         {
             "type": "StateShape",
             "id": "53d2a3e8-302c-0407-7c14-152f7ecd27cf",
-            "x": 3517.5,
-            "y": 3775,
-            "width": 51.34375,
-            "height": 37.5,
-            "selectable": true,
-            "draggable": true,
-            "angle": 0,
+            "x": 3433,
+            "y": 3748,
+            "width": 144,
+            "height": 80,
             "userData": {
                 "system_prompt": "",
                 "ambient_sound_volume": 100
             },
-            "cssClass": "StateShape",
-            "bgColor": "rgba(0,0,0,0)",
-            "color": "rgba(215,215,215,1)",
-            "radius": 3,
-            "dasharray": null,
-            "gap": 5,
             "name": "Start",
             "stateType": "START",
             "trigger": []
         },
         {
             "type": "TriggerConnection",
+            "id": "c94c5b8e-66b2-382d-d9de-f29a0b8d8510",
+            "userData": {
+                "sound_effect_volume": 100
+            },
+            "vertex": [
+                {
+                    "x": 3577.5,
+                    "y": 3788
+                },
+                {
+                    "x": 3681.5,
+                    "y": 3788
+                },
+                {
+                    "x": 3681.5,
+                    "y": 3786.5
+                },
+                {
+                    "x": 3822,
+                    "y": 3786.5
+                }
+            ],
+            "routingMetaData": {
+                "routedByUserInteraction": true,
+                "fromDir": 1,
+                "toDir": 3
+            },
+            "source": {
+                "node": "53d2a3e8-302c-0407-7c14-152f7ecd27cf",
+                "port": "output0",
+                "name": "Start"
+            },
+            "target": {
+                "node": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
+                "port": "input0",
+                "decoration": "draw2d.decoration.connection.ArrowDecorator",
+                "name": "A"
+            },
+            "name": "start"
+        },
+        {
+            "type": "TriggerConnection",
+            "id": "c887824e-3a55-a265-856c-3c0720e8adcf",
+            "userData": {
+                "description": "gehe in den Zustand C",
+                "sound_effect_volume": 100,
+                "sound_effect": "effect_retrogame.wav",
+                "system_prompt": "Du bist nun in Zustand C"
+            },
+            "vertex": [
+                {
+                    "x": 4109,
+                    "y": 3787.5
+                },
+                {
+                    "x": 4212.71,
+                    "y": 3787.5
+                },
+                {
+                    "x": 4212.71,
+                    "y": 3784.5
+                },
+                {
+                    "x": 4281,
+                    "y": 3784.5
+                }
+            ],
+            "routingMetaData": {
+                "routedByUserInteraction": true,
+                "fromDir": 1,
+                "toDir": 3
+            },
+            "source": {
+                "node": "6033ed21-0161-48e1-8bf2-f5c5075a8c7c",
+                "port": "output0",
+                "name": "B"
+            },
+            "target": {
+                "node": "7536a309-49b6-70b9-bbd1-7b31a7e4d8af",
+                "port": "input0",
+                "decoration": "draw2d.decoration.connection.ArrowDecorator",
+                "name": "C"
+            },
+            "name": "go_to_c"
+        },
+        {
+            "type": "TriggerConnection",
+            "id": "4a25402c-a071-0b42-edba-2aff09d9590b",
+            "userData": {
+                "description": "gehe in den Zustand A",
+                "sound_effect_volume": 100,
+                "sound_effect": "effect_retrogame.wav",
+                "system_prompt": "Du bist nun in Zustnad A"
+            },
+            "vertex": [
+                {
+                    "x": 4327,
+                    "y": 3784.5
+                },
+                {
+                    "x": 4387.67,
+                    "y": 3784.5
+                },
+                {
+                    "x": 4387.67,
+                    "y": 3984.75
+                },
+                {
+                    "x": 3764,
+                    "y": 3984.75
+                },
+                {
+                    "x": 3764,
+                    "y": 3786.5
+                },
+                {
+                    "x": 3822,
+                    "y": 3786.5
+                }
+            ],
+            "routingMetaData": {
+                "routedByUserInteraction": true,
+                "fromDir": 1,
+                "toDir": 3
+            },
+            "source": {
+                "node": "7536a309-49b6-70b9-bbd1-7b31a7e4d8af",
+                "port": "output0",
+                "name": "C"
+            },
+            "target": {
+                "node": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
+                "port": "input0",
+                "decoration": "draw2d.decoration.connection.ArrowDecorator",
+                "name": "A"
+            },
+            "name": "go_to_a"
+        },
+        {
+            "type": "TriggerConnection",
             "id": "1262e685-6a1b-022e-c7fd-6b26fa4e08bc",
-            "alpha": 1,
-            "selectable": true,
-            "draggable": true,
-            "angle": 0,
             "userData": {
                 "description": "gehe in den Zustand B",
                 "sound_effect_volume": 100,
                 "sound_effect": "effect_retrogame.wav",
                 "system_prompt": "Du bist nun in Zustand B. "
             },
-            "cssClass": "TriggerConnection",
-            "stroke": 3,
-            "color": "rgba(204,229,188,1)",
-            "outlineStroke": 0,
-            "outlineColor": "rgba(0,0,0,0)",
-            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
             "vertex": [
                 {
-                    "x": 3852.671875,
-                    "y": 3793.25
+                    "x": 3868,
+                    "y": 3786.5
                 },
                 {
-                    "x": 3957.8359375,
-                    "y": 3793.25
+                    "x": 3965.5,
+                    "y": 3786.5
                 },
                 {
-                    "x": 3957.8359375,
-                    "y": 3782.25
+                    "x": 3965.5,
+                    "y": 3787.5
                 },
                 {
                     "x": 4063,
-                    "y": 3782.25
+                    "y": 3787.5
                 }
             ],
-            "radius": 20,
             "routingMetaData": {
                 "routedByUserInteraction": false,
                 "fromDir": 1,
@@ -159,49 +252,39 @@
         {
             "type": "TriggerConnection",
             "id": "c5357c3c-6cbd-8b3e-ef7b-d9a2bba20103",
-            "alpha": 1,
-            "selectable": true,
-            "draggable": true,
-            "angle": 0,
             "userData": {
                 "description": "gehe in den Zustand B",
                 "sound_effect_volume": 100,
                 "sound_effect": "effect_retrogame.wav",
-                "system_prompt": "Du bist nun in Zustand B"
+                "system_prompt": "Du bist nun in Zustand B",
+                "sound_effect_duration": 2
             },
-            "cssClass": "TriggerConnection",
-            "stroke": 3,
-            "color": "rgba(204,229,188,1)",
-            "outlineStroke": 0,
-            "outlineColor": "rgba(0,0,0,0)",
-            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
             "vertex": [
                 {
-                    "x": 4311.671875,
-                    "y": 3797.25
+                    "x": 4327,
+                    "y": 3784.5
                 },
                 {
-                    "x": 4387.671875,
-                    "y": 3797.25
+                    "x": 4387.67,
+                    "y": 3784.5
                 },
                 {
-                    "x": 4387.671875,
-                    "y": 3654.75
+                    "x": 4387.67,
+                    "y": 3612.75
                 },
                 {
-                    "x": 3972,
-                    "y": 3654.75
+                    "x": 4027,
+                    "y": 3612.75
                 },
                 {
-                    "x": 3972,
-                    "y": 3782.25
+                    "x": 4027,
+                    "y": 3787.5
                 },
                 {
                     "x": 4063,
-                    "y": 3782.25
+                    "y": 3787.5
                 }
             ],
-            "radius": 20,
             "routingMetaData": {
                 "routedByUserInteraction": true,
                 "fromDir": 1,
@@ -219,179 +302,6 @@
                 "name": "B"
             },
             "name": "go_to_b"
-        },
-        {
-            "type": "TriggerConnection",
-            "id": "c887824e-3a55-a265-856c-3c0720e8adcf",
-            "alpha": 1,
-            "selectable": true,
-            "draggable": true,
-            "angle": 0,
-            "userData": {
-                "description": "gehe in den Zustand C",
-                "sound_effect_volume": 100,
-                "sound_effect": "effect_retrogame.wav",
-                "system_prompt": "Du bist nun in Zustand C"
-            },
-            "cssClass": "TriggerConnection",
-            "stroke": 3,
-            "color": "rgba(204,229,188,1)",
-            "outlineStroke": 0,
-            "outlineColor": "rgba(0,0,0,0)",
-            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
-            "vertex": [
-                {
-                    "x": 4093.671875,
-                    "y": 3782.25
-                },
-                {
-                    "x": 4212.71484375,
-                    "y": 3782.25
-                },
-                {
-                    "x": 4212.71484375,
-                    "y": 3797.25
-                },
-                {
-                    "x": 4281,
-                    "y": 3797.25
-                }
-            ],
-            "radius": 20,
-            "routingMetaData": {
-                "routedByUserInteraction": true,
-                "fromDir": 1,
-                "toDir": 3
-            },
-            "source": {
-                "node": "6033ed21-0161-48e1-8bf2-f5c5075a8c7c",
-                "port": "output0",
-                "name": "B"
-            },
-            "target": {
-                "node": "7536a309-49b6-70b9-bbd1-7b31a7e4d8af",
-                "port": "input0",
-                "decoration": "draw2d.decoration.connection.ArrowDecorator",
-                "name": "C"
-            },
-            "name": "go_to_c"
-        },
-        {
-            "type": "TriggerConnection",
-            "id": "c94c5b8e-66b2-382d-d9de-f29a0b8d8510",
-            "alpha": 1,
-            "selectable": true,
-            "draggable": true,
-            "angle": 0,
-            "userData": {
-                "sound_effect_volume": 100
-            },
-            "cssClass": "TriggerConnection",
-            "stroke": 3,
-            "color": "rgba(204,229,188,1)",
-            "outlineStroke": 0,
-            "outlineColor": "rgba(0,0,0,0)",
-            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
-            "vertex": [
-                {
-                    "x": 3568.84375,
-                    "y": 3793.75
-                },
-                {
-                    "x": 3658.421875,
-                    "y": 3793.75
-                },
-                {
-                    "x": 3658.421875,
-                    "y": 3793.25
-                },
-                {
-                    "x": 3822,
-                    "y": 3793.25
-                }
-            ],
-            "radius": 20,
-            "routingMetaData": {
-                "routedByUserInteraction": true,
-                "fromDir": 1,
-                "toDir": 3
-            },
-            "source": {
-                "node": "53d2a3e8-302c-0407-7c14-152f7ecd27cf",
-                "port": "output0",
-                "name": "Start"
-            },
-            "target": {
-                "node": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
-                "port": "input0",
-                "decoration": "draw2d.decoration.connection.ArrowDecorator",
-                "name": "A"
-            },
-            "name": "start"
-        },
-        {
-            "type": "TriggerConnection",
-            "id": "4a25402c-a071-0b42-edba-2aff09d9590b",
-            "alpha": 1,
-            "selectable": true,
-            "draggable": true,
-            "angle": 0,
-            "userData": {
-                "description": "gehe in den Zustand A",
-                "sound_effect_volume": 100,
-                "sound_effect": "effect_retrogame.wav",
-                "system_prompt": "Du bist nun in Zustnad A"
-            },
-            "cssClass": "TriggerConnection",
-            "stroke": 3,
-            "color": "rgba(204,229,188,1)",
-            "outlineStroke": 0,
-            "outlineColor": "rgba(0,0,0,0)",
-            "policy": "draw2d.policy.line.OrthogonalSelectionFeedbackPolicy",
-            "vertex": [
-                {
-                    "x": 4311.671875,
-                    "y": 3797.25
-                },
-                {
-                    "x": 4387.671875,
-                    "y": 3797.25
-                },
-                {
-                    "x": 4387.671875,
-                    "y": 3984.75
-                },
-                {
-                    "x": 3764,
-                    "y": 3984.75
-                },
-                {
-                    "x": 3764,
-                    "y": 3793.25
-                },
-                {
-                    "x": 3822,
-                    "y": 3793.25
-                }
-            ],
-            "radius": 20,
-            "routingMetaData": {
-                "routedByUserInteraction": true,
-                "fromDir": 1,
-                "toDir": 3
-            },
-            "source": {
-                "node": "7536a309-49b6-70b9-bbd1-7b31a7e4d8af",
-                "port": "output0",
-                "name": "C"
-            },
-            "target": {
-                "node": "ac67f30d-d182-6aac-4c5e-e484f396cb1a",
-                "port": "input0",
-                "decoration": "draw2d.decoration.connection.ArrowDecorator",
-                "name": "A"
-            },
-            "name": "go_to_a"
         }
     ]
 }

@@ -1,8 +1,8 @@
 <template>
   <v-dialog :model-value="dialog" max-width="400" @click:outside="closeDialog" @update:model-value="updateDialog">
-    <v-card class="file-new-dialog">
+    <v-card class="game-new-dialog">
       <DialogHeader 
-        title="Create Map" 
+        title="Create Game" 
         icon="mdi-plus-box"
         @close="closeDialog" 
       />
@@ -52,16 +52,19 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("maps", ["maps"]),
+    ...mapGetters("games", ["games"]),
+    maps() {
+      return this.games;
+    },
     isCreateDisabled() {
       return !this.mapName || this.maps.includes(this.mapName);
     },
   },
   methods: {
-    ...mapActions("maps", ["fetchMaps", "createNewMap"]),
+    ...mapActions("games", ["fetchGames", "createNewGame"]),
 
     async loadMaps() {
-      await this.fetchMaps();
+      await this.fetchGames();
     },
 
   
@@ -76,8 +79,8 @@ export default {
 
     async createDialog() {
       if (!this.isCreateDisabled) {
-        // Create the named map content and store it in Vuex
-        await this.createNewMap(this.mapName);
+        // Create the named game content and store it in Vuex
+        await this.createNewGame(this.mapName);
         this.$router.replace({ name: this.$route.name, params: { mapName: this.mapName } });
         this.$emit("update:dialog", false);
         console.log(`Map "${this.mapName}" created!`);  
@@ -115,7 +118,7 @@ export default {
 </script>
 
 <style scoped>
-.file-new-dialog {
+.game-new-dialog {
   background: var(--game-bg-secondary) !important;
   color: var(--game-text-primary) !important;
   border: 2px solid var(--game-border-highlight);

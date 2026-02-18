@@ -35,6 +35,7 @@ export default {
         'mdi-code-braces': '{ }',
         'mdi-music-box': '♪',
         'mdi-map': '⌂',
+        'mdi-gamepad-variant': '♠',
         'mdi-plus-box': '+',
         'mdi-information': 'i',
         'mdi-treasure-chest': '▣',

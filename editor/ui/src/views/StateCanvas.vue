@@ -51,13 +51,19 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('maps', ['mapDiagram', 'documentRequestTrigger', 'mapName', 'updateSource']),
+    ...mapGetters('games', ['gameDiagram', 'documentRequestTrigger', 'gameName', 'updateSource']),
+    mapDiagram() {
+      return this.gameDiagram;
+    },
+    mapName() {
+      return this.gameName;
+    },
     draw2dFrame() {
       return this.$refs.draw2dFrame;
     }
   },
   watch: {
-    mapDiagram: {
+    gameDiagram: {
       handler(newMapDiagram) {
         // Check if update came from canvas - if so, skip sending back
         if(this.updateSource === 'canvas'){
@@ -74,10 +80,16 @@ export default {
     }
   },
   methods: {
-    ...mapActions('maps', ['saveMap', 'updateMapDiagram']),
+    ...mapActions('games', ['saveGame', 'updateGameDiagram']),
+    saveMap() {
+      return this.saveGame();
+    },
+    updateMapDiagram(data) {
+      return this.updateGameDiagram(data);
+    },
 
     async saveReceivedDocument() {
-      await this.saveMap();
+      await this.saveGame();
     },
     updateDraw2dFrame() {
       // Check if the draw2dFrame ref is set
