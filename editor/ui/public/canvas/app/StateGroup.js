@@ -60,7 +60,7 @@ StateGroup = draw2d.shape.composite.Raft.extend({
 
         // and add all children of the JSON document.
         //
-        $.each(memento.labels,(i,json)=> {
+        $.each(memento.labels, (i,json) => {
             // create the figure stored in the JSON
             var figure =  eval(`new ${json.type}()`)
 

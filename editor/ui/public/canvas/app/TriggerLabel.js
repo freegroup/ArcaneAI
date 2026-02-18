@@ -31,7 +31,7 @@ var TriggerLabel = draw2d.shape.basic.Label.extend({
             system_prompt: this.getSystemPrompt,
         });
 
-        this.on("change:userData", (emitter, event)=>{
+        this.on("change:userData", (emitter, event) => {
             this.updateStyle()
         })
     },

@@ -77,13 +77,13 @@ StateShape = draw2d.shape.box.VBox.extend({
         this.createPort("output")
 
         this.add(this.stateNameLabel);
-        this.stateNameLabel.on("contextmenu", (emitter, event)=>{
+        this.stateNameLabel.on("contextmenu", (emitter, event) => {
             $.contextMenu({
                 selector: 'body', 
                 events:{  
-                    hide:()=> { $.contextMenu( 'destroy' ); }
+                    hide: () => { $.contextMenu( 'destroy' ); }
                 },
-                callback: (key, options) =>{
+                callback: (key, options) => {
                    switch(key){
                    case "delete":
                        this.getCanvas().getCommandStack().execute(
@@ -91,7 +91,7 @@ StateShape = draw2d.shape.box.VBox.extend({
                         )
                        break;
                     case "add":
-                        setTimeout(()=>{
+                        setTimeout(() => {
                             this.addTrigger("_new_").onDoubleClick();
                         },10);
                         break;
@@ -166,10 +166,10 @@ StateShape = draw2d.shape.box.VBox.extend({
     {
         this._super(alpha)
         this.stateNameLabel.setAlpha(alpha)
-        this.children.each(function(i,e){
+        this.children.each((i,e) => {
             e.figure.setAlpha(alpha)
         })
-        this.getPorts().each(function(i,p){
+        this.getPorts().each((i,p) => {
             p.setAlpha(alpha)
         })
         
@@ -187,23 +187,22 @@ StateShape = draw2d.shape.box.VBox.extend({
 	   	 var label =new TriggerLabel(txt);
          
          var _table=this;
-         label.on("contextmenu", (emitter, event)=>{
+         label.on("contextmenu", (emitter, event) => {
              $.contextMenu({
                  selector: 'body', 
                  events:
                  {  
-                     hide:()=>{ $.contextMenu( 'destroy' ); }
+                     hide: () => { $.contextMenu( 'destroy' ); }
                  },
-                 callback: (key, options) =>
-                 {
+                 callback: (key, options) => {
                     switch(key){
                     case "rename":
-                        setTimeout(()=>{
+                        setTimeout(() => {
                             emitter.onDoubleClick();
                         },10);
                         break;
                     case "new":
-                        setTimeout(()=>{
+                        setTimeout(() => {
                             _table.addTrigger("_new_").onDoubleClick();
                         },10);
                         break;
@@ -295,7 +294,7 @@ StateShape = draw2d.shape.box.VBox.extend({
         memento.stateType = this.stateType ?? StateType.NORMAL
         memento.trigger   = [];
 
-        this.children.each(function(i,e){
+        this.children.each((i,e) => {
             if(i>0){ // skip the header of the figure
                 memento.trigger.push({
                     id: e.figure.getId(),
@@ -350,7 +349,7 @@ StateShape = draw2d.shape.box.VBox.extend({
         this.stateNameLabel.setCssClass("cursor-move");
 
          if(typeof memento.trigger !== "undefined"){
-             $.each(memento.trigger, $.proxy(function(i,e){
+             $.each(memento.trigger, (i,e) => {
                  var trigger =this.addTrigger(e.name ?? "undefined");
                  trigger.setConditions(e.conditions ?? [])
                  trigger.setActions(e.actions ?? [])
@@ -359,7 +358,7 @@ StateShape = draw2d.shape.box.VBox.extend({
                  trigger.setSoundEffectDuration(e.sound_effect_duration ?? 2)
                  trigger.setSoundEffectVolume(e.sound_effect_volume ?? 100)
                  trigger.setSystemPrompt(e.system_prompt ?? "")
-             },this));
+             });
          }
 
          return this;

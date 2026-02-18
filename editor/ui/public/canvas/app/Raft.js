@@ -35,8 +35,20 @@ Raft = draw2d.shape.composite.Raft.extend({
         // add all decorations to the memento
         //
         memento.labels = [];
-        this.children.each(function(i,e){
+        this.children.each((i,e) => {
             var labelJSON = e.figure.getPersistentAttributes();
+            delete labelJSON.alpha
+            delete labelJSON.stroke
+            delete labelJSON.selectable
+            delete labelJSON.draggable
+            delete labelJSON.angle
+            delete labelJSON.cssClass
+            delete labelJSON.bgColor
+            delete labelJSON.color
+            delete labelJSON.radius
+            delete labelJSON.dasharray
+            delete labelJSON.ports
+
             labelJSON.locator=e.locator.NAME;
             memento.labels.push(labelJSON);
         });
@@ -45,7 +57,7 @@ Raft = draw2d.shape.composite.Raft.extend({
         delete memento.alpha
         delete memento.bgColor
         delete memento.color
-        delete memento.electable
+        delete memento.selectable
         delete memento.draggable
         delete memento.angle
         delete memento.ports
@@ -69,7 +81,7 @@ Raft = draw2d.shape.composite.Raft.extend({
         delete memento.alpha
         delete memento.bgColor
         delete memento.color
-        delete memento.electable
+        delete memento.selectable
         delete memento.draggable
         delete memento.angle
         delete memento.ports
@@ -85,7 +97,7 @@ Raft = draw2d.shape.composite.Raft.extend({
 
         // and add all children of the JSON document.
         //
-        $.each(memento.labels, $.proxy(function(i,json){
+        $.each(memento.labels, (i,json) => {
 
             // create the figure stored in the JSON
             var figure =  eval("new "+json.type+"()");
@@ -98,6 +110,6 @@ Raft = draw2d.shape.composite.Raft.extend({
 
             // add the new figure as child to this figure
             this.add(figure, locator);
-        },this));
+        });
     }
 });

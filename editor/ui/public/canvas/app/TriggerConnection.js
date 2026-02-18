@@ -55,7 +55,7 @@ var TriggerConnection= draw2d.Connection.extend({
 
       //this.label.installEditor(new draw2d.ui.LabelInplaceEditor());
 
-      this.on("change:userData", (emitter, event)=>{
+      this.on("change:userData", (emitter, event) => {
         this.updateStyle()
       })
     },
@@ -179,10 +179,9 @@ var TriggerConnection= draw2d.Connection.extend({
             selector: 'body',
             events:
             {
-                hide:function(){ $.contextMenu( 'destroy' ); }
+                hide: () => { $.contextMenu( 'destroy' ); }
             },
-            callback: function(key, options)
-            {
+            callback: (key, options) => {
                switch(key){
                case "delete":
                    this.getCanvas().getCommandStack().execute(
@@ -192,7 +191,7 @@ var TriggerConnection= draw2d.Connection.extend({
                    break;
                }
 
-            }.bind(this),
+            },
             x:x,
             y:y,
             items:
@@ -231,7 +230,7 @@ var TriggerConnection= draw2d.Connection.extend({
 
         // Round vertices to 2 decimal places to save space
         if (memento.vertex) {
-            memento.vertex.forEach(function(v) {
+            memento.vertex.forEach((v) => {
                 v.x = Math.round(v.x * 100) / 100;
                 v.y = Math.round(v.y * 100) / 100;
             });

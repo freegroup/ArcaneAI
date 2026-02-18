@@ -11,7 +11,7 @@ View = draw2d.Canvas.extend({
         this.installEditPolicy(new draw2d.policy.canvas.ShowDotEditPolicy(20, 1, "#33ff33", "#1a1a2e"));
         this.installEditPolicy(new EditPolicy())
         this.installEditPolicy(new draw2d.policy.connection.DragConnectionCreatePolicy({
-            createConnection: function(){
+            createConnection: () => {
                 return new TriggerConnection();
             }
         }));
@@ -19,7 +19,7 @@ View = draw2d.Canvas.extend({
         this.getCommandStack().addEventListener((e)=>{
             if(e.isPostChangeEvent()){
                 var writer = new draw2d.io.json.Writer();
-                writer.marshal(this, function(json){
+                writer.marshal(this, (json) => {
                     if( json.length ===0)
                         return
                     window.parent.postMessage({ type: 'updateDocumentData', data: json }, '*');
@@ -166,7 +166,7 @@ View = draw2d.Canvas.extend({
                 })
               }
             }
-          })        
+          })
 	  },
 
     getFigure: function(id)
@@ -180,7 +180,7 @@ View = draw2d.Canvas.extend({
                 result = figure;
                 return false
             }
-            figure.children.each(function (i, entry) {
+            figure.children.each((i, entry) => {
                 let child = entry.figure
                 if(child.id === id ){
                     result = child;
@@ -208,7 +208,7 @@ View = draw2d.Canvas.extend({
             }
         }
         var writer = new draw2d.io.json.Writer();
-        writer.marshal(this, function(json){
+        writer.marshal(this, (json) => {
             if( json.length ===0)
                 return
             window.parent.postMessage({ type: 'updateDocumentData', data: json }, '*');

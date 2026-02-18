@@ -16,7 +16,7 @@ Application = Class.extend(
      * 
      * @param {String} canvasId the id of the DOM element to use as paint container
      */
-    init : function()
+    init: function()
     {
 	    this.view = new View("canvas");
         this.toolbar = new Toolbar("canvas_toolbar", this.view)
@@ -36,7 +36,7 @@ Application = Class.extend(
      * @param {draw2d.Canvas} emitter
      * @param {Object} event
 	 */
-	onSelectCallback : function(emitter, event)
+	onSelectCallback: function(emitter, event)
 	{
 		this.selectedFigure = event.figure;
 
@@ -44,7 +44,7 @@ Application = Class.extend(
         window.parent.postMessage({ type: data.type, event: 'onSelect', data: data }, '*');
 	},
 
-    onUnselectCallback : function(emitter, event)
+    onUnselectCallback: function(emitter, event)
 	{
 		this.selectedFigure = null;
         window.parent.postMessage({ type: "", event: 'onUnselect', data: {} }, '*');

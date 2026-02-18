@@ -56,14 +56,14 @@
  * @returns {draw2d.Connection}
  */
 
-document.addEventListener("DOMContentLoaded",function () {
+document.addEventListener("DOMContentLoaded", () => {
 
     var app  = new Application();
 
       // Notify parent that canvas is ready (using MessageTypes)
       window.parent.postMessage({ type: MessageTypes.CANVAS_READY }, window.location.origin);
 
-      function receiveMessage(event) {
+      const receiveMessage = (event) => {
 
         if (event.origin !== window.location.origin) return;
 
