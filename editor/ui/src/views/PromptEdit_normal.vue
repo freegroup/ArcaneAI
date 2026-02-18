@@ -68,7 +68,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('games', ['gameConfig']),
+    ...mapGetters('game', ['gameConfig']),
     mapConfig() {
       return this.gameConfig;
     },
@@ -84,7 +84,7 @@ export default {
     
   },
   methods: {
-    ...mapActions('games', ['updateGameConfig']),
+    ...mapActions('game', ['updateGameConfig']),
     updateMapConfig(config) {
       this.updateGameConfig(config);
     },

@@ -142,9 +142,12 @@
 </template>
 
 <script>
+import axios from 'axios';
 import MonacoEditor from 'monaco-editor-vue3';
 import * as monaco from 'monaco-editor';
 import DialogHeader from './DialogHeader.vue';
+
+const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
 
 // Register Jinja2 language
 monaco.languages.register({ id: 'jinja2' });
@@ -368,23 +371,13 @@ export default {
       const wordsBefore = this.countWords(this.editedText);
 
       try {
-        const response = await fetch('http://localhost:8000/api/v1/improve-text', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            text: this.editedText,
-            instruction: this.aiPrompt,
-            include_comment: true
-          })
+        const response = await axios.post(`${API_BASE_URL}/text/improve`, {
+          text: this.editedText,
+          instruction: this.aiPrompt,
+          include_comment: true
         });
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
+        const data = response.data;
         this.aiResponse = data.improved_text;
         this.aiComment = data.comment || '';
         

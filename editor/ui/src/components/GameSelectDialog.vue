@@ -49,15 +49,15 @@ export default {
     },
   },
   methods: {
-    ...mapActions('games', ['fetchGames', 'downloadGame']),
+    ...mapActions('games', ['fetchGames', 'selectGame']),
 
     async loadMaps() {
       await this.fetchGames();
     },
 
     async selectMap(map) {
-      // Download the selected game content and store it in Vuex
-      await this.downloadGame(map);
+      // Select and load the game via games store, which loads it into game store
+      await this.selectGame(map);
       this.$router.replace({ name: this.$route.name, params: { mapName: map } });
       this.$emit('update:dialog', false); // Close the dialog
     },

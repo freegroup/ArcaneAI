@@ -79,11 +79,11 @@ export default {
 
     async createDialog() {
       if (!this.isCreateDisabled) {
-        // Create the named game content and store it in Vuex
+        // Create the named game via games store, which loads it into game store
         await this.createNewGame(this.mapName);
         this.$router.replace({ name: this.$route.name, params: { mapName: this.mapName } });
         this.$emit("update:dialog", false);
-        console.log(`Map "${this.mapName}" created!`);  
+        console.log(`Game "${this.mapName}" created!`);  
       }
     },
 

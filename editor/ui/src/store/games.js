@@ -6,47 +6,22 @@ export default {
   namespaced: true,
   state: {
     games: [],
-    gameConfig: {
-      system_prompt: "game prompt",
-      final_prompt:"final prompt",
-      inventory: [],
-    },
-    gameDiagram: [],
-    gameName: "unknown",
+    currentGameName: null,
     loading: false,
     error: null,
-    _updateSource: null, // Track update source: 'canvas' | 'vue' | null
   },
   mutations: {
     SET_GAMES(state, games) {
       state.games = games;
     },
-    SET_GAME_CONFIG(state, data) {
-      state.gameConfig = data;
-    },
-    ADD_INVENTORY_ITEM(state, item) {
-      state.gameConfig.inventory.push(item);
-    },
-    UPDATE_INVENTORY_ITEM(state, { index, item }) {
-      state.gameConfig.inventory.splice(index, 1, item);
-    },
-    REMOVE_INVENTORY_ITEM(state, index) {
-      state.gameConfig.inventory.splice(index, 1);
-    },
-    SET_GAME_DIAGRAM(state, data) {
-      state.gameDiagram = data;
+    SET_CURRENT_GAME_NAME(state, gameName) {
+      state.currentGameName = gameName;
     },
     SET_LOADING(state, isLoading) {
       state.loading = isLoading;
     },
     SET_ERROR(state, error) {
       state.error = error;
-    },
-    SET_GAME_NAME(state, newName) {
-      state.gameName = newName;
-    },
-    SET_UPDATE_SOURCE(state, source) {
-      state._updateSource = source;
     },
   },
   actions: {
@@ -63,34 +38,10 @@ export default {
       commit('SET_LOADING', true);
       commit('SET_ERROR', null);
       try {
-        const response = await axios.get(`${API_BASE_URL}/maps/`);
+        const response = await axios.get(`${API_BASE_URL}/games/`);
         commit('SET_GAMES', response.data);
       } catch (error) {
         commit('SET_ERROR', error.response?.data?.detail || 'Error fetching games');
-      } finally {
-        commit('SET_LOADING', false);
-      }
-    },
-
-    async downloadGame({ commit, dispatch }, gameName) {
-      if( gameName===undefined || gameName.length===0){
-        return // silently
-      }
-
-      commit('SET_LOADING', true);
-      commit('SET_ERROR', null);
-      try {
-        const response = await axios.get(`${API_BASE_URL}/maps/${gameName}`, {
-          responseType: 'blob',
-        });
-        const gameData = JSON.parse(await response.data.text()); 
-        commit('SET_GAME_CONFIG', gameData.config); 
-        commit('SET_GAME_DIAGRAM', gameData.diagram); 
-        commit('SET_GAME_NAME', gameName);
-        await dispatch('sounds/fetchSounds', gameName, { root: true });
-      } catch (error) {
-        commit('SET_ERROR', error.response?.data?.detail || 'Error downloading file');
-        throw error;
       } finally {
         commit('SET_LOADING', false);
       }
@@ -104,67 +55,62 @@ export default {
       commit('SET_LOADING', true);
       commit('SET_ERROR', null);
       try {
-        const response = await axios.post(`${API_BASE_URL}/maps/${gameName}`, {
+        await axios.post(`${API_BASE_URL}/games/${gameName}`, {
           responseType: 'blob',
         });
-        const gameData = await response.data; 
-        commit('SET_GAME_CONFIG', gameData.config); 
-        commit('SET_GAME_DIAGRAM', gameData.diagram); 
-        commit('SET_GAME_NAME', gameName);
-        await dispatch('sounds/fetchSounds', gameName, { root: true });
+        
+        // Load the newly created game into the game store
+        await dispatch('game/loadGame', gameName, { root: true });
+        commit('SET_CURRENT_GAME_NAME', gameName);
+        
+        // Refresh the games list
+        await dispatch('fetchGames');
       } catch (error) {
-        commit('SET_ERROR', error.response?.data?.detail || 'Error downloading file');
+        commit('SET_ERROR', error.response?.data?.detail || 'Error creating game');
         throw error;
       } finally {
         commit('SET_LOADING', false);
       }
     },
 
-    async updateGameConfig({ commit }, data) {
-      commit('SET_GAME_CONFIG', data);
-    },
-    addInventoryItem({ commit }, item) {
-      commit('ADD_INVENTORY_ITEM', item);
-    },
-    updateInventoryItem({ commit }, { index, item }) {
-      commit('UPDATE_INVENTORY_ITEM', { index, item });
-    },
-    removeInventoryItem({ commit }, index) {
-      commit('REMOVE_INVENTORY_ITEM', index);
-    },
-    async updateGameDiagram({ commit }, data) {
-      // Mark that this update came from canvas
-      commit('SET_UPDATE_SOURCE', 'canvas');
-      commit('SET_GAME_DIAGRAM', data);
-      
-      // Auto-reset source after a short delay to allow watch to process
-      setTimeout(() => {
-        commit('SET_UPDATE_SOURCE', null);
-      }, 100);
-    },
+    async selectGame({ commit, dispatch }, gameName) {
+      if( gameName===undefined || gameName.length===0){
+        return // silently
+      }
 
-    async saveGame({ commit, state }) {
       commit('SET_LOADING', true);
       commit('SET_ERROR', null);
       try {
-        // Simple: Just save the JSON with config and diagram
-        const formattedJson = JSON.stringify({
-          "config": state.gameConfig,
-          "diagram": state.gameDiagram
-        }, null, 4);
-
-        const blob = new Blob([formattedJson], { type: 'application/json' });
-        const formData = new FormData();
-        formData.append('file', blob, state.gameName + ".json");
-
-        // Send PUT request to backend - that's it!
-        await axios.put(`${API_BASE_URL}/maps/`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+        // Load the game into the game store
+        await dispatch('game/loadGame', gameName, { root: true });
+        commit('SET_CURRENT_GAME_NAME', gameName);
       } catch (error) {
-        commit('SET_ERROR', error.response?.data?.detail || 'Error saving document');
+        commit('SET_ERROR', error.response?.data?.detail || 'Error selecting game');
+        throw error;
+      } finally {
+        commit('SET_LOADING', false);
+      }
+    },
+
+    async deleteGame({ commit, dispatch }, gameName) {
+      if( gameName===undefined || gameName.length===0){
+        return // silently
+      }
+
+      commit('SET_LOADING', true);
+      commit('SET_ERROR', null);
+      try {
+        await axios.delete(`${API_BASE_URL}/games/${gameName}`);
+        
+        // Refresh the games list
+        await dispatch('fetchGames');
+        
+        // If this was the current game, clear it
+        if (gameName === commit.state.currentGameName) {
+          commit('SET_CURRENT_GAME_NAME', null);
+        }
+      } catch (error) {
+        commit('SET_ERROR', error.response?.data?.detail || 'Error deleting game');
         throw error;
       } finally {
         commit('SET_LOADING', false);
@@ -173,11 +119,8 @@ export default {
   },
   getters: {
     games: (state) => state.games,
-    gameConfig: (state) => state.gameConfig,
-    gameDiagram: (state) => state.gameDiagram,
-    gameName: (state) => state.gameName,
+    currentGameName: (state) => state.currentGameName,
     isLoading: (state) => state.loading,
     error: (state) => state.error,
-    updateSource: (state) => state._updateSource,
   },
 };

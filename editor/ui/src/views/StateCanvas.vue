@@ -51,7 +51,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('games', ['gameDiagram', 'documentRequestTrigger', 'gameName', 'updateSource']),
+    ...mapGetters('game', ['gameDiagram', 'documentRequestTrigger', 'gameName', 'updateSource']),
     mapDiagram() {
       return this.gameDiagram;
     },
@@ -80,7 +80,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('games', ['saveGame', 'updateGameDiagram']),
+    ...mapActions('game', ['saveGame', 'updateGameDiagram']),
     saveMap() {
       return this.saveGame();
     },

@@ -80,11 +80,15 @@ export default {
     // Listen for window resize to update drawer width responsively
     window.addEventListener('resize', this.handleResize);
 
-    // Initialize Map and Sounds
+    // Initialize Stores and Sounds
     setTimeout(async () => {
-      this.initializeMap();
+      this.initializeGame();
+      this.initializeGames();
       this.initializeSounds();
-      await this.downloadMap(this.$route.params.mapName || '');
+      // Load game if mapName is in route
+      if (this.$route.params.mapName) {
+        await this.loadGame(this.$route.params.mapName);
+      }
     }, 500);
   },
   beforeUnmount() {
@@ -92,13 +96,13 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
-    ...mapActions('games', {
-      initializeMap: 'initialize',
-      downloadGame: 'downloadGame',
+    ...mapActions('game', {
+      initializeGame: 'initialize',
+      loadGame: 'loadGame',
     }),
-    downloadMap(gameName) {
-      return this.downloadGame(gameName);
-    },
+    ...mapActions('games', {
+      initializeGames: 'initialize',
+    }),
     ...mapActions('sounds', {
       initializeSounds: 'initialize',
     }),

@@ -32,7 +32,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions('games', ['saveGame']),
+    ...mapActions('game', ['saveGame']),
     
     newFileDialog() {
       this.gameNewDialog = true;
