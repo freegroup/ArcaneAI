@@ -30,7 +30,7 @@
         </div>
 
         <!-- Sound Picker Dialog -->
-        <SoundPickerDialog
+        <SoundSelectDialog
           v-model="showSoundPicker"
           :files="soundFiles"
           :currentValue="jsonData.userData.ambient_sound"
@@ -93,7 +93,7 @@
   import MessageTypes from '../../public/canvas/MessageTypes.js';
   import ExtendedHelpDialog from '@/components/ExtendedHelpDialog.vue';
   import JinjaEditorDialog from '@/components/JinjaEditorDialog.vue';
-  import SoundPickerDialog from '@/components/SoundPickerDialog.vue';
+  import SoundSelectDialog from '@/components/SoundSelectDialog.vue';
   import HelpButton from '@/components/HelpButton.vue';
 
   import Codemirror from "codemirror-editor-vue3";
@@ -105,7 +105,7 @@
 
   export default {
     name: 'PropertyView',
-    components: { Codemirror, ExtendedHelpDialog, JinjaEditorDialog, SoundPickerDialog, HelpButton },
+    components: { Codemirror, ExtendedHelpDialog, JinjaEditorDialog, SoundSelectDialog, HelpButton },
     props: {
         draw2dFrame: {
             type: Object,

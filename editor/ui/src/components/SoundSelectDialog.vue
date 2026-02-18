@@ -116,7 +116,7 @@ import SoundManager from '@/utils/SoundManager';
 import DialogHeader from './DialogHeader.vue';
 
 export default {
-  name: 'SoundPickerDialog',
+  name: 'SoundSelectDialog',
   
   props: {
     modelValue: {

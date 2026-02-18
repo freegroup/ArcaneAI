@@ -30,7 +30,7 @@
         </div>
 
         <!-- Sound Picker Dialog -->
-        <SoundPickerDialog
+        <SoundSelectDialog
           v-model="showSoundPicker"
           :files="soundFiles"
           :currentValue="jsonData.userData.sound_effect"
@@ -165,13 +165,13 @@
   import MessageTypes from '../../public/canvas/MessageTypes.js';
   import ExtendedHelpDialog from '@/components/ExtendedHelpDialog.vue';
   import JinjaEditorDialog from '@/components/JinjaEditorDialog.vue';
-  import SoundPickerDialog from '@/components/SoundPickerDialog.vue';
+  import SoundSelectDialog from '@/components/SoundSelectDialog.vue';
   import HelpButton from '@/components/HelpButton.vue';
   import "codemirror/theme/material-darker.css";
 
   export default {
     name: 'PropertyView',
-    components: { ExtendedHelpDialog, JinjaEditorDialog, SoundPickerDialog, HelpButton },
+    components: { ExtendedHelpDialog, JinjaEditorDialog, SoundSelectDialog, HelpButton },
     props: {
         draw2dFrame: {
             type: Object,
