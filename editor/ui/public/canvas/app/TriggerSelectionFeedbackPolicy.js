@@ -5,7 +5,7 @@
  * 
  * @extends draw2d.policy.line.LineSelectionFeedbackPolicy
  */
-var TriggerSelectionFeedbackPolicy = draw2d.policy.line.LineSelectionFeedbackPolicy.extend({
+var TriggerSelectionFeedbackPolicy = draw2d.policy.line.OrthogonalSelectionFeedbackPolicy.extend({
   
   NAME: "TriggerSelectionFeedbackPolicy",
 
@@ -26,7 +26,6 @@ var TriggerSelectionFeedbackPolicy = draw2d.policy.line.LineSelectionFeedbackPol
    */
   onSelect: function(canvas, figure, isPrimarySelection) {
     this._super(canvas, figure, isPrimarySelection);
-    
     if (figure.setHighlight) {
         figure.setHighlight();
     }

@@ -6,13 +6,7 @@
  * @author Andreas Herz
  * @extend draw2d.Connection
  */
-var routerToUse = new draw2d.layout.connection.InteractiveManhattanBridgedConnectionRouter();
-    routerToUse = new draw2d.layout.connection.InteractiveCircuitConnectionRouter()
-    //routerToUse = new draw2d.layout.connection.CircuitConnectionRouter()
-    //routerToUse = new draw2d.layout.connection.InteractiveManhattanConnectionRouter()
-    //routerToUse = new draw2d.layout.connection.FanConnectionRouter()
-    routerToUse = new draw2d.layout.connection.MazeConnectionRouter()
-    routerToUse = new TriggerRouter();
+var routerToUse = new TriggerRouter();
 
 var TriggerConnection= draw2d.Connection.extend({
     NAME: "TriggerConnection",
@@ -51,14 +45,13 @@ var TriggerConnection= draw2d.Connection.extend({
           fontSize: 10,
           stroke: 2,
           bgColor: "#cce5bc",
-          color : this.defaultColor,
-          cssClass: "cursor-pointer"
+          color : this.defaultColor
       });
       
       // add the new decoration to the connection with a position locator.
       //
       this.add(this.label, new draw2d.layout.locator.ManhattanMidpointLocator());
-      //this.setRouter(routerToUse)
+      this.label.setSelectionAdapter( null) 
 
       //this.label.installEditor(new draw2d.ui.LabelInplaceEditor());
 
@@ -102,9 +95,6 @@ var TriggerConnection= draw2d.Connection.extend({
     },
 
     setHighlight: function(){
-        this.resetHighlight()
-        this.toFront();
-
         // Store original state if not already stored
         if (!this._selectionFeedbackState) {
             this._selectionFeedbackState = {
@@ -155,6 +145,8 @@ var TriggerConnection= draw2d.Connection.extend({
         // Apply visual feedback to the decorator
         this.arrowDecorator.setBackgroundColor(lighterColor);
         this.arrowDecorator.setDimension(this.arrowDecorator._selectionFeedbackState.width * 1.5, this.arrowDecorator._selectionFeedbackState.height * 1.5);
+        // force redraw
+        this.setTargetDecorator(this.targetDecorator)
     },
 
     resetHighlight: function(){
@@ -176,6 +168,8 @@ var TriggerConnection= draw2d.Connection.extend({
             this.arrowDecorator.setBackgroundColor(this.arrowDecorator._selectionFeedbackState.backgroundColor);
             this.arrowDecorator.setDimension(this.arrowDecorator._selectionFeedbackState.width, this.arrowDecorator._selectionFeedbackState.height);
             delete this.arrowDecorator._selectionFeedbackState;
+            // force redraw
+             this.setTargetDecorator(this.targetDecorator)
         }
     },
 
@@ -220,10 +214,28 @@ var TriggerConnection= draw2d.Connection.extend({
         delete memento.router
         delete memento.target.decorator
         delete memento.policy
+        delete memento.alpha
+        delete memento.selectable
+        delete memento.draggable
+        delete memento.angle
+        delete memento.cssClass
+        delete memento.stroke
+        delete memento.color
+        delete memento.outlineStroke
+        delete memento.outlineColor
+        delete memento.radius
 
         memento.name = this.getName();
         memento.source.name= this.getSource().getParent().getName()
         memento.target.name= this.getTarget().getParent().getName()
+
+        // Round vertices to 2 decimal places to save space
+        if (memento.vertex) {
+            memento.vertex.forEach(function(v) {
+                v.x = Math.round(v.x * 100) / 100;
+                v.y = Math.round(v.y * 100) / 100;
+            });
+        }
 
         return memento;
      },
