@@ -45,6 +45,13 @@ Raft = draw2d.shape.composite.Raft.extend({
         delete memento.alpha
         delete memento.bgColor
         delete memento.color
+        delete memento.electable
+        delete memento.draggable
+        delete memento.angle
+        delete memento.ports
+        delete memento.stroke
+        delete memento.radius
+        delete memento.dasharray
 
         return memento;
     },
@@ -58,10 +65,17 @@ Raft = draw2d.shape.composite.Raft.extend({
      */
     setPersistentAttributes : function(memento)
     {
+        delete memento.cssClass;
         delete memento.alpha
         delete memento.bgColor
         delete memento.color
+        delete memento.electable
+        delete memento.draggable
+        delete memento.angle
+        delete memento.ports
+        delete memento.stroke
         delete memento.radius
+        delete memento.dasharray
 
         this._super(memento);
         
