@@ -38,7 +38,6 @@ Application = Class.extend(
 	 */
 	onSelectCallback : function(emitter, event)
 	{
-        console.log(".....")
 		this.selectedFigure = event.figure;
 
         var data = this.selectedFigure.getPersistentAttributes()

@@ -310,9 +310,21 @@ StateShape = draw2d.shape.box.VBox.extend({
                 });
             }
         });
-
+        memento.x = memento.x |0
+        memento.y = memento.y |0
+        
         delete memento.alpha
         delete memento.stroke
+        delete memento.selectable
+        delete memento.draggable
+        delete memento.angle
+        delete memento.cssClass
+        delete memento.bgColor
+        delete memento.color
+        delete memento.radius
+        delete memento.dasharray
+        delete memento.gap
+        delete memento.align
      
          return memento;
      },
