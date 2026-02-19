@@ -22,12 +22,56 @@
       <v-divider></v-divider>
 
       <v-list dense class="nav-drawer__list">
+        <!-- Regular navigation items (not Game Map) -->
         <v-list-item
-          v-for="item in navigationItems"
+          v-for="item in navigationItems.filter(i => i.title !== 'Game Map')"
           :key="item.title"
-          :to="item.route($route.params.mapName)"
+          :to="item.route($route.params.gameName)"
           :prepend-icon="item.icon"
           :title="isCompact ? undefined : item.title"
+          router
+          class="nav-drawer__item"
+        >
+        </v-list-item>
+
+        <!-- Game Map - Static Header (always visible) -->
+        <template v-if="!isCompact && $route.params.gameName">
+          <v-list-item
+            prepend-icon="mdi-state-machine"
+            title="Game Map"
+            class="nav-drawer__item nav-drawer__header"
+            disabled
+          >
+          </v-list-item>
+
+          <!-- World - Main Game (always called "World") -->
+          <v-list-item
+            :to="`/game/${$route.params.gameName}/world`"
+            prepend-icon="mdi-earth"
+            title="World"
+            class="nav-drawer__subitem"
+            router
+          >
+          </v-list-item>
+
+          <!-- Encounters - Direct children, no subfolder -->
+          <v-list-item
+            v-for="encounter in encountersList"
+            :key="encounter"
+            :to="`/game/${$route.params.gameName}/encounter/${encounter}`"
+            prepend-icon="mdi-map-marker"
+            :title="encounter"
+            class="nav-drawer__subitem"
+            router
+          >
+          </v-list-item>
+        </template>
+
+        <!-- Compact mode: Just show Game Map as single item -->
+        <v-list-item
+          v-else-if="isCompact && $route.params.gameName"
+          :to="`/game/${$route.params.gameName}/world`"
+          prepend-icon="mdi-state-machine"
           router
           class="nav-drawer__item"
         >
@@ -52,12 +96,13 @@ export default {
   data() {
     return {
       navigationItems: [
-        { title: 'Personality',  route: (mapName) => `/gamesetup/${mapName || ''}`, icon: 'mdi-account-alert-outline'},
-        { title: 'Inventory',    route: (mapName) => `/inventory/${mapName || ''}`, icon: 'mdi-hand-coin-outline' },
-        { title: 'Game Map', route: (mapName) => `/diagram/${mapName   || ''}`, icon: 'mdi-state-machine'     },
+        { title: 'Personality',  route: (gameName) => gameName ? `/game/${gameName}/personality` : '#', icon: 'mdi-account-alert-outline'},
+        { title: 'Inventory',    route: (gameName) => gameName ? `/game/${gameName}/inventory` : '#', icon: 'mdi-hand-coin-outline' },
+        { title: 'Game Map', route: (gameName) => gameName ? `/game/${gameName}/world` : '#', icon: 'mdi-state-machine'     },
       ],
       isCompact: false,
       windowWidth: window.innerWidth,
+      openedGroups: ['game-map'],
     };
   },
   computed: {
@@ -68,6 +113,9 @@ export default {
         return 180;
       }
       return 240;
+    },
+    encountersList() {
+      return this.$store.getters['encounters/encounterNames'] || [];
     },
   },
   created() {
@@ -85,9 +133,9 @@ export default {
       this.initializeGame();
       this.initializeGames();
       this.initializeSounds();
-      // Load game if mapName is in route
-      if (this.$route.params.mapName) {
-        await this.loadGame(this.$route.params.mapName);
+      // Load game if gameName is in route
+      if (this.$route.params.gameName) {
+        await this.loadGame(this.$route.params.gameName);
       }
     }, 500);
   },
@@ -204,6 +252,63 @@ export default {
 .nav-drawer__item.v-list-item--active .v-list-item-title {
   color: var(--game-accent-secondary) !important;
   font-weight: 600 !important;
+}
+
+/* Subitem Styling (World + Encounters) */
+.nav-drawer__subitem {
+  border-radius: 0 !important;
+  margin: 2px var(--game-spacing-sm) !important;
+  padding-left: 40px !important;
+  min-height: 36px !important;
+  font-size: 0.875rem !important;
+}
+
+.nav-drawer__subitem .v-icon {
+  font-size: 18px !important;
+  opacity: 0.8 !important;
+}
+
+.nav-drawer__subitem .v-list-item-title {
+  font-size: 0.875rem !important;
+}
+
+/* Active Subitem */
+.nav-drawer__subitem.v-list-item--active {
+  background: rgba(233, 69, 96, 0.1) !important;
+  border-left: 2px solid var(--game-accent-secondary) !important;
+  border-top: 1px solid var(--game-accent-secondary) !important;
+  border-bottom: 1px solid var(--game-accent-primary) !important;
+}
+
+.nav-drawer__subitem.v-list-item--active .v-icon {
+  color: var(--game-accent-secondary) !important;
+  opacity: 1 !important;
+}
+
+.nav-drawer__subitem.v-list-item--active .v-list-item-title {
+  color: var(--game-accent-secondary) !important;
+  font-weight: 500 !important;
+}
+
+/* Header Styling (Game Map Label) */
+.nav-drawer__header {
+  opacity: 0.7 !important;
+  cursor: default !important;
+  pointer-events: none !important;
+  margin-top: var(--game-spacing-md) !important;
+  border-top: 1px solid rgba(233, 69, 96, 0.2) !important;
+  padding-top: var(--game-spacing-sm) !important;
+}
+
+.nav-drawer__header .v-icon {
+  opacity: 0.6 !important;
+}
+
+.nav-drawer__header .v-list-item-title {
+  font-weight: 600 !important;
+  font-size: 0.75rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
 }
 </style>
 

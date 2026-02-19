@@ -41,13 +41,23 @@ Application = Class.extend(
 		this.selectedFigure = event.figure;
 
         var data = this.selectedFigure.getPersistentAttributes()
-        window.parent.postMessage({ type: data.type, event: 'onSelect', data: data }, '*');
+        window.parent.postMessage({ 
+            type: data.type, 
+            event: 'onSelect', 
+            data: data,
+            source: 'canvas:game'
+        }, '*');
 	},
 
     onUnselectCallback: function(emitter, event)
 	{
 		this.selectedFigure = null;
-        window.parent.postMessage({ type: "", event: 'onUnselect', data: {} }, '*');
+        window.parent.postMessage({ 
+            type: "", 
+            event: 'onUnselect', 
+            data: {},
+            source: 'canvas:game'
+        }, '*');
 	}
 
 });

@@ -37,13 +37,41 @@ export default {
       commit('SET_LOADING', true);
       commit('SET_ERROR', null);
       try {
-        const response = await axios.get(`${API_BASE_URL}/game/${gameName}/encounters`);
-        const encounters = response.data;
-        commit('SET_ENCOUNTERS', encounters);
+        // First get the list of encounter names
+        const namesResponse = await axios.get(`${API_BASE_URL}/game/${gameName}/encounters`);
+        const encounterNames = namesResponse.data;
         
-        // Log to console as requested
-        console.log('[ENCOUNTERS] Loaded encounters for game:', gameName);
-        console.log('[ENCOUNTERS] Encounter files:', encounters);
+        // Then load ALL encounter data in parallel
+        const encounterDataPromises = encounterNames.map(async (name) => {
+          try {
+            const response = await axios.get(
+              `${API_BASE_URL}/game/${gameName}/encounters/${name}`,
+              { responseType: 'text' }  // Get as text first
+            );
+            // Parse the JSON string to object
+            const data = JSON.parse(response.data);
+            return { name, data };
+          } catch (error) {
+            console.error(`[ENCOUNTERS] Error loading encounter ${name}:`, error);
+            return { name, data: null, error: true };
+          }
+        });
+
+        const encountersWithData = await Promise.all(encounterDataPromises);
+        
+        // Convert to object map: { '001_go': {...data...}, '002_tavern': {...data...} }
+        const encountersMap = {};
+        encountersWithData.forEach(({ name, data }) => {
+          if (data) {
+            encountersMap[name] = data;
+          }
+        });
+        
+        commit('SET_ENCOUNTERS', encountersMap);
+        
+        // Log to console
+        console.log('[ENCOUNTERS] Loaded ALL encounters for game:', gameName);
+        console.log('[ENCOUNTERS] Encounter data:', encountersMap);
       } catch (error) {
         commit('SET_ERROR', error.response?.data?.detail || 'Error fetching encounters');
         console.error('[ENCOUNTERS] Error loading encounters:', error);
@@ -168,6 +196,8 @@ export default {
   },
   getters: {
     encounters: (state) => state.encounters,
+    encounterNames: (state) => Object.keys(state.encounters),
+    getEncounterData: (state) => (encounterName) => state.encounters[encounterName],
     currentEncounter: (state) => state.currentEncounter,
     isLoading: (state) => state.loading,
     error: (state) => state.error,

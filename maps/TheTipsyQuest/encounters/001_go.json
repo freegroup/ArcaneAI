@@ -1,7 +1,39 @@
 {
     "config": {
         "name": "Enter the Room",
-        "description": "Du bist eine Haudegen im , präzise\n",
+        "description": "Du bist eine Haudegen im , präzise\n"
     },
-    "diagram": []
+    "diagram": [
+
+         {
+            "type": "StateShape",
+            "id": "63c0f27a-716e-804c-6873-cd99b945b63f",
+            "x": 2110,
+            "y": 1061,
+            "width": 138.0703125,
+            "height": 74,
+            "userData": {
+                "system_prompt": "Ein Schauer durchläuft dich – klamme Kälte kriecht wie eine Präsenz bis in die Knochen, als bewache sie etwas Verbotenes. Aus einer dunklen Ecke dringt das metallische Klagen einer alten Maschine, die vibrierend und stöhnend ein vergessenes Lied von Traurigkeit und Pflicht singt.\n\nVon der Decke hängen unheimliche Silhouetten: tote, unidentifizierbare Wesen an Haken, deren glasige Augen voller Anklage und Flehen blicken. Diese Galerie der Verdammten ist unmöglich zu ignorieren. Am Boden stapeln sich Kisten, scheppernde Kanister mit dubiosen Flüssigkeiten und riesige, unheilvoll blubbernde Tongefäße, in denen ein alter Geist zu atmen scheint.\n\n{% if discovered_kalter_raum %}\nIn einer Ecke funkelt etwas Goldenes, ein rundes Etwas im trüben Licht. Es zieht dich magisch an, doch die düstere Ahnung bleibt: In diesem Raum gibt es keine einfachen Schätze. Was glänzt, verbirgt oft eine Last, die schwerer wiegt, als man tragen kann.\n{% endif %}",
+                "ambient_sound": "ambient_wind_horror.wav",
+                "ambient_sound_volume": 100
+            },
+            "name": "KalterRaum",
+            "stateType": "NORMAL",
+            "trigger": [
+                {
+                    "id": "0c499dd3-1744-043a-350f-67c50bd430c9",
+                    "name": "untersuche_den_raum",
+                    "description": "Du kannst den Raum untersuchen un ihn mal Beschreiben.",
+                    "sound_effect": "effect_tuer_aufschliessen.wav",
+                    "sound_effect_duration": 2,
+                    "sound_effect_volume": 100,
+                    "system_prompt": "Die ist etwas in der Ecke aufgefallen was man sich ja mal genauer ansehen könnte. Wenn man klug genug ist.",
+                    "conditions": [],
+                    "actions": [
+                        "discovered_kalter_raum = true"
+                    ]
+                }
+            ]
+        }
+    ]
 }

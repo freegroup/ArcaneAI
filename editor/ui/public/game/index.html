@@ -6,26 +6,26 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 
-  <script src="./lib/jquery.js"></script>
-  <script src="./lib/jquery-ui.js"></script>
-  <script src="./lib/jquery.browser.js"></script>
-  <script src="./lib/bootstrap.min.js"></script>
-  <script src="./lib/mousetrap.js"></script>
+  <script src="../lib/jquery.js"></script>
+  <script src="../lib/jquery-ui.js"></script>
+  <script src="../lib/jquery.browser.js"></script>
+  <script src="../lib/bootstrap.min.js"></script>
+  <script src="../lib/mousetrap.js"></script>
 
-  <script src="./lib/draw2d.js"></script>
+  <script src="../lib/draw2d.js"></script>
 
-  <script src="./MessageTypes.js"></script>
-  <script src="./app/Application.js"></script>
-  <script src="./app/EditPolicy.js"></script>
-  <script src="./app/View.js"></script>
-  <script src="./app/Toolbar.js"></script>
-  <script src="./app/TriggerLabel.js"></script>
-  <script src="./app/TriggerSelectionFeedbackPolicy.js"></script>
-  <script src="./app/TriggerRouter.js"></script>
-  <script src="./app/TriggerConnection.js"></script>
-  <script src="./app/StateShape.js"></script>
-  <script src="./app/Raft.js"></script>
-  <script src="./app/LabelInplaceEditor.js"></script>
+  <script src="../shared/MessageTypes.js"></script>
+  <script src="./src/Application.js"></script>
+  <script src="../shared/EditPolicy.js"></script>
+  <script src="../shared/View.js"></script>
+  <script src="./src/Toolbar.js"></script>
+  <script src="../shared/TriggerLabel.js"></script>
+  <script src="../shared/TriggerSelectionFeedbackPolicy.js"></script>
+  <script src="../shared/TriggerRouter.js"></script>
+  <script src="../shared/TriggerConnection.js"></script>
+  <script src="../shared/StateShape.js"></script>
+  <script src="../shared/Raft.js"></script>
+  <script src="../shared/LabelInplaceEditor.js"></script>
 
   <link type="text/css" rel="stylesheet" href="./css/application.css" />
   <link type="text/css" rel="stylesheet" href="./css/contextmenu.css" />
@@ -61,7 +61,10 @@ document.addEventListener("DOMContentLoaded", () => {
     var app  = new Application();
 
       // Notify parent that canvas is ready (using MessageTypes)
-      window.parent.postMessage({ type: MessageTypes.CANVAS_READY }, window.location.origin);
+      window.parent.postMessage({ 
+        type: MessageTypes.CANVAS_READY,
+        source: 'canvas:game'
+      }, window.location.origin);
 
       const receiveMessage = (event) => {
 
@@ -83,13 +86,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       window.addEventListener("message", receiveMessage, false);
 
-      // Wir für Mousetrap benötigt. Sonst kommen keine Evnets an.
+      // Wird für Mousetrap benötigt. Sonst kommen keine Evnets an.
       //
       const canvas = document.getElementById('canvas');
       const pseudoCheckbox = document.getElementById('pseudoCheckbox');
       pseudoCheckbox.focus();
       canvas.addEventListener('click', (event) => {
-          //event.preventDefault();
           pseudoCheckbox.focus();
       });
 

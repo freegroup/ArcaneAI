@@ -3,8 +3,9 @@ import game from './game';
 import games from './games';
 import sounds from "./sounds";
 import encounters from "./encounters";
+import { createDiagramManager } from '@/utils/DiagramManager';
 
-export default createStore({
+const store = createStore({
   modules: {
     game,
     games,
@@ -12,3 +13,8 @@ export default createStore({
     encounters,
   },
 });
+
+// Initialize DiagramManager singleton
+export const diagramManager = createDiagramManager(store);
+
+export default store;

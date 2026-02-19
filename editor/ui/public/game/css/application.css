@@ -1,0 +1,126 @@
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+body {
+	overflow: hidden;
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+	background-color: #1e1e2e;
+	color: #e0e0e0;
+	overflow: hidden;
+	-webkit-text-size-adjust: 100%;
+}
+
+#container{
+	overflow: scroll;
+}
+
+#canvas {
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+#canvas_toolbar {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	background-color: rgba(0, 0, 0, 0.6); /* Black with transparency */
+	backdrop-filter: blur(10px); /* Frosted glass effect */
+	-webkit-backdrop-filter: blur(10px); /* Safari compatibility */
+	border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border for definition */
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+	padding: 10px;
+	z-index: 1000; /* Ensure it stays above other content */
+  }
+
+  .toolbar_delimiter{
+	margin-right:10px;
+  }
+
+  .glassy-button {
+	display: inline-block;
+	padding: 3px 10px;
+	margin-right:3px;
+	font-size: 14px;
+	font-weight: 400;
+	color: rgba(255, 255, 255, 0.85); /* White text with slight transparency */
+	background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent black */
+	backdrop-filter: blur(10px); /* Frosted glass effect */
+	-webkit-backdrop-filter: blur(10px); /* Safari compatibility */
+	border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border */
+	border-radius: 8px; /* Rounded corners for Material Design look */
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+	cursor: pointer;
+	text-align: center;
+	transition: all 0.3s ease; /* Smooth hover effect */
+  }
+  
+  .glassy-button:hover {
+	background-color: rgba(255, 255, 255, 0.1); /* Slightly lighter background on hover */
+	box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3); /* Increase shadow for hover effect */
+  }
+
+  
+#canvas_zoom{
+	position: fixed;
+    bottom: 20px;
+    right: 20px;
+    border-radius: 5px;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    background-color: #ffffff9e;
+    padding: 3px;
+    border-color: #eaeaea;
+    border-width: 1px;
+    border-style: solid;
+}
+
+#canvas_zoom > button {
+	background-color:transparent;
+	font-weight:800;
+	font-size: 12px;
+	border-radius:5px;
+	padding:5px;
+	padding-left:10px;
+	padding-right:10px;
+	border-width:1px;
+	border-style: solid;
+	outline:none;
+	transition: all 0.5s;
+	margin: 2px;
+}
+
+#canvas_zoom > button:hover {
+	border-width:1px;
+	border-style: solid;
+}
+	
+  
+#pseudoCheckbox {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	opacity: 0;
+	pointer-events: none; /* Mausinteraktionen ignorieren */
+  }
+
+.cursor-pointer {
+	cursor: pointer;
+}
+
+.cursor-move {
+	cursor: move;
+}

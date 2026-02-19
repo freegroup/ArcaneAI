@@ -58,7 +58,8 @@ export default {
     async selectMap(map) {
       // Select and load the game via games store, which loads it into game store
       await this.selectGame(map);
-      this.$router.replace({ name: this.$route.name, params: { mapName: map } });
+      // Navigate to the game's world view
+      this.$router.push({ name: 'world', params: { gameName: map } });
       this.$emit('update:dialog', false); // Close the dialog
     },
 

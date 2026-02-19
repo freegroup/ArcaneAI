@@ -103,20 +103,32 @@
   };
   
   // Helper functions for creating messages
-  MessageTypes.createMessage = function(type, data) {
-    return { type: type, data: data };
+  MessageTypes.createMessage = function(type, data, source) {
+    const message = { type: type, data: data };
+    if (source) {
+      message.source = source;
+    }
+    return message;
   };
   
-  MessageTypes.createSelectMessage = function(shapeType, data) {
-    return { 
+  MessageTypes.createSelectMessage = function(shapeType, data, source) {
+    const message = { 
       event: MessageTypes.SELECT, 
       type: shapeType, 
       data: data 
     };
+    if (source) {
+      message.source = source;
+    }
+    return message;
   };
   
-  MessageTypes.createUnselectMessage = function() {
-    return { event: MessageTypes.UNSELECT };
+  MessageTypes.createUnselectMessage = function(source) {
+    const message = { event: MessageTypes.UNSELECT };
+    if (source) {
+      message.source = source;
+    }
+    return message;
   };
   
   return MessageTypes;

@@ -1,6 +1,6 @@
 <template>
   <splitpanes 
-      id="state-editor"
+      id="canvas-game"
       ref="splitPanes" 
       class="default-theme full-height"  
       @resized="handleResize">
@@ -9,7 +9,7 @@
       <div  class="iframe-container">
         <iframe
           ref="draw2dFrame"
-          src="/canvas/index.html"
+          src="/game/index.html"
           frameborder="0"
           style="width: 100%; height: 100%; border: none"
         ></iframe>
@@ -32,7 +32,7 @@ import 'splitpanes/dist/splitpanes.css';
 import PropertyViewState from './PropertyViewState.vue';
 import PropertyViewTriggerLabel from './PropertyViewTriggerLabel.vue';
 import PropertyViewTriggerConnection from './PropertyViewTriggerConnection.vue';
-import MessageTypes from '../../public/canvas/MessageTypes.js';
+import MessageTypes from '../../public/shared/MessageTypes.js';
 
 export default {
   components: {
@@ -114,7 +114,11 @@ export default {
       }
       
       const iframe = this.draw2dFrame.contentWindow;
-      iframe.postMessage({ type: MessageTypes.SET_DOCUMENT, data: JSON.parse(JSON.stringify(document)) }, '*');
+      iframe.postMessage({ 
+        type: MessageTypes.SET_DOCUMENT, 
+        data: JSON.parse(JSON.stringify(document)),
+        source: 'vue:world'
+      }, '*');
     },
     handleResize(event) {
       this.paneSize = event[0].size;
@@ -156,7 +160,7 @@ export default {
         this.updateMapDiagram(message.data);
       }
       else if(message.type === MessageTypes.TOGGLE_FULLSCREEN){
-        var element = document.getElementById('state-editor');
+        var element = document.getElementById('canvas-game');
 
         var requestFullScreen =
           element.requestFullscreen ||

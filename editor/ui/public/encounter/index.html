@@ -1,0 +1,140 @@
+﻿<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+<title></title>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+  <script src="../lib/jquery.js"></script>
+  <script src="../lib/jquery-ui.js"></script>
+  <script src="../lib/jquery.browser.js"></script>
+  <script src="../lib/bootstrap.min.js"></script>
+  <script src="../lib/mousetrap.js"></script>
+
+  <script src="../lib/draw2d.js"></script>
+
+  <script src="../shared/MessageTypes.js"></script>
+  <script src="./src/Application.js"></script>
+  <script src="../shared/EditPolicy.js"></script>
+  <script src="../shared/View.js"></script>
+  <script src="./src/Toolbar.js"></script>
+  <script src="../shared/TriggerLabel.js"></script>
+  <script src="../shared/TriggerSelectionFeedbackPolicy.js"></script>
+  <script src="../shared/TriggerRouter.js"></script>
+  <script src="../shared/TriggerConnection.js"></script>
+  <script src="../shared/StateShape.js"></script>
+  <script src="../shared/Raft.js"></script>
+  <script src="../shared/LabelInplaceEditor.js"></script>
+
+  <link type="text/css" rel="stylesheet" href="./css/application.css" />
+  <link type="text/css" rel="stylesheet" href="./css/contextmenu.css" />
+  <link type="text/css" rel="stylesheet" href="./css/bootstrap.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+	<style>
+    .draw2d_InputPort{
+      fill:#F7F7F7;
+      stroke:#d7d7d7;
+    }
+    
+    .draw2d_OutputPort{
+       fill:#F7F7F7;
+       stroke:#d7d7d7;
+    }
+	</style>
+<script type="text/javascript">
+
+/**
+ * @method
+ * Factory method to provide a default connection for all drag&drop connections. You
+ * can override this method and customize this for your personal purpose.
+ *
+ * @param {draw2d.Port} sourcePort port of the source of the connection
+ * @param {draw2d.Port} targetPort port of the target of the connection
+ * @template
+ * @returns {draw2d.Connection}
+ */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    var app  = new Application();
+
+      // Notify parent that canvas is ready (using MessageTypes)
+      window.parent.postMessage({ 
+        type: MessageTypes.CANVAS_READY,
+        source: 'canvas:encounter'
+      }, window.location.origin);
+
+      const receiveMessage = (event) => {
+
+        if (event.origin !== window.location.origin) return;
+
+        const message = event.data;
+
+        if (message.type === MessageTypes.SET_DOCUMENT) {
+            const mapJson = message.data;
+            var reader = new draw2d.io.json.Reader();
+            app.view.clear();
+            reader.unmarshal(app.view, mapJson);
+            app.view.centerDocument()
+        }
+        else if (message.type === MessageTypes.SET_SHAPE_DATA) {
+          app.view.setShapeData(message.data)
+        }
+      }
+
+      window.addEventListener("message", receiveMessage, false);
+
+      // Wird für Mousetrap benötigt. Sonst kommen keine Evnets an.
+      //
+      const canvas = document.getElementById('canvas');
+      const pseudoCheckbox = document.getElementById('pseudoCheckbox');
+      pseudoCheckbox.focus();
+      canvas.addEventListener('click', (event) => {
+          pseudoCheckbox.focus();
+      });
+
+});
+
+</script>
+</head>
+
+<body id="container">
+  <div id="canvas" oncontextmenu="return false;"></div>
+
+
+  <div id="canvas_toolbar">
+    <input id="pseudoCheckbox" type="checkbox" style="position: absolute; opacity: 0; pointer-events: none;">
+    
+  </div>
+
+  <div id="canvas_zoom">
+    <button type="button" id="canvas_zoom_in"     >&#8210;</button>
+    <button type="button" id="canvas_zoom_normal" >100%</button>
+    <button type="button" id="canvas_zoom_out"    >&#xFF0B</button>
+  </div>
+
+  <!-- Bootstrap Modal -->
+<div id="inputModal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Enter Label</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="modalInput" class="form-control" placeholder="Enter label text" />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" id="modalSaveButton" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

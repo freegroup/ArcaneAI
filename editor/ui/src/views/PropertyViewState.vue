@@ -90,7 +90,7 @@
 <script>
   import SoundManager from '@/utils/SoundManager'
   import { mapGetters } from 'vuex';
-  import MessageTypes from '../../public/canvas/MessageTypes.js';
+  import MessageTypes from '../../public/shared/MessageTypes.js';
   import ExtendedHelpDialog from '@/components/ExtendedHelpDialog.vue';
   import JinjaEditorDialog from '@/components/JinjaEditorDialog.vue';
   import SoundSelectDialog from '@/components/SoundSelectDialog.vue';

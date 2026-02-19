@@ -18,11 +18,33 @@ View = draw2d.Canvas.extend({
     
         this.getCommandStack().addEventListener((e)=>{
             if(e.isPostChangeEvent()){
+                // Get command details for granular change notification
+                const command = e.getCommand();
+                let changeInfo = null;
+                
+                if (command && command.getAffectedFigures) {
+                    const affectedFigures = command.getAffectedFigures();
+                    const commandType = command.NAME;
+                    
+                    // Extract figure info from affected figures (getAffectedFigures returns JS Array [])
+                    const figureInfos = affectedFigures.map(figure => figure.getPersistentAttributes());
+                    
+                    changeInfo = {
+                        commandType: commandType,
+                        affectedFigures: figureInfos
+                    };
+                }
+                
                 var writer = new draw2d.io.json.Writer();
                 writer.marshal(this, (json) => {
                     if( json.length ===0)
                         return
-                    window.parent.postMessage({ type: 'updateDocumentData', data: json }, '*');
+                window.parent.postMessage({ 
+                    type: MessageTypes.DOCUMENT_UPDATED, 
+                    data: json,
+                    changeInfo: changeInfo,
+                    source: 'canvas:shared'
+                }, '*');
                 });                
             }
         });
@@ -207,13 +229,18 @@ View = draw2d.Canvas.extend({
                 })
             }
         }
+        /*
         var writer = new draw2d.io.json.Writer();
         writer.marshal(this, (json) => {
             if( json.length ===0)
                 return
-            window.parent.postMessage({ type: 'updateDocumentData', data: json }, '*');
+        window.parent.postMessage({ 
+            type: MessageTypes.DOCUMENT_UPDATED, 
+            data: json,
+            source: 'canvas:shared'
+        }, '*');
         });                
-
+        */
         return this
     },
 

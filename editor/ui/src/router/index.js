@@ -1,28 +1,48 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
-import StateCanvas from '../views/StateCanvas.vue';
+import CanvasGame from '../views/CanvasGame.vue';
+import CanvasEncounter from '../views/CanvasEncounter.vue';
 import GameSetup from '../views/PromptEdit_normal.vue';
 import Inventory from '../views/Inventory.vue';
 
 const routes = [
   {
     path: '/',
-    redirect: '/gamesetup'
+    redirect: '/game'
   },
   {
-    path: '/gamesetup/:mapName?',
-    name: 'gamesetup',
+    path: '/game',
+    name: 'game-selection',
     component: GameSetup,
     props: true
   },
   {
-    path: '/diagram/:mapName?',
-    name: 'diagram',
-    component: StateCanvas,
+    path: '/game/:gameName',
+    redirect: to => {
+      // Redirect to world view
+      return `/game/${to.params.gameName}/world`;
+    }
+  },
+  {
+    path: '/game/:gameName/personality',
+    name: 'personality',
+    component: GameSetup,
     props: true
   },
   {
-    path: '/inventory/:mapName?',
+    path: '/game/:gameName/world',
+    name: 'world',
+    component: CanvasGame,
+    props: true
+  },
+  {
+    path: '/game/:gameName/encounter/:encounterName',
+    name: 'encounter',
+    component: CanvasEncounter,
+    props: true
+  },
+  {
+    path: '/game/:gameName/inventory',
     name: 'inventory',
     component: Inventory,
     props: true
