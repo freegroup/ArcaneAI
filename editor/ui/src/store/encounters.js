@@ -23,6 +23,11 @@ export default {
     SET_ERROR(state, error) {
       state.error = error;
     },
+    UPDATE_ENCOUNTER_DIAGRAM(state, { encounterName, diagram }) {
+      if (state.encounters[encounterName]) {
+        state.encounters[encounterName].diagram = diagram;
+      }
+    },
   },
   actions: {
     async initialize() {
@@ -169,6 +174,10 @@ export default {
       } finally {
         commit('SET_LOADING', false);
       }
+    },
+
+    updateEncounterDiagram({ commit }, { encounterName, diagram }) {
+      commit('UPDATE_ENCOUNTER_DIAGRAM', { encounterName, diagram });
     },
 
     async deleteEncounter({ commit, dispatch }, { gameName, encounterName }) {

@@ -2,7 +2,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import CanvasGame from '../views/CanvasGame.vue';
 import CanvasEncounter from '../views/CanvasEncounter.vue';
-import GameSetup from '../views/PromptEdit_normal.vue';
+import Personality from '../views/Personality.vue';
 import Inventory from '../views/Inventory.vue';
 
 const routes = [
@@ -13,7 +13,7 @@ const routes = [
   {
     path: '/game',
     name: 'game-selection',
-    component: GameSetup,
+    component: Personality,
     props: true
   },
   {
@@ -26,7 +26,7 @@ const routes = [
   {
     path: '/game/:gameName/personality',
     name: 'personality',
-    component: GameSetup,
+    component: Personality,
     props: true
   },
   {

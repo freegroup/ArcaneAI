@@ -14,7 +14,7 @@
 
   <script src="../lib/draw2d.js"></script>
 
-  <script src="../shared/MessageTypes.js"></script>
+  <script src="../shared/SharedConstants.js"></script>
   <script src="./src/Application.js"></script>
   <script src="../shared/EditPolicy.js"></script>
   <script src="../shared/View.js"></script>
@@ -60,31 +60,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
     var app  = new Application();
 
-      // Notify parent that canvas is ready (using MessageTypes)
-      window.parent.postMessage({ 
-        type: MessageTypes.CANVAS_READY,
-        source: 'canvas:game'
-      }, window.location.origin);
-
+      // Register message handler FIRST, before notifying parent
       const receiveMessage = (event) => {
-
         if (event.origin !== window.location.origin) return;
 
         const message = event.data;
 
-        if (message.type === MessageTypes.SET_DOCUMENT) {
-            const mapJson = message.data;
-            var reader = new draw2d.io.json.Reader();
-            app.view.clear();
-            reader.unmarshal(app.view, mapJson);
-            app.view.centerDocument()
-        }
-        else if (message.type === MessageTypes.SET_SHAPE_DATA) {
-          app.view.setShapeData(message.data)
+        switch (message.type) {
+          case MessageTypes.SET_DOCUMENT:
+            app.view.setDocumentData(message.data)
+            break
+          case MessageTypes.SET_SHAPE_DATA:
+            app.view.setShapeData(message.data)
+            break
+          // Ignore messages that canvas sends to parent (they can echo back)
+          case MessageTypes.CANVAS_READY:
+          case MessageTypes.DOCUMENT_UPDATED:
+          case MessageTypes.ELEMENT_UPDATED:
+          case MessageTypes.SELECT:
+          case MessageTypes.UNSELECT:
+          case MessageTypes.CCM:
+            // These are outgoing messages, ignore when received
+            break
+          default:
+            console.warn('Unknown message type:', message.type)
         }
       }
-
       window.addEventListener("message", receiveMessage, false);
+
+      // NOW notify parent that canvas is ready (after listener is set up)
+      window.parent.postMessage({ 
+        type: MessageTypes.CANVAS_READY,
+        source: 'canvas:game'
+      }, window.location.origin);
 
       // Wird für Mousetrap benötigt. Sonst kommen keine Evnets an.
       //

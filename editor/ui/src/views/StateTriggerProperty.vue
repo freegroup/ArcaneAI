@@ -161,8 +161,9 @@
   
 <script>
   import SoundManager from '@/utils/SoundManager'
+  import CCM from '@/utils/ContentChangeManager'
   import { mapGetters } from 'vuex';
-  import MessageTypes from '../../public/shared/MessageTypes.js';
+  import { MessageTypes, ShapeTypes } from '../../public/shared/SharedConstants.js';
   import ExtendedHelpDialog from '@/components/ExtendedHelpDialog.vue';
   import JinjaEditorDialog from '@/components/JinjaEditorDialog.vue';
   import SoundSelectDialog from '@/components/SoundSelectDialog.vue';
@@ -192,6 +193,8 @@
             description: '',
           },
         },
+        initialData: null, // Snapshot of initial data to detect real changes
+        isInitializing: false, // Flag to prevent watchers from firing during initial data load
         conditionsText: '',
         actionsText: '',
         isPlaying: false,
@@ -282,18 +285,40 @@
       },
     },
     methods: {
-      onDataChange() { 
+      /**
+       * Called when data is loaded/synced (initial load or programmatic update).
+       * Sends data to the canvas iframe.
+       */
+      onDataLoad() { 
         this.jsonData.text = this.jsonData?.text?.replace(/[^a-zA-Z0-9_-]/g, '');
+        var data = JSON.parse(JSON.stringify( this.jsonData ));
         if (this.draw2dFrame ) {
-            var data = JSON.parse(JSON.stringify( this.jsonData ));
             this.draw2dFrame.postMessage({ type: MessageTypes.SET_SHAPE_DATA, data: data },'*');
         }
       },
+
+      /**
+       * Called only when data has actually changed by user interaction.
+       * Sends data to canvas AND notifies ContentChangeManager.
+       */
+      onDataChange() {
+        this.onDataLoad(); // Always sync with canvas
+        
+        if (!this.initialData) return;
+        var data = JSON.parse(JSON.stringify( this.jsonData ));
+        CCM.handleStateTriggerChange("vue", data);
+      },
+
       onVolumeChange() {
         if(this.jsonData?.userData){
           const volume = this.jsonData.userData.sound_effect_volume || 100;
           SoundManager.setVolume(volume);
-          this.onDataChange();
+          this.onDataLoad();
+          // Also trigger real change notification
+          if (this.initialData) {
+            var data = JSON.parse(JSON.stringify( this.jsonData ));
+            CCM.handleStateTriggerChange("vue", data);
+          }
         }
       },
       updateConditions() {
@@ -358,16 +383,27 @@
         immediate: true,
       },
       "jsonData.userData.sound_effect"() {
-          this.onDataChange();
+          this.onDataLoad(); // Always sync with canvas
+          if (!this.isInitializing) {
+            this.onDataChange();
+          }
       },
       "jsonData.userData.sound_effect_volume"() {
-        this.onVolumeChange();
+        if (!this.isInitializing) {
+          this.onVolumeChange();
+        }
       },
       "jsonData.userData.description"() {
-          this.onDataChange();
+          this.onDataLoad(); // Always sync with canvas
+          if (!this.isInitializing) {
+            this.onDataChange();
+          }
       },
       "jsonData.userData.sound_effect_duration"() {
-          this.onDataChange();
+          this.onDataLoad(); // Always sync with canvas
+          if (!this.isInitializing) {
+            this.onDataChange();
+          }
       },
     },
     mounted() {
@@ -380,19 +416,27 @@
         this.messageHandler = (event) => {
             if (event.origin !== window.location.origin) return;
             const message = event.data;
-            if (message.event === MessageTypes.SELECT && message.type === MessageTypes.SHAPE_TRIGGER_LABEL) {
+            if (message.event === MessageTypes.SELECT && message.type === ShapeTypes.TRIGGER_LABEL) {
                 SoundManager.stopCurrentSound()
-
+                // Set flag to prevent watchers from firing during initial data load
+                this.isInitializing = true;
                 this.jsonData = message.data
                 this.jsonData.userData.sound_effect_volume ??= 100;
                 // 0 is allowed as well
                 if (this.jsonData.userData.sound_effect_duration === null) {
                     this.jsonData.userData.sound_effect_duration = 2;
                 }
-
+                // Store snapshot of initial data for comparison
+                this.initialData = JSON.parse(JSON.stringify(this.jsonData));
+                // Use nextTick to ensure all watchers have fired before clearing the flag
+                this.$nextTick(() => {
+                  this.isInitializing = false;
+                });
             }
             else if (message.event === MessageTypes.UNSELECT) {
                 SoundManager.stopCurrentSound()
+                // Reset initial data snapshot
+                this.initialData = null;
                 this.jsonData = {}
             }
         };

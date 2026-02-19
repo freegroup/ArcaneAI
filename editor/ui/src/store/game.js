@@ -14,7 +14,6 @@ export default {
     gameName: "unknown",
     loading: false,
     error: null,
-    _updateSource: null, // Track update source: 'canvas' | 'vue' | null
   },
   mutations: {
     SET_GAME_CONFIG(state, data) {
@@ -40,9 +39,6 @@ export default {
     },
     SET_GAME_NAME(state, newName) {
       state.gameName = newName;
-    },
-    SET_UPDATE_SOURCE(state, source) {
-      state._updateSource = source;
     },
   },
   actions: {
@@ -99,14 +95,7 @@ export default {
     },
     
     async updateGameDiagram({ commit }, data) {
-      // Mark that this update came from canvas
-      commit('SET_UPDATE_SOURCE', 'canvas');
       commit('SET_GAME_DIAGRAM', data);
-      
-      // Auto-reset source after a short delay to allow watch to process
-      setTimeout(() => {
-        commit('SET_UPDATE_SOURCE', null);
-      }, 100);
     },
 
     async saveGame({ commit, state }) {
@@ -143,6 +132,5 @@ export default {
     gameName: (state) => state.gameName,
     isLoading: (state) => state.loading,
     error: (state) => state.error,
-    updateSource: (state) => state._updateSource,
   },
 };

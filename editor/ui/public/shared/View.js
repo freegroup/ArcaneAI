@@ -16,35 +16,49 @@ View = draw2d.Canvas.extend({
             }
         }));
     
+        // Mapping: ShapeType → CCM method name
+        const shapeTypeToCCMMethod = {
+            [ShapeTypes.STATE]: 'handleStateChange',
+            [ShapeTypes.TRIGGER_LABEL]: 'handleStateTriggerChange',
+            [ShapeTypes.TRIGGER_CONNECTION]: 'handleConnectionChange',
+        };
+
         this.getCommandStack().addEventListener((e)=>{
             if(e.isPostChangeEvent()){
                 // Get command details for granular change notification
                 const command = e.getCommand();
-                let changeInfo = null;
-                
-                if (command && command.getAffectedFigures) {
+                console.log(command)
+                if (command?.getAffectedFigures) {
                     const affectedFigures = command.getAffectedFigures();
-                    const commandType = command.NAME;
                     
-                    // Extract figure info from affected figures (getAffectedFigures returns JS Array [])
-                    const figureInfos = affectedFigures.map(figure => figure.getPersistentAttributes());
-                    
-                    changeInfo = {
-                        commandType: commandType,
-                        affectedFigures: figureInfos
-                    };
+                    // Send CCM message for each affected figure
+                    affectedFigures.forEach(figure => {
+                        const figureName = figure.NAME;
+                        const ccmMethod = shapeTypeToCCMMethod[figureName];
+                        
+                        if (ccmMethod) {
+                            window.parent.postMessage({
+                                type: MessageTypes.CCM,
+                                data: {
+                                    method: ccmMethod,
+                                    payload: figure.getPersistentAttributes()
+                                }
+                            }, '*');
+                        }
+                    });
                 }
                 
                 var writer = new draw2d.io.json.Writer();
                 writer.marshal(this, (json) => {
                     if( json.length ===0)
                         return
+                      
                 window.parent.postMessage({ 
                     type: MessageTypes.DOCUMENT_UPDATED, 
                     data: json,
-                    changeInfo: changeInfo,
                     source: 'canvas:shared'
                 }, '*');
+                
                 });                
             }
         });
@@ -214,6 +228,15 @@ View = draw2d.Canvas.extend({
     },
 
 
+    setDocumentData: function(jsonData)
+    {
+        var reader = new draw2d.io.json.Reader();
+        this.clear();
+        reader.unmarshal(this, jsonData);
+        this.centerDocument();
+        return this;
+    },
+
     setShapeData: function(data)
     {
         var shape = this.getFigure(data.id)
@@ -255,8 +278,7 @@ View = draw2d.Canvas.extend({
 
     toggleFullScreen: function() 
     {
-        //window.parent.postMessage({ type: 'toggleFullScreen' }, '*');
-        
+
         var doc = window.document;
         var docEl = doc.documentElement;
       

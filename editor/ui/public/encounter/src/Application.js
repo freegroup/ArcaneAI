@@ -40,10 +40,10 @@ Application = Class.extend(
 	{
 		this.selectedFigure = event.figure;
 
-        var data = this.selectedFigure.getPersistentAttributes()
-        window.parent.postMessage({ 
-            type: data.type, 
-            event: 'onSelect', 
+        var data = this.selectedFigure.getPersistentAttributes();
+        window.parent.postMessage({
+            event: MessageTypes.SELECT,
+            type: data.type,  // ShapeType is already in data.type (e.g., 'StateShape', 'TriggerLabel')
             data: data,
             source: 'canvas:encounter'
         }, '*');
@@ -52,10 +52,8 @@ Application = Class.extend(
     onUnselectCallback: function(emitter, event)
 	{
 		this.selectedFigure = null;
-        window.parent.postMessage({ 
-            type: "", 
-            event: 'onUnselect', 
-            data: {},
+        window.parent.postMessage({
+            event: MessageTypes.UNSELECT,
             source: 'canvas:encounter'
         }, '*');
 	}
