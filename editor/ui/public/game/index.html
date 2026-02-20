@@ -60,37 +60,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
     var app  = new Application();
 
-      // Register message handler FIRST, before notifying parent
+      /**
+       * Unified message architecture:
+       * - Canvas listens on window.parent for V2C messages
+       * - Vue posts to window.postMessage() → parent window
+       * - Canvas ignores C2V messages (its own outgoing messages)
+       */
       const receiveMessage = (event) => {
         if (event.origin !== window.location.origin) return;
 
         const message = event.data;
+        
+        // Only process V2C (Vue-to-Canvas) messages
+        if (!message.type?.startsWith('v2c:')) return;
 
         switch (message.type) {
-          case MessageTypes.SET_DOCUMENT:
+          case MessageTypes.V2C_SET_DOCUMENT:
             app.view.setDocumentData(message.data)
             break
-          case MessageTypes.SET_SHAPE_DATA:
+          case MessageTypes.V2C_SET_SHAPE_DATA:
             app.view.setShapeData(message.data)
             break
-          // Ignore messages that canvas sends to parent (they can echo back)
-          case MessageTypes.CANVAS_READY:
-          case MessageTypes.DOCUMENT_UPDATED:
-          case MessageTypes.ELEMENT_UPDATED:
-          case MessageTypes.SELECT:
-          case MessageTypes.UNSELECT:
-          case MessageTypes.CCM:
-            // These are outgoing messages, ignore when received
-            break
           default:
-            console.warn('Unknown message type:', message.type)
+            console.warn('Unknown V2C message type:', message.type)
         }
       }
+      // Listen on own window for messages
+      // Note: Parent forwards V2C messages to iframe via postMessage
       window.addEventListener("message", receiveMessage, false);
 
       // NOW notify parent that canvas is ready (after listener is set up)
       window.parent.postMessage({ 
-        type: MessageTypes.CANVAS_READY,
+        type: MessageTypes.C2V_CANVAS_READY,
         source: 'canvas:game'
       }, window.location.origin);
 

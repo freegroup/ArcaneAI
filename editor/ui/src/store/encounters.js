@@ -6,7 +6,7 @@ export default {
   namespaced: true,
   state: {
     encounters: [],
-    currentEncounter: null,
+    currentEncounterName: null,  // Name des aktuell bearbeiteten Encounters
     loading: false,
     error: null,
   },
@@ -14,8 +14,8 @@ export default {
     SET_ENCOUNTERS(state, encounters) {
       state.encounters = encounters;
     },
-    SET_CURRENT_ENCOUNTER(state, encounter) {
-      state.currentEncounter = encounter;
+    SET_CURRENT_ENCOUNTER_NAME(state, encounterName) {
+      state.currentEncounterName = encounterName;
     },
     SET_LOADING(state, isLoading) {
       state.loading = isLoading;
@@ -85,27 +85,16 @@ export default {
       }
     },
 
-    async loadEncounter({ commit }, { gameName, encounterName }) {
-      if (!gameName || !encounterName) {
-        return; // silently
-      }
+    // Set the current encounter by name (used when navigating to CanvasEncounter)
+    setCurrentEncounter({ commit }, encounterName) {
+      commit('SET_CURRENT_ENCOUNTER_NAME', encounterName);
+      console.log('[ENCOUNTERS] Set current encounter:', encounterName);
+    },
 
-      commit('SET_LOADING', true);
-      commit('SET_ERROR', null);
-      try {
-        const response = await axios.get(
-          `${API_BASE_URL}/game/${gameName}/encounters/${encounterName}`,
-          { responseType: 'blob' }
-        );
-        const encounterData = JSON.parse(await response.data.text());
-        commit('SET_CURRENT_ENCOUNTER', encounterData);
-        console.log('[ENCOUNTERS] Loaded encounter:', encounterName, encounterData);
-      } catch (error) {
-        commit('SET_ERROR', error.response?.data?.detail || 'Error loading encounter');
-        console.error('[ENCOUNTERS] Error loading encounter:', error);
-      } finally {
-        commit('SET_LOADING', false);
-      }
+    // Clear the current encounter (used when leaving CanvasEncounter)
+    clearCurrentEncounter({ commit }) {
+      commit('SET_CURRENT_ENCOUNTER_NAME', null);
+      console.log('[ENCOUNTERS] Cleared current encounter');
     },
 
     async createEncounter({ commit, dispatch }, { gameName, encounterName, data }) {
@@ -207,7 +196,23 @@ export default {
     encounters: (state) => state.encounters,
     encounterNames: (state) => Object.keys(state.encounters),
     getEncounterData: (state) => (encounterName) => state.encounters[encounterName],
-    currentEncounter: (state) => state.currentEncounter,
+    
+    // Name des aktuellen Encounters
+    currentEncounterName: (state) => state.currentEncounterName,
+    
+    // Komplettes JSON des aktuellen Encounters (aus encounters Map)
+    currentEncounter: (state) => {
+      if (!state.currentEncounterName) return null;
+      return state.encounters[state.currentEncounterName] || null;
+    },
+    
+    // Diagram des aktuellen Encounters (Shortcut)
+    currentEncounterDiagram: (state) => {
+      if (!state.currentEncounterName) return null;
+      const encounter = state.encounters[state.currentEncounterName];
+      return encounter?.diagram || null;
+    },
+    
     isLoading: (state) => state.loading,
     error: (state) => state.error,
   },

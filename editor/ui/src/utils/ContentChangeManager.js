@@ -70,12 +70,57 @@ class ContentChangeManager {
   }
 
   /**
-   * Handle when a connection's properties change
+   * Handle when a connection's properties change (name, userData, etc.)
+   * Connections (TriggerConnection) have `vertex` arrays for routing which are position-specific.
    * @param {string} emitter - 'game' | encounterName
    * @param {object} data - Connection persistence data
    */
   static handleConnectionChange(emitter, data) {
     console.log(`[ContentChangeManager] Connection changed in ${emitter}:`, data.id, data);
+    
+    if (!data || !data.id) {
+      console.warn('[ContentChangeManager] No valid connection data provided');
+      return;
+    }
+
+    // Create copy of connection data without position-specific properties
+    const connectionData = { ...data };
+    delete connectionData.vertex;  // Routing vertices are position-specific per diagram
+    delete connectionData.routingMetaData;  // Also position-specific
+    
+    console.log('[ContentChangeManager] Syncing connectionData:', connectionData);
+
+    // Helper to find and update connection in diagram
+    const _updateConnection = (diagram) => {
+      if (!Array.isArray(diagram)) return false;
+      const connection = diagram.find(item => item.type === 'TriggerConnection' && item.id === data.id);
+      if (connection) {
+        // Update name and userData but preserve vertex/routing
+        if (connectionData.name !== undefined) connection.name = connectionData.name;
+        if (connectionData.userData !== undefined) {
+          connection.userData = { ...connection.userData, ...connectionData.userData };
+        }
+        if (connectionData.dasharray !== undefined) connection.dasharray = connectionData.dasharray;
+        return true;
+      }
+      return false;
+    };
+
+    // Update connection in World (gameDiagram)
+    const gameDiagram = store.state.game.gameDiagram;
+    if (_updateConnection(gameDiagram)) {
+      console.log('[ContentChangeManager] Updated connection in World');
+    }
+
+    // Update connection in ALL encounters
+    const encounters = store.state.encounters.encounters;
+    for (const [encounterName, encounterData] of Object.entries(encounters)) {
+      if (encounterData && encounterData.diagram) {
+        if (_updateConnection(encounterData.diagram)) {
+          console.log(`[ContentChangeManager] Updated connection in encounter: ${encounterName}`);
+        }
+      }
+    }
   }
 
 

@@ -297,7 +297,7 @@
       onDataLoad() { 
         this.jsonData.name = this.jsonData?.name?.replace(/[^a-zA-Z0-9_-]/g, '');
         var data = JSON.parse(JSON.stringify( this.jsonData ));
-        this.draw2dFrame?.postMessage({ type: MessageTypes.SET_SHAPE_DATA, data: data },'*');
+        window.postMessage({ type: MessageTypes.V2C_SET_SHAPE_DATA, data: data }, '*');
       },
 
       /**
@@ -419,7 +419,7 @@
       this.messageHandler = (event) => {
           if (event.origin !== window.location.origin) return;
           const message = event.data;
-          if (message.event === MessageTypes.SELECT && message.type === ShapeTypes.TRIGGER_CONNECTION) {
+          if (message.event === MessageTypes.C2V_SELECT && message.type === ShapeTypes.TRIGGER_CONNECTION) {
               SoundManager.stopCurrentSound()
               // Set flag to prevent watchers from firing during initial data load
               this.isInitializing = true;
@@ -440,7 +440,7 @@
                 this.isInitializing = false;
               });
           }
-          else if (message.event === MessageTypes.UNSELECT) {
+          else if (message.event === MessageTypes.C2V_UNSELECT) {
               SoundManager.stopCurrentSound()
               // Reset initial data snapshot
               this.initialData = null;

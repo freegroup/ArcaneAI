@@ -42,7 +42,7 @@ Application = Class.extend(
 
         var data = this.selectedFigure.getPersistentAttributes();
         window.parent.postMessage({
-            event: MessageTypes.SELECT,
+            event: MessageTypes.C2V_SELECT,
             type: data.type,  // ShapeType is already in data.type (e.g., 'StateShape', 'TriggerLabel')
             data: data,
             source: 'canvas:encounter'
@@ -53,7 +53,7 @@ Application = Class.extend(
 	{
 		this.selectedFigure = null;
         window.parent.postMessage({
-            event: MessageTypes.UNSELECT,
+            event: MessageTypes.C2V_UNSELECT,
             source: 'canvas:encounter'
         }, '*');
 	}

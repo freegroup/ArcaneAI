@@ -23,6 +23,9 @@
       <ConnectionTriggerProperty v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
     </pane>
   </splitpanes>
+
+  <!-- Import State Dialog -->
+  <ImportStateDialog v-model="showImportStateDialog" />
 </template>
 
 <script>
@@ -32,6 +35,7 @@ import 'splitpanes/dist/splitpanes.css';
 import StateProperty from './StateProperty.vue';
 import StateTriggerProperty from './StateTriggerProperty.vue';
 import ConnectionTriggerProperty from './ConnectionTriggerProperty.vue';
+import ImportStateDialog from '../components/ImportStateDialog.vue';
 import { MessageTypes } from '../../public/shared/SharedConstants.js';
 import CCM from '../utils/ContentChangeManager.js';
 
@@ -41,7 +45,19 @@ export default {
     Pane,
     StateProperty,
     StateTriggerProperty,
-    ConnectionTriggerProperty
+    ConnectionTriggerProperty,
+    ImportStateDialog
+  },
+  // Accept route params as props (passed via router with props: true)
+  props: {
+    gameName: {
+      type: String,
+      default: null
+    },
+    encounterName: {
+      type: String,
+      default: null
+    }
   },
   data() {
     return {
@@ -49,26 +65,14 @@ export default {
       paneSize: 50,
       canvasReady: false,
       isCanvasUpdate: false,  // Flag to prevent circular updates from canvas
+      showImportStateDialog: false,
     };
   },
   computed: {
-    ...mapGetters('encounters', ['getEncounterData']),
-    ...mapGetters('game', ['gameName']),
+    ...mapGetters('encounters', ['currentEncounter', 'currentEncounterName', 'currentEncounterDiagram', 'getEncounterData']),
     encounterDiagram() {
-      // Get encounter data from store (already loaded via fetchEncounters)
-      const encounterName = this.$route.params.encounterName;
-      if (encounterName) {
-        const encounterData = this.getEncounterData(encounterName);
-        if (encounterData && encounterData.diagram) {
-          // Encounter has structure: { config: {...}, diagram: [...] }
-          // Only return the diagram part for canvas
-          return encounterData.diagram;
-        }
-      }
-      return null;
-    },
-    mapName() {
-      return this.gameName;
+      // Use currentEncounterDiagram getter (based on currentEncounterName)
+      return this.currentEncounterDiagram;
     },
     draw2dFrame() {
       return this.$refs.draw2dFrame;
@@ -102,7 +106,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('encounters', ['updateEncounter', 'updateEncounterDiagram']),
+    ...mapActions('encounters', ['updateEncounter', 'updateEncounterDiagram', 'setCurrentEncounter', 'clearCurrentEncounter']),
     async saveMap() {
       // Save encounter, not game
       const encounterName = this.$route.params.encounterName;
@@ -131,10 +135,15 @@ export default {
         this.draw2dFrameContent = this.$refs.draw2dFrame.contentWindow;
       }
     },
+    /**
+     * Send document to canvas via parent window postMessage.
+     * Uses unified message architecture: both Vue and Canvas communicate
+     * through the parent window. Canvas listens on window.parent.
+     */
     sendDocumentToCanvas(document) {
       const encounterName = this.$route.params.encounterName || 'unknown';
-      this.draw2dFrameContent?.postMessage({ 
-        type: MessageTypes.SET_DOCUMENT, 
+      window.postMessage({ 
+        type: MessageTypes.V2C_SET_DOCUMENT, 
         data: JSON.parse(JSON.stringify(document)),
         source: `vue:encounter:${encounterName}`
       }, '*');
@@ -152,43 +161,65 @@ export default {
     },
   },
   mounted() {
+    // Set current encounter in store
+    const encounterName = this.$route.params.encounterName;
+    if (encounterName) {
+      this.setCurrentEncounter(encounterName);
+    }
+
     // Load divider position from local storage on mount
     this.loadDividerPosition();
 
-    // Event listener for messages from the iframe
+    // Event listener for messages (unified architecture: all messages go through parent window)
     this.messageHandler = (event) => {
       if (event.origin !== window.location.origin) return;
       const message = event.data;
       
-      // Handle canvas ready message
-      if (message.type === MessageTypes.CANVAS_READY) {
-        this.updateDraw2dFrame();
-        this.canvasReady = true;
-        
-        // Send current diagram if available
-        if (this.encounterDiagram) {
-          this.sendDocumentToCanvas(this.encounterDiagram);
+      // Message Router: Handle C2V messages, forward V2C messages to canvas
+      switch (message.type) {
+        case MessageTypes.C2V_CANVAS_READY:
+          this.updateDraw2dFrame();
+          this.canvasReady = true;
+          // Send current diagram if available
+          if (this.encounterDiagram) {
+            this.sendDocumentToCanvas(this.encounterDiagram);
+          }
+          break;
+
+        case MessageTypes.C2V_DOCUMENT_UPDATED:
+          this.updateMapDiagram(message.data);
+          break;
+
+        case MessageTypes.C2V_CCM: {
+          // Bridge: Canvas sends CCM message → forward to ContentChangeManager
+          const { method, payload } = message.data;
+          if (CCM[method] && typeof CCM[method] === 'function') {
+            CCM[method]('canvas', payload);
+          } else {
+            const availableMethods = Object.getOwnPropertyNames(CCM).filter(m => typeof CCM[m] === 'function' && m.startsWith('handle'));
+            console.warn(`[CanvasEncounter] Unknown CCM method: "${method}". Available methods: ${availableMethods.join(', ')}`);
+          }
+          break;
         }
-      }
-      else if (message.type === MessageTypes.DOCUMENT_UPDATED) {
-        // No need for blocked flag anymore - updateMapDiagram sets source to 'canvas'
-        this.updateMapDiagram(message.data);
-      }
-      else if (message.type === MessageTypes.CCM) {
-        // Bridge: Canvas sends CCM message → forward to ContentChangeManager
-        // message.data = { method: 'handleStateChange', payload: {...} }
-        const { method, payload } = message.data;
-        if (CCM[method] && typeof CCM[method] === 'function') {
-          CCM[method]('canvas', payload);
-        } else {
-          const availableMethods = Object.getOwnPropertyNames(CCM).filter(m => typeof CCM[m] === 'function' && m.startsWith('handle'));
-          console.warn(`[CanvasEncounter] Unknown CCM method: "${method}". Available methods: ${availableMethods.join(', ')}`);
-        }
+
+        case MessageTypes.C2V_OPEN_IMPORT_DIALOG:
+          this.showImportStateDialog = true;
+          break;
+
+        default:
+          // Forward V2C messages to the iframe (Vue → Canvas)
+          if (message.type?.startsWith('v2c:') && this.draw2dFrameContent) {
+            this.draw2dFrameContent.postMessage(message, '*');
+          }
+          break;
       }
     };
     window.addEventListener('message', this.messageHandler);
   },
   beforeUnmount() {
+    // Clear current encounter in store
+    this.clearCurrentEncounter();
+    
     // Clean up message listener
     if (this.messageHandler) {
       window.removeEventListener('message', this.messageHandler);

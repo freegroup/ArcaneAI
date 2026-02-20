@@ -109,9 +109,14 @@ export default {
         this.draw2dFrameContent = this.$refs.draw2dFrame.contentWindow;
       }
     },
+    /**
+     * Send document to canvas via parent window postMessage.
+     * Uses unified message architecture: both Vue and Canvas communicate
+     * through the parent window. Canvas listens on window.parent.
+     */
     sendDocumentToCanvas(document) {
-      this.draw2dFrameContent?.postMessage({ 
-        type: MessageTypes.SET_DOCUMENT, 
+      window.postMessage({ 
+        type: MessageTypes.V2C_SET_DOCUMENT, 
         data: JSON.parse(JSON.stringify(document)),
         source: 'vue:world'
       }, '*');
@@ -132,35 +137,44 @@ export default {
     // Load divider position from local storage on mount
     this.loadDividerPosition();
 
-    // Event listener for messages from the iframe
+    // Event listener for messages (unified architecture: all messages go through parent window)
     this.messageHandler = (event) => {
       if (event.origin !== window.location.origin) return;
       const message = event.data;
       
-      // Handle canvas ready message
-      if (message.type === MessageTypes.CANVAS_READY) {
-        this.updateDraw2dFrame();
-        this.canvasReady = true;
-        
-        // Send current diagram if available
-        if (this.gameDiagram) {
-          this.sendDocumentToCanvas(this.gameDiagram);
+      // Message Router: Handle C2V messages, forward V2C messages to canvas
+      switch (message.type) {
+        case MessageTypes.C2V_CANVAS_READY:
+          this.updateDraw2dFrame();
+          this.canvasReady = true;
+          // Send current diagram if available
+          if (this.gameDiagram) {
+            this.sendDocumentToCanvas(this.gameDiagram);
+          }
+          break;
+
+        case MessageTypes.C2V_DOCUMENT_UPDATED:
+          this.updateMapDiagram(message.data);
+          break;
+
+        case MessageTypes.C2V_CCM: {
+          // Bridge: Canvas sends CCM message → forward to ContentChangeManager
+          const { method, payload } = message.data;
+          if (CCM[method] && typeof CCM[method] === 'function') {
+            CCM[method]('canvas', payload);
+          } else {
+            const availableMethods = Object.getOwnPropertyNames(CCM).filter(m => typeof CCM[m] === 'function' && m.startsWith('handle'));
+            console.warn(`[CanvasGame] Unknown CCM method: "${method}". Available methods: ${availableMethods.join(', ')}`);
+          }
+          break;
         }
-      }
-      else if (message.type === MessageTypes.DOCUMENT_UPDATED) {
-        // No need for blocked flag anymore - updateMapDiagram sets source to 'canvas'
-        this.updateMapDiagram(message.data);
-      }
-      else if (message.type === MessageTypes.CCM) {
-        // Bridge: Canvas sends CCM message → forward to ContentChangeManager
-        // message.data = { method: 'handleStateChange', payload: {...} }
-        const { method, payload } = message.data;
-        if (CCM[method] && typeof CCM[method] === 'function') {
-          CCM[method]('canvas', payload);
-        } else {
-          const availableMethods = Object.getOwnPropertyNames(CCM).filter(m => typeof CCM[m] === 'function' && m.startsWith('handle'));
-          console.warn(`[CanvasGame] Unknown CCM method: "${method}". Available methods: ${availableMethods.join(', ')}`);
-        }
+
+        default:
+          // Forward V2C messages to the iframe (Vue → Canvas)
+          if (message.type?.startsWith('v2c:') && this.draw2dFrameContent) {
+            this.draw2dFrameContent.postMessage(message, '*');
+          }
+          break;
       }
     };
     window.addEventListener('message', this.messageHandler);

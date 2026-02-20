@@ -50,18 +50,29 @@
   // ====================================
   // Message Types - Communication Events
   // ====================================
+  // 
+  // Naming Convention:
+  //   C2V_* = Canvas-to-Vue (Canvas sends, Vue receives)
+  //   V2C_* = Vue-to-Canvas (Vue sends, Canvas receives)
+  //
+  // Value Convention:
+  //   'c2v:*' = Canvas-to-Vue message values
+  //   'v2c:*' = Vue-to-Canvas message values
+  //   This allows easy filtering: message.type.startsWith('c2v:') or 'v2c:'
+  //
   const MessageTypes = {
-    // Canvas → Vue Messages
-    CANVAS_READY: 'canvasReady',
-    DOCUMENT_UPDATED: 'updateDocumentData',
-    ELEMENT_UPDATED: 'updateElementData',
-    SELECT: 'onSelect',
-    UNSELECT: 'onUnselect',
-    CCM: 'ccm',  // Canvas notifies Vue about content changes (for ContentChangeManager)
+    // C2V: Canvas → Vue Messages
+    C2V_CANVAS_READY: 'c2v:canvasReady',
+    C2V_DOCUMENT_UPDATED: 'c2v:documentUpdated',
+    C2V_ELEMENT_UPDATED: 'c2v:elementUpdated',
+    C2V_SELECT: 'c2v:select',
+    C2V_UNSELECT: 'c2v:unselect',
+    C2V_CCM: 'c2v:ccm',  // Canvas notifies Vue about content changes (for ContentChangeManager)
+    C2V_OPEN_IMPORT_DIALOG: 'c2v:openImportDialog',  // Canvas requests Vue to open Import State dialog
     
-    // Vue → Canvas Messages
-    SET_DOCUMENT: 'documentUpdated',
-    SET_SHAPE_DATA: 'figureUpdated',
+    // V2C: Vue → Canvas Messages
+    V2C_SET_DOCUMENT: 'v2c:setDocument',
+    V2C_SET_SHAPE_DATA: 'v2c:setShapeData',
   };
   
   return {

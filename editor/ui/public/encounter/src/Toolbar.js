@@ -60,6 +60,13 @@ Toolbar = Class.extend({
 			this.view.getCommandStack().execute(command);
 		});
 
+		// Import State Button
+		this.importButton = this.createButton('Import State');
+		this.html.appendChild(this.importButton);
+		this.importButton.addEventListener('click', () => {
+			this.view.onImportState();
+		});
+
 		// Fullscreen Button
 		this.fullscreenButton = this.createButton('Fullscreen');
 		this.html.appendChild(this.fullscreenButton);

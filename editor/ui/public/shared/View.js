@@ -38,7 +38,7 @@ View = draw2d.Canvas.extend({
                         
                         if (ccmMethod) {
                             window.parent.postMessage({
-                                type: MessageTypes.CCM,
+                                type: MessageTypes.C2V_CCM,
                                 data: {
                                     method: ccmMethod,
                                     payload: figure.getPersistentAttributes()
@@ -54,7 +54,7 @@ View = draw2d.Canvas.extend({
                         return
                       
                 window.parent.postMessage({ 
-                    type: MessageTypes.DOCUMENT_UPDATED, 
+                    type: MessageTypes.C2V_DOCUMENT_UPDATED, 
                     data: json,
                     source: 'canvas:shared'
                 }, '*');
@@ -240,6 +240,7 @@ View = draw2d.Canvas.extend({
     setShapeData: function(data)
     {
         var shape = this.getFigure(data.id)
+        console.log(shape)
         if(shape){
             shape.attr(data)
         }
@@ -252,18 +253,17 @@ View = draw2d.Canvas.extend({
                 })
             }
         }
-        /*
+        // Send C2V_DOCUMENT_UPDATED so Vue Store gets updated
         var writer = new draw2d.io.json.Writer();
         writer.marshal(this, (json) => {
-            if( json.length ===0)
+            if( json.length === 0)
                 return
-        window.parent.postMessage({ 
-            type: MessageTypes.DOCUMENT_UPDATED, 
-            data: json,
-            source: 'canvas:shared'
-        }, '*');
+            window.parent.postMessage({ 
+                type: MessageTypes.C2V_DOCUMENT_UPDATED, 
+                data: json,
+                source: 'canvas:setShapeData'
+            }, '*');
         });                
-        */
         return this
     },
 
@@ -347,6 +347,17 @@ View = draw2d.Canvas.extend({
           }
           this.scrollTo(bb.y - c.height() / 2, bb.x - c.width() / 2)
         }
+    },
+
+    /**
+     * Send command to Vue to open the Import State dialog
+     */
+    onImportState: function()
+    {
+        window.parent.postMessage({
+            type: MessageTypes.C2V_OPEN_IMPORT_DIALOG,
+            data: {}
+        }, '*');
     },
 
 });
