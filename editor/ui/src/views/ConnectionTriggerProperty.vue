@@ -164,7 +164,6 @@
   
 <script>
   import SoundManager from '@/utils/SoundManager'
-  import CCM from '@/utils/ContentChangeManager'
   import { mapGetters } from 'vuex';
   import { MessageTypes, ShapeTypes } from '../../public/shared/SharedConstants.js';
   import ExtendedHelpDialog from '@/components/ExtendedHelpDialog.vue';
@@ -196,7 +195,6 @@
             description: '',
           },
         },
-        initialData: null, // Snapshot of initial data to detect real changes
         isInitializing: false, // Flag to prevent watchers from firing during initial data load
         conditionsText: '',
         actionsText: '',
@@ -302,16 +300,26 @@
 
       /**
        * Called only when data has actually changed by user interaction.
-       * Sends data to canvas AND notifies ContentChangeManager.
+       * Sends data to canvas AND updates model store.
        */
       onDataChange() {
          // Always sync with canvas
         this.onDataLoad();
         
-        // sync with CCM
-        if (!this.initialData) return;
-        var data = JSON.parse(JSON.stringify( this.jsonData ));
-        CCM.handleConnectionChange("vue", data);
+        // Update model store - replaces CCM
+        if (this.isInitializing || !this.jsonData.id) return;
+        
+        // Prepare connection data for model update (without position-specific data)
+        const connectionData = {
+          id: this.jsonData.id,
+          name: this.jsonData.name,
+          type: this.jsonData.type,
+          source: this.jsonData.source,
+          target: this.jsonData.target,
+          userData: { ...this.jsonData.userData }
+        };
+        
+        this.$store.dispatch('model/updateConnection', connectionData);
       },
 
       onVolumeChange() {
@@ -433,8 +441,6 @@
               if (this.jsonData.userData.sound_effect_duration === null || this.jsonData.userData.sound_effect_duration === undefined) {
                   this.jsonData.userData.sound_effect_duration = 2;
               }
-              // Store snapshot of initial data for comparison
-              this.initialData = JSON.parse(JSON.stringify(this.jsonData));
               // Use nextTick to ensure all watchers have fired before clearing the flag
               this.$nextTick(() => {
                 this.isInitializing = false;
@@ -442,8 +448,6 @@
           }
           else if (message.event === MessageTypes.C2V_UNSELECT) {
               SoundManager.stopCurrentSound()
-              // Reset initial data snapshot
-              this.initialData = null;
               // Reset to initial state with userData to prevent null access
               this.jsonData = {
                 name: '',

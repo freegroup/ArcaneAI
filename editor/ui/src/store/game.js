@@ -1,20 +1,29 @@
-import axios from 'axios';
-
-const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
+/**
+ * Game Store - Orchestriert Game-Laden und verwaltet Game-Config
+ * 
+ * VERANTWORTLICHKEITEN:
+ * 1. Game-Config (system_prompt, final_prompt, inventory)
+ * 2. Orchestrierung von Load/Save über alle Stores
+ * 
+ * DATEN-STORES (ausgelagert):
+ * - States/Connections → model.js
+ * - Layout/Positions → views.js
+ */
 
 export default {
   namespaced: true,
+  
   state: {
     gameConfig: {
       system_prompt: "game prompt",
-      final_prompt:"final prompt",
+      final_prompt: "final prompt",
       inventory: [],
     },
-    gameDiagram: [],
     gameName: "unknown",
     loading: false,
     error: null,
   },
+  
   mutations: {
     SET_GAME_CONFIG(state, data) {
       state.gameConfig = data;
@@ -28,9 +37,6 @@ export default {
     REMOVE_INVENTORY_ITEM(state, index) {
       state.gameConfig.inventory.splice(index, 1);
     },
-    SET_GAME_DIAGRAM(state, data) {
-      state.gameDiagram = data;
-    },
     SET_LOADING(state, isLoading) {
       state.loading = isLoading;
     },
@@ -41,35 +47,55 @@ export default {
       state.gameName = newName;
     },
   },
+  
   actions: {
-    async initialize({ dispatch }) {
-      try {
-        // Placeholder for future initialization
-        void dispatch; // Suppress unused variable warning
-      } catch (error) {
-        // Silent error handling
-      }
+    /**
+     * Initialisiert den Game Store.
+     * Placeholder für zukünftige Initialisierungslogik.
+     */
+    async initialize() {
+      // Placeholder for future initialization
     },
 
+    /**
+     * Lädt ein komplettes Game.
+     * Orchestriert: config, model, views, sounds, encounters
+     */
     async loadGame({ commit, dispatch }, gameName) {
-      if( gameName===undefined || gameName.length===0){
-        return // silently
+      if (!gameName || gameName.length === 0) {
+        return;
       }
 
       commit('SET_LOADING', true);
       commit('SET_ERROR', null);
+      commit('SET_GAME_NAME', gameName);
+      
       try {
-        const response = await axios.get(`${API_BASE_URL}/game/${gameName}`, {
-          responseType: 'blob',
-        });
-        const gameData = JSON.parse(await response.data.text()); 
-        commit('SET_GAME_CONFIG', gameData.config); 
-        commit('SET_GAME_DIAGRAM', gameData.diagram); 
-        commit('SET_GAME_NAME', gameName);
+        // 1. Lade Config
+        await dispatch('config/loadConfig', gameName, { root: true });
         
-        // Load related resources for this game
+        // 2. Lade Model (States + Connections)
+        await dispatch('model/loadModel', gameName, { root: true });
+        
+        // 3. Lade Views (Layouts)
+        await dispatch('views/loadAllViews', gameName, { root: true });
+        
+        // 4. Garbage Collection: Entferne verwaiste Layouts
+        // (Layouts die auf nicht mehr existierende Model-Einträge verweisen)
+        dispatch('views/garbageCollectOrphanedLayouts', null, { root: true });
+        
+        // 5. Lade Related Resources
         await dispatch('sounds/fetchSounds', gameName, { root: true });
         await dispatch('encounters/fetchEncounters', gameName, { root: true });
+        
+        // Config aus config-store übernehmen
+        const config = this.state.config;
+        commit('SET_GAME_CONFIG', {
+          system_prompt: config.system_prompt,
+          final_prompt: config.final_prompt,
+          inventory: config.inventory || [],
+        });
+        
       } catch (error) {
         commit('SET_ERROR', error.response?.data?.detail || 'Error loading game');
         throw error;
@@ -78,10 +104,42 @@ export default {
       }
     },
 
-    async updateGameConfig({ commit }, data) {
+    /**
+     * Speichert das komplette Game.
+     * Orchestriert: config, model, views
+     */
+    async saveGame({ commit, state, dispatch }) {
+      console.log('[game.js] saveGame START', { gameName: state.gameName });
+      commit('SET_LOADING', true);
+      commit('SET_ERROR', null);
+      
+      try {
+        // 1. Save Config
+        await dispatch('config/saveConfig', null, { root: true });
+        
+        // 2. Save Model (States + Connections)
+        await dispatch('model/saveModel', null, { root: true });
+        
+        // 3. Save Views (Layouts)
+        await dispatch('views/saveAllViews', null, { root: true });
+        
+        console.log('[game.js] saveGame COMPLETE');
+      } catch (error) {
+        commit('SET_ERROR', error.response?.data?.detail || 'Error saving game');
+        throw error;
+      } finally {
+        commit('SET_LOADING', false);
+      }
+    },
+
+    // ========== Config Actions ==========
+    updateGameConfig({ commit, dispatch }, data) {
       commit('SET_GAME_CONFIG', data);
+      // Sync to config store
+      dispatch('config/setConfig', data, { root: true });
     },
     
+    // ========== Inventory Actions ==========
     addInventoryItem({ commit }, item) {
       commit('ADD_INVENTORY_ITEM', item);
     },
@@ -93,44 +151,17 @@ export default {
     removeInventoryItem({ commit }, index) {
       commit('REMOVE_INVENTORY_ITEM', index);
     },
-    
-    async updateGameDiagram({ commit }, data) {
-      commit('SET_GAME_DIAGRAM', data);
-    },
-
-    async saveGame({ commit, state }) {
-      commit('SET_LOADING', true);
-      commit('SET_ERROR', null);
-      try {
-        // Simple: Just save the JSON with config and diagram
-        const formattedJson = JSON.stringify({
-          "config": state.gameConfig,
-          "diagram": state.gameDiagram
-        }, null, 4);
-
-        const blob = new Blob([formattedJson], { type: 'application/json' });
-        const formData = new FormData();
-        formData.append('file', blob, state.gameName + ".json");
-
-        // Send PUT request to backend - that's it!
-        await axios.put(`${API_BASE_URL}/game/${state.gameName}`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-      } catch (error) {
-        commit('SET_ERROR', error.response?.data?.detail || 'Error saving game');
-        throw error;
-      } finally {
-        commit('SET_LOADING', false);
-      }
-    },
   },
+  
   getters: {
     gameConfig: (state) => state.gameConfig,
-    gameDiagram: (state) => state.gameDiagram,
     gameName: (state) => state.gameName,
     isLoading: (state) => state.loading,
     error: (state) => state.error,
+    
+    // Diagram wird aus model + views zusammengebaut
+    gameDiagram: (state, getters, rootState, rootGetters) => {
+      return rootGetters['views/getWorldDiagram'] || [];
+    },
   },
 };

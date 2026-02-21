@@ -4,7 +4,6 @@ Loads game definition and coordinates StateEngine, Inventory, and LLM.
 """
 from __future__ import annotations
 import json
-import yaml
 from pathlib import Path
 from typing import Any, Dict, Optional, TYPE_CHECKING
 
@@ -97,195 +96,198 @@ class GameEngine:
     
     def _load_game_definition(self, definition_path: str) -> Dict[str, Any]:
         """
-        Load game definition from Designer JSON file (v2 format).
-        ALWAYS converts from Designer format to Engine format.
+        Load game definition from Overlay Pattern format (model.json + config.json).
         
         Args:
-            definition_path: Path to game_definition_tipsy_v2.json
+            definition_path: Path to game definition directory or index.json
             
         Returns:
             Game data dictionary (Internal Engine Format)
         """
         path: Path = Path(definition_path)
-        if not path.exists():
-            raise FileNotFoundError(f"Game definition not found: {path}")
         
-        with open(path, 'r', encoding='utf-8') as f:
-            data = json.load(f)
+        # Determine the game directory
+        if path.suffix == '.json':
+            game_dir = path.parent
+        else:
+            game_dir = path
             
-        # Always convert from Designer format (v2)
-        # Note: Elements like 'Raft' (graphical groupings) are ignored by the converter
-        # because it only looks for 'StateShape' and 'TriggerConnection'.
-        # Data is extracted from 'userData' as expected by the Designer format.
-        return self._convert_designer_format(data)
+        model_path = game_dir / 'model.json'
+        
+        if not model_path.exists():
+            raise FileNotFoundError(f"Game definition not found: {model_path}")
+        
+        print(f"[ENGINE] Loading Overlay Pattern format from: {model_path}")
+        return self._convert_overlay_format(game_dir)
 
-    def _convert_designer_format(self, designer_data: Dict[str, Any]) -> Dict[str, Any]:
+    def _convert_overlay_format(self, game_dir: Path) -> Dict[str, Any]:
         """
-        Convert Designer JSON format (index.json) to Engine format.
+        Convert Overlay Pattern format (model.json + config.json) to Engine format.
         
         Args:
-            designer_data: Raw JSON data from designer
+            game_dir: Path to game directory containing model.json and config.json
             
         Returns:
             Engine-compatible game definition
         """
-        config = designer_data.get("config", {})
-        diagram = designer_data.get("diagram", [])
+        model_path = game_dir / 'model.json'
+        config_path = game_dir / 'config.json'
         
-        # 1. Parse Config (Identity, Behaviour, Inventory)
-        identity = config.get("identity", "")
-        behaviour = "WICHTIG: Du darfst NUR die explizit definierten Aktionen verwenden. Erfinde NIEMALS eigene Aktionen. Wenn der Spieler etwas tun möchte, das nicht in der Liste der verfügbaren Aktionen steht, antworte im Piraten-Slang ablehnend und verwende [AKTION: keine_aktion]."
+        # Load model.json
+        with open(model_path, 'r', encoding='utf-8') as f:
+            model_data = json.load(f)
+        
+        # Load config.json (optional)
+        config_data = {}
+        if config_path.exists():
+            with open(config_path, 'r', encoding='utf-8') as f:
+                config_data = json.load(f)
+        
+        states_dict = model_data.get('states', {})
+        connections_dict = model_data.get('connections', {})
+        
+        # 1. Parse Config
+        identity = config_data.get('system_prompt', '') + '\n' + config_data.get('final_prompt', '')
+        behaviour = "WICHTIG: Du darfst NUR die explizit definierten Aktionen verwenden. Erfinde NIEMALS eigene Aktionen."
         
         # Convert Inventory list to dict
         inventory = {}
-        for item in config.get("inventory", []):
-            # item is like {"key": "coins", "value": 0, "type": "integer"}
-            key = item.get("key")
-            value = item.get("value")
+        for item in config_data.get('inventory', []):
+            key = item.get('key')
+            value = item.get('value')
             if key:
                 inventory[key] = value
-                
-        # 2. Parse States (StateShape)
+        
+        # 2. Parse States
         states = {}
-        state_id_map = {} # Map ID to Name
+        state_id_map = {}  # Map ID to Name
         start_node_id = None
         
-        for element in diagram:
-            if element.get("type") == "StateShape":
-                state_id = element.get("id")
-                name = element.get("name")
-                user_data = element.get("userData", {})
-                
-                state_id_map[state_id] = name
-                
-                if element.get("stateType") == "START":
-                    start_node_id = state_id
-                    # Start node itself is usually skipped or empty in logic, 
-                    # but we track it to find the real initial state via connection
-                    continue
-                
-                # Build state object
-                state_data = {
-                    "description": user_data.get("system_prompt", ""),
-                }
-                
-                # Ambient sound
-                ambient_sound = user_data.get("ambient_sound")
-                if ambient_sound:
-                    state_data["ambient_sound"] = ambient_sound
-                
-                ambient_volume = user_data.get("ambient_sound_volume")
-                if ambient_volume is not None:
-                    state_data["ambient_sound_volume"] = ambient_volume
-                    
-                states[name] = state_data
-
-        # 3. Parse Actions (TriggerConnection AND Internal Triggers)
-        actions = []
+        for state_id, state_obj in states_dict.items():
+            name = state_obj.get('name')
+            user_data = state_obj.get('userData', {})
+            
+            state_id_map[state_id] = name
+            
+            if state_obj.get('stateType') == 'START':
+                start_node_id = state_id
+                continue
+            
+            state_data = {
+                'description': user_data.get('system_prompt', ''),
+            }
+            
+            ambient_sound = user_data.get('ambient_sound')
+            if ambient_sound:
+                state_data['ambient_sound'] = ambient_sound
+            
+            ambient_volume = user_data.get('ambient_sound_volume')
+            if ambient_volume is not None:
+                state_data['ambient_sound_volume'] = ambient_volume
+            
+            states[name] = state_data
         
-        # 3a. TriggerConnections (Transitions)
+        # 3. Parse Actions from Connections
+        actions = []
         initial_state = None
         
-        for element in diagram:
-            if element.get("type") == "TriggerConnection":
-                source_id = element.get("source", {}).get("node")
-                target_id = element.get("target", {}).get("node")
-                user_data = element.get("userData", {})
-                
-                # Resolve names
-                state_before = state_id_map.get(source_id)
-                state_after = state_id_map.get(target_id)
-                
-                # Special case: Connection from Start Node defines initial state
-                if source_id == start_node_id:
-                    initial_state = state_after
-                    continue
-                    
-                if not state_before or not state_after:
-                    continue
-                
-                name = element.get("name", "")
+        for conn_id, conn_obj in connections_dict.items():
+            source_id = conn_obj.get('source', {}).get('node')
+            target_id = conn_obj.get('target', {}).get('node')
+            user_data = conn_obj.get('userData', {})
+            
+            state_before = state_id_map.get(source_id)
+            state_after = state_id_map.get(target_id)
+            
+            # Connection from Start Node defines initial state
+            if source_id == start_node_id:
+                initial_state = state_after
+                continue
+            
+            if not state_before or not state_after:
+                continue
+            
+            name = conn_obj.get('name', '')
+            if not name:
+                continue
+            
+            action = {
+                'name': name,
+                'state_before': state_before,
+                'state_after': state_after,
+                'prompts': {
+                    'description': user_data.get('description', name),
+                    'after_fire': user_data.get('system_prompt', '')
+                }
+            }
+            
+            if user_data.get('sound_effect'):
+                action['sound_effect'] = user_data.get('sound_effect')
+            if user_data.get('sound_effect_volume') is not None:
+                action['sound_effect_volume'] = user_data.get('sound_effect_volume')
+            if user_data.get('sound_effect_duration') is not None:
+                action['sound_effect_duration'] = user_data.get('sound_effect_duration')
+            if user_data.get('conditions'):
+                action['conditions'] = user_data.get('conditions')
+            if user_data.get('actions'):
+                action['scripts'] = user_data.get('actions')
+            
+            actions.append(action)
+        
+        # 4. Parse Internal Triggers from States
+        for state_id, state_obj in states_dict.items():
+            if state_obj.get('stateType') == 'START':
+                continue
+            
+            state_name = state_obj.get('name')
+            
+            for trigger in state_obj.get('trigger', []):
+                name = trigger.get('name')
                 if not name:
-                    continue # Skip unnamed connections
+                    continue
                 
-                # Build action object
                 action = {
-                    "name": name,
-                    "state_before": state_before,
-                    "state_after": state_after,
-                    "prompts": {
-                        "description": user_data.get("description", name),
-                        "after_fire": user_data.get("system_prompt", "")
+                    'name': name,
+                    'state_before': state_name,
+                    'state_after': state_name,
+                    'prompts': {
+                        'description': trigger.get('description', name),
+                        'after_fire': trigger.get('system_prompt', '')
                     }
                 }
                 
-                # Optional fields
-                if user_data.get("sound_effect"):
-                    action["sound_effect"] = user_data.get("sound_effect")
-                if user_data.get("sound_effect_volume") is not None:
-                    action["sound_effect_volume"] = user_data.get("sound_effect_volume")
-                if user_data.get("sound_effect_duration") is not None:
-                    action["sound_effect_duration"] = user_data.get("sound_effect_duration")
-                    
-                if user_data.get("conditions"):
-                    action["conditions"] = user_data.get("conditions")
-                    
-                if user_data.get("actions"):
-                    # Designer uses "actions" for scripts
-                    action["scripts"] = user_data.get("actions")
-                    
-                actions.append(action)
-
-        # 3b. Internal Triggers (Actions within a StateShape)
-        for element in diagram:
-            if element.get("type") == "StateShape" and element.get("stateType") != "START":
-                state_name = element.get("name")
+                if trigger.get('sound_effect'):
+                    action['sound_effect'] = trigger.get('sound_effect')
+                if trigger.get('sound_effect_volume') is not None:
+                    action['sound_effect_volume'] = trigger.get('sound_effect_volume')
+                if trigger.get('sound_effect_duration') is not None:
+                    action['sound_effect_duration'] = trigger.get('sound_effect_duration')
+                if trigger.get('conditions'):
+                    action['conditions'] = trigger.get('conditions')
+                if trigger.get('actions'):
+                    action['scripts'] = trigger.get('actions')
                 
-                for trigger in element.get("trigger", []):
-                    # Trigger structure: id, name, description, sound_effect..., system_prompt, conditions, actions
-                    
-                    name = trigger.get("name")
-                    if not name: continue
-                    
-                    action = {
-                        "name": name,
-                        "state_before": state_name,
-                        "state_after": state_name, # Internal trigger stays in same state
-                        "prompts": {
-                            "description": trigger.get("description", name),
-                            "after_fire": trigger.get("system_prompt", "")
-                        }
-                    }
-                    
-                    if trigger.get("sound_effect"):
-                        action["sound_effect"] = trigger.get("sound_effect")
-                    if trigger.get("sound_effect_volume") is not None:
-                        action["sound_effect_volume"] = trigger.get("sound_effect_volume")
-                    if trigger.get("sound_effect_duration") is not None:
-                        action["sound_effect_duration"] = trigger.get("sound_effect_duration")
-                        
-                    if trigger.get("conditions"):
-                        action["conditions"] = trigger.get("conditions")
-                        
-                    if trigger.get("actions"):
-                        action["scripts"] = trigger.get("actions")
-                        
-                    actions.append(action)
-
-        # Fallback for initial state if not found via connection
-        if not initial_state and states:
-            # Fallback to "WestOfHouse" or just the first state
-            if "WestOfHouse" in states:
-                initial_state = "WestOfHouse"
-            else:
+                actions.append(action)
+        
+        # Initial state: Priority is Start-Node connection > config.json > fallback
+        # Start-Node connection is the authoritative source!
+        if not initial_state:
+            config_initial = config_data.get('initial_state')
+            if config_initial and config_initial in states:
+                initial_state = config_initial
+            elif states:
+                # Fallback to first state
                 initial_state = list(states.keys())[0]
-
+        
+        print(f"[ENGINE] Loaded Overlay format: {len(states)} states, {len(actions)} actions, initial={initial_state}")
+        
         return {
-            "initial_state": initial_state,
-            "identity": identity,
-            "behaviour": behaviour,
-            "states": states,
-            "actions": actions,
-            "inventory": inventory
+            'initial_state': initial_state,
+            'identity': identity,
+            'behaviour': behaviour,
+            'states': states,
+            'actions': actions,
+            'inventory': inventory
         }
+
     

@@ -40,14 +40,18 @@
           <div
             v-for="state in filteredStates"
             :key="state.id"
-            class="state-item state-item-clickable"
+            :class="['state-item', 'state-item-clickable', { 'has-connection': state.hasDirectConnection }]"
             @click="importState(state)"
           >
             <div class="state-icon">
-              <v-icon size="small">mdi-circle-slice-8</v-icon>
+              <v-icon size="small">
+                {{ state.hasDirectConnection ? 'mdi-circle' : 'mdi-circle-outline' }}
+              </v-icon>
             </div>
             <div class="state-info">
-              <span class="state-name">{{ state.name }}</span>
+              <span :class="['state-name', { 'connected-name': state.hasDirectConnection }]">
+                {{ state.name }}
+              </span>
               <span v-if="state.userData?.description" class="state-description">
                 {{ truncate(state.userData.description, 60) }}
               </span>
@@ -68,8 +72,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import DialogHeader from './DialogHeader.vue';
-import CCM from '../utils/ContentChangeManager.js';
 import { MessageTypes } from '../../public/shared/SharedConstants.js';
+import ViewComposer from '../utils/ViewComposer.js';
 
 export default {
   name: 'ImportStateDialog',
@@ -94,6 +98,8 @@ export default {
   computed: {
     ...mapGetters('game', ['gameDiagram']),
     ...mapGetters('encounters', ['currentEncounter']),
+    ...mapGetters('model', ['allStates']),
+    ...mapGetters('views', ['currentView']),
     
     dialogVisible: {
       get() {
@@ -137,12 +143,55 @@ export default {
         }));
     },
 
-    // Search filtered states
+    // IDs der States die bereits im aktuellen View sind
+    statesInCurrentView() {
+      const currentView = this.currentView;
+      return new Set(Object.keys(currentView?.stateLayouts || {}));
+    },
+
+    // Prüft ob ein State eine direkte Connection zu einem State im aktuellen View hat
+    statesWithDirectConnection() {
+      const connections = this.$store.state.model.connections || {};
+      const visibleStateIds = this.statesInCurrentView;
+      const connectedStates = new Set();
+      
+      // Durchsuche alle Connections
+      for (const conn of Object.values(connections)) {
+        const sourceId = conn.source?.node;
+        const targetId = conn.target?.node;
+        
+        // Wenn Source im View ist und Target nicht → Target ist verbunden
+        if (visibleStateIds.has(sourceId) && !visibleStateIds.has(targetId)) {
+          connectedStates.add(targetId);
+        }
+        // Wenn Target im View ist und Source nicht → Source ist verbunden
+        if (visibleStateIds.has(targetId) && !visibleStateIds.has(sourceId)) {
+          connectedStates.add(sourceId);
+        }
+      }
+      
+      return connectedStates;
+    },
+
+    // Search filtered states - erweitert um hasDirectConnection Flag
     filteredStates() {
-      if (!this.searchQuery) return this.gameStateNames;
+      const connectedSet = this.statesWithDirectConnection;
+      let states = this.gameStateNames.map(state => ({
+        ...state,
+        hasDirectConnection: connectedSet.has(state.id)
+      }));
+      
+      // Sortiere: States mit Connection zuerst
+      states.sort((a, b) => {
+        if (a.hasDirectConnection && !b.hasDirectConnection) return -1;
+        if (!a.hasDirectConnection && b.hasDirectConnection) return 1;
+        return a.name.localeCompare(b.name);
+      });
+      
+      if (!this.searchQuery) return states;
       
       const query = this.searchQuery.toLowerCase();
-      return this.gameStateNames.filter(state => 
+      return states.filter(state => 
         state.name.toLowerCase().includes(query) ||
         (state.userData?.description || '').toLowerCase().includes(query)
       );
@@ -161,13 +210,54 @@ export default {
 
   methods: {
     ...mapActions('encounters', ['updateEncounterDiagram']),
+    ...mapActions('views', ['addStateToView']),
     
     /**
-     * Import state from game diagram into current encounter
-     * 1. Find state in gameDiagram by ID
-     * 2. Add copy at beginning of encounter diagram
-     * 3. Notify CCM about state addition
-     * 4. Send updated diagram to canvas
+     * Calculate the bounding box center of existing states in the current view.
+     * Returns { x, y } of the center point, or a default if no states exist.
+     */
+    calculateBoundingBoxCenter() {
+      const currentView = this.$store.getters['views/currentView'];
+      const stateLayouts = currentView?.stateLayouts || {};
+      const layoutValues = Object.values(stateLayouts);
+      
+      // Default position if no states exist yet
+      if (layoutValues.length === 0) {
+        return { x: 300, y: 200 };
+      }
+      
+      // Calculate bounding box
+      let minX = Infinity, maxX = -Infinity;
+      let minY = Infinity, maxY = -Infinity;
+      
+      for (const layout of layoutValues) {
+        minX = Math.min(minX, layout.x);
+        maxX = Math.max(maxX, layout.x);
+        minY = Math.min(minY, layout.y);
+        maxY = Math.max(maxY, layout.y);
+      }
+      
+      // Add some offset for the state width/height (approx 150x80)
+      const stateWidth = 150;
+      const stateHeight = 80;
+      
+      // Calculate center of bounding box
+      const centerX = (minX + maxX + stateWidth) / 2;
+      const centerY = (minY + maxY + stateHeight) / 2;
+      
+      // Add small random offset to avoid exact overlap
+      const offsetX = (Math.random() - 0.5) * 50;
+      const offsetY = (Math.random() - 0.5) * 30;
+      
+      return {
+        x: Math.round(centerX + offsetX),
+        y: Math.round(centerY + offsetY)
+      };
+    },
+
+    /**
+     * Import state from game diagram into current encounter.
+     * Uses Overlay Pattern: Adds layout to current view, then composes full diagram.
      */
     importState(state) {
       const encounterName = this.$store.getters['encounters/currentEncounterName'];
@@ -178,32 +268,36 @@ export default {
         return;
       }
 
-      // Step 1: Find the original state in game diagram by ID
-      const originalState = this.gameDiagram?.find(item => item.id === state.id);
+      // Step 1: Find the original state in model by ID
+      const originalState = this.$store.state.model.states[state.id];
       if (!originalState) {
-        console.warn('[ImportStateDialog] State not found in game diagram:', state.id);
+        console.warn('[ImportStateDialog] State not found in model:', state.id);
         this.close();
         return;
       }
 
-      // Step 2: Create deep copy with new position for encounter
-      const stateCopy = JSON.parse(JSON.stringify(originalState));
-      //stateCopy.x = 100 + Math.random() * 300;  // Random position in visible area
-      //stateCopy.y = 100 + Math.random() * 200;
+      // Step 2: Add layout for this state to current view
+      // Position at center of existing states bounding box
+      const layout = this.calculateBoundingBoxCenter();
+      
+      this.addStateToView({ stateId: state.id, layout });
 
-      // Step 3: Insert at BEGINNING of encounter diagram
+      // Step 3: Compose full diagram (Model + View) and send to canvas
+      // This ensures all connections are included!
+      const model = {
+        states: this.$store.state.model.states,
+        connections: this.$store.state.model.connections
+      };
+      const view = this.$store.getters['views/currentView'];
+      const composedDiagram = ViewComposer.compose(model, view);
+      
+      this.sendToCanvas(composedDiagram);
+      
+      // Step 4: Update legacy store for backwards compatibility
       const currentDiagram = this.currentEncounter?.diagram ? [...this.currentEncounter.diagram] : [];
-      currentDiagram.unshift(stateCopy);  // Add at beginning
-      
-      // Step 4: Update store
+      const stateCopy = JSON.parse(JSON.stringify({ ...originalState, ...layout }));
+      currentDiagram.unshift(stateCopy);
       this.updateEncounterDiagram({ encounterName, diagram: currentDiagram });
-      
-      // Step 5: Notify CCM about state addition
-      CCM.handleStateAdded(encounterName, stateCopy);
-
-      // Step 6: Get fresh diagram from store and send to canvas
-      const updatedDiagram = this.$store.getters['encounters/currentEncounterDiagram'];
-      this.sendToCanvas(updatedDiagram);
       
       this.close();
     },
@@ -327,6 +421,11 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* States with direct connection - bold name only */
+.connected-name {
+  font-weight: 700;
 }
 
 .state-description {

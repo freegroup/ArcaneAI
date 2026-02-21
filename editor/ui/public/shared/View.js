@@ -237,33 +237,30 @@ View = draw2d.Canvas.extend({
         return this;
     },
 
+    /**
+     * Silent inplace update of a shape's data.
+     * This is called from PropertyEditor and should NOT trigger any events.
+     * The model/view store is updated separately by the PropertyEditor.
+     * 
+     * IMPORTANT: This must remain silent to prevent circular updates that
+     * would clear the canvas selection and hide the PropertyView.
+     */
     setShapeData: function(data)
     {
         var shape = this.getFigure(data.id)
-        console.log(shape)
         if(shape){
             shape.attr(data)
         }
         else {
             shape = this.getLine(data.id)
             if(shape){
-                shape.attr( {
+                shape.attr({
                     name: data.name,
                     userData: data.userData
                 })
             }
         }
-        // Send C2V_DOCUMENT_UPDATED so Vue Store gets updated
-        var writer = new draw2d.io.json.Writer();
-        writer.marshal(this, (json) => {
-            if( json.length === 0)
-                return
-            window.parent.postMessage({ 
-                type: MessageTypes.C2V_DOCUMENT_UPDATED, 
-                data: json,
-                source: 'canvas:setShapeData'
-            }, '*');
-        });                
+        // NO C2V_DOCUMENT_UPDATED - this is a silent update
         return this
     },
 

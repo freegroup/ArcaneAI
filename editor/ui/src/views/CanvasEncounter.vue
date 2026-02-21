@@ -37,7 +37,7 @@ import StateTriggerProperty from './StateTriggerProperty.vue';
 import ConnectionTriggerProperty from './ConnectionTriggerProperty.vue';
 import ImportStateDialog from '../components/ImportStateDialog.vue';
 import { MessageTypes } from '../../public/shared/SharedConstants.js';
-import CCM from '../utils/ContentChangeManager.js';
+import ViewComposer from '../utils/ViewComposer.js';
 
 export default {
   components: {
@@ -69,76 +69,141 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('encounters', ['currentEncounter', 'currentEncounterName', 'currentEncounterDiagram', 'getEncounterData']),
-    encounterDiagram() {
-      // Use currentEncounterDiagram getter (based on currentEncounterName)
-      return this.currentEncounterDiagram;
+    ...mapGetters('model', ['allStates', 'allConnections']),
+    ...mapGetters('views', ['currentView']),
+    
+    /**
+     * View-ID für den aktuellen Encounter
+     */
+    currentViewId() {
+      const encounterName = this.$route.params.encounterName;
+      return encounterName ? `encounter_${encounterName}` : null;
     },
+    
+    /**
+     * Komponiertes Diagram für Canvas (Model + View Layout)
+     * Verwendet das Overlay Pattern: Model-Daten + View-Layout = draw2d Diagram
+     */
+    composedDiagram() {
+      const model = {
+        states: this.$store.state.model.states,
+        connections: this.$store.state.model.connections
+      };
+      const view = this.currentView;
+      return ViewComposer.compose(model, view);
+    },
+    
     draw2dFrame() {
       return this.$refs.draw2dFrame;
     }
   },
   watch: {
     /**
-     * Watch for diagram changes from the Store.
+     * Watch for composed diagram changes from Model+View.
      * 
-     * This is needed for INITIAL LOADING when:
-     * 1. Canvas is ready (CANVAS_READY received)
-     * 2. But the diagram wasn't loaded yet from the server
-     * 3. Later, the Store loads the diagram from API
-     * 4. This watcher sends it to the canvas
-     * 
-     * Note: Canvas updates are ignored using isCanvasUpdate flag
+     * Note: Canvas updates are ignored using isCanvasUpdate flag.
+     * PropertyEditor updates are ignored using model.isPropertyUpdate flag
      * to prevent circular updates that would clear the selection.
      */
-    encounterDiagram: {
+    composedDiagram: {
       handler(newDiagram) {
         if (newDiagram && this.canvasReady) {
-          // Skip if this change came from the canvas itself
           if (this.isCanvasUpdate) {
-            this.isCanvasUpdate = false;  // Reset flag
+            return;
+          }
+          // Skip if this change came from PropertyEditor
+          // PropertyEditor uses updateState which sets model.isPropertyUpdate
+          if (this.$store.state.model.isPropertyUpdate) {
             return;
           }
           this.sendDocumentToCanvas(newDiagram);
         }
       },
+      deep: true,
       immediate: false,
     }
   },
   methods: {
-    ...mapActions('encounters', ['updateEncounter', 'updateEncounterDiagram', 'setCurrentEncounter', 'clearCurrentEncounter']),
+    ...mapActions('model', ['setModel', 'mergeModel', 'saveModel']),
+    ...mapActions('views', ['updateCurrentViewLayout', 'saveView', 'setCurrentView', 'createEncounterView', 'removeStateFromCurrentView', 'removeConnectionFromCurrentView']),
+    
+    /**
+     * Speichert Model und aktuelle View
+     */
     async saveMap() {
-      // Save encounter, not game
-      const encounterName = this.$route.params.encounterName;
-      const gameName = this.$route.params.gameName;
-      if (encounterName && gameName) {
-        const encounterData = this.getEncounterData(encounterName);
-        if (encounterData) {
-          await this.updateEncounter({ gameName, encounterName, data: encounterData });
-        }
+      try {
+        await this.saveModel();
+        await this.saveView({ viewId: this.currentViewId });
+      } catch (error) {
+        console.error('[CanvasEncounter] Save failed:', error);
+        throw error;
       }
     },
-    updateMapDiagram(diagramData) {
-      const encounterName = this.$route.params.encounterName;
-      if (encounterName) {
-        this.isCanvasUpdate = true;  // Set flag before store update
-        this.updateEncounterDiagram({ encounterName, diagram: diagramData });
+    
+    /**
+     * Verarbeitet Diagram-Updates vom Canvas.
+     * Trennt Model-Daten von Layout-Daten und speichert separat.
+     * 
+     * WICHTIG: Verwendet mergeModel statt setModel, damit States aus anderen
+     * Views nicht verloren gehen (Overlay Pattern).
+     */
+    handleCanvasUpdate(diagram) {
+      this.isCanvasUpdate = true;
+      
+      // 1. Extrahiere was im Canvas ist
+      const newModel = ViewComposer.extractModel(diagram);
+      const newLayout = ViewComposer.extractLayout(diagram);
+      
+      // 2. Finde gelöschte Elemente
+      // WICHTIG: Vergleiche mit dem Model, nicht mit der View!
+      // Ein State gilt als gelöscht wenn:
+      // - Er im Model existiert UND
+      // - Er in dieser View ein Layout hatte UND  
+      // - Er jetzt nicht mehr im Canvas ist
+      const currentView = this.currentView;
+      const previousLayoutIds = Object.keys(currentView?.stateLayouts || {});
+      const currentCanvasStateIds = Object.keys(newModel.states);
+      const previousRouteIds = Object.keys(currentView?.connectionRoutes || {});
+      const currentCanvasConnIds = Object.keys(newModel.connections);
+      
+      // Gelöschte States entfernen - NUR aus der View, NICHT aus dem Model!
+      // (Encounter-View: State wird nur aus dem View-Layout entfernt, bleibt im Model)
+      for (const stateId of previousLayoutIds) {
+        if (!currentCanvasStateIds.includes(stateId)) {
+          this.removeStateFromCurrentView(stateId);
+        }
       }
+      
+      // Gelöschte Connections entfernen - NUR aus der View, NICHT aus dem Model!
+      for (const connId of previousRouteIds) {
+        if (!currentCanvasConnIds.includes(connId)) {
+          this.removeConnectionFromCurrentView(connId);
+        }
+      }
+      
+      // 3. Model-Änderungen mergen (nicht überschreiben!)
+      this.mergeModel(newModel);
+      
+      // 4. Layout-Änderungen für diese View speichern
+      this.updateCurrentViewLayout(newLayout);
+      
+      this.$nextTick(() => {
+        this.isCanvasUpdate = false;
+      });
     },
 
     async saveReceivedDocument() {
       await this.saveMap();
     },
+    
     updateDraw2dFrame() {
-      // Check if the draw2dFrame ref is set
       if (this.$refs.draw2dFrame) {
         this.draw2dFrameContent = this.$refs.draw2dFrame.contentWindow;
       }
     },
+    
     /**
      * Send document to canvas via parent window postMessage.
-     * Uses unified message architecture: both Vue and Canvas communicate
-     * through the parent window. Canvas listens on window.parent.
      */
     sendDocumentToCanvas(document) {
       const encounterName = this.$route.params.encounterName || 'unknown';
@@ -148,59 +213,67 @@ export default {
         source: `vue:encounter:${encounterName}`
       }, '*');
     },
+    
     handleResize(event) {
       this.paneSize = event[0].size;
       localStorage.setItem('paneSize', this.paneSize);
     },
+    
     loadDividerPosition() {
-      // Load pane size from local storage
       const savedSize = localStorage.getItem('paneSize');
       if (savedSize !== null) {
         this.paneSize = parseFloat(savedSize);
       }
     },
+    
+    /**
+     * Initialisiert die View für diesen Encounter
+     */
+    async initEncounterView() {
+      const encounterName = this.$route.params.encounterName;
+      if (!encounterName) return;
+      
+      const viewId = `encounter_${encounterName}`;
+      
+      // Prüfe ob View existiert, sonst erstelle sie
+      const existingView = this.$store.getters['views/viewById'](viewId);
+      if (!existingView) {
+        this.createEncounterView({ encounterName });
+      }
+      
+      // Setze aktuelle View
+      this.setCurrentView(viewId);
+    }
   },
   mounted() {
-    // Set current encounter in store
-    const encounterName = this.$route.params.encounterName;
-    if (encounterName) {
-      this.setCurrentEncounter(encounterName);
-    }
+    // Initialize encounter view (Overlay Pattern)
+    this.initEncounterView();
 
     // Load divider position from local storage on mount
     this.loadDividerPosition();
 
-    // Event listener for messages (unified architecture: all messages go through parent window)
+    // Event listener for messages
     this.messageHandler = (event) => {
       if (event.origin !== window.location.origin) return;
       const message = event.data;
       
-      // Message Router: Handle C2V messages, forward V2C messages to canvas
       switch (message.type) {
         case MessageTypes.C2V_CANVAS_READY:
           this.updateDraw2dFrame();
           this.canvasReady = true;
-          // Send current diagram if available
-          if (this.encounterDiagram) {
-            this.sendDocumentToCanvas(this.encounterDiagram);
+          if (this.composedDiagram && this.composedDiagram.length > 0) {
+            this.sendDocumentToCanvas(this.composedDiagram);
           }
           break;
 
         case MessageTypes.C2V_DOCUMENT_UPDATED:
-          this.updateMapDiagram(message.data);
-          break;
-
-        case MessageTypes.C2V_CCM: {
-          // Bridge: Canvas sends CCM message → forward to ContentChangeManager
-          const { method, payload } = message.data;
-          if (CCM[method] && typeof CCM[method] === 'function') {
-            CCM[method]('canvas', payload);
-          } else {
-            const availableMethods = Object.getOwnPropertyNames(CCM).filter(m => typeof CCM[m] === 'function' && m.startsWith('handle'));
-            console.warn(`[CanvasEncounter] Unknown CCM method: "${method}". Available methods: ${availableMethods.join(', ')}`);
+          // Skip if this is a response to a property update (setShapeData)
+          // The model was already updated by PropertyEditor's updateState()
+          if (message.source === 'canvas:setShapeData') {
+            return;
           }
+          this.handleCanvasUpdate(message.data);
           break;
-        }
 
         case MessageTypes.C2V_OPEN_IMPORT_DIALOG:
           this.showImportStateDialog = true;
@@ -217,10 +290,6 @@ export default {
     window.addEventListener('message', this.messageHandler);
   },
   beforeUnmount() {
-    // Clear current encounter in store
-    this.clearCurrentEncounter();
-    
-    // Clean up message listener
     if (this.messageHandler) {
       window.removeEventListener('message', this.messageHandler);
     }
@@ -234,7 +303,6 @@ export default {
   display: flex;
 }
 
-/* Ensure each pane inside splitpanes takes full height */
 .splitpanes {
   height: 100%;
   display: flex;

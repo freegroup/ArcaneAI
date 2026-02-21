@@ -161,8 +161,7 @@
   
 <script>
   import SoundManager from '@/utils/SoundManager'
-  import CCM from '@/utils/ContentChangeManager'
-  import { mapGetters } from 'vuex';
+  import { mapGetters, mapActions } from 'vuex';
   import { MessageTypes, ShapeTypes } from '../../public/shared/SharedConstants.js';
   import ExtendedHelpDialog from '@/components/ExtendedHelpDialog.vue';
   import JinjaEditorDialog from '@/components/JinjaEditorDialog.vue';
@@ -193,7 +192,6 @@
             description: '',
           },
         },
-        initialData: null, // Snapshot of initial data to detect real changes
         isInitializing: false, // Flag to prevent watchers from firing during initial data load
         conditionsText: '',
         actionsText: '',
@@ -285,6 +283,8 @@
       },
     },
     methods: {
+      ...mapActions('model', ['updateTrigger']),
+      
       /**
        * Called when data is loaded/synced (initial load or programmatic update).
        * Sends data to the canvas iframe.
@@ -297,14 +297,16 @@
 
       /**
        * Called only when data has actually changed by user interaction.
-       * Sends data to canvas AND notifies ContentChangeManager.
+       * Sends data to canvas AND updates the Model Store.
+       * TriggerLabels are stored as part of their parent StateShape in model.js.
        */
       onDataChange() {
-        this.onDataLoad(); // Always sync with canvas
+        this.onDataLoad(); // Sync with canvas
+        if (this.isInitializing) return;
         
-        if (!this.initialData) return;
-        var data = JSON.parse(JSON.stringify( this.jsonData ));
-        CCM.handleStateTriggerChange("vue", data);
+        // Update the trigger in the Model Store
+        var data = JSON.parse(JSON.stringify(this.jsonData));
+        this.updateTrigger(data);
       },
 
       onVolumeChange() {
@@ -312,11 +314,6 @@
           const volume = this.jsonData.userData.sound_effect_volume || 100;
           SoundManager.setVolume(volume);
           this.onDataLoad();
-          // Also trigger real change notification
-          if (this.initialData) {
-            var data = JSON.parse(JSON.stringify( this.jsonData ));
-            CCM.handleStateTriggerChange("vue", data);
-          }
         }
       },
       updateConditions() {
@@ -424,8 +421,6 @@
                 if (this.jsonData.userData.sound_effect_duration === null) {
                     this.jsonData.userData.sound_effect_duration = 2;
                 }
-                // Store snapshot of initial data for comparison
-                this.initialData = JSON.parse(JSON.stringify(this.jsonData));
                 // Use nextTick to ensure all watchers have fired before clearing the flag
                 this.$nextTick(() => {
                   this.isInitializing = false;
@@ -433,8 +428,6 @@
             }
             else if (message.event === MessageTypes.C2V_UNSELECT) {
                 SoundManager.stopCurrentSound()
-                // Reset initial data snapshot
-                this.initialData = null;
                 this.jsonData = {}
             }
         };

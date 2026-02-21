@@ -89,8 +89,7 @@
   
 <script>
   import SoundManager from '@/utils/SoundManager'
-  import CCM from '@/utils/ContentChangeManager'
-  import { mapGetters } from 'vuex';
+  import { mapGetters, mapActions } from 'vuex';
   import { MessageTypes, ShapeTypes } from '../../public/shared/SharedConstants.js';
   import ExtendedHelpDialog from '@/components/ExtendedHelpDialog.vue';
   import JinjaEditorDialog from '@/components/JinjaEditorDialog.vue';
@@ -123,8 +122,7 @@
             ambient_sound_volume: 100,
           },
         },
-        initialData: null, // Snapshot of initial data to detect real changes
-        isInitializing: false, // Flag to prevent watchers from firing during initial data load
+        isInitializing: false,
         cmOptions: {
           mode: "jinja2",
           lineNumbers: false, 
@@ -133,26 +131,23 @@
           styleActiveLine: false,
         },
         isPlaying: false,
-        // Help Dialog
         showHelpDialog: false,
-        // Jinja Editor Dialog
         showJinjaEditor: false,
-        // Sound Picker Dialog
         showSoundPicker: false,
         helpTitle: '',
         helpText: '',
         helpTexts: {
           stateName: {
             title: 'State Name',
-            text: 'The unique identifier for this game state. Use only letters and numbers. This name will be displayed in the game map and used to reference this state in transitions.'
+            text: 'The unique identifier for this game state.'
           },
           ambientSound: {
             title: 'Ambient Sound',
-            text: 'Background music or ambient sounds that play continuously while the player is in this state. Choose a sound file that matches the atmosphere you want to create for this location.'
+            text: 'Background music or ambient sounds that play continuously.'
           },
           sceneDescription: {
             title: 'Scene Description',
-            text: 'Describe this location in detail. This text will be used by the AI to understand the scene and generate appropriate responses. Include atmosphere, objects, NPCs, and possible interactions. You can use Jinja2 template syntax to reference game state variables and inventory items. Use conditional blocks ({% if inventory.key %}...{% endif %}) to show or hide text based on what the player has, giving the AI more or less context dynamically.'
+            text: 'Describe this location in detail for the AI.'
           }
         }
       };
@@ -165,7 +160,7 @@
     },
     watch: {
       "jsonData.userData.ambient_sound"() {
-        this.onDataLoad(); // Always sync with canvas
+        this.onDataLoad();
         if (!this.isInitializing) {
           this.onDataChange();
         }
@@ -177,27 +172,19 @@
       },
     },
     methods: {
-
-      /**
-       * Called when data is loaded/synced (initial load or programmatic update).
-       * Sends data to the canvas iframe.
-       */
+      ...mapActions('model', ['updateState']),
+      
       onDataLoad() { 
         this.jsonData.name = this.jsonData?.name?.replace(/[^a-zA-Z0-9]/g, '');
         var data = JSON.parse(JSON.stringify( this.jsonData ));
         window.postMessage({ type: MessageTypes.V2C_SET_SHAPE_DATA, data: data }, '*');
       },
 
-      /**
-       * Called only when data has actually changed by user interaction.
-       * Sends data to canvas AND notifies ContentChangeManager.
-       */
       onDataChange() {
-        this.onDataLoad(); // Always sync with canvas
-        
-        if (!this.initialData) return;
+        this.onDataLoad();
+        if (this.isInitializing) return;
         var data = JSON.parse(JSON.stringify( this.jsonData ));
-        CCM.handleStateChange("vue", data);
+        this.updateState(data);
       },
 
       onVolumeChange() {
@@ -205,10 +192,9 @@
           const volume = this.jsonData.userData.ambient_sound_volume || 100;
           SoundManager.setVolume(volume);
           this.onDataLoad();
-          // Also trigger real change notification
-          if (this.initialData) {
+          if (!this.isInitializing) {
             var data = JSON.parse(JSON.stringify( this.jsonData ));
-            CCM.handleStateChange("vue", data);
+            this.updateState(data);
           }
         }
       },
@@ -243,61 +229,47 @@
     },
 
     mounted() {
-        // Listen to SoundManager events
         this.soundListener = SoundManager.addListener((isPlaying) => {
           this.isPlaying = isPlaying;
         });
 
-        // Event listener for messages from the iframe
         this.messageHandler = (event) => {
             if (event.origin !== window.location.origin) return;
             const message = event.data;
             if (message.event === MessageTypes.C2V_SELECT && message.type === ShapeTypes.STATE) {
                 SoundManager.stopCurrentSound()
-                // Set flag to prevent watchers from firing during initial data load
                 this.isInitializing = true;
                 this.jsonData = message.data;
                 if (!this.jsonData.userData.ambient_sound_volume) {
                   this.jsonData.userData.ambient_sound_volume = 100;
                 }
-                // Store snapshot of initial data for comparison
-                this.initialData = JSON.parse(JSON.stringify(this.jsonData));
-                // Use nextTick to ensure all watchers have fired before clearing the flag
                 this.$nextTick(() => {
                   this.isInitializing = false;
                 });
             }
             else if (message.event === MessageTypes.C2V_UNSELECT) {
                 SoundManager.stopCurrentSound()
-                // Reset initial data snapshot
-                this.initialData = null;
                 this.jsonData = {}
             }
         };
         window.addEventListener('message', this.messageHandler);
     },
     beforeUnmount() {
-        // Clean up sound listener
         if (this.soundListener) {
             this.soundListener();
             this.soundListener = null;
         }
-        // Clean up event listener to prevent memory leaks
         if (this.messageHandler) {
             window.removeEventListener('message', this.messageHandler);
             this.messageHandler = null;
         }
-        // Stop any playing sounds when component is destroyed
         SoundManager.stopCurrentSound();
     }
   };
 </script>
   
 <style scoped>
-  ::v-deep .v-input__details {
-    display: none;
-  }
-
+  ::v-deep .v-input__details { display: none; }
   .property-view {
     background: var(--game-bg-primary);
     color: var(--game-text-primary);
@@ -311,7 +283,6 @@
     font-size: var(--game-font-size-sm);
     border-left: 1px solid var(--game-border-color);
   }
-  
   .property-view label {
     display: block;
     margin: 0 0 var(--game-spacing-xs) 0;
@@ -321,13 +292,7 @@
     letter-spacing: 0.5px;
     font-weight: 600;
   }
-
-  /* Override for labels inside label-with-help */
-  .label-with-help label {
-    display: inline-block !important;
-    margin: 0 !important;
-  }
-
+  .label-with-help label { display: inline-block !important; margin: 0 !important; }
   .property-view input {
     width: 100%;
     padding: var(--game-spacing-sm) var(--game-spacing-md);
@@ -339,8 +304,6 @@
     transition: all var(--game-transition-fast);
     outline: none;
   }
-
-  /* Retro 8-Bit Font for State Name */
   .property-view input#stateName {
     font-family: var(--game-font-family-retro);
     font-size: 18px;
@@ -349,24 +312,9 @@
     text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
     padding: var(--game-spacing-md) var(--game-spacing-lg);
   }
-
-  .property-view input:hover {
-    background: var(--game-input-hover);
-    border-color: var(--game-border-highlight);
-  }
-
-  .property-view input:focus {
-    border-color: var(--game-input-focus);
-    box-shadow: 0 0 0 2px rgba(233, 69, 96, 0.2);
-  }
-
-  .sound-selection {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--game-spacing-sm);
-  }
-
-  /* Sound Display - clickable field to open picker */
+  .property-view input:hover { background: var(--game-input-hover); border-color: var(--game-border-highlight); }
+  .property-view input:focus { border-color: var(--game-input-focus); box-shadow: 0 0 0 2px rgba(233, 69, 96, 0.2); }
+  .sound-selection { display: flex; align-items: flex-start; gap: var(--game-spacing-sm); }
   .sound-display {
     flex: 1;
     display: flex;
@@ -379,158 +327,25 @@
     transition: all var(--game-transition-fast);
     min-height: 36px;
   }
-
-  .sound-display:hover {
-    background: var(--game-input-hover);
-    border-color: var(--game-border-highlight);
-  }
-
-  .sound-display .sound-icon {
-    color: var(--game-accent-secondary);
-    flex-shrink: 0;
-  }
-
-  .sound-display .sound-name {
-    flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: var(--game-font-size-sm);
-    color: var(--game-text-primary);
-  }
-
-  .sound-display .browse-icon {
-    color: var(--game-text-muted);
-    flex-shrink: 0;
-    opacity: 0.6;
-    transition: opacity var(--game-transition-fast);
-  }
-
-  .sound-display:hover .browse-icon {
-    opacity: 1;
-    color: var(--game-accent-secondary);
-  }
-
-  .sound-selection :deep(.v-select) {
-    flex: 1;
-  }
-
-  .sound-selection :deep(.v-field) {
-    background: var(--game-input-bg);
-    border: 1px solid var(--game-input-border);
-    border-radius: 0;
-  }
-
-  .sound-selection :deep(.v-field:hover) {
-    background: var(--game-input-hover);
-    border-color: var(--game-border-highlight);
-  }
-
+  .sound-display:hover { background: var(--game-input-hover); border-color: var(--game-border-highlight); }
+  .sound-display .sound-icon { color: var(--game-accent-secondary); flex-shrink: 0; }
+  .sound-display .sound-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--game-font-size-sm); color: var(--game-text-primary); }
+  .sound-display .browse-icon { color: var(--game-text-muted); flex-shrink: 0; opacity: 0.6; transition: opacity var(--game-transition-fast); }
+  .sound-display:hover .browse-icon { opacity: 1; color: var(--game-accent-secondary); }
   .sound-selection :deep(.v-btn) {
     background: var(--game-accent-primary) !important;
     color: var(--game-text-primary) !important;
     border-radius: 0 !important;
     min-width: 36px !important;
     height: 36px !important;
-    box-shadow: inset -4px -4px 0px 0px #8c2022,
-                0 0 0 3px black !important;
-    transition: all var(--game-transition-fast) !important;
   }
-
-  .sound-selection :deep(.v-btn:hover) {
-    background: var(--game-accent-tertiary) !important;
-    box-shadow: inset -6px -6px 0px 0px #8c2022,
-                0 0 0 3px black !important;
-  }
-
-  .sound-selection :deep(.v-btn:active) {
-    box-shadow: inset 4px 4px 0px 0px #8c2022,
-                0 0 0 3px black !important;
-  }
-
-  .sound-selection :deep(.v-btn:disabled) {
-    background: var(--game-text-muted) !important;
-    box-shadow: inset -4px -4px 0px 0px #555,
-                0 0 0 3px #555 !important;
-    opacity: 0.5 !important;
-    cursor: not-allowed !important;
-  }
-
-  .sound-selection :deep(.v-btn:disabled .v-icon) {
-    color: #888 !important;
-  }
-
-  /* Slider Styling - Vuetify 3 */
-  :deep(.v-slider) {
-    margin-top: var(--game-spacing-sm);
-  }
-
-  :deep(.v-slider-track__background) {
-    background: var(--game-border-color) !important;
-    opacity: 1 !important;
-  }
-
-  :deep(.v-slider-track__fill) {
-    background: var(--game-accent-primary) !important;
-  }
-
-  :deep(.v-slider-thumb__surface) {
-    background: var(--game-accent-primary) !important;
-    width: 20px !important;
-    height: 20px !important;
-    border-radius: 50% !important;
-    border: 2px solid var(--game-bg-primary) !important;
-    box-shadow: var(--game-shadow-md) !important;
-  }
-
-  :deep(.v-slider-thumb:hover .v-slider-thumb__surface) {
-    transform: scale(1.1);
-  }
-
-  /* Editor Container with Expand Button */
-  .editor-container {
-    position: relative;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    overflow: hidden;
-  }
-
-  .expand-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    z-index: 10;
-    background: var(--game-accent-primary) !important;
-    color: var(--game-text-primary) !important;
-    box-shadow: var(--game-shadow-md);
-    transition: all var(--game-transition-fast);
-    opacity: 0.33;
-    min-width: 28px !important;
-    width: 28px !important;
-    height: 28px !important;
-  }
-
-  .expand-btn:hover {
-    background: var(--game-accent-tertiary) !important;
-    box-shadow: var(--game-shadow-glow);
-    transform: scale(1.1);
-    opacity: 1;
-  }
-
-  .expand-btn :deep(.v-icon) {
-    font-size: 18px !important;
-  }
-
-  /* CodeMirror Game Theme */
-  .code-editor {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-  }
-
+  :deep(.v-slider) { margin-top: var(--game-spacing-sm); }
+  :deep(.v-slider-track__fill) { background: var(--game-accent-primary) !important; }
+  :deep(.v-slider-thumb__surface) { background: var(--game-accent-primary) !important; }
+  .editor-container { position: relative; flex: 1; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+  .expand-btn { position: absolute; top: 8px; right: 8px; z-index: 10; background: var(--game-accent-primary) !important; opacity: 0.33; }
+  .expand-btn:hover { opacity: 1; }
+  .code-editor { flex: 1; display: flex; flex-direction: column; min-height: 0; }
   .code-editor :deep(.CodeMirror) {
     font-size: var(--game-font-size-md);
     font-family: var(--game-font-family-mono);
@@ -541,34 +356,5 @@
     padding: var(--game-spacing-sm);
     height: 100%;
   }
-
-  .code-editor :deep(.CodeMirror-scroll) {
-    overflow-y: auto !important;
-    overflow-x: auto !important;
-  }
-
-  .code-editor :deep(.CodeMirror-gutters) {
-    display: none;
-  }
-
-  .code-editor :deep(.CodeMirror-cursor) {
-    border-left-color: var(--game-accent-primary);
-  }
-
-  .code-editor :deep(.CodeMirror-selected) {
-    background: rgba(233, 69, 96, 0.2);
-  }
-
-  /* Label with Help Icon */
-  .label-with-help {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    margin-bottom: var(--game-spacing-xs);
-  }
-
-  .label-with-help label {
-    margin: 0;
-    display: inline-block;
-  }
+  .label-with-help { display: inline-flex; align-items: center; gap: 4px; margin-bottom: var(--game-spacing-xs); }
 </style>

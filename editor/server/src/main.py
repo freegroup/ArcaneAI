@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).parent
 from config_loader import EditorConfig
 
 # Import route modules
-from routes import games_routes, game_routes, sounds_routes, text_improver_routes, encounters_routes
+from routes import games_routes, game_routes, sounds_routes, text_improver_routes, encounters_routes, views_routes
 
 # Load config
 editor_config = EditorConfig()
@@ -56,6 +56,7 @@ games_routes.init_routes(MAPS_ROOT_DIR)
 game_routes.init_routes(MAPS_ROOT_DIR)
 sounds_routes.init_routes(MAPS_ROOT_DIR, SOUNDFX_ROOT_DIR)
 encounters_routes.init_routes(MAPS_ROOT_DIR)
+views_routes.init_routes(MAPS_ROOT_DIR)
 
 # Include routers
 app.include_router(games_routes.router)
@@ -63,6 +64,7 @@ app.include_router(game_routes.router)
 app.include_router(sounds_routes.router)
 app.include_router(text_improver_routes.router)
 app.include_router(encounters_routes.router)
+app.include_router(views_routes.router)
 
 
 # Static files für /editor - liefert Dateien aus dem src/static Verzeichnis
