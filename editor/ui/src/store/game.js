@@ -1,42 +1,28 @@
 /**
- * Game Store - Orchestriert Game-Laden und verwaltet Game-Config
+ * Game Store - Orchestrator for Loading/Saving Games
  * 
- * VERANTWORTLICHKEITEN:
- * 1. Game-Config (system_prompt, final_prompt, inventory)
- * 2. Orchestrierung von Load/Save über alle Stores
+ * RESPONSIBILITIES:
+ * - Orchestration of load/save across all stores
+ * - Maintaining gameName as single source of truth
+ * - Loading/error status tracking
  * 
- * DATEN-STORES (ausgelagert):
+ * DATA STORES (separated by concern):
+ * - Config (prompts, inventory) → config.js
  * - States/Connections → model.js
  * - Layout/Positions → views.js
+ * - Encounter metadata → encounters.js
  */
 
 export default {
   namespaced: true,
   
   state: {
-    gameConfig: {
-      system_prompt: "game prompt",
-      final_prompt: "final prompt",
-      inventory: [],
-    },
     gameName: "unknown",
     loading: false,
     error: null,
   },
   
   mutations: {
-    SET_GAME_CONFIG(state, data) {
-      state.gameConfig = data;
-    },
-    ADD_INVENTORY_ITEM(state, item) {
-      state.gameConfig.inventory.push(item);
-    },
-    UPDATE_INVENTORY_ITEM(state, { index, item }) {
-      state.gameConfig.inventory.splice(index, 1, item);
-    },
-    REMOVE_INVENTORY_ITEM(state, index) {
-      state.gameConfig.inventory.splice(index, 1);
-    },
     SET_LOADING(state, isLoading) {
       state.loading = isLoading;
     },
@@ -88,14 +74,6 @@ export default {
         await dispatch('sounds/fetchSounds', gameName, { root: true });
         await dispatch('encounters/fetchEncounters', gameName, { root: true });
         
-        // Config aus config-store übernehmen
-        const config = this.state.config;
-        commit('SET_GAME_CONFIG', {
-          system_prompt: config.system_prompt,
-          final_prompt: config.final_prompt,
-          inventory: config.inventory || [],
-        });
-        
       } catch (error) {
         commit('SET_ERROR', error.response?.data?.detail || 'Error loading game');
         throw error;
@@ -132,29 +110,9 @@ export default {
       }
     },
 
-    // ========== Config Actions ==========
-    updateGameConfig({ commit, dispatch }, data) {
-      commit('SET_GAME_CONFIG', data);
-      // Sync to config store
-      dispatch('config/setConfig', data, { root: true });
-    },
-    
-    // ========== Inventory Actions ==========
-    addInventoryItem({ commit }, item) {
-      commit('ADD_INVENTORY_ITEM', item);
-    },
-    
-    updateInventoryItem({ commit }, { index, item }) {
-      commit('UPDATE_INVENTORY_ITEM', { index, item });
-    },
-    
-    removeInventoryItem({ commit }, index) {
-      commit('REMOVE_INVENTORY_ITEM', index);
-    },
   },
   
   getters: {
-    gameConfig: (state) => state.gameConfig,
     gameName: (state) => state.gameName,
     isLoading: (state) => state.loading,
     error: (state) => state.error,

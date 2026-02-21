@@ -12,6 +12,27 @@
 import axios from 'axios'
 const API_BASE_URL = process.env.VUE_APP_API_BASE_URL
 
+/**
+ * Slugify a string to create a valid filename.
+ * Converts to lowercase, replaces spaces/special chars with underscores.
+ */
+function slugify(text) {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '_')           // Replace spaces with _
+    .replace(/[äàáâã]/g, 'a')       // Replace umlauts
+    .replace(/[ëèéê]/g, 'e')
+    .replace(/[ïìíî]/g, 'i')
+    .replace(/[öòóô]/g, 'o')
+    .replace(/[üùúû]/g, 'u')
+    .replace(/ß/g, 'ss')
+    .replace(/[^a-z0-9_-]/g, '')    // Remove invalid chars
+    .replace(/_+/g, '_')            // Replace multiple _ with single _
+    .replace(/^_|_$/g, '')          // Trim _ from start/end
+}
+
 export default {
   namespaced: true,
   
@@ -108,6 +129,19 @@ export default {
       delete newRoutes[connId]
       view.connectionRoutes = newRoutes
       state.views = { ...state.views, [viewId]: view }
+    },
+    
+    /**
+     * Patch encounterConfig for a view.
+     * Used for description, todos, and other view metadata.
+     */
+    PATCH_ENCOUNTER_CONFIG(state, { viewId, encounterConfig }) {
+      const targetViewId = viewId || state.currentViewId
+      if (!state.views[targetViewId]) return
+      
+      const view = { ...state.views[targetViewId] }
+      view.encounterConfig = encounterConfig
+      state.views = { ...state.views, [targetViewId]: view }
     },
     
     // ========== Status Mutations ==========
@@ -253,18 +287,51 @@ export default {
     },
 
     /**
-     * Create a new encounter view
+     * Create a new encounter view.
+     * 
+     * Creates the view in memory AND saves it to the server immediately.
+     * This ensures the encounter persists and appears in navigation.
+     * 
+     * @param {string} encounterName - Display name for the encounter
+     * @param {string} gameName - Optional game name (defaults to state.gameName)
      */
-    createEncounterView({ commit }, { encounterName }) {
-      const viewId = `encounter_${encounterName}`
-      const newView = {
-        id: viewId,
-        name: encounterName,
-        type: 'encounter',
-        stateLayouts: {},
-        connectionRoutes: {}
+    async createEncounterView({ commit, state, dispatch, rootState }, { encounterName, gameName }) {
+      const slug = slugify(encounterName)
+      const viewId = `encounter_${slug}`
+      
+      // Use provided gameName, or fall back to views state, or fall back to game store
+      const targetGameName = gameName || state.gameName || rootState.game?.gameName
+      
+      if (!targetGameName) {
+        console.error('[views] createEncounterView: No gameName available!')
+        throw new Error('Game name is required to create an encounter')
       }
+      
+      const newView = {
+        viewId: viewId,
+        viewType: 'encounter',
+        encounterConfig: {
+          name: encounterName,
+          description: '',
+          todos: []
+        },
+        stateLayouts: {},
+        connectionRoutes: {},
+        rafts: []
+      }
+      
+      // 1. Save to local store
       commit('SET_VIEW', { viewId, viewData: newView })
+      
+      // 2. Save to server immediately so it persists
+      try {
+        await dispatch('saveView', { gameName: targetGameName, viewId })
+        console.log(`[views] Created and saved encounter view: ${viewId} for game: ${targetGameName}`)
+      } catch (error) {
+        console.error(`[views] Failed to save encounter view ${viewId}:`, error)
+        throw error
+      }
+      
       return viewId
     },
     
@@ -343,6 +410,80 @@ export default {
         }
       }
       console.log('[views.js] saveAllViews COMPLETE')
+    },
+
+    /**
+     * Benennt eine View um (aktualisiert encounterConfig.name und Dateiname)
+     * 
+     * 1. Erstellt slugified Dateinamen aus newName
+     * 2. Löscht alte View-Datei vom Server
+     * 3. Speichert View mit neuem Dateinamen
+     * 4. Aktualisiert lokalen Store
+     */
+    async renameView({ commit, state, dispatch }, { gameName, viewId, newName }) {
+      const targetGameName = gameName || state.gameName
+      
+      if (!targetGameName || !viewId) {
+        throw new Error('Game name and view ID required')
+      }
+      
+      const viewData = state.views[viewId]
+      if (!viewData) {
+        throw new Error(`View ${viewId} not found`)
+      }
+      
+      // Create new viewId from slugified name (for encounter views)
+      const newSlug = slugify(newName)
+      const newViewId = viewId.startsWith('encounter_') 
+        ? `encounter_${newSlug}` 
+        : viewId  // Don't rename world view
+      
+      // Update view data with new name and viewId
+      const updatedView = {
+        ...viewData,
+        viewId: newViewId,
+        encounterConfig: {
+          ...(viewData.encounterConfig || {}),
+          name: newName
+        }
+      }
+      
+      // If viewId changed, we need to delete old file and create new one
+      if (newViewId !== viewId) {
+        // 1. Delete old view file from server
+        try {
+          await axios.delete(`${API_BASE_URL}/game/${targetGameName}/views/${viewId}`)
+          console.log(`[views] Deleted old view file: ${viewId}`)
+        } catch (error) {
+          // Ignore 404 errors (file might not exist yet)
+          if (error.response?.status !== 404) {
+            throw error
+          }
+        }
+        
+        // 2. Remove old view from local store
+        const newViews = { ...state.views }
+        delete newViews[viewId]
+        newViews[newViewId] = updatedView
+        commit('SET_VIEWS', newViews)
+        
+        // 3. Update currentViewId if necessary
+        if (state.currentViewId === viewId) {
+          commit('SET_CURRENT_VIEW', newViewId)
+        }
+        
+        // 4. Save new view to server
+        await dispatch('saveView', { gameName: targetGameName, viewId: newViewId })
+        
+        console.log(`[views] Renamed view ${viewId} → ${newViewId} ("${newName}")`)
+      } else {
+        // Just update the name, no file rename needed
+        commit('SET_VIEW', { viewId, viewData: updatedView })
+        await dispatch('saveView', { gameName: targetGameName, viewId })
+        console.log(`[views] Updated view ${viewId} name to "${newName}"`)
+      }
+      
+      return newViewId
     },
 
     /**

@@ -69,6 +69,7 @@
     C2V_UNSELECT: 'c2v:unselect',
     C2V_CCM: 'c2v:ccm',  // Canvas notifies Vue about content changes (for ContentChangeManager)
     C2V_OPEN_IMPORT_DIALOG: 'c2v:openImportDialog',  // Canvas requests Vue to open Import State dialog
+    C2V_CHAT_FROM_HERE: 'c2v:chatFromHere',  // Canvas requests Vue to open chat dialog from specific state
     
     // V2C: Vue → Canvas Messages
     V2C_SET_DOCUMENT: 'v2c:setDocument',

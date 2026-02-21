@@ -54,7 +54,43 @@ class GameEngine:
         # Create GameController (decides its own LLM implementation)
         self.controller: GameController = GameController(session=session)
     
-    def process_input(self, user_input: str) -> str:
+    def reinitialize_from_memory(self, model_data: Dict[str, Any], config_data: Optional[Dict[str, Any]] = None) -> None:
+        """
+        Reinitialize the game engine with in-memory model/config data.
+        Used by Developer Server to hot-reload without saving to disk.
+        
+        Args:
+            model_data: Model data dict (states, connections)
+            config_data: Config data dict (system_prompt, final_prompt, inventory) - optional
+        """
+        print("[ENGINE] Reinitializing from in-memory data...")
+        
+        # Convert overlay data to engine format
+        self.game_data = self._convert_overlay_data(model_data, config_data)
+        
+        # Reinitialize state engine with new data
+        self.state_engine = StateEngine(
+            session=self.session,
+            states=self.game_data.get('states', {}),
+            actions=self.game_data.get('actions', []),
+            initial_state=self.game_data.get('initial_state')
+        )
+        
+        # Reinitialize inventory with new data
+        self.inventory = Inventory(
+            session=self.session,
+            items=self.game_data.get('inventory', {})
+        )
+        
+        # Re-register inventory hook
+        self.state_engine.add_action_hook(self.inventory.on_action)
+        
+        # Recreate controller (it references state_engine/inventory via session)
+        self.controller = GameController(session=self.session)
+        
+        print(f"[ENGINE] Reinitialized with {len(self.game_data.get('states', {}))} states, {len(self.game_data.get('actions', []))} actions")
+    
+    def process_input(self, user_input: str) -> dict:
         """
         Process user input through the game controller.
         
@@ -62,7 +98,7 @@ class GameEngine:
             user_input: User's input text
             
         Returns:
-            Response text
+            Dict with 'response' (str), 'executed_action' (str or None)
         """
         return self.controller.process_input(user_input)
     
@@ -142,6 +178,23 @@ class GameEngine:
         if config_path.exists():
             with open(config_path, 'r', encoding='utf-8') as f:
                 config_data = json.load(f)
+        
+        return self._convert_overlay_data(model_data, config_data)
+    
+    def _convert_overlay_data(self, model_data: Dict[str, Any], config_data: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """
+        Convert Overlay Pattern data (model + config dicts) to Engine format.
+        This method can be used for both file-based and in-memory model data.
+        
+        Args:
+            model_data: Model data dict (states, connections)
+            config_data: Config data dict (system_prompt, final_prompt, inventory) - optional
+            
+        Returns:
+            Engine-compatible game definition
+        """
+        if config_data is None:
+            config_data = {}
         
         states_dict = model_data.get('states', {})
         connections_dict = model_data.get('connections', {})

@@ -39,7 +39,8 @@ export default {
         'mdi-plus-box': '+',
         'mdi-information': 'i',
         'mdi-treasure-chest': '▣',
-        'mdi-account-alert': '☺'
+        'mdi-account-alert': '☺',
+        'mdi-pencil': '✎'
       };
       return iconMap[this.icon] || '●';
     }

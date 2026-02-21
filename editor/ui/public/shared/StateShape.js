@@ -95,21 +95,14 @@ StateShape = draw2d.shape.box.VBox.extend({
                             this.addTrigger("_new_").onDoubleClick();
                         },10);
                         break;
-                    case "start":
-                        this.getCanvas().getCommandStack().execute(
-                            new draw2d.command.CommandAttr(this, {stateType: StateType.START})
-                        )
+                    case "chatFromHere":
+                        // Send C2V event to Vue parent to open chat dialog from this state
+                        window.parent.postMessage({
+                            type: MessageTypes.C2V_CHAT_FROM_HERE,
+                            stateName: this.getName()
+                        }, '*');
                         break;
-                    case "normal":
-                        this.getCanvas().getCommandStack().execute(
-                            new draw2d.command.CommandAttr(this, {stateType: StateType.NORMAL})
-                        )
-                        break;
-                    case "end":
-                        this.getCanvas().getCommandStack().execute(
-                            new draw2d.command.CommandAttr(this, {stateType: StateType.END})
-                        )
-                        break;
+
                     default:
                        break;
                    }
@@ -119,10 +112,12 @@ StateShape = draw2d.shape.box.VBox.extend({
                 items: {
                     "add": {name: "Add Trigger"},
                     "sep1": "---------",
+                    "chatFromHere": {name: "Chat from here", icon: "fa-comments"},
+                    "sep2": "---------",
                     "start": {name: "Start Node"},
                     "normal": {name: "Normal Node"},
                     "end": {name: "End Node"},
-                    "sep2": "---------",
+                    "sep3": "---------",
                     "delete": {name: "Delete"},
                 }
             })
@@ -324,7 +319,9 @@ StateShape = draw2d.shape.box.VBox.extend({
         delete memento.dasharray
         delete memento.gap
         delete memento.align
-     
+        delete memento.width
+        delete memento.height
+
          return memento;
      },
      
@@ -341,6 +338,8 @@ StateShape = draw2d.shape.box.VBox.extend({
         delete memento.stroke
         delete memento.bgColor
         delete memento.radius
+        delete memento.width
+        delete memento.height
 
         this._super(memento);
          

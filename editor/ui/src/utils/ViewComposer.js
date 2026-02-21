@@ -10,11 +10,12 @@ class ViewComposer {
   /**
    * Komponiert ein draw2d-kompatibles Diagram aus Model und View
    * 
-   * NUR States die in der View ein Layout haben werden angezeigt!
-   * Das ist das Overlay Pattern: Views sind Filter die bestimmen was sichtbar ist.
+   * Overlay Pattern Verhalten:
+   * - World View (viewType='world'): Zeigt ALLE States, auch ohne Layout (Default-Position)
+   * - Encounter View: Zeigt NUR States die in der View ein Layout haben
    * 
    * @param {Object} model - { states: {id: stateData}, connections: {id: connData} }
-   * @param {Object} view - { stateLayouts: {id: {x, y}}, connectionRoutes: {id: {vertex: []}} }
+   * @param {Object} view - { viewType, stateLayouts: {id: {x, y}}, connectionRoutes: {id: {vertex: []}} }
    * @returns {Array} - draw2d JSON Array
    */
   static compose(model, view) {
@@ -22,6 +23,7 @@ class ViewComposer {
     const stateLayouts = view?.stateLayouts || {}
     const connectionRoutes = view?.connectionRoutes || {}
     const rafts = view?.rafts || []
+    const isWorldView = view?.viewType === 'world'
     
     // 0. Rafts zuerst (sind Hintergrund-Elemente)
     for (const raft of rafts) {
@@ -38,22 +40,35 @@ class ViewComposer {
     }
     
     // Set der States die in dieser View sichtbar sind
-    const visibleStateIds = new Set(Object.keys(stateLayouts))
+    // World View: Alle Model-States sind sichtbar
+    // Encounter View: Nur States mit Layout sind sichtbar
+    const visibleStateIds = new Set()
     
-    // 1. NUR States mit Layout in der View werden angezeigt
+    // 1. States verarbeiten
     for (const [stateId, stateData] of Object.entries(model?.states || {})) {
       const layout = stateLayouts[stateId]
-      // Skip states ohne Layout in dieser View
-      if (!layout) continue
       
-      diagram.push({
-        ...stateData,
-        x: layout.x,
-        y: layout.y
-      })
+      if (isWorldView) {
+        // World View: Zeige ALLE States, Default-Position wenn kein Layout
+        visibleStateIds.add(stateId)
+        diagram.push({
+          ...stateData,
+          x: layout?.x ?? 100,
+          y: layout?.y ?? 100
+        })
+      } else {
+        // Encounter View: Nur States mit Layout in dieser View
+        if (!layout) continue
+        visibleStateIds.add(stateId)
+        diagram.push({
+          ...stateData,
+          x: layout.x,
+          y: layout.y
+        })
+      }
     }
     
-    // 2. NUR Connections deren Source UND Target sichtbar sind
+    // 2. Connections verarbeiten - nur wenn Source UND Target sichtbar sind
     for (const [connId, connData] of Object.entries(model?.connections || {})) {
       const sourceVisible = visibleStateIds.has(connData.source?.node)
       const targetVisible = visibleStateIds.has(connData.target?.node)

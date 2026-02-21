@@ -304,6 +304,9 @@
         this.onDataLoad(); // Sync with canvas
         if (this.isInitializing) return;
         
+        // Guard: Skip if no valid trigger is selected (e.g., after unselect)
+        if (!this.jsonData?.id) return;
+        
         // Update the trigger in the Model Store
         var data = JSON.parse(JSON.stringify(this.jsonData));
         this.updateTrigger(data);

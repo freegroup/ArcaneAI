@@ -5,6 +5,11 @@ const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 module.exports = defineConfig({
   transpileDependencies: true,
+  devServer: {
+    client: {
+      webSocketURL: 'auto://0.0.0.0:0/ws'
+    }
+  },
   configureWebpack: {
     plugins: [
       new webpack.DefinePlugin({

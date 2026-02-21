@@ -7,11 +7,13 @@
     <button @click="newFileDialog" class="retro-btn retro-btn--secondary retro-btn--sm">New Game</button>
     <button @click="openFileDialog" class="retro-btn retro-btn--secondary retro-btn--sm">Load Game</button>
     <button @click="save" class="retro-btn retro-btn--secondary retro-btn--sm">Save Game</button>
+    <button @click="newEncounterDialog" class="retro-btn retro-btn--secondary retro-btn--sm">Add Encounter</button>
     
     <v-spacer></v-spacer>
 
     <GameSelectDialog v-model:dialog="gameSelectDialog" />
     <GameNewDialog    v-model:dialog="gameNewDialog" />
+    <EncounterNewDialog v-model="encounterNewDialog" />
   </v-app-bar>
 </template>
 
@@ -19,16 +21,19 @@
 import { mapActions } from 'vuex';
 import GameNewDialog from './GameNewDialog.vue';
 import GameSelectDialog from './GameSelectDialog.vue';
+import EncounterNewDialog from './EncounterNewDialog.vue';
 
 export default {
   components: {
     GameSelectDialog,
     GameNewDialog,
+    EncounterNewDialog,
   },
   data() {
     return {
       gameSelectDialog: false,
       gameNewDialog: false,
+      encounterNewDialog: false,
     };
   },
   methods: {
@@ -45,6 +50,10 @@ export default {
     save() {
       console.log("Save Game");
       this.saveGame();
+    },
+    
+    newEncounterDialog() {
+      this.encounterNewDialog = true;
     },
   },
 };

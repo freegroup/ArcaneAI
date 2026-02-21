@@ -1,4 +1,5 @@
 from __future__ import annotations
+import threading
 from typing import TYPE_CHECKING, List, Optional
 
 from llm import LLMFactory, LLMMessage, LLMFunction, BaseLLMProvider
@@ -169,15 +170,15 @@ class GameController:
 
         return welcome_text
 
-    def process_input(self, user_input: str) -> str:
+    def process_input(self, user_input: str) -> dict:
         """
-        Process user input and return LLM response.
+        Process user input and return LLM response with metadata.
 
         Args:
             user_input: User's input text
 
         Returns:
-            Response text
+            Dict with 'response' (str), 'executed_action' (str or None)
         """
         from llm import LLMResponse
         
@@ -237,10 +238,20 @@ class GameController:
         # Stop any current speech before starting new one
         self.voice_provider.stop(self.session)
 
-        # Convert to speech
-        self.voice_provider.speak(self.session, narrative_response)
+        # Convert to speech in background thread (non-blocking)
+        # This allows the text response to return immediately
+        tts_thread = threading.Thread(
+            target=self.voice_provider.speak,
+            args=(self.session, narrative_response),
+            daemon=True
+        )
+        tts_thread.start()
 
-        return narrative_response
+        # Return response with metadata
+        return {
+            'response': narrative_response,
+            'executed_action': chosen_function_name if chosen_function_name != "keine_aktion" else None
+        }
 
     def _send_initial_ambient(self) -> None:
         """Play ambient sound for the initial game state via jukebox."""

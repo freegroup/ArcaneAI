@@ -10,6 +10,7 @@
  * - Klarere Dokumentation
  */
 import axios from 'axios'
+import { nextTick } from 'vue'
 const API_BASE_URL = process.env.VUE_APP_API_BASE_URL
 
 export default {
@@ -80,6 +81,9 @@ export default {
     },
     SET_GAME_NAME(state, name) {
       state.gameName = name
+    },
+    SET_PROPERTY_UPDATE(state, value) {
+      state.isPropertyUpdate = value
     }
   },
 
@@ -164,13 +168,16 @@ export default {
      * Aktualisiert einen einzelnen State (von PropertyEditor).
      * Setzt isPropertyUpdate Flag um Canvas-Refresh zu verhindern.
      */
-    updateState({ commit, state }, stateData) {
-      state.isPropertyUpdate = true
+    updateState({ commit }, stateData) {
+      commit('SET_PROPERTY_UPDATE', true)
       commit('SET_STATE', stateData)
       // Reset flag after Vue's reactivity cycle completes
-      setTimeout(() => {
-        state.isPropertyUpdate = false
-      }, 0)
+      // Using double nextTick ensures all watchers have processed before flag is cleared
+      nextTick(() => {
+        nextTick(() => {
+          commit('SET_PROPERTY_UPDATE', false)
+        })
+      })
     },
 
     /**
@@ -225,12 +232,16 @@ export default {
         actions: triggerData.userData?.actions || []
       }
       
-      // Set flag and commit
-      state.isPropertyUpdate = true
+      // Set flag and commit using proper mutation
+      commit('SET_PROPERTY_UPDATE', true)
       commit('SET_STATE', updatedState)
-      setTimeout(() => {
-        state.isPropertyUpdate = false
-      }, 0)
+      // Reset flag after Vue's reactivity cycle completes
+      // Using double nextTick ensures all watchers have processed before flag is cleared
+      nextTick(() => {
+        nextTick(() => {
+          commit('SET_PROPERTY_UPDATE', false)
+        })
+      })
     },
 
     /**
@@ -260,10 +271,19 @@ export default {
     },
 
     /**
-     * Aktualisiert eine einzelne Connection
+     * Aktualisiert eine einzelne Connection (von PropertyEditor).
+     * Setzt isPropertyUpdate Flag um Canvas-Refresh zu verhindern.
      */
     updateConnection({ commit }, connData) {
+      commit('SET_PROPERTY_UPDATE', true)
       commit('SET_CONNECTION', connData)
+      // Reset flag after Vue's reactivity cycle completes
+      // Using double nextTick ensures all watchers have processed before flag is cleared
+      nextTick(() => {
+        nextTick(() => {
+          commit('SET_PROPERTY_UPDATE', false)
+        })
+      })
     },
 
     /**

@@ -1,9 +1,10 @@
 <template>
-  <splitpanes 
-      id="canvas-game"
-      ref="splitPanes" 
-      class="default-theme full-height"  
-      @resized="handleResize">
+  <div class="canvas-game-container">
+    <splitpanes 
+        id="canvas-game"
+        ref="splitPanes" 
+        class="default-theme full-height"  
+        @resized="handleResize">
     <!-- Editor-Bereich -->
     <pane min-size="40%"  :size="paneSize">
       <div  class="iframe-container">
@@ -23,6 +24,13 @@
       <ConnectionTriggerProperty v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
     </pane>
   </splitpanes>
+  
+    <!-- Chat Dialog - outside splitpanes to avoid layout issues -->
+    <ChatDialog 
+      v-model="showChatDialog" 
+      :stateName="chatDialogStateName"
+    />
+  </div>
 </template>
 
 <script>
@@ -32,6 +40,7 @@ import 'splitpanes/dist/splitpanes.css';
 import StateProperty from './StateProperty.vue';
 import StateTriggerProperty from './StateTriggerProperty.vue';
 import ConnectionTriggerProperty from './ConnectionTriggerProperty.vue';
+import ChatDialog from '../components/ChatDialog.vue';
 import { MessageTypes } from '../../public/shared/SharedConstants.js';
 import ViewComposer from '../utils/ViewComposer.js';
 
@@ -41,7 +50,8 @@ export default {
     Pane,
     StateProperty,
     StateTriggerProperty,
-    ConnectionTriggerProperty
+    ConnectionTriggerProperty,
+    ChatDialog
   },
   data() {
     return {
@@ -49,6 +59,8 @@ export default {
       paneSize: 50,
       canvasReady: false,
       isCanvasUpdate: false,  // Flag to prevent circular updates from canvas
+      showChatDialog: false,
+      chatDialogStateName: ''
     };
   },
   computed: {
@@ -245,7 +257,11 @@ export default {
           this.handleCanvasUpdate(message.data);
           break;
 
-        // CCM Handler entfernt - nicht mehr benötigt im Overlay Pattern
+        case MessageTypes.C2V_CHAT_FROM_HERE:
+          // Open chat dialog with selected state
+          this.chatDialogStateName = message.stateName;
+          this.showChatDialog = true;
+          break;
 
         default:
           // Forward V2C messages to the iframe (Vue → Canvas)
@@ -267,8 +283,13 @@ export default {
 </script>
 
 <style scoped>
-.full-height {
+.canvas-game-container {
   height: 100vh;
+  width: 100%;
+}
+
+.full-height {
+  height: 100%;
   display: flex;
 }
 

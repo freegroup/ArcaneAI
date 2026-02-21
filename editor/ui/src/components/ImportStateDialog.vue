@@ -97,7 +97,6 @@ export default {
 
   computed: {
     ...mapGetters('game', ['gameDiagram']),
-    ...mapGetters('encounters', ['currentEncounter']),
     ...mapGetters('model', ['allStates']),
     ...mapGetters('views', ['currentView']),
     
@@ -110,30 +109,20 @@ export default {
       }
     },
 
-    // Get state names already in the current encounter (from store)
-    encounterStateNames() {
-      if (!this.currentEncounter?.diagram || !Array.isArray(this.currentEncounter.diagram)) {
-        return new Set();
-      }
-      
-      // Collect all state names from the encounter diagram
-      return new Set(
-        this.currentEncounter.diagram
-          .filter(item => item.type === 'StateShape')
-          .map(item => item.name)
-      );
-    },
-
-    // Get all states from the World (game) diagram that are not yet in encounter
+    // Get all states from the World (game) diagram that are not yet in current view
+    // Uses Overlay Pattern: checks views store for state IDs already in view
     gameStateNames() {
       if (!this.gameDiagram || !Array.isArray(this.gameDiagram)) {
         return [];
       }
       
-      // Filter for StateShape items only, excluding states already in encounter
+      // Get IDs of states already in current view
+      const statesInView = this.statesInCurrentView;
+      
+      // Filter for StateShape items only, excluding states already in view
       return this.gameDiagram
         .filter(item => item.type === 'StateShape')
-        .filter(item => !this.encounterStateNames.has(item.name))  // Exclude existing states
+        .filter(item => !statesInView.has(item.id))  // Exclude states by ID (new pattern)
         .map(state => ({
           id: state.id,
           name: state.name || 'Unnamed State',
@@ -209,7 +198,6 @@ export default {
   },
 
   methods: {
-    ...mapActions('encounters', ['updateEncounterDiagram']),
     ...mapActions('views', ['addStateToView']),
     
     /**
@@ -292,12 +280,6 @@ export default {
       const composedDiagram = ViewComposer.compose(model, view);
       
       this.sendToCanvas(composedDiagram);
-      
-      // Step 4: Update legacy store for backwards compatibility
-      const currentDiagram = this.currentEncounter?.diagram ? [...this.currentEncounter.diagram] : [];
-      const stateCopy = JSON.parse(JSON.stringify({ ...originalState, ...layout }));
-      currentDiagram.unshift(stateCopy);
-      this.updateEncounterDiagram({ encounterName, diagram: currentDiagram });
       
       this.close();
     },

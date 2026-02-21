@@ -1,9 +1,10 @@
 <template>
-  <splitpanes 
-      id="canvas-game"
-      ref="splitPanes" 
-      class="default-theme full-height"  
-      @resized="handleResize">
+  <div class="canvas-encounter-container">
+    <splitpanes 
+        id="canvas-game"
+        ref="splitPanes" 
+        class="default-theme full-height"  
+        @resized="handleResize">
     <!-- Editor-Bereich -->
     <pane min-size="40%"  :size="paneSize">
       <div  class="iframe-container">
@@ -18,14 +19,19 @@
 
     <!-- Sidebar-Bereich -->
     <pane min-size="20%"  :size="100-paneSize" class="scroll-y">
+      <EncounterPropertyView v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
       <StateProperty v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
       <StateTriggerProperty v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
       <ConnectionTriggerProperty v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
     </pane>
   </splitpanes>
 
-  <!-- Import State Dialog -->
-  <ImportStateDialog v-model="showImportStateDialog" />
+    <!-- Import State Dialog -->
+    <ImportStateDialog v-model="showImportStateDialog" />
+    
+    <!-- Chat Dialog - outside splitpanes to avoid layout issues -->
+    <ChatDialog v-model="showChatDialog" :stateName="chatDialogStateName" />
+  </div>
 </template>
 
 <script>
@@ -35,7 +41,9 @@ import 'splitpanes/dist/splitpanes.css';
 import StateProperty from './StateProperty.vue';
 import StateTriggerProperty from './StateTriggerProperty.vue';
 import ConnectionTriggerProperty from './ConnectionTriggerProperty.vue';
+import EncounterPropertyView from './EncounterPropertyView.vue';
 import ImportStateDialog from '../components/ImportStateDialog.vue';
+import ChatDialog from '../components/ChatDialog.vue';
 import { MessageTypes } from '../../public/shared/SharedConstants.js';
 import ViewComposer from '../utils/ViewComposer.js';
 
@@ -46,7 +54,9 @@ export default {
     StateProperty,
     StateTriggerProperty,
     ConnectionTriggerProperty,
-    ImportStateDialog
+    EncounterPropertyView,
+    ImportStateDialog,
+    ChatDialog
   },
   // Accept route params as props (passed via router with props: true)
   props: {
@@ -66,6 +76,8 @@ export default {
       canvasReady: false,
       isCanvasUpdate: false,  // Flag to prevent circular updates from canvas
       showImportStateDialog: false,
+      showChatDialog: false,
+      chatDialogStateName: ''
     };
   },
   computed: {
@@ -99,6 +111,21 @@ export default {
   },
   watch: {
     /**
+     * Watch for route param changes to reinitialize view when switching encounters.
+     * Vue reuses the component when navigating between encounters (same route, different params),
+     * so mounted() doesn't run again. This watcher ensures the canvas updates.
+     */
+    '$route.params.encounterName': {
+      handler(newEncounterName, oldEncounterName) {
+        if (newEncounterName && newEncounterName !== oldEncounterName) {
+          console.log(`[CanvasEncounter] Route changed: ${oldEncounterName} → ${newEncounterName}`);
+          this.initEncounterView();
+        }
+      },
+      immediate: false
+    },
+    
+    /**
      * Watch for composed diagram changes from Model+View.
      * 
      * Note: Canvas updates are ignored using isCanvasUpdate flag.
@@ -126,6 +153,7 @@ export default {
   methods: {
     ...mapActions('model', ['setModel', 'mergeModel', 'saveModel']),
     ...mapActions('views', ['updateCurrentViewLayout', 'saveView', 'setCurrentView', 'createEncounterView', 'removeStateFromCurrentView', 'removeConnectionFromCurrentView']),
+    ...mapActions('encounters', ['setCurrentEncounter']),
     
     /**
      * Speichert Model und aktuelle View
@@ -228,21 +256,23 @@ export default {
     
     /**
      * Initialisiert die View für diesen Encounter
+     * 
+     * WICHTIG: Views werden NICHT automatisch erstellt!
+     * Encounter-Views werden nur über EncounterNewDialog erstellt.
+     * Hier wird nur die currentView gesetzt - die View muss bereits
+     * vom Server geladen worden sein (via loadAllViews).
      */
-    async initEncounterView() {
+    initEncounterView() {
       const encounterName = this.$route.params.encounterName;
       if (!encounterName) return;
       
       const viewId = `encounter_${encounterName}`;
       
-      // Prüfe ob View existiert, sonst erstelle sie
-      const existingView = this.$store.getters['views/viewById'](viewId);
-      if (!existingView) {
-        this.createEncounterView({ encounterName });
-      }
-      
-      // Setze aktuelle View
+      // Setze aktuelle View (muss bereits vom Server geladen sein)
       this.setCurrentView(viewId);
+      
+      // Setze current encounter im encounters store
+      this.setCurrentEncounter(encounterName);
     }
   },
   mounted() {
@@ -279,6 +309,11 @@ export default {
           this.showImportStateDialog = true;
           break;
 
+        case MessageTypes.C2V_CHAT_FROM_HERE:
+          this.chatDialogStateName = message.stateName;
+          this.showChatDialog = true;
+          break;
+
         default:
           // Forward V2C messages to the iframe (Vue → Canvas)
           if (message.type?.startsWith('v2c:') && this.draw2dFrameContent) {
@@ -298,8 +333,13 @@ export default {
 </script>
 
 <style scoped>
-.full-height {
+.canvas-encounter-container {
   height: 100vh;
+  width: 100%;
+}
+
+.full-height {
+  height: 100%;
   display: flex;
 }
 

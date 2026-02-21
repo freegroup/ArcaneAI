@@ -60,10 +60,17 @@
             :key="encounter"
             :to="`/game/${$route.params.gameName}/encounter/${encounter}`"
             prepend-icon="mdi-map-marker"
-            :title="encounter"
+            :title="getEncounterDisplayName(encounter)"
             class="nav-drawer__subitem"
             router
           >
+            <template v-slot:append>
+              <button
+                @click.prevent.stop="openDeleteDialog(encounter)"
+                class="nav-drawer__delete-btn"
+                title="Delete encounter"
+              >X</button>
+            </template>
           </v-list-item>
         </template>
 
@@ -82,16 +89,26 @@
     <v-main class="content-area">
       <router-view ref="iframeContainer"></router-view>
     </v-main>
+
+    <!-- Delete Encounter Dialog -->
+    <confirm-encounter-delete-dialog
+      v-model="deleteDialogVisible"
+      :encounter-id="deletingEncounterId"
+      :encounter-name="deletingEncounterName"
+      @confirm="handleEncounterDelete"
+    />
   </v-app>
 </template>
 
 <script>
 import AppToolbar from './components/AppToolbar.vue';
+import ConfirmEncounterDeleteDialog from './components/ConfirmEncounterDeleteDialog.vue';
 import { mapActions } from 'vuex';
 
 export default {
   components: {
     AppToolbar,
+    ConfirmEncounterDeleteDialog,
   },
   data() {
     return {
@@ -103,16 +120,20 @@ export default {
       isCompact: false,
       windowWidth: window.innerWidth,
       openedGroups: ['game-map'],
+      // Delete Encounter Dialog state
+      deleteDialogVisible: false,
+      deletingEncounterId: '',
+      deletingEncounterName: '',
     };
   },
   computed: {
     drawerWidth() {
-      // Laptop screens (< 1440px): 25% narrower (180px instead of 240px)
-      // Larger screens: full width (240px)
+      // Laptop screens (< 1440px): narrower width (180px)
+      // Larger screens (≥ 1440px): 1/4 wider (300px instead of 240px)
       if (this.windowWidth < 1440) {
         return 180;
       }
-      return 240;
+      return 300;
     },
     encountersList() {
       return this.$store.getters['encounters/encounterNames'] || [];
@@ -168,6 +189,39 @@ export default {
     },
     handleResize() {
       this.windowWidth = window.innerWidth;
+    },
+    getEncounterDisplayName(encounterId) {
+      // Get display name from encounterConfig or fallback to encounterId
+      const encounter = this.$store.state.encounters?.encounters?.[encounterId];
+      return encounter?.name || encounterId;
+    },
+    openDeleteDialog(encounterId) {
+      this.deletingEncounterId = encounterId;
+      this.deletingEncounterName = this.getEncounterDisplayName(encounterId);
+      this.deleteDialogVisible = true;
+    },
+    async handleEncounterDelete(encounterId) {
+      try {
+        const viewId = `encounter_${encounterId}`;
+        
+        // Delete the view from server and store
+        await this.$store.dispatch('views/deleteView', {
+          gameName: this.$route.params.gameName,
+          viewId
+        });
+        
+        // Reload encounters to refresh navigation
+        await this.$store.dispatch('encounters/fetchEncounters', this.$route.params.gameName);
+        
+        // Navigate to world if we're currently viewing the deleted encounter
+        if (this.$route.params.encounterId === encounterId) {
+          this.$router.replace(`/game/${this.$route.params.gameName}/world`);
+        }
+        
+        console.log(`Encounter ${encounterId} deleted successfully`);
+      } catch (error) {
+        console.error('Failed to delete encounter:', error);
+      }
     },
   },
 };
@@ -257,10 +311,15 @@ export default {
 /* Subitem Styling (World + Encounters) */
 .nav-drawer__subitem {
   border-radius: 0 !important;
-  margin: 2px var(--game-spacing-sm) !important;
+  margin: 0 var(--game-spacing-sm) !important;
   padding-left: 40px !important;
-  min-height: 36px !important;
+  min-height: 32px !important;
   font-size: 0.875rem !important;
+}
+
+.nav-drawer__subitem .v-list-item__prepend {
+  width: 28px !important;
+  min-width: 28px !important;
 }
 
 .nav-drawer__subitem .v-icon {
@@ -309,6 +368,66 @@ export default {
   font-size: 0.75rem !important;
   text-transform: uppercase !important;
   letter-spacing: 0.5px !important;
+}
+
+/* Delete Button Styling - 8-Bit Button (like dialog close) */
+.nav-drawer__delete-btn {
+  opacity: 0;
+  transition: all 0.2s ease;
+  background: var(--game-accent-primary);
+  color: white;
+  border: none;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: var(--game-font-family-retro, 'Press Start 2P', monospace);
+  font-size: 8px;
+  font-weight: bold;
+  position: relative;
+  box-shadow: inset -2px -2px 0px 0px #8c2022;
+}
+
+.nav-drawer__delete-btn::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+  box-sizing: content-box;
+  pointer-events: none;
+}
+
+.nav-drawer__delete-btn::after {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+  box-sizing: content-box;
+  pointer-events: none;
+}
+
+.nav-drawer__subitem:hover .nav-drawer__delete-btn {
+  opacity: 0.8;
+}
+
+.nav-drawer__delete-btn:hover {
+  opacity: 1 !important;
+  background: #ce372b;
+  box-shadow: inset -3px -3px 0px 0px #8c2022;
+}
+
+.nav-drawer__delete-btn:active {
+  box-shadow: inset 2px 2px 0px 0px #8c2022;
 }
 </style>
 
