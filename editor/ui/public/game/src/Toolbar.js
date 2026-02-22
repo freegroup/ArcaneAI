@@ -56,8 +56,24 @@ Toolbar = Class.extend({
             let x = (this.view.getScrollLeft() + 100) * this.view.getZoom();
             let y = (this.view.getScrollTop() + 100) * this.view.getZoom();
         
-            var command = new draw2d.command.CommandAdd(this.view, new StateShape({name:"NewState"}), x, y);
+            var newState = new StateShape({name:"NewState"});
+            var command = new draw2d.command.CommandAdd(this.view, newState, x, y);
 			this.view.getCommandStack().execute(command);
+			
+			// Select the newly added state after command execution completes
+			// Use setTimeout to ensure the figure is fully added to the canvas
+			setTimeout(() => {
+				this.view.setCurrentSelection(newState);
+				
+				// Send message to Vue to focus the name property field
+				// Additional delay to ensure selection event is processed first
+				setTimeout(() => {
+					window.parent.postMessage({
+						type: MessageTypes.C2V_FOCUS_PROPERTY,
+						field: 'name'
+					}, '*');
+				}, 50);
+			}, 0);
 		});
     },
 

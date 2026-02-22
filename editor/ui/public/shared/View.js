@@ -346,16 +346,5 @@ View = draw2d.Canvas.extend({
         }
     },
 
-    /**
-     * Send command to Vue to open the Import State dialog
-     */
-    onImportState: function()
-    {
-        window.parent.postMessage({
-            type: MessageTypes.C2V_OPEN_IMPORT_DIALOG,
-            data: {}
-        }, '*');
-    },
-
 });
 

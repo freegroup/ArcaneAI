@@ -100,9 +100,14 @@ export default {
     '$route.query.addEncounter': {
       immediate: true,
       handler(value) {
+        console.log('[CanvasGame] addEncounter query changed:', value);
         if (value === 'true') {
+          console.log('[CanvasGame] Opening encounter dialog');
           this.showEncounterDialog = true;
-          this.$router.replace({ query: {} });
+          // Clear query param after a short delay to ensure dialog opened
+          this.$nextTick(() => {
+            this.$router.replace({ query: {} });
+          });
         }
       }
     }
@@ -194,6 +199,13 @@ export default {
       this.updateDraw2dFrame();
     });
 
+    // Listen for global event to open add encounter dialog
+    this.addEncounterHandler = () => {
+      console.log('[CanvasGame] Received open-add-encounter-dialog event');
+      this.showEncounterDialog = true;
+    };
+    window.addEventListener('open-add-encounter-dialog', this.addEncounterHandler);
+
     this.messageHandler = (event) => {
       if (event.origin !== window.location.origin) return;
       const message = event.data;
@@ -228,6 +240,9 @@ export default {
   beforeUnmount() {
     if (this.messageHandler) {
       window.removeEventListener('message', this.messageHandler);
+    }
+    if (this.addEncounterHandler) {
+      window.removeEventListener('open-add-encounter-dialog', this.addEncounterHandler);
     }
   }
 };

@@ -258,11 +258,18 @@ export default {
       }
     },
     openAddEncounterDialog() {
-      // Navigate to world view with addEncounter query param to trigger dialog
-      this.$router.push({
-        path: `/game/${this.$route.params.gameName}/world`,
-        query: { addEncounter: 'true' }
-      });
+      // If already on world route, emit event directly
+      const targetPath = `/game/${this.$route.params.gameName}/world`;
+      if (this.$route.path === targetPath) {
+        // Already on world view - emit global event
+        window.dispatchEvent(new CustomEvent('open-add-encounter-dialog'));
+      } else {
+        // Navigate to world view with query param
+        this.$router.push({
+          path: targetPath,
+          query: { addEncounter: 'true' }
+        });
+      }
     },
     async handleEncounterDelete(encounterId) {
       try {

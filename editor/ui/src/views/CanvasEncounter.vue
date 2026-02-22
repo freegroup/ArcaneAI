@@ -133,6 +133,7 @@ export default {
   methods: {
     ...mapActions('model', ['mergeModel', 'removeState', 'removeConnection', 'saveModel']),
     ...mapActions('views', ['updateCurrentViewLayout', 'saveView', 'setCurrentView', 'loadEncounterView']),
+    ...mapActions('encounters', ['setCurrentEncounter']),
     
     toggleSidebar() {
       this.sidebarCollapsed = !this.sidebarCollapsed;
@@ -144,6 +145,9 @@ export default {
       
       // viewId format is 'encounter_xxx'
       this.setCurrentView(this.viewId);
+      
+      // Set current encounter in encounters store for ImportStateDialog
+      this.setCurrentEncounter(this.encounterId);
     },
     
     async saveMap() {
@@ -238,6 +242,10 @@ export default {
         case MessageTypes.C2V_CHAT_FROM_HERE:
           this.chatDialogStateName = message.stateName;
           this.showChatDialog = true;
+          break;
+
+        case MessageTypes.C2V_OPEN_IMPORT_DIALOG:
+          this.showImportStateDialog = true;
           break;
 
         default:

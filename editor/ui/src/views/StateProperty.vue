@@ -6,6 +6,7 @@
           <HelpButton @click="openHelp('stateName')" />
         </div>
         <input
+            ref="nameInput"
             id="stateName"
             type="text"
             v-model="jsonData.name"
@@ -226,6 +227,19 @@
         this.jsonData.userData.ambient_sound = soundPath;
         this.onDataChange();
       },
+
+      /**
+       * Focus a specific property field.
+       * @param {string} fieldName - The field to focus ('name', etc.)
+       */
+      focusField(fieldName) {
+        this.$nextTick(() => {
+          if (fieldName === 'name' && this.$refs.nameInput) {
+            this.$refs.nameInput.focus();
+            this.$refs.nameInput.select();
+          }
+        });
+      },
     },
 
     mounted() {
@@ -250,6 +264,10 @@
             else if (message.event === MessageTypes.C2V_UNSELECT) {
                 SoundManager.stopCurrentSound()
                 this.jsonData = {}
+            }
+            // Handle focus request from canvas (e.g., after adding new element)
+            else if (message.type === MessageTypes.C2V_FOCUS_PROPERTY) {
+                this.focusField(message.field);
             }
         };
         window.addEventListener('message', this.messageHandler);
