@@ -202,6 +202,7 @@ class GameEngine:
         # 1. Parse Config
         identity = config_data.get('personality', '') + '\n'
         behaviour = "WICHTIG: Du darfst NUR die explizit definierten Aktionen verwenden. Erfinde NIEMALS eigene Aktionen."
+        welcome_prompt = config_data.get('welcome_prompt', '')
         
         # Convert Inventory list to dict
         inventory = {}
@@ -214,7 +215,7 @@ class GameEngine:
         # 2. Parse States
         states = {}
         state_id_map = {}  # Map ID to Name
-        start_node_id = None
+        initial_state = None  # Will be set by state with stateType='START'
         
         for state_id, state_obj in states_dict.items():
             name = state_obj.get('name')
@@ -222,9 +223,10 @@ class GameEngine:
             
             state_id_map[state_id] = name
             
+            # State marked as START is the initial state
             if state_obj.get('stateType') == 'START':
-                start_node_id = state_id
-                continue
+                initial_state = name
+                # Don't skip - this is a real state, just marked as start!
             
             state_data = {
                 'description': user_data.get('system_prompt', ''),
@@ -242,7 +244,6 @@ class GameEngine:
         
         # 3. Parse Actions from Connections
         actions = []
-        initial_state = None
         
         for conn_id, conn_obj in connections_dict.items():
             source_id = conn_obj.get('source', {}).get('node')
@@ -251,11 +252,6 @@ class GameEngine:
             
             state_before = state_id_map.get(source_id)
             state_after = state_id_map.get(target_id)
-            
-            # Connection from Start Node defines initial state
-            if source_id == start_node_id:
-                initial_state = state_after
-                continue
             
             if not state_before or not state_after:
                 continue
@@ -289,9 +285,6 @@ class GameEngine:
         
         # 4. Parse Internal Triggers from States
         for state_id, state_obj in states_dict.items():
-            if state_obj.get('stateType') == 'START':
-                continue
-            
             state_name = state_obj.get('name')
             
             for trigger in state_obj.get('trigger', []):
@@ -322,15 +315,16 @@ class GameEngine:
                 
                 actions.append(action)
         
-        # Initial state: Priority is Start-Node connection > config.json > fallback
-        # Start-Node connection is the authoritative source!
+        # ERROR if no state is marked as START
         if not initial_state:
-            config_initial = config_data.get('initial_state')
-            if config_initial and config_initial in states:
-                initial_state = config_initial
-            elif states:
-                # Fallback to first state
-                initial_state = list(states.keys())[0]
+            print("\n" + "=" * 70)
+            print("FATAL ERROR: No initial state found!")
+            print("=" * 70)
+            print("Mark exactly one state with stateType='START' to define")
+            print("where the game begins.")
+            print("=" * 70 + "\n")
+            import sys
+            sys.exit(1)
         
         print(f"[ENGINE] Loaded Overlay format: {len(states)} states, {len(actions)} actions, initial={initial_state}")
         
@@ -338,6 +332,7 @@ class GameEngine:
             'initial_state': initial_state,
             'personality': identity,
             'behaviour': behaviour,
+            'welcome_prompt': welcome_prompt,
             'states': states,
             'actions': actions,
             'inventory': inventory

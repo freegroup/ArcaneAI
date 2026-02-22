@@ -38,11 +38,11 @@ def init_routes(maps_dir: str):
 
 @router.get("/", response_model=List[str])
 async def list_games():
-    """List all available games (directories in maps folder, excluding 'template')."""
+    """List all available games (directories in maps folder)."""
     try:
         directories = [
             d for d in os.listdir(MAPS_ROOT_DIR) 
-            if os.path.isdir(os.path.join(MAPS_ROOT_DIR, d)) and d != "template"
+            if os.path.isdir(os.path.join(MAPS_ROOT_DIR, d))
         ]
         return sorted(directories)
     except FileNotFoundError:

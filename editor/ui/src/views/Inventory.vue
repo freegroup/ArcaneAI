@@ -17,11 +17,13 @@
           <tr class="input-row">
             <td>
               <v-text-field
+                ref="nameInput"
                 v-model="newItem.key"
                 placeholder="item_name"
                 outlined
                 dense
                 hide-details
+                @keyup.enter="handleEnter"
               ></v-text-field>
             </td>
             <td>
@@ -31,6 +33,7 @@
                 outlined
                 dense
                 hide-details
+                @keyup.enter="handleEnter"
               ></v-text-field>
             </td>
             <td>
@@ -50,13 +53,13 @@
           </tr>
           
           <!-- Inventory Items -->
-          <tr v-for="(item, key) in inventory" :key="key">
+          <tr v-for="(item, index) in inventorySorted" :key="item.key">
             <td>{{ item.key }}</td>
             <td>
               <v-text-field
                 v-model="item.value"
                 :type="item.type === 'integer' ? 'number' : 'text'"
-                @change="updateInventory"
+                @change="updateItem(item, index)"
                 outlined
                 density="compact"
                 hide-details
@@ -66,7 +69,7 @@
               <v-select
                 v-model="item.type"
                 :items="['string', 'boolean', 'integer']"
-                @change="updateInventory"
+                @change="updateItem(item, index)"
                 outlined
                 density="compact"
                 hide-details
@@ -130,44 +133,53 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('config', ['config']),
-    mapConfig() {
-      return this.config || {};
-    },
-    inventory: {
-      get() {
-        // Return inventory items sorted by key
-        return (this.mapConfig.inventory || []).sort((a, b) =>
-          a.key.localeCompare(b.key)
-        );
-      },
-      set(value) {
-        this.updateConfig({
-          ...this.mapConfig,
-          inventory: value,
-        });
-      },
+    ...mapGetters('config', ['inventory']),
+    inventorySorted() {
+      // Return inventory items sorted by key
+      return [...(this.inventory || [])].sort((a, b) =>
+        a.key.localeCompare(b.key)
+      );
     },
     canAddItem() {
       return this.newItem.key.trim() !== '' && this.newItem.value !== '';
     },
   },
+  mounted() {
+    // Focus name input when component mounts
+    this.$nextTick(() => {
+      this.focusNameInput();
+    });
+  },
   methods: {
-    ...mapActions('config', ['updateConfig']),
-    updateMapConfig(config) {
-      return this.updateConfig(config);
+    ...mapActions('config', ['setInventory', 'addInventoryItem', 'removeInventoryItem', 'updateInventoryItem']),
+    
+    focusNameInput() {
+      if (this.$refs.nameInput) {
+        // Vuetify v-text-field: access the internal input element
+        const input = this.$refs.nameInput.$el?.querySelector('input');
+        if (input) {
+          input.focus();
+        }
+      }
+    },
+    
+    handleEnter() {
+      if (this.canAddItem) {
+        this.addItem();
+      }
     },
     
     addItem() {
       if (this.newItem.key && this.newItem.value !== undefined) {
         // Convert value to the appropriate type
-        this.newItem.value = this.convertType(this.newItem.value, this.newItem.type);
+        const item = {
+          key: this.newItem.key,
+          value: this.convertType(this.newItem.value, this.newItem.type),
+          type: this.newItem.type
+        };
 
-        // Add the new item to inventory
-        const updatedInventory = [...this.inventory, { ...this.newItem }];
-
-        // Update the Vuex store
-        this.inventory = updatedInventory;
+        // Add the new item via Vuex action
+        this.addInventoryItem(item);
         
         // Show success toast notification
         this.toastMessage = 'Inventory item created!';
@@ -179,36 +191,40 @@ export default {
         
         // Reset the form
         this.newItem = { key: '', value: '', type: 'string' };
+        
+        // Re-focus the name input for quick entry of next item
+        this.$nextTick(() => {
+          this.focusNameInput();
+        });
       }
     },
 
-    updateInventory() {
-      // Ensure values are updated based on their type
-      this.inventory.forEach(item => {
-        item.value = this.convertType(item.value, item.type);
-      });
+    updateItem(item, index) {
+      // Convert value based on type
+      const updatedItem = {
+        ...item,
+        value: this.convertType(item.value, item.type)
+      };
       
-      // Update Vuex store
-      this.updateMapConfig({
-        ...this.mapConfig,
-        inventory: [...this.inventory],
-      });
+      // Update via Vuex action
+      this.updateInventoryItem({ index, item: updatedItem });
     },
 
     removeItem(key) {
-      // Filter out the item with the specified key
-      const updatedInventory = this.inventory.filter(item => item.key !== key);
-      
-      // Update Vuex store
-      this.inventory = updatedInventory;
-      
-      // Show error toast notification
-      this.toastMessage = 'Inventory item removed!';
-      this.toastType = 'toast-error';
-      this.showToast = true;
-      setTimeout(() => {
-        this.showToast = false;
-      }, 2000);
+      // Find index of item with key
+      const index = this.inventory.findIndex(item => item.key === key);
+      if (index !== -1) {
+        // Remove via Vuex action
+        this.removeInventoryItem(index);
+        
+        // Show error toast notification
+        this.toastMessage = 'Inventory item removed!';
+        this.toastType = 'toast-error';
+        this.showToast = true;
+        setTimeout(() => {
+          this.showToast = false;
+        }, 2000);
+      }
     },
 
     convertType(value, type) {

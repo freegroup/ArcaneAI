@@ -319,7 +319,31 @@ WICHTIG:
         if json_match:
             return json_match.group(1)
 
-        # Try to find JSON directly (non-greedy to get first complete object)
+        # Try brace-matching approach for complex JSON with strings containing special chars
+        start_idx = text.find('{')
+        if start_idx != -1:
+            depth = 0
+            in_string = False
+            escape_next = False
+            for i, char in enumerate(text[start_idx:], start_idx):
+                if escape_next:
+                    escape_next = False
+                    continue
+                if char == '\\' and in_string:
+                    escape_next = True
+                    continue
+                if char == '"' and not escape_next:
+                    in_string = not in_string
+                    continue
+                if not in_string:
+                    if char == '{':
+                        depth += 1
+                    elif char == '}':
+                        depth -= 1
+                        if depth == 0:
+                            return text[start_idx:i+1]
+
+        # Fallback: Try to find JSON directly (non-greedy for simple cases)
         json_match = re.search(r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', text)
         if json_match:
             return json_match.group(0)

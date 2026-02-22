@@ -209,8 +209,11 @@ class GameController:
         if function_call:
             chosen_function_name = function_call.name
         else:
-            # Parsing failed - provide fallback message instead of raw output
-            narrative_response = "Ich bin verwirrt... Kannst du das anders formulieren?"
+            # No function call - this is OK if LLM provided a narrative response
+            # Only fallback if response is empty or very short
+            if not narrative_response or len(narrative_response.strip()) < 10:
+                narrative_response = "Ich bin verwirrt... Kannst du das anders formulieren?"
+            # else: keep the narrative response as-is (no action needed)
 
         # Execute the action if one was chosen
         function_success: bool = True

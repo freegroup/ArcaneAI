@@ -98,17 +98,20 @@ class StateEngine:
                     state_after=state_after
                 ))
         
-        # Set initial state
+        # Set initial state - MUST be provided by GameEngine (from START node)
         if initial_state and initial_state in self.states:
             self.current_state = initial_state
-        elif self.states:
-            self.current_state = list(self.states.keys())[0]
         else:
-            raise ValueError("No states defined")
-        
-        # Validate that we have an initial state
-        if not self.current_state:
-            raise ValueError("No initial_state defined")
+            # GameEngine should catch this before we get here
+            # but guard against invalid initial_state name
+            print("\n" + "=" * 70)
+            print("FATAL ERROR: Invalid initial_state!")
+            print("=" * 70)
+            print(f"initial_state='{initial_state}' is not a valid state.")
+            print(f"Available states: {list(self.states.keys())}")
+            print("=" * 70 + "\n")
+            import sys
+            sys.exit(1)
     
     def add_action_hook(self, hook: Callable[[Action], bool]) -> None:
         """

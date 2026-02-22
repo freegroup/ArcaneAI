@@ -283,6 +283,7 @@ export default {
     modelValue(newVal) {
       if (newVal) {
         // Dialog opened - initialize with current text and history
+        console.log('[JinjaEditorDialog] Dialog opened, text prop:', this.text?.substring(0, 50));
         this.isInitializing = true;
         this.editedText = this.text;
         this.lastSavedText = this.text;
@@ -293,6 +294,19 @@ export default {
           this.isInitializing = false;
         });
       }
+    },
+    // Also watch text prop to sync when it changes after dialog opens
+    text: {
+      handler(newVal) {
+        console.log('[JinjaEditorDialog] text prop changed:', newVal?.substring(0, 50));
+        if (this.modelValue && !this.editedText) {
+          // Dialog is open but editedText is empty - sync from text prop
+          console.log('[JinjaEditorDialog] Syncing empty editedText from text prop');
+          this.editedText = newVal;
+          this.lastSavedText = newVal;
+        }
+      },
+      immediate: true
     },
     editedText(newVal) {
       // Skip if this is an undo/redo operation or initialization
@@ -358,7 +372,15 @@ export default {
     },
 
     async improveText() {
-      if (!this.aiPrompt.trim() || !this.editedText.trim()) {
+      console.log('improveText called', {
+        aiPrompt: this.aiPrompt,
+        editedText: this.editedText?.substring(0, 50),
+        API_BASE_URL
+      });
+      
+      // Only require prompt - text can be empty (AI will generate new content)
+      if (!this.aiPrompt.trim()) {
+        console.log('improveText early return - empty prompt');
         return;
       }
 

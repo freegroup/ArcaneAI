@@ -2,10 +2,10 @@
   <v-container fluid class="fill-height pa-0">
     <div class="config-view">
     <!-- 8-Bit Retro Header -->
-    <div class="personality-header">
-      <div class="personality-header__title">
-        <v-icon class="personality-header__icon">mdi-account-alert</v-icon>
-        <span>AI CHARACTER PERSONALITY</span>
+    <div class="welcome-header">
+      <div class="welcome-header__title">
+        <v-icon class="welcome-header__icon">mdi-message-text-clock</v-icon>
+        <span>WELCOME PROMPT</span>
         <HelpButton @click="showHelp = true" />
       </div>
     </div>
@@ -14,9 +14,9 @@
     <Codemirror
       class="full-height-editor"
       :class="{ 'editor-collapsed': aiAssistExpanded }"
-      v-model:value="personalityPrompt"
+      v-model:value="welcomePromptText"
       :options="cmOptions"
-      placeholder="Du bist ein Haudegen im 1700 Jahrhundert..."
+      placeholder="Set the scene for the player when the game starts..."
     />
 
     <!-- AI Assist Expandable Panel -->
@@ -39,29 +39,29 @@
             <div v-if="!aiResponse && !aiLoading" class="ai-helper-text">
               <v-icon size="small" color="primary">mdi-information-outline</v-icon>
               <div>
-                <strong>Wie funktioniert AI Assist?</strong>
-                <p>Gib der AI eine Anweisung, wie sie deinen Text verbessern soll:</p>
+                <strong>How does AI Assist work?</strong>
+                <p>Give the AI an instruction on how to improve your text:</p>
                 <ul>
-                  <li>"Verbessere die Grammatik und Rechtschreibung"</li>
-                  <li>"Übersetze ins Englische"</li>
-                  <li>"Mache den Text dramatischer"</li>
-                  <li>"Vereinfache die Sprache"</li>
+                  <li>"Make it more mysterious and atmospheric"</li>
+                  <li>"Add sensory details (sounds, smells, etc.)"</li>
+                  <li>"Make it shorter and punchier"</li>
+                  <li>"Translate to German"</li>
                 </ul>
               </div>
             </div>
 
             <div v-if="aiLoading" class="ai-loading">
               <v-progress-circular indeterminate color="primary" size="20"></v-progress-circular>
-              <span>AI arbeitet...</span>
+              <span>AI is working...</span>
             </div>
 
             <div v-if="aiResponse" class="ai-result">
               <div class="ai-result-header">
-                <strong>Verbesserter Text:</strong>
+                <strong>Improved Text:</strong>
                 <button 
                   @click="applyAiResult" 
                   class="retro-btn retro-btn--sm"
-                  title="Text in Editor übernehmen"
+                  title="Apply text to editor"
                 >
                   <v-icon size="small">mdi-check</v-icon>
                   Apply to Editor
@@ -84,7 +84,7 @@
               ref="promptInput"
               v-model="aiPrompt"
               type="text"
-              placeholder="z.B. 'Verbessere die Grammatik' oder 'Übersetze ins Englische'"
+              placeholder="e.g. 'Make it more atmospheric' or 'Translate to German'"
               @keyup.enter="improveText"
               :disabled="aiLoading"
               class="prompt-field"
@@ -93,7 +93,7 @@
               @click="improveText" 
               class="retro-btn retro-btn--sm"
               :disabled="!aiPrompt.trim() || aiLoading"
-              title="Text verbessern"
+              title="Improve text"
             >
               <v-icon size="small">mdi-magic-staff</v-icon>
               Send
@@ -106,7 +106,7 @@
     <!-- Extended Help Dialog -->
     <ExtendedHelpDialog
       v-model="showHelp"
-      title="AI Character Personality"
+      title="Welcome Prompt"
       :helpText="helpContent"
     />
     </div>
@@ -129,7 +129,7 @@ import "codemirror/theme/material-darker.css";
 const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
 
 export default {
-  name: 'PropertyView',
+  name: 'WelcomePromptView',
   components: { 
     Codemirror,
     ExtendedHelpDialog,
@@ -139,14 +139,28 @@ export default {
     return {
       showHelp: false,
       helpContent: `
-<p>Define how your AI game companion behaves:</p>
+<p>The <strong>Welcome Prompt</strong> is sent to the AI when the game starts.</p>
+
+<p>This text tells the AI what scene to describe to the player as their first impression of the game world.</p>
+
+<h4>What to include:</h4>
 <ul>
-  <li><strong>Personality & language style</strong> - How they talk and express themselves</li>
-  <li><strong>Response length</strong> - Short and snappy or detailed descriptions</li>
-  <li><strong>Interaction style</strong> - Friendly, mysterious, grumpy, etc.</li>
-  <li><strong>Game world behavior</strong> - Their role in the story</li>
+  <li><strong>Setting the scene</strong> - Describe the environment the player wakes up in</li>
+  <li><strong>Atmosphere</strong> - Sounds, smells, lighting, mood</li>
+  <li><strong>Initial situation</strong> - What just happened? Why is the player here?</li>
+  <li><strong>Call to action</strong> - What should the player do first?</li>
 </ul>
-<p>This defines their complete personality!</p>
+
+<h4>Tips:</h4>
+<ul>
+  <li>Keep it concise - the AI will elaborate</li>
+  <li>Use present tense for immediacy</li>
+  <li>Appeal to multiple senses</li>
+  <li>Create intrigue or urgency</li>
+</ul>
+
+<h4>Example:</h4>
+<p><em>"Describe the player waking up in a dark tavern cellar. They hear muffled voices above and smell spilled ale. A single candle flickers nearby, revealing a locked door."</em></p>
       `,
       cmOptions: {
         mode: "jinja2",
@@ -165,18 +179,18 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('config', ['personality']),
-    personalityPrompt: {
+    ...mapGetters('config', ['welcomePrompt']),
+    welcomePromptText: {
       get() {
-        return this.personality || '';
+        return this.welcomePrompt || '';
       },
       set(value) {
-        this.setPersonality(value);
+        this.setWelcomePrompt(value);
       },
     },
   },
   methods: {
-    ...mapActions('config', ['setPersonality']),
+    ...mapActions('config', ['setWelcomePrompt']),
     
     // AI Assist methods
     toggleAiAssist() {
@@ -209,11 +223,11 @@ export default {
       this.wordCountInfo = '';
 
       // Count words before improvement
-      const wordsBefore = this.countWords(this.personalityPrompt);
+      const wordsBefore = this.countWords(this.welcomePromptText);
 
       try {
         const response = await axios.post(`${API_BASE_URL}/text/improve`, {
-          text: this.personalityPrompt,
+          text: this.welcomePromptText,
           instruction: this.aiPrompt,
           include_comment: true
         });
@@ -224,14 +238,14 @@ export default {
         
         // Count words after improvement and create info
         const wordsAfter = this.countWords(data.improved_text);
-        this.wordCountInfo = `Wörter: ${wordsBefore} → ${wordsAfter}`;
+        this.wordCountInfo = `Words: ${wordsBefore} → ${wordsAfter}`;
         
         // Clear prompt after successful response
         this.aiPrompt = '';
       } catch (error) {
         console.error('AI Improve Text Error:', error);
         this.aiResponse = '';
-        this.aiComment = 'Fehler bei der Textverbesserung. Bitte versuche es erneut.';
+        this.aiComment = 'Error improving text. Please try again.';
       } finally {
         this.aiLoading = false;
       }
@@ -239,7 +253,7 @@ export default {
 
     applyAiResult() {
       if (this.aiResponse) {
-        this.setPersonality(this.aiResponse);
+        this.setWelcomePrompt(this.aiResponse);
         // Clear AI response after applying
         this.aiResponse = '';
         this.aiComment = '';
@@ -263,7 +277,7 @@ export default {
 }
 
 /* 8-Bit Retro Header */
-.personality-header {
+.welcome-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -274,7 +288,7 @@ export default {
   box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.3);
 }
 
-.personality-header__title {
+.welcome-header__title {
   display: flex;
   align-items: center;
   gap: var(--screen-wide-header-gap, var(--game-spacing-md));
@@ -286,7 +300,7 @@ export default {
                0 0 10px var(--game-accent-secondary);
 }
 
-.personality-header__icon {
+.welcome-header__icon {
   color: var(--game-accent-secondary);
   font-size: var(--screen-wide-header-icon-size, 32px);
   filter: drop-shadow(0 0 8px var(--game-accent-secondary));
@@ -295,42 +309,42 @@ export default {
 
 /* Responsive header for laptop screens (60% height) */
 @media (max-width: 1439px) {
-  .personality-header {
+  .welcome-header {
     padding: var(--screen-medium-header-padding-y) var(--game-spacing-lg);
   }
   
-  .personality-header__title {
+  .welcome-header__title {
     font-size: var(--screen-medium-header-font-size);
     gap: var(--screen-medium-header-gap);
     letter-spacing: var(--screen-medium-header-letter-spacing);
   }
   
-  .personality-header__icon {
+  .welcome-header__icon {
     font-size: var(--screen-medium-header-icon-size);
   }
   
-  .personality-header__info {
+  .welcome-header__info {
     font-size: var(--screen-medium-header-info-size);
   }
 }
 
 /* Responsive header for small screens */
 @media (max-width: 1023px) {
-  .personality-header {
+  .welcome-header {
     padding: var(--screen-small-header-padding-y) var(--game-spacing-md);
   }
   
-  .personality-header__title {
+  .welcome-header__title {
     font-size: var(--screen-small-header-font-size);
     gap: var(--screen-small-header-gap);
     letter-spacing: var(--screen-small-header-letter-spacing);
   }
   
-  .personality-header__icon {
+  .welcome-header__icon {
     font-size: var(--screen-small-header-icon-size);
   }
   
-  .personality-header__info {
+  .welcome-header__info {
     font-size: var(--screen-small-header-info-size);
   }
 }
@@ -346,14 +360,14 @@ export default {
   }
 }
 
-.personality-header__info {
+.welcome-header__info {
   color: var(--game-text-secondary);
   font-size: var(--screen-wide-header-info-size, 24px);
   cursor: pointer;
   transition: all var(--game-transition-fast);
 }
 
-.personality-header__info:hover {
+.welcome-header__info:hover {
   color: var(--game-accent-secondary);
   filter: drop-shadow(0 0 8px var(--game-accent-secondary));
   transform: scale(1.1);

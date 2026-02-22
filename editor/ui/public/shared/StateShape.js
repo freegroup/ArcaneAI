@@ -102,7 +102,13 @@ StateShape = draw2d.shape.box.VBox.extend({
                             stateName: this.getName()
                         }, '*');
                         break;
-
+                    case "start":
+                        this.setStateType(StateType.START);
+                        // Notify Vue that model changed
+                        window.parent.postMessage({
+                            type: MessageTypes.C2V_MODEL_CHANGED
+                        }, '*');
+                        break;
                     default:
                        break;
                    }
@@ -114,10 +120,7 @@ StateShape = draw2d.shape.box.VBox.extend({
                     "sep1": "---------",
                     "chatFromHere": {name: "Chat from here", icon: "fa-comments"},
                     "sep2": "---------",
-                    "start": {name: "Start Node"},
-                    "normal": {name: "Normal Node"},
-                    "end": {name: "End Node"},
-                    "sep3": "---------",
+                    "start": {name: "Set as Start"},
                     "delete": {name: "Delete"},
                 }
             })

@@ -11,6 +11,7 @@ export default {
   
   state: {
     personality: '',
+    welcomePrompt: '',
     finalPrompt: '',
     inventory: [],
     loading: false,
@@ -22,11 +23,16 @@ export default {
   mutations: {
     SET_CONFIG(state, config) {
       state.personality = config.personality || ''
+      state.welcomePrompt = config.welcome_prompt || ''
       state.inventory = config.inventory || []
       state.hasUnsavedChanges = false
     },
     SET_PERSONALITY(state, prompt) {
       state.personality = prompt
+      state.hasUnsavedChanges = true
+    },
+    SET_WELCOME_PROMPT(state, prompt) {
+      state.welcomePrompt = prompt
       state.hasUnsavedChanges = true
     },
     SET_INVENTORY(state, inventory) {
@@ -100,6 +106,7 @@ export default {
       
       const configData = {
         personality: state.personality,
+        welcome_prompt: state.welcomePrompt,
         inventory: state.inventory
       }
       
@@ -120,6 +127,13 @@ export default {
      */
     setPersonality({ commit }, prompt) {
       commit('SET_PERSONALITY', prompt)
+    },
+
+    /**
+     * Aktualisiert den Welcome Prompt
+     */
+    setWelcomePrompt({ commit }, prompt) {
+      commit('SET_WELCOME_PROMPT', prompt)
     },
 
     /**
@@ -153,6 +167,7 @@ export default {
 
   getters: {
     personality: (state) => state.personality,
+    welcomePrompt: (state) => state.welcomePrompt,
     finalPrompt: (state) => state.finalPrompt,
     inventory: (state) => state.inventory,
     inventoryCount: (state) => state.inventory.length,
@@ -162,6 +177,7 @@ export default {
     // Für Rückwärtskompatibilität
     gameConfig: (state) => ({
       personality: state.personality,
+      welcome_prompt: state.welcomePrompt,
       inventory: state.inventory
     }),
     

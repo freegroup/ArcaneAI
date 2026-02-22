@@ -144,9 +144,10 @@ export default {
   data() {
     return {
       navigationItems: [
-        { title: 'Personality',  route: (gameName) => gameName ? `/game/${gameName}/personality` : '#', icon: 'mdi-account-alert-outline'},
-        { title: 'Inventory',    route: (gameName) => gameName ? `/game/${gameName}/inventory` : '#', icon: 'mdi-hand-coin-outline' },
-        { title: 'Game Map', route: (gameName) => gameName ? `/game/${gameName}/world` : '#', icon: 'mdi-state-machine'     },
+        { title: 'Personality',    route: (gameName) => gameName ? `/game/${gameName}/personality` : '#', icon: 'mdi-account-alert-outline'},
+        { title: 'Welcome Prompt', route: (gameName) => gameName ? `/game/${gameName}/welcome` : '#', icon: 'mdi-message-text-clock-outline'},
+        { title: 'Inventory',      route: (gameName) => gameName ? `/game/${gameName}/inventory` : '#', icon: 'mdi-hand-coin-outline' },
+        { title: 'Game Map',       route: (gameName) => gameName ? `/game/${gameName}/world` : '#', icon: 'mdi-state-machine'     },
       ],
       isCompact: false,
       windowWidth: window.innerWidth,
