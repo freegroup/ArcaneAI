@@ -15,30 +15,40 @@ export default {
     inventory: [],
     loading: false,
     error: null,
-    gameName: null
+    gameName: null,
+    hasUnsavedChanges: false
   },
 
   mutations: {
     SET_CONFIG(state, config) {
       state.personality = config.personality || ''
       state.inventory = config.inventory || []
+      state.hasUnsavedChanges = false
     },
     SET_PERSONALITY(state, prompt) {
       state.personality = prompt
+      state.hasUnsavedChanges = true
     },
     SET_INVENTORY(state, inventory) {
       state.inventory = inventory || []
+      state.hasUnsavedChanges = true
     },
     ADD_INVENTORY_ITEM(state, item) {
       state.inventory = [...state.inventory, item]
+      state.hasUnsavedChanges = true
     },
     REMOVE_INVENTORY_ITEM(state, index) {
       state.inventory = state.inventory.filter((_, i) => i !== index)
+      state.hasUnsavedChanges = true
     },
     UPDATE_INVENTORY_ITEM(state, { index, item }) {
       const newInventory = [...state.inventory]
       newInventory[index] = item
       state.inventory = newInventory
+      state.hasUnsavedChanges = true
+    },
+    SET_UNSAVED_CHANGES(state, value) {
+      state.hasUnsavedChanges = value
     },
     SET_LOADING(state, loading) {
       state.loading = loading
@@ -61,7 +71,8 @@ export default {
       commit('SET_GAME_NAME', gameName)
       
       try {
-        const response = await axios.get(`${API_BASE_URL}/game/${gameName}/config`)
+        // RESTful: GET /games/{name}/config
+        const response = await axios.get(`${API_BASE_URL}/games/${gameName}/config`)
         commit('SET_CONFIG', response.data)
       } catch (error) {
         if (error.response?.status === 404) {
@@ -82,7 +93,7 @@ export default {
     /**
      * Speichert die Config zum Server
      */
-    async saveConfig({ state }) {
+    async saveConfig({ state, commit }) {
       if (!state.gameName) {
         throw new Error('No game name set')
       }
@@ -92,11 +103,9 @@ export default {
         inventory: state.inventory
       }
       
-      const blob = new Blob([JSON.stringify(configData, null, 2)], { type: 'application/json' })
-      const formData = new FormData()
-      formData.append('file', blob, 'config.json')
-      
-      await axios.put(`${API_BASE_URL}/game/${state.gameName}/config`, formData)
+      // RESTful: PUT /games/{name}/config with JSON body
+      await axios.put(`${API_BASE_URL}/games/${state.gameName}/config`, configData)
+      commit('SET_UNSAVED_CHANGES', false)
     },
 
     /**
@@ -154,6 +163,9 @@ export default {
     gameConfig: (state) => ({
       personality: state.personality,
       inventory: state.inventory
-    })
+    }),
+    
+    // Unsaved changes tracking
+    hasUnsavedChanges: (state) => state.hasUnsavedChanges
   }
 }

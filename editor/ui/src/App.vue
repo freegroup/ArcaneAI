@@ -19,6 +19,11 @@
       >
       </v-list-item>
 
+      <!-- Game Name Display -->
+      <div v-if="!isCompact && currentGameName" class="nav-drawer__game-name">
+        <span class="nav-drawer__game-label">{{ currentGameName }}</span>
+      </div>
+
       <v-divider></v-divider>
 
       <v-list dense class="nav-drawer__list">
@@ -163,6 +168,10 @@ export default {
       }
       return 300;
     },
+    currentGameName() {
+      // Get game name from store (preferred) or from route params
+      return this.$store.getters['game/gameName'] || this.$route.params.gameName || null;
+    },
     encountersList() {
       return this.$store.getters['encounters/encounterNames'] || [];
     },
@@ -238,8 +247,8 @@ export default {
       this.deleteDialogVisible = true;
     },
     handleBeforeUnload(event) {
-      // Check if there are unsaved changes in the model store
-      const hasUnsavedChanges = this.$store.getters['model/hasUnsavedChanges'];
+      // Check if there are unsaved changes (central getter in game store)
+      const hasUnsavedChanges = this.$store.getters['game/hasUnsavedChanges'];
       if (hasUnsavedChanges) {
         // Standard way to show browser's "unsaved changes" dialog
         event.preventDefault();
@@ -305,6 +314,26 @@ export default {
 .nav-drawer__toggle:hover .v-icon {
   filter: drop-shadow(0 0 12px var(--game-accent-secondary)) !important;
   transform: scale(1.1) !important;
+}
+
+/* Game Name Display */
+.nav-drawer__game-name {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  margin: 0 8px 8px 8px;
+  background: rgba(243, 156, 18, 0.1);
+  border: 2px solid var(--game-accent-secondary);
+  border-radius: 0;
+}
+
+.nav-drawer__game-label {
+  font-family: var(--game-font-family-retro, 'Press Start 2P', monospace);
+  font-size: 10px;
+  color: var(--game-accent-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Divider verstecken */

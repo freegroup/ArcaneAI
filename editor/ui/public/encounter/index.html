@@ -1,4 +1,4 @@
-﻿<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
 <title></title>
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -105,6 +105,19 @@ document.addEventListener("DOMContentLoaded", () => {
           pseudoCheckbox.focus();
       });
 
+      // Fullscreen Toggle Button
+      const fullscreenToggle = document.getElementById('canvas_fullscreen_toggle');
+      const expandIcon = document.getElementById('fullscreen_expand');
+      const collapseIcon = document.getElementById('fullscreen_collapse');
+      
+      fullscreenToggle.addEventListener('click', () => {
+        app.view.toggleFullScreen();
+        // Toggle icons based on fullscreen state
+        const isFullscreen = app.view.isFullScreen;
+        expandIcon.style.display = isFullscreen ? 'none' : 'block';
+        collapseIcon.style.display = isFullscreen ? 'block' : 'none';
+      });
+
 });
 
 </script>
@@ -123,6 +136,17 @@ document.addEventListener("DOMContentLoaded", () => {
     <button type="button" id="canvas_zoom_in"     >&#8210;</button>
     <button type="button" id="canvas_zoom_normal" >100%</button>
     <button type="button" id="canvas_zoom_out"    >&#xFF0B</button>
+  </div>
+
+  <div id="canvas_fullscreen">
+    <button type="button" id="canvas_fullscreen_toggle" title="Toggle Fullscreen">
+      <svg id="fullscreen_expand" viewBox="0 0 24 24" width="20" height="20">
+        <path fill="currentColor" d="M5,5H10V7H7V10H5V5M14,5H19V10H17V7H14V5M17,14H19V19H14V17H17V14M10,17V19H5V14H7V17H10Z"/>
+      </svg>
+      <svg id="fullscreen_collapse" viewBox="0 0 24 24" width="20" height="20" style="display:none;">
+        <path fill="currentColor" d="M14,14H19V16H16V19H14V14M5,14H10V19H8V16H5V14M8,5H10V10H5V8H8V5M19,8V10H14V5H16V8H19Z"/>
+      </svg>
+    </button>
   </div>
 
   <!-- Bootstrap Modal -->

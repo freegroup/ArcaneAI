@@ -105,7 +105,8 @@ export default {
       commit('SET_GAME_NAME', gameName)
       
       try {
-        const response = await axios.get(`${API_BASE_URL}/game/${gameName}/model`)
+        // RESTful: GET /games/{name}/model
+        const response = await axios.get(`${API_BASE_URL}/games/${gameName}/model`)
         const modelData = response.data
         commit('SET_MODEL', {
           states: modelData.states || {},
@@ -140,11 +141,8 @@ export default {
         connections: state.connections
       }
       
-      const blob = new Blob([JSON.stringify(modelData, null, 2)], { type: 'application/json' })
-      const formData = new FormData()
-      formData.append('file', blob, 'model.json')
-      
-      await axios.put(`${API_BASE_URL}/game/${state.gameName}/model`, formData)
+      // RESTful: PUT /games/{name}/model with JSON body
+      await axios.put(`${API_BASE_URL}/games/${state.gameName}/model`, modelData)
       commit('SET_UNSAVED_CHANGES', false)  // Model saved = no unsaved changes
       console.log('[model.js] saveModel COMPLETE')
     },

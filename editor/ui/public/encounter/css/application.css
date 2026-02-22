@@ -107,6 +107,53 @@ body {
 	border-width:1px;
 	border-style: solid;
 }
+
+#canvas_fullscreen {
+	position: fixed;
+	top: 60px;
+	right: 20px;
+	z-index: 1001;
+	border-radius: 5px;
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	background-color: #ffffff9e;
+	padding: 3px;
+	border-color: #eaeaea;
+	border-width: 1px;
+	border-style: solid;
+}
+
+#canvas_fullscreen_toggle {
+	background-color: transparent;
+	font-weight: 800;
+	font-size: 12px;
+	border-radius: 5px;
+	padding: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: transparent;
+	outline: none;
+	transition: all 0.5s;
+	margin: 2px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #333;
+}
+
+#canvas_fullscreen_toggle:hover {
+	border-width: 1px;
+	border-style: solid;
+	border-color: #ccc;
+}
+
+#canvas_fullscreen_toggle svg {
+	display: block;
+}
 	
   
 #pseudoCheckbox {

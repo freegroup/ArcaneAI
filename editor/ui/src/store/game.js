@@ -121,5 +121,16 @@ export default {
     gameDiagram: (state, getters, rootState, rootGetters) => {
       return rootGetters['views/getWorldDiagram'] || [];
     },
+    
+    /**
+     * Zentrales hasUnsavedChanges - prüft ALLE relevanten Stores
+     */
+    hasUnsavedChanges: (state, getters, rootState, rootGetters) => {
+      const modelUnsaved = rootGetters['model/hasUnsavedChanges'] || false;
+      const configUnsaved = rootGetters['config/hasUnsavedChanges'] || false;
+      // Views könnten auch Änderungen haben (positions etc.)
+      // const viewsUnsaved = rootGetters['views/hasUnsavedChanges'] || false;
+      return modelUnsaved || configUnsaved;
+    },
   },
 };

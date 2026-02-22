@@ -2,13 +2,13 @@
   <v-dialog :model-value="modelValue" max-width="500" @click:outside="cancel" @update:model-value="updateDialog">
     <v-card class="delete-encounter-dialog">
       <DialogHeader 
-        title="Delete Encounter" 
+        title="Remove Encounter" 
         icon="mdi-map-marker"
         @close="cancel" 
       />
       <v-card-text class="dialog-content">
         <p class="confirm-text">
-          Delete encounter <strong>"{{ encounterName }}"</strong>?
+          Remove encounter <strong>"{{ encounterName }}"</strong>?
         </p>
       </v-card-text>
       <v-card-actions class="dialog-actions">

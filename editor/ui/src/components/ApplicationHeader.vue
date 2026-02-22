@@ -20,7 +20,9 @@
           </v-btn>
           <button @click="newFileDialog" class="retro-btn retro-btn--secondary retro-btn--sm">New Game</button>
           <button @click="openFileDialog" class="retro-btn retro-btn--secondary retro-btn--sm">Load Game</button>
-          <button @click="save" class="retro-btn retro-btn--secondary retro-btn--sm">Save Game</button>
+          <button @click="save" class="retro-btn retro-btn--secondary retro-btn--sm">
+            Save Game<span v-if="hasUnsavedChanges" class="unsaved-indicator">*</span>
+          </button>
         </div>
       </div>
     </template>
@@ -32,7 +34,9 @@
       </v-btn>
       <button @click="newFileDialog" class="retro-btn retro-btn--secondary retro-btn--sm">New Game</button>
       <button @click="openFileDialog" class="retro-btn retro-btn--secondary retro-btn--sm">Load Game</button>
-      <button @click="save" class="retro-btn retro-btn--secondary retro-btn--sm">Save Game</button>
+      <button @click="save" class="retro-btn retro-btn--secondary retro-btn--sm">
+        Save Game<span v-if="hasUnsavedChanges" class="unsaved-indicator">*</span>
+      </button>
       <v-spacer></v-spacer>
     </template>
     
@@ -44,7 +48,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import GameNewDialog from './GameNewDialog.vue';
 import GameSelectDialog from './GameSelectDialog.vue';
 import EncounterNewDialog from './EncounterNewDialog.vue';
@@ -65,6 +69,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters('game', ['hasUnsavedChanges']),
     isLargeScreen() {
       return this.windowWidth >= 1200;
     },
@@ -208,5 +213,18 @@ export default {
 
 .app-header .home-btn:hover .v-icon {
   color: var(--game-text-primary) !important;
+}
+
+/* Unsaved changes indicator */
+.unsaved-indicator {
+  color: var(--game-accent-secondary, #f39c12);
+  font-weight: bold;
+  margin-left: 2px;
+  animation: pulse-indicator 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-indicator {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 </style>

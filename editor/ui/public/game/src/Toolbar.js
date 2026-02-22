@@ -59,13 +59,6 @@ Toolbar = Class.extend({
             var command = new draw2d.command.CommandAdd(this.view, new StateShape({name:"NewState"}), x, y);
 			this.view.getCommandStack().execute(command);
 		});
-
-		// Fullscreen Button
-		this.fullscreenButton = this.createButton('Fullscreen');
-		this.html.appendChild(this.fullscreenButton);
-		this.fullscreenButton.addEventListener('click', () => {
-			this.view.toggleFullScreen();
-		});
     },
 
 	/**

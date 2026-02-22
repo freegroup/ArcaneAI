@@ -66,13 +66,6 @@ Toolbar = Class.extend({
 		this.importButton.addEventListener('click', () => {
 			this.view.onImportState();
 		});
-
-		// Fullscreen Button
-		this.fullscreenButton = this.createButton('Fullscreen');
-		this.html.appendChild(this.fullscreenButton);
-		this.fullscreenButton.addEventListener('click', () => {
-			this.view.toggleFullScreen();
-		});
     },
 
 	/**

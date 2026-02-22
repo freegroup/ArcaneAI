@@ -1,0 +1,145 @@
+{
+  "states": {
+    "63c0f27a-716e-804c-6873-cd99b945b63f": {
+      "type": "StateShape",
+      "id": "63c0f27a-716e-804c-6873-cd99b945b63f",
+      "userData": {
+        "system_prompt": "Du befindest dich in Zustand A. Ja, genau, A wie \"Anfang\". Die State Engine hat definitiv schon bessere Tage gesehen – irgendwo quietscht es verdächtig und ein paar Zahnräder drehen sich nur noch aus Gewohnheit. Du kannst dich umschauen und entdeckst....nihts.",
+        "ambient_sound": "",
+        "ambient_sound_volume": 100
+      },
+      "name": "A",
+      "stateType": "NORMAL",
+      "trigger": [
+        {
+          "id": "9d443b67-a677-d481-7f7b-d542697eca61",
+          "name": "untersuche_den_state",
+          "description": "Du kannst den Raum untersuchen un ihn mal Beschreiben.",
+          "sound_effect": "effect_tuer_aufschliessen.wav",
+          "sound_effect_duration": 2,
+          "sound_effect_volume": 100,
+          "system_prompt": "Die ist etwas in der Ecke aufgefallen was man sich ja mal genauer ansehen könnte. Wenn man klug genug ist.",
+          "conditions": [],
+          "actions": [
+            "discovered_kalter_raum = true"
+          ]
+        }
+      ]
+    },
+    "3253ff2a-a920-09d5-f033-ca759a778e19": {
+      "type": "StateShape",
+      "id": "3253ff2a-a920-09d5-f033-ca759a778e19",
+      "userData": {
+        "system_prompt": "Du befindest dich in Zustand B. Ja, genau, B wie \"belanglos\". Die State Engine hat definitiv schon bessere Tage gesehen – irgendwo quietscht es verdächtig und ein paar Zahnräder drehen sich nur noch aus Gewohnheit. Du kannst dich umschauen und entdeckst....nihts.",
+        "ambient_sound": "",
+        "ambient_sound_volume": 100
+      },
+      "name": "B",
+      "stateType": "NORMAL",
+      "trigger": [
+        {
+          "id": "1047ee2f-3e05-f19f-60c8-1f687d3cd08f",
+          "name": "untersuche_den_state",
+          "description": "du untersuchts diesen state und meldest zurück was due entdeckt hast",
+          "sound_effect": "laufen_teppich.wav",
+          "sound_effect_duration": 2,
+          "sound_effect_volume": 100,
+          "system_prompt": "Du hast den Raum durchsucht und hast nun viele Dinge gesehen wie in der Raumbeschreibung aufgeführt... ohne endlich mal was zum trinken. Die Luft ist hier super trocken und ein kühles Bier wäre jetzt echt ein Ding von einem anderen Stern. Oh - ich schweife ab. Es ist ein seltsames kleines Packet unter der langen Tafel.",
+          "conditions": [],
+          "actions": [
+            "discovered_friedhof_der_traeume = true",
+            "discovered_cigarettes = true"
+          ]
+        }
+      ]
+    },
+    "02b138d0-14a0-e8a2-0482-48dd1f8781d5": {
+      "type": "StateShape",
+      "id": "02b138d0-14a0-e8a2-0482-48dd1f8781d5",
+      "userData": {
+        "system_prompt": "Du befindest dich in Zustand C. Ja, genau,C  wie \"...keine Ahnung\". Die State Engine hat definitiv schon bessere Tage gesehen – irgendwo quietscht es verdächtig und ein paar Zahnräder drehen sich nur noch aus Gewohnheit. Du kannst dich umschauen und entdeckst....nihts.",
+        "ambient_sound_volume": 100
+      },
+      "name": "C",
+      "stateType": "NORMAL",
+      "trigger": [
+        {
+          "id": "47d681b8-e67a-e773-5bce-503a5e8e8bfb",
+          "name": "untersuche_den_state",
+          "description": "",
+          "sound_effect": "",
+          "sound_effect_duration": 2,
+          "sound_effect_volume": 100,
+          "system_prompt": "",
+          "conditions": [],
+          "actions": []
+        }
+      ]
+    }
+  },
+  "connections": {
+    "09cc8952-1871-8c1c-a47e-dcbe99d2a0e9": {
+      "type": "TriggerConnection",
+      "id": "09cc8952-1871-8c1c-a47e-dcbe99d2a0e9",
+      "userData": {
+        "sound_effect_volume": 100,
+        "sound_effect_duration": 2,
+        "sound_effect": "map/effect_soundeffect_melodie.wav"
+      },
+      "source": {
+        "node": "63c0f27a-716e-804c-6873-cd99b945b63f",
+        "port": "output0",
+        "name": "A"
+      },
+      "target": {
+        "node": "3253ff2a-a920-09d5-f033-ca759a778e19",
+        "port": "input0",
+        "decoration": "draw2d.decoration.connection.ArrowDecorator",
+        "name": "B"
+      },
+      "name": "gehe_nach_b"
+    },
+    "9c3e1f88-4d89-f9da-48e6-d8783c5b75a8": {
+      "type": "TriggerConnection",
+      "id": "9c3e1f88-4d89-f9da-48e6-d8783c5b75a8",
+      "userData": {
+        "sound_effect_volume": 100,
+        "sound_effect_duration": 2,
+        "sound_effect": "map/effect_soundeffect_melodie.wav"
+      },
+      "source": {
+        "node": "3253ff2a-a920-09d5-f033-ca759a778e19",
+        "port": "output0",
+        "name": "B"
+      },
+      "target": {
+        "node": "02b138d0-14a0-e8a2-0482-48dd1f8781d5",
+        "port": "input0",
+        "decoration": "draw2d.decoration.connection.ArrowDecorator",
+        "name": "C"
+      },
+      "name": "gehe_nach_c"
+    },
+    "95a6edd0-8a30-f473-9e12-6a7b59a45e8e": {
+      "type": "TriggerConnection",
+      "id": "95a6edd0-8a30-f473-9e12-6a7b59a45e8e",
+      "userData": {
+        "sound_effect_volume": 100,
+        "sound_effect_duration": 2,
+        "sound_effect": "map/effect_soundeffect_melodie.wav"
+      },
+      "source": {
+        "node": "02b138d0-14a0-e8a2-0482-48dd1f8781d5",
+        "port": "output0",
+        "name": "C"
+      },
+      "target": {
+        "node": "63c0f27a-716e-804c-6873-cd99b945b63f",
+        "port": "input0",
+        "decoration": "draw2d.decoration.connection.ArrowDecorator",
+        "name": "A"
+      },
+      "name": "gehe_nach_a"
+    }
+  }
+}

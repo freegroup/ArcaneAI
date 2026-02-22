@@ -55,16 +55,21 @@ export default {
       commit('SET_LOADING', true);
       commit('SET_ERROR', null);
       try {
-        await axios.post(`${API_BASE_URL}/games/${gameName}`, {
-          responseType: 'blob',
-        });
+        // POST to /games with name in body (RESTful - create resource)
+        const response = await axios.post(`${API_BASE_URL}/games/`, { name: gameName });
+        
+        // Use the sanitized name returned by the backend
+        const actualGameName = response.data.game_name || gameName;
         
         // Load the newly created game into the game store
-        await dispatch('game/loadGame', gameName, { root: true });
-        commit('SET_CURRENT_GAME_NAME', gameName);
+        await dispatch('game/loadGame', actualGameName, { root: true });
+        commit('SET_CURRENT_GAME_NAME', actualGameName);
         
         // Refresh the games list
         await dispatch('fetchGames');
+        
+        // Return the actual game name so the caller can use it for navigation
+        return actualGameName;
       } catch (error) {
         commit('SET_ERROR', error.response?.data?.detail || 'Error creating game');
         throw error;

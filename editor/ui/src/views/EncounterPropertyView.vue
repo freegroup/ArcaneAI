@@ -147,7 +147,6 @@ export default {
     
     /**
      * Get todos from encounterConfig.
-     * Uses text as stable identifier for legacy todos without ID.
      */
     todos() {
       return this.currentView?.encounterConfig?.todos || [];
@@ -251,15 +250,40 @@ export default {
     },
     
     /**
+     * Generate a unique ID for todos
+     */
+    generateTodoId() {
+      return `todo_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    },
+    
+    /**
+     * Migrate legacy todos to have unique IDs.
+     * Returns a new array with all todos having IDs.
+     */
+    ensureTodoIds(todos) {
+      return todos.map((todo) => {
+        if (!todo.id) {
+          return {
+            ...todo,
+            id: this.generateTodoId()
+          };
+        }
+        return todo;
+      });
+    },
+    
+    /**
      * Add a new todo item
      */
     addTodo() {
       if (!this.newTodoText.trim()) return;
       
+      // Ensure all existing todos have IDs, then add the new one
+      const todosWithIds = this.ensureTodoIds(this.todos);
       const newTodos = [
-        ...this.todos,
+        ...todosWithIds,
         { 
-          id: Date.now() + Math.random().toString(36).substr(2, 9),
+          id: this.generateTodoId(),
           text: this.newTodoText.trim(), 
           done: false 
         }
@@ -270,23 +294,35 @@ export default {
     },
     
     /**
-     * Toggle todo done state by ID.
+     * Toggle todo done state.
+     * Uses index for legacy todos without ID.
      */
     toggleTodo(todo) {
-      const rawTodos = this.currentView?.encounterConfig?.todos || [];
-      const newTodos = rawTodos.map(t => 
-        t.id === todo.id ? { ...t, done: !t.done } : t
+      const todoIndex = this.todos.findIndex((t, i) => 
+        t.id ? t.id === todo.id : i === this.todos.indexOf(todo)
       );
-      this.updateEncounterConfig({ todos: newTodos });
+      if (todoIndex === -1) return;
+      
+      // Ensure all todos have IDs when saving
+      const todosWithIds = this.ensureTodoIds(this.todos);
+      todosWithIds[todoIndex] = { ...todosWithIds[todoIndex], done: !todosWithIds[todoIndex].done };
+      this.updateEncounterConfig({ todos: todosWithIds });
     },
     
     /**
-     * Remove a todo item by ID.
+     * Remove a todo item.
+     * Uses index for legacy todos without ID.
      */
     removeTodo(todo) {
-      const rawTodos = this.currentView?.encounterConfig?.todos || [];
-      const newTodos = rawTodos.filter(t => t.id !== todo.id);
-      this.updateEncounterConfig({ todos: newTodos });
+      const todoIndex = this.todos.findIndex((t, i) => 
+        t.id ? t.id === todo.id : i === this.todos.indexOf(todo)
+      );
+      if (todoIndex === -1) return;
+      
+      // Ensure all todos have IDs when saving
+      const todosWithIds = this.ensureTodoIds(this.todos);
+      todosWithIds.splice(todoIndex, 1);
+      this.updateEncounterConfig({ todos: todosWithIds });
     },
     
     /**
@@ -301,9 +337,12 @@ export default {
      * Save edited todo
      */
     saveTodoEdit(updatedTodo) {
-      const rawTodos = this.currentView?.encounterConfig?.todos || [];
-      const newTodos = rawTodos.map(t => 
-        t.id === updatedTodo.id ? updatedTodo : t
+      // Ensure all todos have IDs first
+      const todosWithIds = this.ensureTodoIds(this.todos);
+      
+      // Find by ID (all todos now have IDs after ensureTodoIds)
+      const newTodos = todosWithIds.map(t => 
+        t.id === updatedTodo.id ? { ...updatedTodo, id: t.id } : t
       );
       this.updateEncounterConfig({ todos: newTodos });
     },

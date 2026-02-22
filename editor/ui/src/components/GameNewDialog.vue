@@ -80,10 +80,13 @@ export default {
     async createDialog() {
       if (!this.isCreateDisabled) {
         // Create the named game via games store, which loads it into game store
-        await this.createNewGame(this.mapName);
-        this.$router.replace({ name: this.$route.name, params: { mapName: this.mapName } });
+        // The store returns the sanitized game name from the backend
+        const actualGameName = await this.createNewGame(this.mapName);
+        
+        // Navigate to the game using the sanitized name
+        this.$router.push(`/game/${actualGameName}/world`);
         this.$emit("update:dialog", false);
-        console.log(`Game "${this.mapName}" created!`);  
+        console.log(`Game "${actualGameName}" created!`);  
       }
     },
 
