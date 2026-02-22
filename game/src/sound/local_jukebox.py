@@ -66,7 +66,10 @@ class LocalJukebox(BaseJukebox):
         elif file_name.startswith("map/"):
             # Remove "map/" prefix - file is in map-specific soundfx dir
             relative_path = file_name[4:]  # len("map/") = 4
-            map_soundfx_dir = session.map_directory / "soundfx" if hasattr(session, 'map_directory') else self.soundfx_dir.parent / "maps" / session.map_name / "soundfx"
+            # Get map directory from GameConfig (always available)
+            from config_loader import GameConfig
+            game_config = GameConfig()
+            map_soundfx_dir = game_config.maps_directory / game_config.game_name / "soundfx"
             file_path: str = str(map_soundfx_dir / relative_path)
         else:
             # No prefix - assume central soundfx directory (backwards compatibility)

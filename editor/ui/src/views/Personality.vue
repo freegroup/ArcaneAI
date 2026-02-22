@@ -4,7 +4,7 @@
     <div class="personality-header">
       <div class="personality-header__title">
         <v-icon class="personality-header__icon">mdi-account-alert</v-icon>
-        <span>AI CHARACTER IDENTITY</span>
+        <span>AI CHARACTER PERSONALITY</span>
         <HelpButton @click="showHelp = true" />
       </div>
     </div>
@@ -12,15 +12,100 @@
     <!-- Editor -->
     <Codemirror
       class="full-height-editor"
-      v-model:value="identityPrompt"
+      :class="{ 'editor-collapsed': aiAssistExpanded }"
+      v-model:value="personalityPrompt"
       :options="cmOptions"
       placeholder="Du bist ein Haudegen im 1700 Jahrhundert..."
     />
 
+    <!-- AI Assist Expandable Panel -->
+    <div class="ai-assist-panel">
+      <div 
+        class="ai-assist-header"
+        @click="toggleAiAssist"
+      >
+        <v-icon size="small">{{ aiAssistExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+        <span class="ai-assist-title">
+          <v-icon size="small" color="primary">mdi-robot</v-icon>
+          AI Assist
+        </span>
+      </div>
+
+      <transition name="expand">
+        <div v-if="aiAssistExpanded" class="ai-assist-content">
+          <!-- Response/Explanation Area -->
+          <div class="ai-response-area">
+            <div v-if="!aiResponse && !aiLoading" class="ai-helper-text">
+              <v-icon size="small" color="primary">mdi-information-outline</v-icon>
+              <div>
+                <strong>Wie funktioniert AI Assist?</strong>
+                <p>Gib der AI eine Anweisung, wie sie deinen Text verbessern soll:</p>
+                <ul>
+                  <li>"Verbessere die Grammatik und Rechtschreibung"</li>
+                  <li>"Übersetze ins Englische"</li>
+                  <li>"Mache den Text dramatischer"</li>
+                  <li>"Vereinfache die Sprache"</li>
+                </ul>
+              </div>
+            </div>
+
+            <div v-if="aiLoading" class="ai-loading">
+              <v-progress-circular indeterminate color="primary" size="20"></v-progress-circular>
+              <span>AI arbeitet...</span>
+            </div>
+
+            <div v-if="aiResponse" class="ai-result">
+              <div class="ai-result-header">
+                <strong>Verbesserter Text:</strong>
+                <button 
+                  @click="applyAiResult" 
+                  class="retro-btn retro-btn--sm"
+                  title="Text in Editor übernehmen"
+                >
+                  <v-icon size="small">mdi-check</v-icon>
+                  Apply to Editor
+                </button>
+              </div>
+              <div class="ai-result-text">{{ aiResponse }}</div>
+              <div v-if="aiComment || wordCountInfo" class="ai-comment">
+                <v-icon size="small" color="info">mdi-comment-text-outline</v-icon>
+                <div>
+                  <div v-if="wordCountInfo" class="word-count-info">{{ wordCountInfo }}</div>
+                  <div v-if="aiComment">{{ aiComment }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Prompt Input -->
+          <div class="ai-prompt-input">
+            <input
+              ref="promptInput"
+              v-model="aiPrompt"
+              type="text"
+              placeholder="z.B. 'Verbessere die Grammatik' oder 'Übersetze ins Englische'"
+              @keyup.enter="improveText"
+              :disabled="aiLoading"
+              class="prompt-field"
+            />
+            <button 
+              @click="improveText" 
+              class="retro-btn retro-btn--sm"
+              :disabled="!aiPrompt.trim() || aiLoading"
+              title="Text verbessern"
+            >
+              <v-icon size="small">mdi-magic-staff</v-icon>
+              Send
+            </button>
+          </div>
+        </div>
+      </transition>
+    </div>
+
     <!-- Extended Help Dialog -->
     <ExtendedHelpDialog
       v-model="showHelp"
-      title="AI Character Identity"
+      title="AI Character Personality"
       :helpText="helpContent"
     />
   </div>
@@ -28,6 +113,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import axios from 'axios';
 import ExtendedHelpDialog from '../components/ExtendedHelpDialog.vue';
 import HelpButton from '../components/HelpButton.vue';
 
@@ -37,6 +123,8 @@ import "codemirror/mode/jinja2/jinja2.js";
 import "codemirror/addon/display/placeholder.js";
 import "codemirror/theme/juejin.css";
 import "codemirror/theme/material-darker.css";
+
+const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
 
 export default {
   name: 'PropertyView',
@@ -56,7 +144,7 @@ export default {
   <li><strong>Interaction style</strong> - Friendly, mysterious, grumpy, etc.</li>
   <li><strong>Game world behavior</strong> - Their role in the story</li>
 </ul>
-<p>This defines their complete identity!</p>
+<p>This defines their complete personality!</p>
       `,
       cmOptions: {
         mode: "jinja2",
@@ -64,33 +152,96 @@ export default {
         lineWrapping: true, 
         theme: "material-darker",
         styleActiveLine: false,
-      }
+      },
+      // AI Assist state
+      aiAssistExpanded: false,
+      aiPrompt: '',
+      aiResponse: '',
+      aiComment: '',
+      aiLoading: false,
+      wordCountInfo: ''
     }
   },
   computed: {
-    ...mapGetters('game', ['gameConfig']),
-    mapConfig() {
-      return this.gameConfig;
-    },
-    identityPrompt: {
+    ...mapGetters('config', ['personality']),
+    personalityPrompt: {
       get() {
-        return this.mapConfig.identity;
+        return this.personality || '';
       },
       set(value) {
-        // Commit the updated system prompt to the store
-        this.updateGameConfig({ ...this.mapConfig, identity: value });
+        this.setPersonality(value);
       },
     },
-    
   },
   methods: {
-    ...mapActions('game', ['updateGameConfig']),
-    updateMapConfig(config) {
-      this.updateGameConfig(config);
+    ...mapActions('config', ['setPersonality']),
+    
+    // AI Assist methods
+    toggleAiAssist() {
+      this.aiAssistExpanded = !this.aiAssistExpanded;
+      
+      // Focus the prompt input after expansion
+      if (this.aiAssistExpanded) {
+        this.$nextTick(() => {
+          if (this.$refs.promptInput) {
+            this.$refs.promptInput.focus();
+          }
+        });
+      }
     },
-    onChange: (val, cm) => {
-      console.log(val);
-      console.log(cm.getValue());
+
+    countWords(text) {
+      // Simple word count - split by whitespace and filter empty strings
+      return text.trim().split(/\s+/).filter(word => word.length > 0).length;
+    },
+
+    async improveText() {
+      if (!this.aiPrompt.trim() || !this.personalityPrompt.trim()) {
+        return;
+      }
+
+      this.aiLoading = true;
+      this.aiResponse = '';
+      this.aiComment = '';
+      this.wordCountInfo = '';
+
+      // Count words before improvement
+      const wordsBefore = this.countWords(this.personalityPrompt);
+
+      try {
+        const response = await axios.post(`${API_BASE_URL}/text/improve`, {
+          text: this.personalityPrompt,
+          instruction: this.aiPrompt,
+          include_comment: true
+        });
+
+        const data = response.data;
+        this.aiResponse = data.improved_text;
+        this.aiComment = data.comment || '';
+        
+        // Count words after improvement and create info
+        const wordsAfter = this.countWords(data.improved_text);
+        this.wordCountInfo = `Wörter: ${wordsBefore} → ${wordsAfter}`;
+        
+        // Clear prompt after successful response
+        this.aiPrompt = '';
+      } catch (error) {
+        console.error('AI Improve Text Error:', error);
+        this.aiResponse = '';
+        this.aiComment = 'Fehler bei der Textverbesserung. Bitte versuche es erneut.';
+      } finally {
+        this.aiLoading = false;
+      }
+    },
+
+    applyAiResult() {
+      if (this.aiResponse) {
+        this.setPersonality(this.aiResponse);
+        // Clear AI response after applying
+        this.aiResponse = '';
+        this.aiComment = '';
+        this.aiPrompt = '';
+      }
     }
   },
 };
@@ -209,6 +360,11 @@ export default {
   flex: 1; 
   height: 100%;
   margin: var(--game-spacing-md);
+  transition: flex 0.3s ease;
+}
+
+.full-height-editor.editor-collapsed {
+  flex: 0.6;
 }
 
 .full-height-editor >>> .CodeMirror {
@@ -228,5 +384,176 @@ export default {
 .full-height-editor >>> .CodeMirror-placeholder {
   color: var(--game-text-muted) !important;
   font-style: italic;
+}
+
+/* AI Assist Panel */
+.ai-assist-panel {
+  border-top: 1px solid var(--game-border-color);
+  background: var(--game-bg-tertiary);
+}
+
+.ai-assist-header {
+  display: flex;
+  align-items: center;
+  gap: var(--game-spacing-sm);
+  padding: var(--game-spacing-md);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.ai-assist-header:hover {
+  background: var(--game-bg-hover);
+}
+
+.ai-assist-title {
+  display: flex;
+  align-items: center;
+  gap: var(--game-spacing-sm);
+  font-weight: 600;
+  color: var(--game-text-primary);
+}
+
+.ai-assist-content {
+  padding: var(--game-spacing-md);
+  background: var(--game-bg-secondary);
+}
+
+/* Expand transition */
+.expand-enter-active,
+.expand-leave-active {
+  transition: all 0.3s ease;
+  max-height: 400px;
+  overflow: hidden;
+}
+
+.expand-enter-from,
+.expand-leave-to {
+  max-height: 0;
+  opacity: 0;
+}
+
+/* AI Response Area */
+.ai-response-area {
+  min-height: 120px;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: var(--game-spacing-md);
+  padding: var(--game-spacing-md);
+  background: var(--game-bg-primary);
+  border: 1px solid var(--game-border-color);
+  border-radius: var(--game-radius-md);
+}
+
+.ai-helper-text {
+  display: flex;
+  gap: var(--game-spacing-md);
+  color: var(--game-text-secondary);
+  font-size: 0.9em;
+}
+
+.ai-helper-text strong {
+  color: var(--game-text-primary);
+  display: block;
+  margin-bottom: var(--game-spacing-sm);
+}
+
+.ai-helper-text p {
+  margin: var(--game-spacing-sm) 0;
+}
+
+.ai-helper-text ul {
+  margin: var(--game-spacing-sm) 0;
+  padding-left: 20px;
+}
+
+.ai-helper-text li {
+  margin: 4px 0;
+}
+
+.ai-loading {
+  display: flex;
+  align-items: center;
+  gap: var(--game-spacing-md);
+  justify-content: center;
+  padding: var(--game-spacing-lg);
+  color: var(--game-text-secondary);
+}
+
+.ai-result {
+  display: flex;
+  flex-direction: column;
+  gap: var(--game-spacing-sm);
+}
+
+.ai-result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--game-spacing-sm);
+}
+
+.ai-result-text {
+  padding: var(--game-spacing-md);
+  background: var(--game-bg-secondary);
+  border: 1px solid var(--game-border-highlight);
+  border-radius: var(--game-radius-sm);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.95em;
+  line-height: 1.5;
+}
+
+.ai-comment {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--game-spacing-sm);
+  padding: var(--game-spacing-sm);
+  background: var(--game-bg-tertiary);
+  border-left: 3px solid var(--game-accent-color);
+  border-radius: var(--game-radius-sm);
+  font-size: 0.9em;
+  color: var(--game-text-secondary);
+  font-style: italic;
+}
+
+.word-count-info {
+  font-weight: 600;
+  color: var(--game-accent-color);
+  font-style: normal;
+  margin-bottom: 4px;
+}
+
+/* AI Prompt Input */
+.ai-prompt-input {
+  display: flex;
+  gap: var(--game-spacing-sm);
+  align-items: center;
+}
+
+.prompt-field {
+  flex: 1;
+  padding: var(--game-spacing-sm) var(--game-spacing-md);
+  background: var(--game-bg-primary);
+  border: 1px solid var(--game-border-color);
+  border-radius: var(--game-radius-sm);
+  color: var(--game-text-primary);
+  font-size: 0.95em;
+  transition: border-color 0.2s;
+}
+
+.prompt-field:focus {
+  outline: none;
+  border-color: var(--game-border-highlight);
+}
+
+.prompt-field:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.prompt-field::placeholder {
+  color: var(--game-text-muted);
 }
 </style>

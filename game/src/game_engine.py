@@ -61,7 +61,7 @@ class GameEngine:
         
         Args:
             model_data: Model data dict (states, connections)
-            config_data: Config data dict (system_prompt, final_prompt, inventory) - optional
+            config_data: Config data dict (personality, inventory) - optional
         """
         print("[ENGINE] Reinitializing from in-memory data...")
         
@@ -188,7 +188,7 @@ class GameEngine:
         
         Args:
             model_data: Model data dict (states, connections)
-            config_data: Config data dict (system_prompt, final_prompt, inventory) - optional
+            config_data: Config data dict (personality, inventory) - optional
             
         Returns:
             Engine-compatible game definition
@@ -200,7 +200,7 @@ class GameEngine:
         connections_dict = model_data.get('connections', {})
         
         # 1. Parse Config
-        identity = config_data.get('system_prompt', '') + '\n' + config_data.get('final_prompt', '')
+        identity = config_data.get('personality', '') + '\n'
         behaviour = "WICHTIG: Du darfst NUR die explizit definierten Aktionen verwenden. Erfinde NIEMALS eigene Aktionen."
         
         # Convert Inventory list to dict
@@ -336,7 +336,7 @@ class GameEngine:
         
         return {
             'initial_state': initial_state,
-            'identity': identity,
+            'personality': identity,
             'behaviour': behaviour,
             'states': states,
             'actions': actions,

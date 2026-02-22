@@ -813,44 +813,5 @@
       ]
     }
   },
-  "rafts": [
-    {
-      "id": "40bdf673-868b-e37c-6c63-a63b2d9f9e49",
-      "x": 2340.9723000000004,
-      "y": 361.3563999999999,
-      "width": 794,
-      "height": 1195,
-      "userData": {},
-      "labels": []
-    },
-    {
-      "id": "11d45733-2b01-33f5-31e5-acf2615fd089",
-      "x": 1255.1956999999998,
-      "y": 352.77390000000014,
-      "width": 1025,
-      "height": 1228,
-      "userData": {},
-      "labels": [
-        {
-          "type": "draw2d.shape.basic.Label",
-          "id": "0248b0db-a0ba-c89d-7c80-e3b913bcda5d",
-          "x": 9,
-          "y": 7,
-          "width": 47.234375,
-          "height": 21,
-          "userData": {},
-          "text": "Im Haus",
-          "outlineStroke": 0,
-          "outlineColor": "rgba(0,0,0,0)",
-          "fontSize": 12,
-          "fontColor": "rgba(8,8,8,1)",
-          "fontFamily": "'Press Start 2P', monospace",
-          "bold": true,
-          "textAlign": "left",
-          "editor": "LabelInplaceEditor",
-          "locator": "draw2d.layout.locator.SmartDraggableLocator"
-        }
-      ]
-    }
-  ]
+  "rafts": []
 }

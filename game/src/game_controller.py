@@ -49,7 +49,7 @@ class GameController:
         # Combine identity and behaviour from game_data
         prompt: str = ""
 
-        identity: str = game_data.get('identity', '')
+        identity: str = game_data.get('personality', '')
         if identity:
             prompt += identity + "\n\n"
 

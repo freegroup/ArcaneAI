@@ -51,8 +51,7 @@ maps/{game_name}/
 **config.json** (Game-Konfiguration)
 ```json
 {
-  "system_prompt": "...",
-  "final_prompt": "...",
+  "personality": "...",
   "inventory": [...]
 }
 ```

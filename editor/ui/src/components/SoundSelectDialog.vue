@@ -58,6 +58,8 @@
               :class="{ selected: selectedPath[0] === item.name }"
               @click="selectItem(0, item)"
             >
+              <v-icon v-if="item.type === 'clear'" size="small" class="clear-icon">mdi-volume-off</v-icon>
+              <v-icon v-else-if="item.type === 'folder'" size="small" class="folder-icon">{{ selectedPath[0] === item.name ? 'mdi-folder-open' : 'mdi-folder' }}</v-icon>
               <span class="item-name">{{ item.name }}</span>
               <v-icon v-if="item.type === 'folder'" size="small" class="folder-arrow">mdi-chevron-right</v-icon>
             </div>
@@ -186,9 +188,14 @@ export default {
       return tree;
     },
 
-    // Root level items
+    // Root level items (with "No Sound" option first)
     rootItems() {
-      return this.getSortedItems(this.fileTree);
+      const noSoundOption = {
+        name: 'Use No Sound',
+        type: 'clear',
+        fullPath: null
+      };
+      return [noSoundOption, ...this.getSortedItems(this.fileTree)];
     },
 
     // Search filtered files
@@ -262,7 +269,10 @@ export default {
 
     // Handle item selection
     selectItem(depth, item) {
-      if (item.type === 'folder') {
+      if (item.type === 'clear') {
+        // "No Sound" option selected - clear the sound
+        this.clearSound();
+      } else if (item.type === 'folder') {
         // Truncate path and add new segment
         this.selectedPath = [...this.selectedPath.slice(0, depth), item.name];
         this.selectedFile = null;
@@ -277,6 +287,14 @@ export default {
         // File selected - set as selected
         this.selectFile(item.fullPath);
       }
+    },
+
+    // Clear sound selection
+    clearSound() {
+      this.stopSound();
+      this.selectedFile = null;
+      this.$emit('select', '');
+      this.close();
     },
 
     // Select a file
@@ -416,7 +434,9 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 13px;
+  font-size: 14px;
+  font-family: var(--game-font-family-retro);
+  letter-spacing: 0.5px;
 }
 
 .file-item {
@@ -425,6 +445,17 @@ export default {
 
 .file-item:hover {
   text-decoration: underline;
+}
+
+.clear-icon,
+.folder-icon {
+  margin-right: 12px;
+  color: var(--game-accent-secondary);
+}
+
+.column-item.selected .clear-icon,
+.column-item.selected .folder-icon {
+  color: var(--game-text-primary);
 }
 
 .folder-arrow {

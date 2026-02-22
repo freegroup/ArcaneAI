@@ -67,7 +67,7 @@ Das System hat ein **denormalisiertes Datenmodell**:
 
 ```
 Game (index.json)
-├── config: { system_prompt, final_prompt, inventory[] }
+├── config: { personality, inventory[] }
 └── diagram: [                    ◄─── World-Level States
       { type: "StateShape", id: "abc123", name: "Tavern", ... },
       { type: "TriggerConnection", id: "xyz789", source: {...}, target: {...} }

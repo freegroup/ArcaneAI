@@ -11,6 +11,7 @@ from .gemini_provider import GeminiProvider
 from .openai_provider import OpenAIProvider
 from .deepseek_provider import DeepSeekProvider
 from .ollama_provider import OllamaProvider
+from .litellm_provider import LiteLLMProvider
 
 
 class LLMFactory:
@@ -24,7 +25,8 @@ class LLMFactory:
         "gemini": GeminiProvider,
         "openai": OpenAIProvider,
         "deepseek": DeepSeekProvider,
-        "ollama": OllamaProvider
+        "ollama": OllamaProvider,
+        "litellm": LiteLLMProvider
     }
     
     def __init__(self, config_path: Optional[str] = None) -> None:
@@ -120,6 +122,26 @@ class LLMFactory:
             base_url: Optional[str] = llm_config.get('base_url')
             provider_instance: BaseLLMProvider = OllamaProvider(
                 api_key="ollama",  # Dummy key
+                model=model,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                base_url=base_url
+            )
+            provider_instance.debug_mode = debug_mode
+            return provider_instance
+
+        # Special handling for LiteLLM Proxy
+        if provider == "litellm":
+            base_url: Optional[str] = llm_config.get('base_url')
+            api_key: Optional[str] = llm_config.get('api_key')
+            
+            if not base_url:
+                raise ValueError("LiteLLM requires base_url in config")
+            if not api_key:
+                raise ValueError("LiteLLM requires api_key in config")
+            
+            provider_instance: BaseLLMProvider = LiteLLMProvider(
+                api_key=api_key,
                 model=model,
                 temperature=temperature,
                 max_tokens=max_tokens,

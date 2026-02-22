@@ -64,7 +64,7 @@ The current store architecture has evolved during the Overlay Pattern implementa
 
 ### 2. `config.js` - Game Configuration (AUTHORITATIVE)
 
-**Purpose**: Stores system_prompt, final_prompt, inventory
+**Purpose**: Stores personality, inventory
 
 **Status**: ✅ This is the authoritative source for config data
 

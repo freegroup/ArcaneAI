@@ -10,7 +10,7 @@ export default {
   namespaced: true,
   
   state: {
-    systemPrompt: '',
+    personality: '',
     finalPrompt: '',
     inventory: [],
     loading: false,
@@ -20,15 +20,11 @@ export default {
 
   mutations: {
     SET_CONFIG(state, config) {
-      state.systemPrompt = config.system_prompt || config.systemPrompt || ''
-      state.finalPrompt = config.final_prompt || config.finalPrompt || ''
+      state.personality = config.personality || ''
       state.inventory = config.inventory || []
     },
-    SET_SYSTEM_PROMPT(state, prompt) {
-      state.systemPrompt = prompt
-    },
-    SET_FINAL_PROMPT(state, prompt) {
-      state.finalPrompt = prompt
+    SET_PERSONALITY(state, prompt) {
+      state.personality = prompt
     },
     SET_INVENTORY(state, inventory) {
       state.inventory = inventory || []
@@ -71,8 +67,7 @@ export default {
         if (error.response?.status === 404) {
           // Config existiert noch nicht - leere Config
           commit('SET_CONFIG', {
-            system_prompt: '',
-            final_prompt: '',
+            personality: '',
             inventory: []
           })
         } else {
@@ -93,8 +88,7 @@ export default {
       }
       
       const configData = {
-        system_prompt: state.systemPrompt,
-        final_prompt: state.finalPrompt,
+        personality: state.personality,
         inventory: state.inventory
       }
       
@@ -113,17 +107,10 @@ export default {
     },
 
     /**
-     * Aktualisiert den System Prompt
+     * Aktualisiert die Personality
      */
-    setSystemPrompt({ commit }, prompt) {
-      commit('SET_SYSTEM_PROMPT', prompt)
-    },
-
-    /**
-     * Aktualisiert den Final Prompt
-     */
-    setFinalPrompt({ commit }, prompt) {
-      commit('SET_FINAL_PROMPT', prompt)
+    setPersonality({ commit }, prompt) {
+      commit('SET_PERSONALITY', prompt)
     },
 
     /**
@@ -156,7 +143,7 @@ export default {
   },
 
   getters: {
-    systemPrompt: (state) => state.systemPrompt,
+    personality: (state) => state.personality,
     finalPrompt: (state) => state.finalPrompt,
     inventory: (state) => state.inventory,
     inventoryCount: (state) => state.inventory.length,
@@ -165,8 +152,7 @@ export default {
     
     // Für Rückwärtskompatibilität
     gameConfig: (state) => ({
-      system_prompt: state.systemPrompt,
-      final_prompt: state.finalPrompt,
+      personality: state.personality,
       inventory: state.inventory
     })
   }
