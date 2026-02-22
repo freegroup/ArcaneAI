@@ -1,12 +1,14 @@
 <template>
   <div v-if="showViewProperties" class="property-view">
-    <!-- Encounter Name Section -->
-    <label>Encounter Name</label>
+    <!-- View Name Section -->
+    <label>{{ isWorldView ? 'View' : 'Encounter' }} Name</label>
     <input
       id="encounterName"
       type="text"
       v-model="localName"
-      @input="debouncedSaveName"
+      :readonly="isWorldView"
+      :class="{ 'readonly-name': isWorldView }"
+      @input="!isWorldView && debouncedSaveName()"
       placeholder="Enter encounter name..."
     />
 
@@ -42,8 +44,8 @@
     <!-- Pending todos -->
     <div v-if="pendingTodos.length > 0" class="todo-section">
       <div 
-        v-for="(todo, index) in pendingTodos" 
-        :key="'pending-' + index"
+        v-for="todo in pendingTodos" 
+        :key="todo.id || todo.text"
         class="todo-item"
       >
         <input
@@ -53,9 +55,8 @@
           class="todo-checkbox"
         />
         <span class="todo-text">{{ todo.text }}</span>
-        <button class="todo-delete-btn" @click="removeTodo(todo)">
-          <v-icon size="x-small">mdi-delete-outline</v-icon>
-        </button>
+        <button class="todo-edit-btn" @click="openEditDialog(todo)">✎</button>
+        <button class="todo-delete-btn" @click="removeTodo(todo)">X</button>
       </div>
     </div>
     
@@ -63,8 +64,8 @@
     <div v-if="completedTodos.length > 0" class="todo-section completed-section">
       <label class="section-label">Completed</label>
       <div 
-        v-for="(todo, index) in completedTodos" 
-        :key="'completed-' + index"
+        v-for="todo in completedTodos" 
+        :key="todo.id || todo.text"
         class="todo-item completed"
       >
         <input
@@ -74,9 +75,8 @@
           class="todo-checkbox"
         />
         <span class="todo-text">{{ todo.text }}</span>
-        <button class="todo-delete-btn" @click="removeTodo(todo)">
-          <v-icon size="x-small">mdi-delete-outline</v-icon>
-        </button>
+        <button class="todo-edit-btn" @click="openEditDialog(todo)">✎</button>
+        <button class="todo-delete-btn" @click="removeTodo(todo)">X</button>
       </div>
     </div>
     
@@ -84,15 +84,27 @@
     <div v-if="todos.length === 0" class="empty-state">
       No todos yet. Add one above.
     </div>
+    
+    <!-- Edit Todo Dialog -->
+    <TodoEditDialog
+      v-model="showEditDialog"
+      :todo="editingTodo"
+      @save="saveTodoEdit"
+    />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import { MessageTypes } from '../../public/shared/SharedConstants.js';
+import TodoEditDialog from '../components/TodoEditDialog.vue';
 
 export default {
   name: 'EncounterPropertyView',
+  
+  components: {
+    TodoEditDialog
+  },
   
   props: {
     draw2dFrame: {
@@ -107,7 +119,9 @@ export default {
       localName: '',
       localDescription: '',
       jsonData: null,  // Track selected element data (null = nothing selected)
-      saveNameTimeout: null  // Debounce timer for name saving
+      saveNameTimeout: null,  // Debounce timer for name saving
+      showEditDialog: false,
+      editingTodo: null
     };
   },
   
@@ -124,7 +138,16 @@ export default {
     },
     
     /**
-     * Get todos from encounterConfig
+     * Check if current view is the world view (readonly name)
+     */
+    isWorldView() {
+      const viewId = this.currentView?.viewId || this.currentView?.id;
+      return viewId === 'world';
+    },
+    
+    /**
+     * Get todos from encounterConfig.
+     * Uses text as stable identifier for legacy todos without ID.
      */
     todos() {
       return this.currentView?.encounterConfig?.todos || [];
@@ -152,7 +175,9 @@ export default {
         if (newView?.encounterConfig?.name !== undefined) {
           this.localName = newView.encounterConfig.name;
         } else {
-          this.localName = '';
+          // Default name based on view type
+          const viewId = newView?.viewId || newView?.id;
+          this.localName = viewId === 'world' ? 'World' : '';
         }
         if (newView?.encounterConfig?.description !== undefined) {
           this.localDescription = newView.encounterConfig.description;
@@ -233,7 +258,11 @@ export default {
       
       const newTodos = [
         ...this.todos,
-        { text: this.newTodoText.trim(), done: false }
+        { 
+          id: Date.now() + Math.random().toString(36).substr(2, 9),
+          text: this.newTodoText.trim(), 
+          done: false 
+        }
       ];
       
       this.updateEncounterConfig({ todos: newTodos });
@@ -241,20 +270,41 @@ export default {
     },
     
     /**
-     * Toggle todo done state
+     * Toggle todo done state by ID.
      */
     toggleTodo(todo) {
-      const newTodos = this.todos.map(t => 
-        t === todo ? { ...t, done: !t.done } : t
+      const rawTodos = this.currentView?.encounterConfig?.todos || [];
+      const newTodos = rawTodos.map(t => 
+        t.id === todo.id ? { ...t, done: !t.done } : t
       );
       this.updateEncounterConfig({ todos: newTodos });
     },
     
     /**
-     * Remove a todo item
+     * Remove a todo item by ID.
      */
     removeTodo(todo) {
-      const newTodos = this.todos.filter(t => t !== todo);
+      const rawTodos = this.currentView?.encounterConfig?.todos || [];
+      const newTodos = rawTodos.filter(t => t.id !== todo.id);
+      this.updateEncounterConfig({ todos: newTodos });
+    },
+    
+    /**
+     * Open edit dialog for a todo
+     */
+    openEditDialog(todo) {
+      this.editingTodo = { ...todo };
+      this.showEditDialog = true;
+    },
+    
+    /**
+     * Save edited todo
+     */
+    saveTodoEdit(updatedTodo) {
+      const rawTodos = this.currentView?.encounterConfig?.todos || [];
+      const newTodos = rawTodos.map(t => 
+        t.id === updatedTodo.id ? updatedTodo : t
+      );
       this.updateEncounterConfig({ todos: newTodos });
     },
     
@@ -367,6 +417,21 @@ export default {
   padding: var(--game-spacing-md) var(--game-spacing-lg);
 }
 
+/* Readonly name style for World view */
+.property-view input#encounterName.readonly-name {
+  background: transparent;
+  border-color: transparent;
+  cursor: default;
+  pointer-events: none;
+}
+
+.property-view input#encounterName.readonly-name:hover,
+.property-view input#encounterName.readonly-name:focus {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
 /* Todo Input Container */
 .todo-input-container {
   display: flex;
@@ -447,17 +512,57 @@ export default {
   color: var(--game-text-muted);
 }
 
-.todo-delete-btn {
-  background: transparent;
+/* 8-bit Edit Button */
+.todo-edit-btn {
+  background: #4a9f4a;
+  color: white;
   border: none;
-  color: var(--game-text-muted);
-  cursor: pointer;
-  padding: var(--game-spacing-xs);
-  opacity: 0;
-  transition: all var(--game-transition-fast);
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  font-family: var(--game-font-family-retro);
+  font-size: 12px;
+  font-weight: bold;
+  transition: all var(--game-transition-fast);
+  opacity: 0;
+  box-shadow: inset -2px -2px 0px 0px #2d6a2d;
+  flex-shrink: 0;
+}
+
+.todo-item:hover .todo-edit-btn {
+  opacity: 1;
+}
+
+.todo-edit-btn:hover {
+  background: #5cb85c;
+  box-shadow: inset -3px -3px 0px 0px #2d6a2d;
+}
+
+.todo-edit-btn:active {
+  box-shadow: inset 2px 2px 0px 0px rgba(0, 0, 0, 0.4);
+}
+
+/* 8-bit Delete Button */
+.todo-delete-btn {
+  background: var(--game-accent-primary);
+  color: white;
+  border: none;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: var(--game-font-family-retro);
+  font-size: 10px;
+  font-weight: bold;
+  transition: all var(--game-transition-fast);
+  opacity: 0;
+  box-shadow: inset -2px -2px 0px 0px #8c2022;
+  flex-shrink: 0;
 }
 
 .todo-item:hover .todo-delete-btn {
@@ -465,7 +570,12 @@ export default {
 }
 
 .todo-delete-btn:hover {
-  color: var(--game-accent-primary);
+  background: #ce372b;
+  box-shadow: inset -3px -3px 0px 0px #8c2022;
+}
+
+.todo-delete-btn:active {
+  box-shadow: inset 2px 2px 0px 0px #8c2022;
 }
 
 /* Empty State */

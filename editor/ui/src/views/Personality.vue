@@ -388,6 +388,7 @@ export default {
 
 /* AI Assist Panel */
 .ai-assist-panel {
+  margin-top: auto;
   border-top: 1px solid var(--game-border-color);
   background: var(--game-bg-tertiary);
 }

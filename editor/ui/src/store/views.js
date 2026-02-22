@@ -573,6 +573,31 @@ export default {
     hasError: (state) => !!state.error,
     
     /**
+     * Count total open (not done) todos across all encounter views.
+     * Used for badge display in navigation.
+     */
+    totalOpenTodos: (state) => {
+      let count = 0
+      for (const view of Object.values(state.views)) {
+        if (view.encounterConfig?.todos) {
+          count += view.encounterConfig.todos.filter(t => !t.done).length
+        }
+      }
+      return count
+    },
+    
+    /**
+     * Get open todos count for a specific view by viewId.
+     * Returns a function that takes viewId and returns the count.
+     * Used for per-encounter badge display in navigation.
+     */
+    openTodosForView: (state) => (viewId) => {
+      const view = state.views[viewId]
+      if (!view?.encounterConfig?.todos) return 0
+      return view.encounterConfig.todos.filter(t => !t.done).length
+    },
+    
+    /**
      * Generiert das Diagram für die World-View (Master-Sicht).
      * Kombiniert ALLE states/connections aus model mit worldView layouts.
      */

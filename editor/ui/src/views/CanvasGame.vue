@@ -19,6 +19,7 @@
 
     <!-- Sidebar-Bereich -->
     <pane min-size="20%"  :size="100-paneSize" class="scroll-y">
+      <EncounterPropertyView v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
       <StateProperty v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
       <StateTriggerProperty v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
       <ConnectionTriggerProperty v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
@@ -30,6 +31,9 @@
       v-model="showChatDialog" 
       :stateName="chatDialogStateName"
     />
+    
+    <!-- Add Encounter Dialog -->
+    <EncounterNewDialog v-model="showEncounterDialog" />
   </div>
 </template>
 
@@ -40,7 +44,9 @@ import 'splitpanes/dist/splitpanes.css';
 import StateProperty from './StateProperty.vue';
 import StateTriggerProperty from './StateTriggerProperty.vue';
 import ConnectionTriggerProperty from './ConnectionTriggerProperty.vue';
+import EncounterPropertyView from './EncounterPropertyView.vue';
 import ChatDialog from '../components/ChatDialog.vue';
+import EncounterNewDialog from '../components/EncounterNewDialog.vue';
 import { MessageTypes } from '../../public/shared/SharedConstants.js';
 import ViewComposer from '../utils/ViewComposer.js';
 
@@ -51,7 +57,9 @@ export default {
     StateProperty,
     StateTriggerProperty,
     ConnectionTriggerProperty,
-    ChatDialog
+    EncounterPropertyView,
+    ChatDialog,
+    EncounterNewDialog
   },
   data() {
     return {
@@ -60,7 +68,8 @@ export default {
       canvasReady: false,
       isCanvasUpdate: false,  // Flag to prevent circular updates from canvas
       showChatDialog: false,
-      chatDialogStateName: ''
+      chatDialogStateName: '',
+      showEncounterDialog: false
     };
   },
   computed: {
@@ -117,6 +126,16 @@ export default {
       },
       deep: true,
       immediate: false,
+    },
+    '$route.query.addEncounter': {
+      immediate: true,
+      handler(value) {
+        if (value === 'true') {
+          this.showEncounterDialog = true;
+          // Clear the query param
+          this.$router.replace({ query: {} });
+        }
+      }
     }
   },
   methods: {

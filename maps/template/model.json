@@ -29,6 +29,8 @@
     "3253ff2a-a920-09d5-f033-ca759a778e19": {
       "type": "StateShape",
       "id": "3253ff2a-a920-09d5-f033-ca759a778e19",
+      "x": 1709,
+      "y": 518,
       "userData": {
         "system_prompt": "Du befindest dich in Zustand B. Ja, genau, B wie \"belanglos\". Die State Engine hat definitiv schon bessere Tage gesehen – irgendwo quietscht es verdächtig und ein paar Zahnräder drehen sich nur noch aus Gewohnheit. Du kannst dich umschauen und entdeckst....nihts.",
         "ambient_sound": "",

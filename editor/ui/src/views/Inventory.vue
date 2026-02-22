@@ -130,9 +130,9 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('game', ['gameConfig']),
+    ...mapGetters('config', ['config']),
     mapConfig() {
-      return this.gameConfig;
+      return this.config || {};
     },
     inventory: {
       get() {
@@ -142,7 +142,7 @@ export default {
         );
       },
       set(value) {
-        this.updateGameConfig({
+        this.updateConfig({
           ...this.mapConfig,
           inventory: value,
         });
@@ -153,9 +153,9 @@ export default {
     },
   },
   methods: {
-    ...mapActions('game', ['updateGameConfig']),
+    ...mapActions('config', ['updateConfig']),
     updateMapConfig(config) {
-      return this.updateGameConfig(config);
+      return this.updateConfig(config);
     },
     
     addItem() {

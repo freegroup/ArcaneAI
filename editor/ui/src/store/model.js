@@ -22,7 +22,8 @@ export default {
     loading: false,
     error: null,
     gameName: null,
-    isPropertyUpdate: false  // Flag to prevent canvas refresh on property edits
+    isPropertyUpdate: false,  // Flag to prevent canvas refresh on property edits
+    hasUnsavedChanges: false  // Flag to track unsaved model changes
   },
 
   mutations: {
@@ -84,6 +85,13 @@ export default {
     },
     SET_PROPERTY_UPDATE(state, value) {
       state.isPropertyUpdate = value
+    },
+    SET_UNSAVED_CHANGES(state, value) {
+      state.hasUnsavedChanges = value
+    },
+    // Mark model as changed (called by other mutations)
+    MARK_CHANGED(state) {
+      state.hasUnsavedChanges = true
     }
   },
 
@@ -103,9 +111,11 @@ export default {
           states: modelData.states || {},
           connections: modelData.connections || {}
         })
+        commit('SET_UNSAVED_CHANGES', false)  // Model loaded from server = no unsaved changes
       } catch (error) {
         if (error.response?.status === 404) {
           commit('SET_MODEL', { states: {}, connections: {} })
+          commit('SET_UNSAVED_CHANGES', false)
         } else {
           commit('SET_ERROR', error.message)
           throw error
@@ -118,7 +128,7 @@ export default {
     /**
      * Speichert das Model zum Server
      */
-    async saveModel({ state }) {
+    async saveModel({ state, commit }) {
       console.log('[model.js] saveModel START', { gameName: state.gameName })
       if (!state.gameName) {
         console.error('[model.js] No gameName set!')
@@ -135,6 +145,7 @@ export default {
       formData.append('file', blob, 'model.json')
       
       await axios.put(`${API_BASE_URL}/game/${state.gameName}/model`, formData)
+      commit('SET_UNSAVED_CHANGES', false)  // Model saved = no unsaved changes
       console.log('[model.js] saveModel COMPLETE')
     },
 
@@ -162,6 +173,7 @@ export default {
       }
       
       commit('SET_MODEL', { states: mergedStates, connections: mergedConnections })
+      commit('SET_UNSAVED_CHANGES', true)  // Mark as changed
     },
 
     /**
@@ -171,6 +183,7 @@ export default {
     updateState({ commit }, stateData) {
       commit('SET_PROPERTY_UPDATE', true)
       commit('SET_STATE', stateData)
+      commit('SET_UNSAVED_CHANGES', true)  // Mark as changed
       // Reset flag after Vue's reactivity cycle completes
       // Using double nextTick ensures all watchers have processed before flag is cleared
       nextTick(() => {
@@ -235,6 +248,7 @@ export default {
       // Set flag and commit using proper mutation
       commit('SET_PROPERTY_UPDATE', true)
       commit('SET_STATE', updatedState)
+      commit('SET_UNSAVED_CHANGES', true)  // Mark as changed
       // Reset flag after Vue's reactivity cycle completes
       // Using double nextTick ensures all watchers have processed before flag is cleared
       nextTick(() => {
@@ -249,6 +263,7 @@ export default {
      * Cleanup in allen Views wird automatisch durchgeführt.
      */
     removeState({ commit, state, dispatch }, stateId) {
+      commit('SET_UNSAVED_CHANGES', true)  // Mark as changed
       // 1. Finde alle Connections die diesen State nutzen
       const connectionsToRemove = Object.values(state.connections)
         .filter(conn => 
@@ -277,6 +292,7 @@ export default {
     updateConnection({ commit }, connData) {
       commit('SET_PROPERTY_UPDATE', true)
       commit('SET_CONNECTION', connData)
+      commit('SET_UNSAVED_CHANGES', true)  // Mark as changed
       // Reset flag after Vue's reactivity cycle completes
       // Using double nextTick ensures all watchers have processed before flag is cleared
       nextTick(() => {
@@ -290,6 +306,7 @@ export default {
      * Entfernt eine Connection (inkl. View-Cleanup)
      */
     removeConnection({ commit, dispatch }, connId) {
+      commit('SET_UNSAVED_CHANGES', true)  // Mark as changed
       commit('REMOVE_CONNECTION', connId)
       dispatch('views/removeConnectionFromAllViews', connId, { root: true })
     }
@@ -304,6 +321,7 @@ export default {
     connectionCount: (state) => Object.keys(state.connections).length,
     isLoading: (state) => state.loading,
     hasError: (state) => !!state.error,
-    errorMessage: (state) => state.error
+    errorMessage: (state) => state.error,
+    hasUnsavedChanges: (state) => state.hasUnsavedChanges
   }
 }
