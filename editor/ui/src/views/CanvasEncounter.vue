@@ -1,43 +1,37 @@
 <template>
   <div class="canvas-encounter-container">
-    <splitpanes 
-        id="canvas-game"
-        ref="splitPanes" 
-        class="default-theme full-height"  
-        @resized="handleResize">
-    <!-- Editor-Bereich -->
-    <pane min-size="40%"  :size="paneSize">
-      <div  class="iframe-container">
-        <iframe
-          ref="draw2dFrame"
-          src="/encounter/index.html"
-          frameborder="0"
-          style="width: 100%; height: 100%; border: none"
-        ></iframe>
-      </div>
-    </pane>
+    <!-- Canvas iframe takes main area -->
+    <div class="iframe-container">
+      <iframe
+        ref="draw2dFrame"
+        src="/encounter/index.html"
+        frameborder="0"
+      ></iframe>
+    </div>
 
-    <!-- Sidebar-Bereich -->
-    <pane min-size="20%"  :size="100-paneSize" class="scroll-y">
-      <EncounterPropertyView v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
-      <StateProperty v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
-      <StateTriggerProperty v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
-      <ConnectionTriggerProperty v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
-    </pane>
-  </splitpanes>
+    <!-- Property Sidebar with toggle -->
+    <div class="sidebar-panel" :class="{ 'sidebar-collapsed': sidebarCollapsed }">
+      <button class="sidebar-toggle" @click="toggleSidebar" :title="sidebarCollapsed ? 'Expand panel' : 'Collapse panel'">
+        {{ sidebarCollapsed ? '◀' : '▶' }}
+      </button>
+      <div class="sidebar-content" v-show="!sidebarCollapsed">
+        <EncounterPropertyView v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
+        <StateProperty v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
+        <StateTriggerProperty v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
+        <ConnectionTriggerProperty v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
+      </div>
+    </div>
 
     <!-- Import State Dialog -->
     <ImportStateDialog v-model="showImportStateDialog" />
     
-    <!-- Chat Dialog - outside splitpanes to avoid layout issues -->
+    <!-- Chat Dialog -->
     <ChatDialog v-model="showChatDialog" :stateName="chatDialogStateName" />
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import { Splitpanes, Pane } from 'splitpanes';
-import 'splitpanes/dist/splitpanes.css';
 import StateProperty from './StateProperty.vue';
 import StateTriggerProperty from './StateTriggerProperty.vue';
 import ConnectionTriggerProperty from './ConnectionTriggerProperty.vue';
@@ -49,8 +43,6 @@ import ViewComposer from '../utils/ViewComposer.js';
 
 export default {
   components: {
-    Splitpanes,
-    Pane,
     StateProperty,
     StateTriggerProperty,
     ConnectionTriggerProperty,
@@ -58,44 +50,35 @@ export default {
     ImportStateDialog,
     ChatDialog
   },
-  // Accept route params as props (passed via router with props: true)
-  props: {
-    gameName: {
-      type: String,
-      default: null
-    },
-    encounterName: {
-      type: String,
-      default: null
-    }
-  },
   data() {
     return {
       draw2dFrameContent: null,
-      paneSize: 50,
       canvasReady: false,
-      isCanvasUpdate: false,  // Flag to prevent circular updates from canvas
+      isCanvasUpdate: false,
       showImportStateDialog: false,
       showChatDialog: false,
-      chatDialogStateName: ''
+      chatDialogStateName: '',
+      sidebarCollapsed: false
     };
   },
   computed: {
-    ...mapGetters('model', ['allStates', 'allConnections']),
+    ...mapGetters('game', ['encounters', 'gameName']),
     ...mapGetters('views', ['currentView']),
     
-    /**
-     * View-ID für den aktuellen Encounter
-     */
-    currentViewId() {
-      const encounterName = this.$route.params.encounterName;
-      return encounterName ? `encounter_${encounterName}` : null;
+    encounterId() {
+      // Router param is :encounterName (not :encounterId)
+      return this.$route.params.encounterName;
     },
     
-    /**
-     * Komponiertes Diagram für Canvas (Model + View Layout)
-     * Verwendet das Overlay Pattern: Model-Daten + View-Layout = draw2d Diagram
-     */
+    // The viewId in the store has format 'encounter_xxx'
+    viewId() {
+      return this.encounterId ? `encounter_${this.encounterId}` : null;
+    },
+    
+    encounter() {
+      return this.encounters.find(e => e.id === this.encounterId);
+    },
+    
     composedDiagram() {
       const model = {
         states: this.$store.state.model.states,
@@ -103,125 +86,110 @@ export default {
       };
       const view = this.currentView;
       return ViewComposer.compose(model, view);
-    },
-    
-    draw2dFrame() {
-      return this.$refs.draw2dFrame;
     }
   },
   watch: {
-    /**
-     * Watch for route param changes to reinitialize view when switching encounters.
-     * Vue reuses the component when navigating between encounters (same route, different params),
-     * so mounted() doesn't run again. This watcher ensures the canvas updates.
-     */
-    '$route.params.encounterName': {
-      handler(newEncounterName, oldEncounterName) {
-        if (newEncounterName && newEncounterName !== oldEncounterName) {
-          console.log(`[CanvasEncounter] Route changed: ${oldEncounterName} → ${newEncounterName}`);
-          this.initEncounterView();
-        }
-      },
-      immediate: false
-    },
-    
-    /**
-     * Watch for composed diagram changes from Model+View.
-     * 
-     * Note: Canvas updates are ignored using isCanvasUpdate flag.
-     * PropertyEditor updates are ignored using model.isPropertyUpdate flag
-     * to prevent circular updates that would clear the selection.
-     */
     composedDiagram: {
       handler(newDiagram) {
         if (newDiagram && this.canvasReady) {
-          if (this.isCanvasUpdate) {
-            return;
-          }
-          // Skip if this change came from PropertyEditor
-          // PropertyEditor uses updateState which sets model.isPropertyUpdate
-          if (this.$store.state.model.isPropertyUpdate) {
-            return;
-          }
+          if (this.isCanvasUpdate) return;
+          if (this.$store.state.model.isPropertyUpdate) return;
           this.sendDocumentToCanvas(newDiagram);
         }
       },
       deep: true,
-      immediate: false,
+      immediate: false
+    },
+    
+    encounterId: {
+      immediate: true,
+      handler(newId) {
+        if (newId && this.gameName) {
+          this.initEncounterView();
+        }
+      }
+    },
+    
+    // Watch for game loading - when gameName becomes available, init the view
+    gameName: {
+      immediate: true,
+      handler(newGameName) {
+        if (newGameName && this.encounterId) {
+          this.initEncounterView();
+        }
+      }
+    },
+    
+    '$route.query.addImport': {
+      immediate: true,
+      handler(value) {
+        if (value === 'true') {
+          this.showImportStateDialog = true;
+          this.$router.replace({ query: {} });
+        }
+      }
     }
   },
   methods: {
-    ...mapActions('model', ['setModel', 'mergeModel', 'saveModel']),
-    ...mapActions('views', ['updateCurrentViewLayout', 'saveView', 'setCurrentView', 'createEncounterView', 'removeStateFromCurrentView', 'removeConnectionFromCurrentView']),
-    ...mapActions('encounters', ['setCurrentEncounter']),
+    ...mapActions('model', ['mergeModel', 'removeState', 'removeConnection', 'saveModel']),
+    ...mapActions('views', ['updateCurrentViewLayout', 'saveView', 'setCurrentView', 'loadEncounterView']),
     
-    /**
-     * Speichert Model und aktuelle View
-     */
+    toggleSidebar() {
+      this.sidebarCollapsed = !this.sidebarCollapsed;
+      localStorage.setItem('sidebarCollapsed', JSON.stringify(this.sidebarCollapsed));
+    },
+    
+    async initEncounterView() {
+      if (!this.viewId) return;
+      
+      // viewId format is 'encounter_xxx'
+      this.setCurrentView(this.viewId);
+    },
+    
     async saveMap() {
       try {
         await this.saveModel();
-        await this.saveView({ viewId: this.currentViewId });
+        await this.saveView({ viewId: this.viewId });
       } catch (error) {
         console.error('[CanvasEncounter] Save failed:', error);
         throw error;
       }
     },
     
-    /**
-     * Verarbeitet Diagram-Updates vom Canvas.
-     * Trennt Model-Daten von Layout-Daten und speichert separat.
-     * 
-     * WICHTIG: Verwendet mergeModel statt setModel, damit States aus anderen
-     * Views nicht verloren gehen (Overlay Pattern).
-     */
     handleCanvasUpdate(diagram) {
       this.isCanvasUpdate = true;
       
-      // 1. Extrahiere was im Canvas ist
       const newModel = ViewComposer.extractModel(diagram);
       const newLayout = ViewComposer.extractLayout(diagram);
       
-      // 2. Finde gelöschte Elemente
-      // WICHTIG: Vergleiche mit dem Model, nicht mit der View!
-      // Ein State gilt als gelöscht wenn:
-      // - Er im Model existiert UND
-      // - Er in dieser View ein Layout hatte UND  
-      // - Er jetzt nicht mehr im Canvas ist
       const currentView = this.currentView;
       const previousLayoutIds = Object.keys(currentView?.stateLayouts || {});
       const currentCanvasStateIds = Object.keys(newModel.states);
       const previousRouteIds = Object.keys(currentView?.connectionRoutes || {});
       const currentCanvasConnIds = Object.keys(newModel.connections);
       
-      // Gelöschte States entfernen - NUR aus der View, NICHT aus dem Model!
-      // (Encounter-View: State wird nur aus dem View-Layout entfernt, bleibt im Model)
       for (const stateId of previousLayoutIds) {
         if (!currentCanvasStateIds.includes(stateId)) {
-          this.removeStateFromCurrentView(stateId);
+          if (this.$store.state.model.states[stateId]) {
+            this.removeState(stateId);
+          }
         }
       }
       
-      // Gelöschte Connections entfernen - NUR aus der View, NICHT aus dem Model!
       for (const connId of previousRouteIds) {
         if (!currentCanvasConnIds.includes(connId)) {
-          this.removeConnectionFromCurrentView(connId);
+          if (this.$store.state.model.connections[connId]) {
+            this.removeConnection(connId);
+          }
         }
       }
       
-      // 3. Model-Änderungen mergen (nicht überschreiben!)
       this.mergeModel(newModel);
-      
-      // 4. Layout-Änderungen für diese View speichern
       this.updateCurrentViewLayout(newLayout);
       
       this.$nextTick(() => {
         this.isCanvasUpdate = false;
       });
-    },
-
-    async saveReceivedDocument() {
-      await this.saveMap();
     },
     
     updateDraw2dFrame() {
@@ -230,59 +198,26 @@ export default {
       }
     },
     
-    /**
-     * Send document to canvas via parent window postMessage.
-     */
     sendDocumentToCanvas(document) {
-      const encounterName = this.$route.params.encounterName || 'unknown';
       window.postMessage({ 
         type: MessageTypes.V2C_SET_DOCUMENT, 
         data: JSON.parse(JSON.stringify(document)),
-        source: `vue:encounter:${encounterName}`
+        source: `vue:encounter:${this.viewId}`
       }, '*');
-    },
-    
-    handleResize(event) {
-      this.paneSize = event[0].size;
-      localStorage.setItem('paneSize', this.paneSize);
-    },
-    
-    loadDividerPosition() {
-      const savedSize = localStorage.getItem('paneSize');
-      if (savedSize !== null) {
-        this.paneSize = parseFloat(savedSize);
-      }
-    },
-    
-    /**
-     * Initialisiert die View für diesen Encounter
-     * 
-     * WICHTIG: Views werden NICHT automatisch erstellt!
-     * Encounter-Views werden nur über EncounterNewDialog erstellt.
-     * Hier wird nur die currentView gesetzt - die View muss bereits
-     * vom Server geladen worden sein (via loadAllViews).
-     */
-    initEncounterView() {
-      const encounterName = this.$route.params.encounterName;
-      if (!encounterName) return;
-      
-      const viewId = `encounter_${encounterName}`;
-      
-      // Setze aktuelle View (muss bereits vom Server geladen sein)
-      this.setCurrentView(viewId);
-      
-      // Setze current encounter im encounters store
-      this.setCurrentEncounter(encounterName);
     }
   },
   mounted() {
-    // Initialize encounter view (Overlay Pattern)
-    this.initEncounterView();
-
-    // Load divider position from local storage on mount
-    this.loadDividerPosition();
-
-    // Event listener for messages
+    // Restore sidebar state from localStorage
+    const storedState = localStorage.getItem('sidebarCollapsed');
+    if (storedState !== null) {
+      this.sidebarCollapsed = JSON.parse(storedState);
+    }
+    
+    // Set draw2dFrameContent immediately when iframe ref is available
+    this.$nextTick(() => {
+      this.updateDraw2dFrame();
+    });
+    
     this.messageHandler = (event) => {
       if (event.origin !== window.location.origin) return;
       const message = event.data;
@@ -297,16 +232,7 @@ export default {
           break;
 
         case MessageTypes.C2V_DOCUMENT_UPDATED:
-          // Skip if this is a response to a property update (setShapeData)
-          // The model was already updated by PropertyEditor's updateState()
-          if (message.source === 'canvas:setShapeData') {
-            return;
-          }
           this.handleCanvasUpdate(message.data);
-          break;
-
-        case MessageTypes.C2V_OPEN_IMPORT_DIALOG:
-          this.showImportStateDialog = true;
           break;
 
         case MessageTypes.C2V_CHAT_FROM_HERE:
@@ -315,7 +241,6 @@ export default {
           break;
 
         default:
-          // Forward V2C messages to the iframe (Vue → Canvas)
           if (message.type?.startsWith('v2c:') && this.draw2dFrameContent) {
             this.draw2dFrameContent.postMessage(message, '*');
           }
@@ -333,34 +258,87 @@ export default {
 </script>
 
 <style scoped>
+/* Vuetify Best Practice: Use flex with explicit height */
 .canvas-encounter-container {
-  height: 100vh;
+  display: flex;
+  flex: 1 1 auto;
+  height: 100%;
+  min-height: 0;
   width: 100%;
-}
-
-.full-height {
-  height: 100%;
-  display: flex;
-}
-
-.splitpanes {
-  height: 100%;
-  display: flex;
-}
-.splitpanes.default-theme .splitpanes__pane {
-  background-color: transparent;
-  overflow-y: auto;
 }
 
 .iframe-container {
-  width: 100%;
-  height: 100%;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
   display: flex;
 }
 
-iframe {
+.iframe-container iframe {
+  flex: 1;
   width: 100%;
   height: 100%;
   border: none;
+}
+
+.sidebar-panel {
+  width: 350px;
+  flex-shrink: 0;
+  border-left: 1px solid var(--game-border-color);
+  background: var(--game-bg-secondary);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Breite Monitore (≥1440px): Doppelt so breites Sidebar */
+@media (min-width: 1440px) {
+  .sidebar-panel {
+    width: 600px;
+  }
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Sidebar needs position relative for toggle button */
+.sidebar-panel {
+  position: relative;
+  transition: width 0.3s ease;
+  overflow: visible;
+}
+
+/* Sidebar Toggle Button */
+.sidebar-toggle {
+  position: absolute;
+  left: -24px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 48px;
+  background: var(--game-accent-primary);
+  color: white;
+  border: 2px solid var(--game-border-color);
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  z-index: 100;
+  transition: background 0.2s ease;
+}
+
+.sidebar-toggle:hover {
+  background: var(--game-accent-secondary);
+}
+
+/* Collapsed state - minimal width for toggle button visibility */
+.sidebar-collapsed {
+  width: 0 !important;
+  min-width: 0 !important;
+  border-left: none !important;
 }
 </style>

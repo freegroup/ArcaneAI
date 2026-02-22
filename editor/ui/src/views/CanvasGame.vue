@@ -1,32 +1,28 @@
 <template>
   <div class="canvas-game-container">
-    <splitpanes 
-        id="canvas-game"
-        ref="splitPanes" 
-        class="default-theme full-height"  
-        @resized="handleResize">
-    <!-- Editor-Bereich -->
-    <pane min-size="40%"  :size="paneSize">
-      <div  class="iframe-container">
-        <iframe
-          ref="draw2dFrame"
-          src="/game/index.html"
-          frameborder="0"
-          style="width: 100%; height: 100%; border: none"
-        ></iframe>
-      </div>
-    </pane>
+    <!-- Canvas iframe takes main area -->
+    <div class="iframe-container">
+      <iframe
+        ref="draw2dFrame"
+        src="/game/index.html"
+        frameborder="0"
+      ></iframe>
+    </div>
 
-    <!-- Sidebar-Bereich -->
-    <pane min-size="20%"  :size="100-paneSize" class="scroll-y">
-      <EncounterPropertyView v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
-      <StateProperty v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
-      <StateTriggerProperty v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
-      <ConnectionTriggerProperty v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
-    </pane>
-  </splitpanes>
+    <!-- Property Sidebar with toggle -->
+    <div class="sidebar-panel" :class="{ 'sidebar-collapsed': sidebarCollapsed }">
+      <button class="sidebar-toggle" @click="toggleSidebar" :title="sidebarCollapsed ? 'Expand panel' : 'Collapse panel'">
+        {{ sidebarCollapsed ? '◀' : '▶' }}
+      </button>
+      <div class="sidebar-content" v-show="!sidebarCollapsed">
+        <EncounterPropertyView v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
+        <StateProperty v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
+        <StateTriggerProperty v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
+        <ConnectionTriggerProperty v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
+      </div>
+    </div>
   
-    <!-- Chat Dialog - outside splitpanes to avoid layout issues -->
+    <!-- Chat Dialog -->
     <ChatDialog 
       v-model="showChatDialog" 
       :stateName="chatDialogStateName"
@@ -39,8 +35,6 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import { Splitpanes, Pane } from 'splitpanes';
-import 'splitpanes/dist/splitpanes.css';
 import StateProperty from './StateProperty.vue';
 import StateTriggerProperty from './StateTriggerProperty.vue';
 import ConnectionTriggerProperty from './ConnectionTriggerProperty.vue';
@@ -52,8 +46,6 @@ import ViewComposer from '../utils/ViewComposer.js';
 
 export default {
   components: {
-    Splitpanes,
-    Pane,
     StateProperty,
     StateTriggerProperty,
     ConnectionTriggerProperty,
@@ -64,12 +56,12 @@ export default {
   data() {
     return {
       draw2dFrameContent: null,
-      paneSize: 50,
       canvasReady: false,
-      isCanvasUpdate: false,  // Flag to prevent circular updates from canvas
+      isCanvasUpdate: false,
       showChatDialog: false,
       chatDialogStateName: '',
-      showEncounterDialog: false
+      showEncounterDialog: false,
+      sidebarCollapsed: false
     };
   },
   computed: {
@@ -77,10 +69,6 @@ export default {
     ...mapGetters('model', ['allStates', 'allConnections']),
     ...mapGetters('views', ['currentView']),
     
-    /**
-     * Komponiertes Diagram für Canvas (Model + View Layout)
-     * Verwendet das Overlay Pattern: Model-Daten + View-Layout = draw2d Diagram
-     */
     composedDiagram() {
       const model = {
         states: this.$store.state.model.states,
@@ -98,29 +86,11 @@ export default {
     }
   },
   watch: {
-    /**
-     * Watch for composed diagram changes.
-     * 
-     * Triggers when:
-     * 1. Model changes (states/connections added/removed/modified)
-     * 2. View changes (layouts/routes changed)
-     * 
-     * Note: Canvas updates are ignored using isCanvasUpdate flag.
-     * PropertyEditor updates are ignored using model.isPropertyUpdate flag
-     * to prevent circular updates that would clear the selection.
-     */
     composedDiagram: {
       handler(newDiagram) {
         if (newDiagram && this.canvasReady) {
-          // Skip if this change came from the canvas itself
-          if (this.isCanvasUpdate) {
-            return;
-          }
-          // Skip if this change came from PropertyEditor
-          // PropertyEditor uses updateState which sets model.isPropertyUpdate
-          if (this.$store.state.model.isPropertyUpdate) {
-            return;
-          }
+          if (this.isCanvasUpdate) return;
+          if (this.$store.state.model.isPropertyUpdate) return;
           this.sendDocumentToCanvas(newDiagram);
         }
       },
@@ -132,7 +102,6 @@ export default {
       handler(value) {
         if (value === 'true') {
           this.showEncounterDialog = true;
-          // Clear the query param
           this.$router.replace({ query: {} });
         }
       }
@@ -142,9 +111,11 @@ export default {
     ...mapActions('model', ['setModel', 'mergeModel', 'removeState', 'removeConnection', 'saveModel']),
     ...mapActions('views', ['updateCurrentViewLayout', 'saveView', 'setCurrentView']),
     
-    /**
-     * Speichert Model und aktuelle View
-     */
+    toggleSidebar() {
+      this.sidebarCollapsed = !this.sidebarCollapsed;
+      localStorage.setItem('sidebarCollapsed', JSON.stringify(this.sidebarCollapsed));
+    },
+    
     async saveMap() {
       try {
         await this.saveModel();
@@ -155,43 +126,26 @@ export default {
       }
     },
     
-    /**
-     * Verarbeitet Diagram-Updates vom Canvas.
-     * Trennt Model-Daten von Layout-Daten und speichert separat.
-     * 
-     * WICHTIG: Verwendet mergeModel statt setModel, damit States aus anderen
-     * Views nicht verloren gehen (Overlay Pattern).
-     */
     handleCanvasUpdate(diagram) {
       this.isCanvasUpdate = true;
       
-      // 1. Extrahiere was im Canvas ist
       const newModel = ViewComposer.extractModel(diagram);
       const newLayout = ViewComposer.extractLayout(diagram);
       
-      // 2. Finde gelöschte Elemente
-      // WICHTIG: Vergleiche mit dem Model, nicht mit der View!
-      // Ein State gilt als gelöscht wenn:
-      // - Er im Model existiert UND
-      // - Er in dieser View ein Layout hatte UND  
-      // - Er jetzt nicht mehr im Canvas ist
       const currentView = this.currentView;
       const previousLayoutIds = Object.keys(currentView?.stateLayouts || {});
       const currentCanvasStateIds = Object.keys(newModel.states);
       const previousRouteIds = Object.keys(currentView?.connectionRoutes || {});
       const currentCanvasConnIds = Object.keys(newModel.connections);
       
-      // Gelöschte States entfernen (hatten Layout in dieser View, sind nicht mehr im Canvas)
       for (const stateId of previousLayoutIds) {
         if (!currentCanvasStateIds.includes(stateId)) {
-          // Prüfe ob State noch im Model existiert (könnte schon gelöscht sein)
           if (this.$store.state.model.states[stateId]) {
             this.removeState(stateId);
           }
         }
       }
       
-      // Gelöschte Connections entfernen
       for (const connId of previousRouteIds) {
         if (!currentCanvasConnIds.includes(connId)) {
           if (this.$store.state.model.connections[connId]) {
@@ -200,10 +154,7 @@ export default {
         }
       }
       
-      // 3. Model-Änderungen mergen (nicht überschreiben!)
       this.mergeModel(newModel);
-      
-      // 4. Layout-Änderungen für diese View speichern
       this.updateCurrentViewLayout(newLayout);
       
       this.$nextTick(() => {
@@ -216,17 +167,11 @@ export default {
     },
     
     updateDraw2dFrame() {
-      // Check if the draw2dFrame ref is set
       if (this.$refs.draw2dFrame) {
         this.draw2dFrameContent = this.$refs.draw2dFrame.contentWindow;
       }
     },
     
-    /**
-     * Send document to canvas via parent window postMessage.
-     * Uses unified message architecture: both Vue and Canvas communicate
-     * through the parent window. Canvas listens on window.parent.
-     */
     sendDocumentToCanvas(document) {
       window.postMessage({ 
         type: MessageTypes.V2C_SET_DOCUMENT, 
@@ -234,56 +179,44 @@ export default {
         source: 'vue:world'
       }, '*');
     },
-    
-    handleResize(event) {
-      this.paneSize = event[0].size;
-      localStorage.setItem('paneSize', this.paneSize);
-    },
-    
-    loadDividerPosition() {
-      // Load pane size from local storage
-      const savedSize = localStorage.getItem('paneSize');
-      if (savedSize !== null) {
-        this.paneSize = parseFloat(savedSize);
-      }
-    },
   },
   mounted() {
-    // Set current view to 'world' for this canvas
+    // Restore sidebar state from localStorage
+    const storedState = localStorage.getItem('sidebarCollapsed');
+    if (storedState !== null) {
+      this.sidebarCollapsed = JSON.parse(storedState);
+    }
+    
     this.setCurrentView('world');
     
-    // Load divider position from local storage on mount
-    this.loadDividerPosition();
+    // Set draw2dFrameContent immediately when iframe ref is available
+    this.$nextTick(() => {
+      this.updateDraw2dFrame();
+    });
 
-    // Event listener for messages (unified architecture: all messages go through parent window)
     this.messageHandler = (event) => {
       if (event.origin !== window.location.origin) return;
       const message = event.data;
       
-      // Message Router: Handle C2V messages, forward V2C messages to canvas
       switch (message.type) {
         case MessageTypes.C2V_CANVAS_READY:
           this.updateDraw2dFrame();
           this.canvasReady = true;
-          // Send current diagram if available
           if (this.composedDiagram && this.composedDiagram.length > 0) {
             this.sendDocumentToCanvas(this.composedDiagram);
           }
           break;
 
         case MessageTypes.C2V_DOCUMENT_UPDATED:
-          // Diagram vom Canvas erhalten - in Model und Layout aufteilen
           this.handleCanvasUpdate(message.data);
           break;
 
         case MessageTypes.C2V_CHAT_FROM_HERE:
-          // Open chat dialog with selected state
           this.chatDialogStateName = message.stateName;
           this.showChatDialog = true;
           break;
 
         default:
-          // Forward V2C messages to the iframe (Vue → Canvas)
           if (message.type?.startsWith('v2c:') && this.draw2dFrameContent) {
             this.draw2dFrameContent.postMessage(message, '*');
           }
@@ -293,7 +226,6 @@ export default {
     window.addEventListener('message', this.messageHandler);
   },
   beforeUnmount() {
-    // Clean up message listener
     if (this.messageHandler) {
       window.removeEventListener('message', this.messageHandler);
     }
@@ -302,35 +234,87 @@ export default {
 </script>
 
 <style scoped>
+/* Vuetify Best Practice: Use flex with explicit height */
 .canvas-game-container {
-  height: 100vh;
+  display: flex;
+  flex: 1 1 auto;
+  height: 100%;
+  min-height: 0;
   width: 100%;
-}
-
-.full-height {
-  height: 100%;
-  display: flex;
-}
-
-/* Ensure each pane inside splitpanes takes full height */
-.splitpanes {
-  height: 100%;
-  display: flex;
-}
-.splitpanes.default-theme .splitpanes__pane {
-  background-color: transparent;
-  overflow-y: auto;
 }
 
 .iframe-container {
-  width: 100%;
-  height: 100%;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
   display: flex;
 }
 
-iframe {
+.iframe-container iframe {
+  flex: 1;
   width: 100%;
   height: 100%;
   border: none;
+}
+
+.sidebar-panel {
+  width: 350px;
+  flex-shrink: 0;
+  border-left: 1px solid var(--game-border-color);
+  background: var(--game-bg-secondary);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Breite Monitore (≥1440px): Doppelt so breites Sidebar */
+@media (min-width: 1440px) {
+  .sidebar-panel {
+    width: 600px;
+  }
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Sidebar needs position relative for toggle button */
+.sidebar-panel {
+  position: relative;
+  transition: width 0.3s ease;
+  overflow: visible;
+}
+
+/* Sidebar Toggle Button */
+.sidebar-toggle {
+  position: absolute;
+  left: -24px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 48px;
+  background: var(--game-accent-primary);
+  color: white;
+  border: 2px solid var(--game-border-color);
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  z-index: 100;
+  transition: background 0.2s ease;
+}
+
+.sidebar-toggle:hover {
+  background: var(--game-accent-secondary);
+}
+
+/* Collapsed state - minimal width for toggle button visibility */
+.sidebar-collapsed {
+  width: 0 !important;
+  min-width: 0 !important;
+  border-left: none !important;
 }
 </style>

@@ -113,7 +113,7 @@
     </v-navigation-drawer>
 
     <v-main class="content-area">
-      <router-view ref="iframeContainer"></router-view>
+      <router-view :key="$route.fullPath" ref="iframeContainer"></router-view>
     </v-main>
 
     <!-- Delete Encounter Dialog -->
@@ -559,15 +559,12 @@ export default {
 </style>
 
 <style scoped>
-#app {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 0;
-}
+/* Vuetify Best Practice: Let v-app handle layout automatically */
+/* Only minimal overrides needed */
 
 .content-area {
-  overflow: hidden;
+  /* Vuetify v-main already handles layout */
+  /* Just ensure content fills available space */
 }
 </style>
 

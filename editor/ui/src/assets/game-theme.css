@@ -6,6 +6,14 @@
 /* Import Noto Sans for regular text and Press Start 2P for retro headers */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Noto+Sans+Mono:wght@400;500;600;700&family=Press+Start+2P&display=swap');
 
+/* Global Layout - Required for Vuetify v-app to fill viewport */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 :root {
   /* Color Palette - Dark Fantasy Theme */
   --game-bg-primary: #1a1a2e;          /* Deep dark blue-black */

@@ -1,5 +1,6 @@
 <template>
-  <div class="config-view">
+  <v-container fluid class="fill-height pa-0">
+    <div class="config-view">
     <!-- 8-Bit Retro Header -->
     <div class="personality-header">
       <div class="personality-header__title">
@@ -108,7 +109,8 @@
       title="AI Character Personality"
       :helpText="helpContent"
     />
-  </div>
+    </div>
+  </v-container>
 </template>
 
 <script>
