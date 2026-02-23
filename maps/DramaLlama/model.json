@@ -23,6 +23,27 @@
       "name": "offended",
       "stateType": "NORMAL",
       "trigger": []
+    },
+    "bf84725e-4ff1-d3a4-84f6-d95ed80d4714": {
+      "type": "StateShape",
+      "id": "bf84725e-4ff1-d3a4-84f6-d95ed80d4714",
+      "userData": {
+        "system_prompt": "",
+        "ambient_sound_volume": 100
+      },
+      "name": "NewState",
+      "stateType": "NORMAL",
+      "trigger": []
+    },
+    "1eeaa02a-cd06-132b-ffcb-ccf95ed522fe": {
+      "type": "StateShape",
+      "id": "1eeaa02a-cd06-132b-ffcb-ccf95ed522fe",
+      "userData": {
+        "system_prompt": ""
+      },
+      "name": "NewState",
+      "stateType": "NORMAL",
+      "trigger": []
     }
   },
   "connections": {

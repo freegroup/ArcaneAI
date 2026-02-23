@@ -12,6 +12,12 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
+  overflow: hidden;
+}
+
+/* Vuetify v-application must fill viewport */
+.v-application {
+  height: 100%;
 }
 
 :root {

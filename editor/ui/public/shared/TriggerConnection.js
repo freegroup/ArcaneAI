@@ -129,7 +129,7 @@ var TriggerConnection= draw2d.Connection.extend({
 
         // Apply the visual feedback using attr() for batch update
         this.attr({
-            stroke: originalStroke * 3,        // Double the stroke width
+            stroke: originalStroke * 2,        // Double the stroke width
             color: lighterColor,               // Lighter color
             outlineStroke: 0,                  // Add outline
             outlineColor: "#000000"            // Black outline

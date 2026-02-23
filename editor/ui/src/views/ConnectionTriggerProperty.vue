@@ -10,7 +10,7 @@
             type="text"
             label="Name"
             v-model="jsonData.name"
-            @input="onDataChange"
+            @input="onTriggerNameInput"
         />
 
         <!-- Sound Effect Selection with Finder Dialog -->
@@ -293,9 +293,33 @@
        * Sends data to the canvas iframe.
        */
       onDataLoad() { 
-        this.jsonData.name = this.jsonData?.name?.replace(/[^a-zA-Z0-9_-]/g, '');
         var data = JSON.parse(JSON.stringify( this.jsonData ));
         window.postMessage({ type: MessageTypes.V2C_SET_SHAPE_DATA, data: data }, '*');
+      },
+
+      /**
+       * Special handler for triggerName input that replaces spaces with underscores
+       * while preserving cursor position transparently.
+       */
+      onTriggerNameInput(event) {
+        const input = event.target;
+        const cursorPos = input.selectionStart;
+        const originalValue = this.jsonData.name || '';
+        
+        // Replace spaces with underscores and remove other invalid characters
+        const newValue = originalValue.replace(/ /g, '_').replace(/[^a-zA-Z0-9_-]/g, '');
+        
+        // Only update if value actually changed
+        if (newValue !== originalValue) {
+          this.jsonData.name = newValue;
+          
+          // Restore cursor position after Vue updates the DOM
+          this.$nextTick(() => {
+            input.setSelectionRange(cursorPos, cursorPos);
+          });
+        }
+        
+        this.onDataChange();
       },
 
       /**
@@ -463,6 +487,23 @@
                 }
               };
           }
+          // Handle focus request for specific field (e.g., after creating a new connection)
+          else if (message.type === MessageTypes.C2V_FOCUS_PROPERTY) {
+              const fieldId = message.field;
+              
+              // Only focus if this property view is currently visible (has a TriggerConnection selected)
+              if (this.jsonData.type === 'TriggerConnection') {
+                  this.$nextTick(() => {
+                      const element = document.getElementById(fieldId);
+                      if (element) {
+                          element.focus();
+                          element.select();
+                      } else {
+                          console.warn('[ConnectionTriggerProperty] Element not found for field:', fieldId);
+                      }
+                  });
+              }
+          }
       };
       window.addEventListener('message', this.messageHandler);
     },
@@ -500,7 +541,6 @@
     gap: var(--game-spacing-md);
     font-size: var(--game-font-size-sm);
     border-left: 1px solid var(--game-border-color);
-    min-height:900px;
   }
 
   .property-view label {

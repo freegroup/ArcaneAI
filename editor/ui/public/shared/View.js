@@ -27,7 +27,29 @@ View = draw2d.Canvas.extend({
             if(e.isPostChangeEvent()){
                 // Get command details for granular change notification
                 const command = e.getCommand();
-                console.log(command)
+                
+                // Check if a new connection was added via CommandConnect
+                // If so, select it and focus the name property field
+                if (command instanceof draw2d.command.CommandConnect) {
+                    const connection = command.getConnection();
+                    if (connection) {
+                        // Select the newly created connection after command execution completes
+                        // Use setTimeout to ensure the connection is fully added to the canvas
+                        setTimeout(() => {
+                            this.setCurrentSelection(connection);
+                            
+                            // Send message to Vue to focus the triggerName property field
+                            // Additional delay to ensure selection event is processed first
+                            setTimeout(() => {
+                                window.parent.postMessage({
+                                    type: MessageTypes.C2V_FOCUS_PROPERTY,
+                                    field: 'triggerName'
+                                }, '*');
+                            }, 50);
+                        }, 0);
+                    }
+                }
+                
                 if (command?.getAffectedFigures) {
                     const affectedFigures = command.getAffectedFigures();
                     
@@ -275,7 +297,6 @@ View = draw2d.Canvas.extend({
 
     toggleFullScreen: function() 
     {
-
         var doc = window.document;
         var docEl = doc.documentElement;
       

@@ -9,18 +9,27 @@
       ></iframe>
     </div>
 
-    <!-- Property Sidebar with toggle -->
-    <div class="sidebar-panel" :class="{ 'sidebar-collapsed': sidebarCollapsed }">
-      <button class="sidebar-toggle" @click="toggleSidebar" :title="sidebarCollapsed ? 'Expand panel' : 'Collapse panel'">
-        {{ sidebarCollapsed ? '◀' : '▶' }}
-      </button>
-      <div class="sidebar-content" v-show="!sidebarCollapsed">
+    <!-- Property Sidebar using Vuetify Navigation Drawer -->
+    <v-navigation-drawer
+      app
+      location="right"
+      :permanent="true"
+      :width="sidebarCollapsed ? 0 : sidebarWidth"
+      class="property-drawer"
+    >
+      <!-- Property content -->
+      <div class="property-drawer__content" v-show="!sidebarCollapsed">
         <EncounterPropertyView v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
         <StateProperty v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
         <StateTriggerProperty v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
         <ConnectionTriggerProperty v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
       </div>
-    </div>
+    </v-navigation-drawer>
+
+    <!-- Toggle Button - outside drawer, always visible -->
+    <button class="sidebar-toggle" @click="toggleSidebar" :title="sidebarCollapsed ? 'Expand panel' : 'Collapse panel'">
+      {{ sidebarCollapsed ? '◀' : '▶' }}
+    </button>
   
     <!-- Chat Dialog -->
     <ChatDialog 
@@ -83,6 +92,11 @@ export default {
     },
     draw2dFrame() {
       return this.$refs.draw2dFrame;
+    },
+    sidebarWidth() {
+      // Laptop screens (< 1440px): narrower width (350px)
+      // Larger screens (≥ 1440px): wider (600px)
+      return window.innerWidth >= 1440 ? 600 : 350;
     }
   },
   watch: {
@@ -249,13 +263,12 @@ export default {
 </script>
 
 <style scoped>
-/* Vuetify Best Practice: Use flex with explicit height */
+/* Container muss sich an den verfügbaren Platz anpassen, nicht an den Inhalt */
 .canvas-game-container {
-  display: flex;
-  flex: 1 1 auto;
-  height: 100%;
-  min-height: 0;
   width: 100%;
+  height: 100%;
+  display: flex;
+  overflow: hidden;
 }
 
 .iframe-container {
@@ -271,39 +284,13 @@ export default {
   height: 100%;
   border: none;
 }
+</style>
 
-.sidebar-panel {
-  width: 350px;
-  flex-shrink: 0;
-  border-left: 1px solid var(--game-border-color);
-  background: var(--game-bg-secondary);
-  display: flex;
-  flex-direction: column;
-}
-
-/* Breite Monitore (≥1440px): Doppelt so breites Sidebar */
-@media (min-width: 1440px) {
-  .sidebar-panel {
-    width: 600px;
-  }
-}
-
-.sidebar-content {
-  flex: 1;
-  overflow-y: auto;
-}
-
-/* Sidebar needs position relative for toggle button */
-.sidebar-panel {
-  position: relative;
-  transition: width 0.3s ease;
-  overflow: visible;
-}
-
-/* Sidebar Toggle Button */
+<style scoped>
+/* Toggle Button - fixed position, always visible */
 .sidebar-toggle {
-  position: absolute;
-  left: -24px;
+  position: fixed;
+  right: v-bind('sidebarCollapsed ? "0px" : sidebarWidth + "px"');
   top: 50%;
   transform: translateY(-50%);
   width: 24px;
@@ -318,18 +305,27 @@ export default {
   align-items: center;
   justify-content: center;
   font-size: 12px;
-  z-index: 100;
-  transition: background 0.2s ease;
+  z-index: 1001;
+  transition: right 0.3s ease, background 0.2s ease;
 }
 
 .sidebar-toggle:hover {
   background: var(--game-accent-secondary);
 }
+</style>
 
-/* Collapsed state - minimal width for toggle button visibility */
-.sidebar-collapsed {
-  width: 0 !important;
-  min-width: 0 !important;
-  border-left: none !important;
+<style>
+/* Property Drawer - matching left navigation */
+.property-drawer {
+  background: var(--game-bg-secondary) !important;
+  border-left: 3px solid var(--game-accent-primary) !important;
+  border-radius: 0 !important;
+}
+
+/* Content area */
+.property-drawer__content {
+  padding: var(--game-spacing-sm);
+  overflow-y: auto;
+  height: 100%;
 }
 </style>
