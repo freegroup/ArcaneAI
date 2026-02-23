@@ -63,12 +63,12 @@
           />
         </div>
         
-        <div style="flex:1;display:flex;flex-direction: column;min-height:0;">
+        <div class="property-view__section">
           <div class="label-with-help" v-if="jsonData.userData">
             <label for="triggerDescription">Action Description</label>
             <HelpButton @click="openHelp('actionDescription')" />
           </div>
-          <div class="editor-container" style="flex:1;min-height:0;" v-if="jsonData.userData">
+          <div class="editor-container" v-if="jsonData.userData">
             <textarea
                 id="triggerDescription"
                 v-model="jsonData.userData.description"
@@ -87,12 +87,12 @@
           </div>
         </div>
 
-        <div style="flex:1;display:flex;flex-direction: column;min-height:0;">
+        <div class="property-view__section">
           <div class="label-with-help" v-if="jsonData.userData">
             <label for="systemPrompt">On Success</label>
             <HelpButton @click="openHelp('onSuccess')" />
           </div>
-          <div class="editor-container" style="flex:1;min-height:0;" v-if="jsonData.userData">
+          <div class="editor-container" v-if="jsonData.userData">
             <textarea
                 id="systemPrompt"
                 v-model="jsonData.userData.system_prompt"
@@ -470,7 +470,6 @@
     gap: var(--game-spacing-md);
     font-size: var(--game-font-size-sm);
     border-left: 1px solid var(--game-border-color);
-    min-height:900px;
   }
 
   .property-view label {
@@ -537,9 +536,24 @@
     overflow-y: auto;
   }
 
+  /* Sections that can grow but have a minimum height to prevent squashing */
+  .property-view__section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 180px; /* Minimum space for label + textarea */
+  }
+
   /* Textareas in flex containers */
+  .editor-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
   .editor-container textarea {
-    height: 100%;
+    flex: 1;
     resize: none;
   }
 

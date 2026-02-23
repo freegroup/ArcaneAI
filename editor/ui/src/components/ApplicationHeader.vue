@@ -18,11 +18,11 @@
           <v-btn icon class="home-btn" @click="goHome">
             <v-icon>mdi-home</v-icon>
           </v-btn>
-          <button @click="newFileDialog" class="retro-btn retro-btn--secondary retro-btn--sm">New Game</button>
-          <button @click="openFileDialog" class="retro-btn retro-btn--secondary retro-btn--sm">Load Game</button>
-          <button @click="save" class="retro-btn retro-btn--secondary retro-btn--sm">
+          <RetroButton @click="newFileDialog" variant="secondary" size="sm">New Game</RetroButton>
+          <RetroButton @click="openFileDialog" variant="secondary" size="sm">Load Game</RetroButton>
+          <RetroButton @click="save" variant="secondary" size="sm">
             Save Game<span v-if="hasUnsavedChanges" class="unsaved-indicator">*</span>
-          </button>
+          </RetroButton>
         </div>
       </div>
     </template>
@@ -32,11 +32,11 @@
       <v-btn icon class="home-btn" @click="goHome">
         <v-icon>mdi-home</v-icon>
       </v-btn>
-      <button @click="newFileDialog" class="retro-btn retro-btn--secondary retro-btn--sm">New Game</button>
-      <button @click="openFileDialog" class="retro-btn retro-btn--secondary retro-btn--sm">Load Game</button>
-      <button @click="save" class="retro-btn retro-btn--secondary retro-btn--sm">
+      <RetroButton @click="newFileDialog" variant="secondary" size="sm">New Game</RetroButton>
+      <RetroButton @click="openFileDialog" variant="secondary" size="sm">Load Game</RetroButton>
+      <RetroButton @click="save" variant="secondary" size="sm">
         Save Game<span v-if="hasUnsavedChanges" class="unsaved-indicator">*</span>
-      </button>
+      </RetroButton>
       <v-spacer></v-spacer>
     </template>
     
@@ -52,6 +52,7 @@ import { mapActions, mapGetters } from 'vuex';
 import GameNewDialog from './GameNewDialog.vue';
 import GameSelectDialog from './GameSelectDialog.vue';
 import EncounterNewDialog from './EncounterNewDialog.vue';
+import RetroButton from './RetroButton.vue';
 
 export default {
   name: 'ApplicationHeader',
@@ -59,10 +60,10 @@ export default {
     GameSelectDialog,
     GameNewDialog,
     EncounterNewDialog,
+    RetroButton,
   },
   data() {
     return {
-      windowWidth: window.innerWidth,
       gameSelectDialog: false,
       gameNewDialog: false,
       encounterNewDialog: false,
@@ -70,22 +71,18 @@ export default {
   },
   computed: {
     ...mapGetters('game', ['hasUnsavedChanges']),
+    
+    /**
+     * Use Vuetify's built-in breakpoint system instead of manual windowWidth tracking.
+     * mdAndUp (>= 960px) is typically where we start showing the full header on desktop/laptops.
+     */
     isLargeScreen() {
-      return this.windowWidth >= 1200;
+      return this.$vuetify.display.mdAndUp;
     },
-  },
-  mounted() {
-    window.addEventListener('resize', this.handleResize);
-  },
-  beforeUnmount() {
-    window.removeEventListener('resize', this.handleResize);
   },
   methods: {
     ...mapActions('game', ['saveGame']),
     
-    handleResize() {
-      this.windowWidth = window.innerWidth;
-    },
     goHome() {
       this.$router.push('/');
     },

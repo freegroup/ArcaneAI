@@ -48,27 +48,29 @@
           />
         </div>
         
-        <div class="label-with-help" v-if="jsonData.userData">
-          <label for="systemPrompt">Scene Description</label>
-          <HelpButton @click="openHelp('sceneDescription')" />
-        </div>
-        <div class="editor-container" v-if="jsonData.userData">
-          <Codemirror
-              class="code-editor"
-              v-model:value="jsonData.userData.system_prompt"
-              :options="cmOptions"
-              placeholder="test placeholder"
-              @change="onDataChange"
-          />
-          <v-btn 
-            icon 
-            size="small" 
-            class="expand-btn" 
-            @click="showJinjaEditor = true"
-            title="Open in fullscreen editor"
-          >
-            <v-icon size="small">mdi-arrow-expand</v-icon>
-          </v-btn>
+        <div class="property-view__section">
+          <div class="label-with-help" v-if="jsonData.userData">
+            <label for="systemPrompt">Scene Description</label>
+            <HelpButton @click="openHelp('sceneDescription')" />
+          </div>
+          <div class="editor-container" v-if="jsonData.userData">
+            <Codemirror
+                class="code-editor"
+                v-model:value="jsonData.userData.system_prompt"
+                :options="cmOptions"
+                placeholder="test placeholder"
+                @change="onDataChange"
+            />
+            <v-btn 
+              icon 
+              size="small" 
+              class="expand-btn" 
+              @click="showJinjaEditor = true"
+              title="Open in fullscreen editor"
+            >
+              <v-icon size="small">mdi-arrow-expand</v-icon>
+            </v-btn>
+          </div>
         </div>
 
         <!-- Help Dialog -->
@@ -292,7 +294,7 @@
     background: var(--game-bg-primary);
     color: var(--game-text-primary);
     height: 100%;
-    overflow: hidden;
+    overflow-y: auto;
     padding: var(--game-spacing-lg);
     box-sizing: border-box; 
     display: flex;
@@ -360,7 +362,21 @@
   :deep(.v-slider) { margin-top: var(--game-spacing-sm); }
   :deep(.v-slider-track__fill) { background: var(--game-accent-primary) !important; }
   :deep(.v-slider-thumb__surface) { background: var(--game-accent-primary) !important; }
-  .editor-container { position: relative; flex: 1; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+  /* Sections that can grow but have a minimum height to prevent squashing */
+  .property-view__section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 250px; /* Codemirror needs a bit more space */
+  }
+
+  .editor-container { 
+    position: relative; 
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+    min-height: 0; 
+  }
   .expand-btn { position: absolute; top: 8px; right: 8px; z-index: 10; background: var(--game-accent-primary) !important; opacity: 0.33; }
   .expand-btn:hover { opacity: 1; }
   .code-editor { flex: 1; display: flex; flex-direction: column; min-height: 0; }

@@ -13,15 +13,16 @@
       </v-card-text>
       <v-card-actions class="dialog-actions">
         <v-spacer></v-spacer>
-        <button @click="cancel" class="retro-btn retro-btn--secondary retro-btn--sm">
+        <RetroButton @click="cancel" variant="secondary" size="sm">
           Cancel
-        </button>
-        <button 
+        </RetroButton>
+        <RetroButton 
           @click="confirmDelete" 
-          class="retro-btn retro-btn--danger retro-btn--sm"
+          variant="reset" 
+          size="sm"
         >
           Delete
-        </button>
+        </RetroButton>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -29,10 +30,11 @@
 
 <script>
 import DialogHeader from './DialogHeader.vue';
+import RetroButton from './RetroButton.vue';
 
 export default {
   name: 'ConfirmEncounterDeleteDialog',
-  components: { DialogHeader },
+  components: { DialogHeader, RetroButton },
   
   props: {
     modelValue: {
@@ -102,49 +104,7 @@ export default {
   background: var(--game-bg-tertiary);
 }
 
-.dialog-actions .retro-btn {
+.dialog-actions > :deep(.retro-btn) {
   margin-left: var(--game-spacing-md);
-}
-
-/* Retro Button Styles */
-.retro-btn {
-  font-family: var(--game-font-family-retro);
-  font-size: 12px;
-  letter-spacing: 1px;
-  padding: var(--game-spacing-sm) var(--game-spacing-lg);
-  border: none;
-  cursor: pointer;
-  transition: all var(--game-transition-fast);
-}
-
-.retro-btn--sm {
-  padding: var(--game-spacing-xs) var(--game-spacing-md);
-  font-size: 11px;
-}
-
-.retro-btn--danger {
-  background: var(--game-accent-primary);
-  color: white;
-  box-shadow: inset -3px -3px 0px 0px #8c2022;
-}
-
-.retro-btn--danger:hover {
-  background: #ce372b;
-  box-shadow: inset -4px -4px 0px 0px #8c2022;
-}
-
-.retro-btn--danger:active {
-  box-shadow: inset 3px 3px 0px 0px #8c2022;
-}
-
-.retro-btn--secondary {
-  background: var(--game-bg-tertiary);
-  color: var(--game-text-secondary);
-  border: 2px solid var(--game-border-color);
-}
-
-.retro-btn--secondary:hover {
-  border-color: var(--game-accent-primary);
-  color: var(--game-accent-secondary);
 }
 </style>

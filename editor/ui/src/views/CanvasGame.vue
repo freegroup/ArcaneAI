@@ -11,9 +11,8 @@
 
     <!-- Property Sidebar using Vuetify Navigation Drawer -->
     <v-navigation-drawer
-      app
       location="right"
-      :permanent="true"
+      permanent
       :width="sidebarCollapsed ? 0 : sidebarWidth"
       class="property-drawer"
     >
@@ -27,9 +26,14 @@
     </v-navigation-drawer>
 
     <!-- Toggle Button - outside drawer, always visible -->
-    <button class="sidebar-toggle" @click="toggleSidebar" :title="sidebarCollapsed ? 'Expand panel' : 'Collapse panel'">
+    <RetroButton 
+      class="sidebar-toggle" 
+      size="icon"
+      @click="toggleSidebar" 
+      :title="sidebarCollapsed ? 'Expand panel' : 'Collapse panel'"
+    >
       {{ sidebarCollapsed ? '◀' : '▶' }}
-    </button>
+    </RetroButton>
   
     <!-- Chat Dialog -->
     <ChatDialog 
@@ -50,6 +54,7 @@ import ConnectionTriggerProperty from './ConnectionTriggerProperty.vue';
 import EncounterPropertyView from './EncounterPropertyView.vue';
 import ChatDialog from '../components/ChatDialog.vue';
 import EncounterNewDialog from '../components/EncounterNewDialog.vue';
+import RetroButton from '../components/RetroButton.vue';
 import { MessageTypes } from '../../public/shared/SharedConstants.js';
 import ViewComposer from '../utils/ViewComposer.js';
 
@@ -60,7 +65,8 @@ export default {
     ConnectionTriggerProperty,
     EncounterPropertyView,
     ChatDialog,
-    EncounterNewDialog
+    EncounterNewDialog,
+    RetroButton
   },
   data() {
     return {
@@ -94,9 +100,12 @@ export default {
       return this.$refs.draw2dFrame;
     },
     sidebarWidth() {
-      // Laptop screens (< 1440px): narrower width (350px)
-      // Larger screens (≥ 1440px): wider (600px)
-      return window.innerWidth >= 1440 ? 600 : 350;
+      /**
+       * Use Vuetify's built-in display system.
+       * Laptop screens (< 1440px): 350px
+       * Larger screens (≥ 1440px): 600px
+       */
+      return this.$vuetify.display.width >= 1440 ? 600 : 350;
     }
   },
   watch: {
@@ -114,11 +123,8 @@ export default {
     '$route.query.addEncounter': {
       immediate: true,
       handler(value) {
-        console.log('[CanvasGame] addEncounter query changed:', value);
         if (value === 'true') {
-          console.log('[CanvasGame] Opening encounter dialog');
           this.showEncounterDialog = true;
-          // Clear query param after a short delay to ensure dialog opened
           this.$nextTick(() => {
             this.$router.replace({ query: {} });
           });
@@ -208,14 +214,12 @@ export default {
     
     this.setCurrentView('world');
     
-    // Set draw2dFrameContent immediately when iframe ref is available
     this.$nextTick(() => {
       this.updateDraw2dFrame();
     });
 
     // Listen for global event to open add encounter dialog
     this.addEncounterHandler = () => {
-      console.log('[CanvasGame] Received open-add-encounter-dialog event');
       this.showEncounterDialog = true;
     };
     window.addEventListener('open-add-encounter-dialog', this.addEncounterHandler);
@@ -261,6 +265,66 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.canvas-game-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+}
+
+.iframe-container {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+}
+
+.iframe-container iframe {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+</style>
+
+<style scoped>
+/* Toggle Button - fixed position, always visible */
+.sidebar-toggle {
+  position: fixed;
+  right: v-bind('sidebarCollapsed ? "0px" : sidebarWidth + "px"');
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 48px;
+  z-index: 1001;
+  transition: right 0.3s ease;
+  padding: 0;
+}
+
+/* We override the retro-btn defaults for the specialized toggle */
+.sidebar-toggle :deep(.retro-btn) {
+  border-radius: 4px 0 0 4px;
+  border-right: none;
+}
+</style>
+
+<style>
+/* Property Drawer - matching left navigation */
+.property-drawer {
+  background: var(--game-bg-secondary) !important;
+  border-left: 3px solid var(--game-accent-primary) !important;
+  border-radius: 0 !important;
+}
+
+/* Content area */
+.property-drawer__content {
+  padding: var(--game-spacing-sm);
+  overflow-y: auto;
+  height: 100%;
+}
+</style>
 
 <style scoped>
 /* Container muss sich an den verfügbaren Platz anpassen, nicht an den Inhalt */

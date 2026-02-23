@@ -7,15 +7,24 @@
         <span v-if="title" class="dialog-header__title">{{ title }}</span>
       </slot>
     </div>
-    <button class="dialog-header__close" @click="$emit('close')" title="Close">
+    <RetroButton 
+      class="dialog-header__close" 
+      size="icon" 
+      variant="reset"
+      @click="$emit('close')" 
+      title="Close"
+    >
       X
-    </button>
+    </RetroButton>
   </div>
 </template>
 
 <script>
+import RetroButton from './RetroButton.vue';
+
 export default {
   name: 'DialogHeader',
+  components: { RetroButton },
   emits: ['close'],
   props: {
     title: {
@@ -86,57 +95,9 @@ export default {
                0 0 8px var(--game-accent-secondary);
 }
 
-/* 8-bit Close Button */
+/* 8-bit Close Button Specialized Overrides */
 .dialog-header__close {
-  background: var(--game-accent-primary);
-  color: white;
-  border: none;
   width: 36px;
   height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-family: var(--game-font-family-retro);
-  font-size: 14px;
-  font-weight: bold;
-  transition: all var(--game-transition-fast);
-  position: relative;
-  box-shadow: inset -4px -4px 0px 0px #8c2022;
-}
-
-.dialog-header__close::before {
-  content: '';
-  position: absolute;
-  top: -3px;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-top: 3px solid black;
-  border-bottom: 3px solid black;
-  box-sizing: content-box;
-  pointer-events: none;
-}
-
-.dialog-header__close::after {
-  content: '';
-  position: absolute;
-  left: -3px;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  border-left: 3px solid black;
-  border-right: 3px solid black;
-  box-sizing: content-box;
-  pointer-events: none;
-}
-
-.dialog-header__close:hover {
-  background: #ce372b;
-  box-shadow: inset -6px -6px 0px 0px #8c2022;
-}
-
-.dialog-header__close:active {
-  box-shadow: inset 4px 4px 0px 0px #8c2022;
 }
 </style>
