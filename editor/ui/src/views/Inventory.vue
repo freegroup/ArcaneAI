@@ -248,6 +248,8 @@ export default {
   height: 100%;
   background: var(--game-bg-secondary);
   padding: 0;
+  overflow: hidden; /* NUR .inventory-list soll scrollen, nicht der Container */
+  box-sizing: border-box;
 }
 
 /* 8-Bit Retro Header */
@@ -453,6 +455,7 @@ export default {
 .inventory-list {
   overflow-y: auto;
   flex: 1;
+  min-height: 0; /* WICHTIG: Erlaubt flex-item zu schrumpfen */
   padding: var(--game-spacing-sm);
   background: var(--game-bg-primary);
 }

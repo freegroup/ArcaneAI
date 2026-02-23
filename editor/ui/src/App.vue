@@ -596,12 +596,28 @@ export default {
 </style>
 
 <style scoped>
-/* Vuetify Best Practice: Let v-app handle layout automatically */
-/* Only minimal overrides needed */
-
+/* v-main muss eine FIXE Höhe haben, damit Kinder height: 100% nutzen können */
+/* height: 100% funktioniert nicht weil v-main selbst keine fixe Höhe hat */
 .content-area {
-  /* Vuetify v-main already handles layout */
-  /* Just ensure content fills available space */
+  /* Berechne Höhe: Viewport minus Header */
+  height: calc(100vh - 128px) !important; /* 128px = Header-Höhe bei großen Bildschirmen */
+  min-height: 0 !important;
+  overflow: hidden;
+}
+
+/* Kleinere Bildschirme haben kleineren Header */
+@media (max-width: 1199px) {
+  .content-area {
+    height: calc(100vh - 48px) !important; /* 48px = Header-Höhe bei kleinen Bildschirmen */
+  }
+}
+
+/* Der innere Wrapper von v-main braucht auch volle Höhe */
+.content-area :deep(.v-main__wrap) {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 </style>
 

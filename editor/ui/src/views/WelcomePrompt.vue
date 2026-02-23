@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="fill-height pa-0">
+  <div class="welcome-wrapper">
     <div class="config-view">
     <!-- 8-Bit Retro Header -->
     <div class="welcome-header">
@@ -110,7 +110,7 @@
       :helpText="helpContent"
     />
     </div>
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -265,11 +265,24 @@ export default {
 </script>
 
 <style scoped>
-.config-view {
-  height: 100%;
+/* Wrapper wie CanvasGame - volle Höhe des Parents */
+.welcome-wrapper {
   width: 100%;
-  overflow-y: auto;
-  padding: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.config-view {
+  flex: 1;
+  min-height: 0; /* WICHTIG: Erlaubt zu schrumpfen */
+  width: 100%;
+  max-width: 100%; /* Verhindert Überlauf */
+  overflow: hidden; /* Kein Scrolling am Container - nur intern */
+  padding: var(--game-spacing-md); /* Padding statt margin am Editor */
+  padding-top: 0; /* Header braucht kein extra padding oben */
   box-sizing: border-box; 
   display: flex;
   flex-direction: column;
@@ -375,8 +388,12 @@ export default {
 
 .full-height-editor {
   flex: 1; 
-  height: 100%;
-  margin: var(--game-spacing-md);
+  min-height: 0; /* WICHTIG: Erlaubt dem flex-item zu schrumpfen */
+  overflow: hidden; /* Content scrollt im CodeMirror */
+  margin: 0; /* Kein margin - padding ist am Container */
+  margin-top: var(--game-spacing-md); /* Nur oben Abstand zum Header */
+  width: 100%;
+  box-sizing: border-box;
   transition: flex 0.3s ease;
 }
 
