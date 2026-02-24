@@ -12,7 +12,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "fd2f6b9f-d5b9-231a-3384-3065e6c9dcf0",
+          "id": "12330a6c-9118-1ad6-dcc1-986200bf6791",
           "name": "untersuche_den_raum",
           "description": "Du kannst den Raum untersuchen un ihn mal Beschreiben.",
           "sound_effect": "effect_tuer_aufschliessen.wav",
@@ -38,7 +38,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "87987342-80f1-535c-411e-b7dd75d4323f",
+          "id": "29f9d7e0-a772-5a79-f413-10544fcdce9e",
           "name": "untersuche_den_raum",
           "description": "Du kannst den Raum untersuchen und durchsuchen und vielleicht findest Du Dinge die Du gebrauchen kannst.  Du siehst ein paar Dinge",
           "sound_effect": "laufen_teppich.wav",
@@ -52,7 +52,7 @@
           ]
         },
         {
-          "id": "33edafe7-fd20-6609-ae68-13106f09bab6",
+          "id": "035d93d0-a937-c5ff-7cf1-d14994da75e2",
           "name": "nehme_das_packet",
           "description": "Du nimmst das weisse Packet mit den seltsamen Röllchen, welches unter der langen Tafel liegt, an dich.",
           "sound_effect": "effect_retrogame.wav",
@@ -68,7 +68,7 @@
           ]
         },
         {
-          "id": "79c99bfd-c0a9-e6b3-4ae8-09d549804607",
+          "id": "800a184f-b350-c5d5-05d1-9e223a2c8205",
           "name": "gebe_packet_dem_waechter",
           "description": "Du gibst den Wächter das seltsame Packet",
           "sound_effect": "effect_mann_streckt_sich.wav",
@@ -85,7 +85,7 @@
           ]
         },
         {
-          "id": "e7886e6d-5615-5146-c036-ee1788dd74db",
+          "id": "b4933796-43cf-3c47-f2dd-a7a573964e8a",
           "name": "rede_mit_waechter",
           "description": "Di sprichts den Wächter an und fragt mal was er so treibt...egal...du redets einfach mit ihm",
           "sound_effect": "effect_gaehnen.wav",
@@ -98,7 +98,7 @@
           "actions": []
         },
         {
-          "id": "6a0db764-6579-0111-9915-c99dcc59ab24",
+          "id": "a0b5e49b-5dc8-b1ac-c240-3bdc2b07d62a",
           "name": "werfe_muenze_ein",
           "description": "Du hast eine Münze und kannst diese Münze in den spielautomaten einwerfen.",
           "sound_effect": "song_traurig_01.mp3",
@@ -113,7 +113,7 @@
           ]
         },
         {
-          "id": "ada04ac0-8fe4-25a3-ee8f-492146b64ebe",
+          "id": "63be68fb-7e96-8ec9-28b2-bc87436be4af",
           "name": "oeffne_tuer_mit_gewalt",
           "description": "Du öffnest die Tür zu \"Gelben Höhle\" mit Gewalt. Entweder eintreten, rennen, dagegen schlagen. Jede art von Gewalt öffnet die Tür.",
           "sound_effect": "aktion_etwas_im_raum_umwerfen_dose.mp3",
@@ -141,7 +141,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "07803d31-ac83-9156-59b3-4eb2317e366d",
+          "id": "4930930d-ecdf-27f9-96c2-e6aa5639ef23",
           "name": "schau_aus_dem_Fenster",
           "description": "Du kannst aus dem Fenster sehen und siehst....tata.....den Briefkasten und ein wenig Wald. Es ist die Stelle an der du vorher draussen da stands.",
           "sound_effect": "",
@@ -152,7 +152,7 @@
           "actions": []
         },
         {
-          "id": "8ee92f46-b613-e34a-dd7c-1a9ca39265e2",
+          "id": "12825eda-5f80-5a4d-9577-091128a35d25",
           "name": "untersuche_den_raum",
           "description": "Du kannst den Raum genauer untersuchen und mitteilen wie dieser aussieht",
           "sound_effect": "",
@@ -165,7 +165,7 @@
           ]
         },
         {
-          "id": "6a07f2fe-418c-0c56-f1bb-5bc2ddeb4bc0",
+          "id": "0ed9faa3-6531-8558-bbdf-555ec3132057",
           "name": "nehme_karotte",
           "description": "Du nimmst, die angesabberten, Karotten.",
           "sound_effect": "effect_retrogame.wav",
@@ -180,7 +180,7 @@
           ]
         },
         {
-          "id": "3f1b86b7-d2f0-8f97-ccaa-bc1c6987b04d",
+          "id": "ed423bcb-185e-2681-c749-51a1be67d550",
           "name": "gebe_die_karotten",
           "description": "Du wirfst die Karotten dem \"Wesen\" oder dem Hund \"Kerberos\" vor die Schnauze die er dann isst.",
           "sound_effect": "eating-crispy-cookies.wav",
@@ -210,7 +210,7 @@
       "stateType": "START",
       "trigger": [
         {
-          "id": "568f17a8-ca24-baaf-e338-87927e97b55c",
+          "id": "e239c751-8f4f-30d8-4903-748d65064eb2",
           "name": "untersuche_das_fenster",
           "description": "Du kannst das Fenster untersuchen und beschreibst, dass man es öffnen könnte. Es fällt dir ein Türschild auf was in der nähe angebracht ist.",
           "sound_effect": "mixkit-air-woosh-1489.wav",
@@ -223,7 +223,7 @@
           ]
         },
         {
-          "id": "25f25dd7-6ff3-c3a3-cb0e-9751315675d8",
+          "id": "d9a58cb1-0549-b9ff-f4a4-ac128477d4d2",
           "name": "oeffne_das_fenster",
           "description": "Du öffnest das Fenster indem du es nach oben schiebst.",
           "sound_effect": "effect_schiebetuer_oeffnen.wav",
@@ -238,7 +238,7 @@
           ]
         },
         {
-          "id": "39edcfa8-5000-cc1c-926b-bab1dbcecd1b",
+          "id": "4dfc1a6b-13d9-cda6-d1aa-72f9ccffecaf",
           "name": "untersuche_das_haus",
           "description": "Man kann das Haus hier nach seinem Zustand untersuchen oder mal nachsehen ob es Türen, Fenster hat in die man in das Haus gelingen könnte. Es fällt dir aber ein Türschild  auf",
           "sound_effect": "",
@@ -249,7 +249,7 @@
           "actions": []
         },
         {
-          "id": "43ce3198-b53d-12c5-a176-f57e5ec17938",
+          "id": "02c10c37-91f9-1352-3085-da9c4584dee0",
           "name": "untersuche_die_tuer",
           "description": "Die kannst die Tür untersuchen und festellen, dass diese unüberwindbar ist. Kein reinkommen auf irgendeine Weise. Es fällt die aber ein Türschild auf",
           "sound_effect": "",
@@ -260,7 +260,7 @@
           "actions": []
         },
         {
-          "id": "3e77c1b0-7f0c-8488-c561-9ef6d61704ad",
+          "id": "5c9027d5-311f-7de9-76a9-af8b12fe0c95",
           "name": "nehme_stock",
           "description": "Ein Stock, der in der nähe liegt kann genommen werden",
           "sound_effect": "effect_retrogame.wav",
@@ -288,7 +288,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "0057f819-9716-88cc-f984-6ff1c9b150b9",
+          "id": "9a5e7225-e906-83e3-0911-4eeea9b524d8",
           "name": "nehme_den_brief",
           "description": "Nehme den Brief der aus dem Briefkasten herausschaut.",
           "sound_effect": "effect_retrogame.wav",
@@ -301,7 +301,7 @@
           ]
         },
         {
-          "id": "27ed4931-db3f-8272-be9f-865c4c82cbf2",
+          "id": "224068f0-6a08-a3e5-71eb-0df6e3fa0d6a",
           "name": "lese_den_brief_vor",
           "description": "Lese den Brief Wortgetreu vor, nahdem du ihn genommen hast",
           "sound_effect": "",
@@ -314,7 +314,7 @@
           "actions": []
         },
         {
-          "id": "a2add3ab-a74f-d6ee-4da9-caeec2c84efc",
+          "id": "d94b24a7-9e6c-4fe0-2e8e-5d81ef60b652",
           "name": "nehme_ratte",
           "description": "Du steckst unter Ekel die Ratte in deine Tasche",
           "sound_effect": "effect_retrogame.wav",
@@ -329,7 +329,7 @@
           ]
         },
         {
-          "id": "eb5fd956-f609-6cf5-4e2f-366576a194b1",
+          "id": "4b1c429d-f896-196b-0b28-e577267a3aec",
           "name": "nehme_muenze",
           "description": "Auf dem Boden liegt eine Münze die du nehmen kannst",
           "sound_effect": "effect_retrogame.wav",
@@ -358,7 +358,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "2f44fb6a-0c34-8afa-3fbf-678a3aa1be54",
+          "id": "629d4fad-47f3-316a-58a3-f8ae5e064c80",
           "name": "faelle_den_baum",
           "description": "Das Fällen des Baumes, oder umsägen, ist keine gute Idee. Du wirst es versuchen, aber es funktioniert niemals. Du wolltest doch tatsächlich diesen wunderschönen Baum für dein Spielvergnügen fällen. Alter – und das in diesen Zeiten! Schon mal was von Nachhaltigkeit gehört?",
           "sound_effect": "effect_erstaunte_frau.wav",
@@ -382,7 +382,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "7abe6b25-d58e-b311-7156-36c22a440b05",
+          "id": "75b38089-774e-e895-76e7-231e03593bcb",
           "name": "untersuche_den_ort",
           "description": "Du kannst den Ort untersuchen und versuchen ob hier interessante Dinge zu finden sind-",
           "sound_effect": "",
@@ -395,7 +395,7 @@
           ]
         },
         {
-          "id": "bcd50f09-6592-d348-870a-741dff30f7eb",
+          "id": "bcca6d80-9e4d-bfce-4589-d09b3e67899a",
           "name": "nehme_das_ei",
           "description": "Du kannst das Goldene Ei aufnemen",
           "sound_effect": "effect_retrogame.wav",
@@ -434,7 +434,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "5a3a8361-72e2-2a59-4a6e-57c5b62121b5",
+          "id": "ff212fbf-840c-4f35-76bc-588f03f8c24f",
           "name": "untersuche_die_hosen",
           "description": "Die Unterhosen auf der Wäschelene Untersuchen. Das Untersuchen der Hosen wird allerdings keine neuen Erkenntnisse oder iInformationen bringen. Ausser, dass diese Hosen so ihre \"Spuren\" haben",
           "sound_effect": "reaktion_bouaaaa.wav",
@@ -482,7 +482,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "b032426b-9917-b10d-4ae2-1104b00496c5",
+          "id": "b8404c00-6f17-c74b-b602-d290d0b46100",
           "name": "nehme_das_ei",
           "description": "Du kannst das Goldene Ei, welches in einem Nest liegt, nehmen.",
           "sound_effect": "effect_retrogame.wav",
@@ -507,7 +507,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "c6fd7e8c-0a74-cbf8-d54b-8b625aacbc1a",
+          "id": "cd986970-9087-cad6-b66e-83761ef9cb3a",
           "name": "durchsuche_die_kammern",
           "description": "Du durchsuchst die Kammern nach etwas brauchbaren.",
           "sound_effect": "",
@@ -520,7 +520,7 @@
           ]
         },
         {
-          "id": "0eb3f0e0-8f85-c8b8-c2c7-d525f7648f89",
+          "id": "69b8d160-c296-9c9d-3217-e2b99d7356ae",
           "name": "nehme_die_flasche",
           "description": "Du nimmst eine Flasche aus einer der Kammern.",
           "sound_effect": "effect_retrogame.wav",
@@ -536,7 +536,7 @@
           ]
         },
         {
-          "id": "69d51e5a-5dcf-15a4-97a7-117065af803c",
+          "id": "79d694a9-b38a-91e3-38f1-7fdff06f55b4",
           "name": "pinkel_in_die_flasche",
           "description": "Du pinkelst in die Flasche und machst die fast voll.",
           "sound_effect": "effect-sink-with-water.wav",

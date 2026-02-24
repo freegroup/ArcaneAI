@@ -1,15 +1,16 @@
 
 let NORMAL_STYLE = {
     stroke: 4,
-    fontSize:10,
-    fontColor: "#4f4f4f",  
-    bgColor: "#add6f5", 
+    fontSize:24,
+    radius:1,
+    fontColor: "#f39c12",  
+    bgColor: "#0f3460", 
     color: "#349be8",
 }
 
 let START_STYLE = {
     stroke: 4,
-    fontSize:16,
+    fontSize:24,
     padding:20,
     fontColor: "#03c524",  
     bgColor: "#281b58", 
@@ -40,12 +41,12 @@ StateShape = draw2d.shape.box.VBox.extend({
             text:"StateName", 
             ...NORMAL_STYLE,
             radius: 5, 
-            padding:6,
+            padding:4,
             bold:false,
             resizeable:true,
             cssClass: "cursor-move",
             textAlign: "center",
-            fontFamily: "'Press Start 2P', monospace"
+            fontFamily: "Ithaca, 'Press Start 2P', monospace"
         })
   
     	this._super(

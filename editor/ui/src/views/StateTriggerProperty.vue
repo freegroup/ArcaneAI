@@ -3,7 +3,7 @@
 
         <div class="field-group">
           <div class="label-with-help">
-            <label>Trigger Name</label>
+            <label>Action Name</label>
             <HelpButton @click="openHelp('triggerName')" />
           </div>
           <input
@@ -197,7 +197,7 @@
         helpText: '',
         helpTexts: {
           triggerName: {
-            title: 'Trigger Name',
+            title: 'Action Name',
             text: `<strong>The Unique Identifier for this Action</strong><br><br>
             Use descriptive names like <code>open_door</code> or <code>take_key</code>. This name is used internally and helps you organize your game logic.<br><br>
             <strong>🎯 AI Matching Importance:</strong><br>
@@ -472,7 +472,8 @@
   /* Retro 8-Bit Font for Trigger Name */
   .property-view input#stateName {
     font-family: var(--game-font-family-retro);
-    font-size: 18px;
+    font-size: 25px;
+    padding: var(--game-spacing-md) var(--game-spacing-md);
     letter-spacing: 2px;
     color: var(--game-accent-secondary);
     text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);

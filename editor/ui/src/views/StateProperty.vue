@@ -308,10 +308,10 @@
   }
   .property-view input#stateName {
     font-family: var(--game-font-family-retro);
-    font-size: 18px;
+    font-size: 25px;
     letter-spacing: 2px;
     color: var(--game-accent-secondary);
-    padding: var(--game-spacing-md) var(--game-spacing-lg);
+    padding: var(--game-spacing-md) var(--game-spacing-md);
   }
   .property-view input:hover { background: var(--game-input-hover); border-color: var(--game-border-highlight); }
   .property-view input:focus { border-color: var(--game-input-focus); box-shadow: 0 0 0 2px rgba(233, 69, 96, 0.2); }

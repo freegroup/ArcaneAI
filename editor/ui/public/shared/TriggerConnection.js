@@ -42,9 +42,10 @@ var TriggerConnection= draw2d.Connection.extend({
           padding:{left:10, top:5, right:10, bottom:5},
           radius: 5,
           fontColor:"#3f3f34",
-          fontSize: 10,
+          fontSize: 18,
           stroke: 2,
           bgColor: "#cce5bc",
+          fontFamily: "Ithaca, 'Press Start 2P', monospace",
           color : this.defaultColor
       });
       

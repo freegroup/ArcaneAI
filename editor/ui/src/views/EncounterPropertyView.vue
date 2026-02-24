@@ -227,12 +227,14 @@ export default {
 /* Encounter Name - Special styling */
 .property-view input#encounterName {
   color: var(--game-accent-secondary);
+      font-size: 24px;
+    letter-spacing: 2px;
+    padding: var(--game-spacing-md) var(--game-spacing-md);
 }
 
 /* Readonly name style for World view */
 .property-view input#encounterName.readonly-name {
   background: transparent;
-  border-color: transparent;
   cursor: default;
   pointer-events: none;
 }
