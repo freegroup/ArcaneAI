@@ -12,7 +12,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "202765f5-7fa9-a4e4-5417-5cccddaf0fd5",
+          "id": "7bdc0b19-8830-e388-82bc-7821909080c3",
           "name": "untersuche_den_raum",
           "description": "Du kannst den Raum untersuchen un ihn mal Beschreiben.",
           "sound_effect": "effect_tuer_aufschliessen.wav",
@@ -38,7 +38,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "6f8fa33a-2274-a1ff-c3bb-94781dda041d",
+          "id": "19f715ed-716d-0f9a-5f0a-20f942d38091",
           "name": "untersuche_den_raum",
           "description": "Du kannst den Raum untersuchen und durchsuchen und vielleicht findest Du Dinge die Du gebrauchen kannst.  Du siehst ein paar Dinge",
           "sound_effect": "laufen_teppich.wav",
@@ -52,7 +52,7 @@
           ]
         },
         {
-          "id": "829dadf9-6d7e-a84a-b13c-ee704b3a1e31",
+          "id": "4cd20136-4ba8-2f66-4124-ad7548c51a68",
           "name": "nehme_das_packet",
           "description": "Du nimmst das weisse Packet mit den seltsamen Röllchen, welches unter der langen Tafel liegt, an dich.",
           "sound_effect": "effect_retrogame.wav",
@@ -68,7 +68,7 @@
           ]
         },
         {
-          "id": "ddb63377-826a-2bb7-1793-4c5a26afe260",
+          "id": "4bed92a5-815e-68b6-8396-9f634f77a25c",
           "name": "gebe_packet_dem_waechter",
           "description": "Du gibst den Wächter das seltsame Packet",
           "sound_effect": "effect_mann_streckt_sich.wav",
@@ -85,7 +85,7 @@
           ]
         },
         {
-          "id": "39cd6835-1828-e56b-b80a-41338b3d6358",
+          "id": "c85738dc-7b4b-eb07-7061-f9911e69cd63",
           "name": "rede_mit_waechter",
           "description": "Di sprichts den Wächter an und fragt mal was er so treibt...egal...du redets einfach mit ihm",
           "sound_effect": "effect_gaehnen.wav",
@@ -98,7 +98,7 @@
           "actions": []
         },
         {
-          "id": "92958381-ab80-1300-6cc8-9ec3e24292c2",
+          "id": "f278f030-1648-1bb6-1078-31777b151575",
           "name": "werfe_muenze_ein",
           "description": "Du hast eine Münze und kannst diese Münze in den spielautomaten einwerfen.",
           "sound_effect": "song_traurig_01.mp3",
@@ -113,7 +113,7 @@
           ]
         },
         {
-          "id": "daa8ada4-540d-2a23-fa84-1c935bb0fda3",
+          "id": "6fd93192-affa-8b3d-103f-67eaaf81fdd9",
           "name": "oeffne_tuer_mit_gewalt",
           "description": "Du öffnest die Tür zu \"Gelben Höhle\" mit Gewalt. Entweder eintreten, rennen, dagegen schlagen. Jede art von Gewalt öffnet die Tür.",
           "sound_effect": "aktion_etwas_im_raum_umwerfen_dose.mp3",
@@ -141,7 +141,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "cc0ae1ff-9fa5-ffa1-315d-6b1f508804cf",
+          "id": "80275a29-923d-8574-c178-de8c2d505099",
           "name": "schau_aus_dem_Fenster",
           "description": "Du kannst aus dem Fenster sehen und siehst....tata.....den Briefkasten und ein wenig Wald. Es ist die Stelle an der du vorher draussen da stands.",
           "sound_effect": "",
@@ -152,7 +152,7 @@
           "actions": []
         },
         {
-          "id": "b156f028-c262-7ee1-0c56-6c52573de3ad",
+          "id": "1e2eb4d3-b2f9-f02c-8286-156c0ff54bee",
           "name": "untersuche_den_raum",
           "description": "Du kannst den Raum genauer untersuchen und mitteilen wie dieser aussieht",
           "sound_effect": "",
@@ -165,7 +165,7 @@
           ]
         },
         {
-          "id": "9553d42f-1e1b-cfb6-2fc8-1b8dc5e19dd7",
+          "id": "1b45488c-9269-f361-236f-06d6f2281019",
           "name": "nehme_karotte",
           "description": "Du nimmst, die angesabberten, Karotten.",
           "sound_effect": "effect_retrogame.wav",
@@ -180,7 +180,7 @@
           ]
         },
         {
-          "id": "d66a36bb-428a-e295-a7fd-247f77a73080",
+          "id": "6808759a-6fdf-578e-b7f0-3d2638dfffb4",
           "name": "gebe_die_karotten",
           "description": "Du wirfst die Karotten dem \"Wesen\" oder dem Hund \"Kerberos\" vor die Schnauze die er dann isst.",
           "sound_effect": "eating-crispy-cookies.wav",
@@ -210,7 +210,7 @@
       "stateType": "START",
       "trigger": [
         {
-          "id": "8cd6485e-31fe-11f9-265c-b7f8269178ef",
+          "id": "17e1b5c3-93d2-20b5-6dc6-ff63898ebe83",
           "name": "untersuche_das_fenster",
           "description": "Du kannst das Fenster untersuchen und beschreibst, dass man es öffnen könnte. Es fällt dir ein Türschild auf was in der nähe angebracht ist.",
           "sound_effect": "mixkit-air-woosh-1489.wav",
@@ -223,7 +223,7 @@
           ]
         },
         {
-          "id": "cf65870e-a563-a787-34c1-5c2eedb1c11a",
+          "id": "bcf8275f-0251-e4b9-0bc4-35e6c1698803",
           "name": "oeffne_das_fenster",
           "description": "Du öffnest das Fenster indem du es nach oben schiebst.",
           "sound_effect": "effect_schiebetuer_oeffnen.wav",
@@ -238,7 +238,7 @@
           ]
         },
         {
-          "id": "843dc7d4-1649-30be-5064-293b7dc6e571",
+          "id": "e017b25e-561a-67f5-fb24-b4ad2f45cd79",
           "name": "untersuche_das_haus",
           "description": "Man kann das Haus hier nach seinem Zustand untersuchen oder mal nachsehen ob es Türen, Fenster hat in die man in das Haus gelingen könnte. Es fällt dir aber ein Türschild  auf",
           "sound_effect": "",
@@ -249,7 +249,7 @@
           "actions": []
         },
         {
-          "id": "a732058a-ddba-6d7c-ea46-9551898e1708",
+          "id": "ca945f34-3698-5c23-c405-68e6cece4667",
           "name": "untersuche_die_tuer",
           "description": "Die kannst die Tür untersuchen und festellen, dass diese unüberwindbar ist. Kein reinkommen auf irgendeine Weise. Es fällt die aber ein Türschild auf",
           "sound_effect": "",
@@ -260,7 +260,7 @@
           "actions": []
         },
         {
-          "id": "0e133f6d-02db-6eba-aa35-ef9607a313e5",
+          "id": "85f83148-fa35-b3c0-8f40-4e1d103cda1d",
           "name": "nehme_stock",
           "description": "Ein Stock, der in der nähe liegt kann genommen werden",
           "sound_effect": "effect_retrogame.wav",
@@ -288,7 +288,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "b3263282-bdc0-f2e2-95d9-471e2d97c1ef",
+          "id": "a020eded-09ee-081f-6c48-cd1361ad6f3d",
           "name": "nehme_den_brief",
           "description": "Nehme den Brief der aus dem Briefkasten herausschaut.",
           "sound_effect": "effect_retrogame.wav",
@@ -301,7 +301,7 @@
           ]
         },
         {
-          "id": "476e91eb-bd7e-1317-cbae-46ad8a8622fb",
+          "id": "189ee217-96dc-bdb2-1f52-ee7e46bd95b3",
           "name": "lese_den_brief_vor",
           "description": "Lese den Brief Wortgetreu vor, nahdem du ihn genommen hast",
           "sound_effect": "",
@@ -314,7 +314,7 @@
           "actions": []
         },
         {
-          "id": "1e9ebf05-7be2-7781-0c82-1b903b8d58ad",
+          "id": "eb3c2650-70d4-d3f7-02ec-8d8d84e303f9",
           "name": "nehme_ratte",
           "description": "Du steckst unter Ekel die Ratte in deine Tasche",
           "sound_effect": "effect_retrogame.wav",
@@ -329,7 +329,7 @@
           ]
         },
         {
-          "id": "6d6f3c85-e584-00b8-ddf8-913f1da1bdbb",
+          "id": "b55713cb-8dcb-db8f-e8e1-8bdc417bdfdc",
           "name": "nehme_muenze",
           "description": "Auf dem Boden liegt eine Münze die du nehmen kannst",
           "sound_effect": "effect_retrogame.wav",
@@ -358,7 +358,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "e9c5dfcb-da44-2dde-591b-e48ccf6b1571",
+          "id": "3ade46e6-61c6-8663-6528-0d68cc780ade",
           "name": "faelle_den_baum",
           "description": "Das Fällen des Baumes, oder umsägen, ist keine gute Idee. Du wirst es versuchen, aber es funktioniert niemals. Du wolltest doch tatsächlich diesen wunderschönen Baum für dein Spielvergnügen fällen. Alter – und das in diesen Zeiten! Schon mal was von Nachhaltigkeit gehört?",
           "sound_effect": "effect_erstaunte_frau.wav",
@@ -374,15 +374,15 @@
       "type": "StateShape",
       "id": "00209ce5-d897-70e6-4ce0-6be075c90804",
       "userData": {
-        "system_prompt": "Die enge Gasse zwischen den alten Mauern wirkt wie ein vergessener Pfad, den nur die Verzweifelten oder Unvorsichtigen jemals betreten. Die Wände bestehen aus groben Ziegelsteinen, die im Laufe der Jahre zerbröckelt sind, so dass sie nun eine mehlige, bröselige Oberfläche tragen – es ist besser, nicht zu fragen, warum. Eine dicke Feuchtigkeit durchzieht die Luft, als hätte der Ort selbst jegliche Frische aufgegeben und beschlossen, den muffigen Geruch des Verfalls für immer zu bewahren.\n\nEin strenger Duft liegt in der Gasse – eine Mischung aus alter Erde, fauligem Wasser und etwas, das beinahe wie ein verschwundenes Leben riecht, als hätten hier bereits viele ihre letzten Spuren hinterlassen. Der Boden ist matschig und uneben, und es gibt seltsame dunkle Flecken, die nicht so recht definierbar sind. Ein Ort, den der gesunde Verstand meiden möchte, der jedoch eine seltsame Anziehungskraft auf diejenigen ausübt, die das Unbekannte und das Ungemütliche nicht scheuen.\n\nIn der Ferne, am Ende der Gasse, erkennt man eine Art dunklen Durchgang. Nach Osten, könnte man weitergehen, wenn man den Mut dazu aufbringt. Oder vielleicht ist es besser, den Blick nach hinten zu wenden und wieder zurück zu gehen, weg von diesem schmierigen Ort, der mehr Fragen als Antworten hinterlässt. Die Gasse selbst scheint zu flüstern, dass hier nichts von Wert zu finden ist – kein Glanz, kein Schatz, und schon gar keine goldenen Eier. Nur der Verfall und eine müde Dunkelheit, die jede Ecke dieses Ortes zu füllen scheint.\n\nDie Ziegelwände auf beiden Seiten wirken alt und spröde, als hätte der Zahn der Zeit sie nicht nur angenagt, sondern regelrecht zermahlen. Ein feiner, pulvriger Belag überzieht sie, als ob sie sich langsam in Staub auflösen würden, während sie dabei irgendein Geheimnis bewahren, das nur die Zeit selbst kennt. Vielleicht sind es die Spuren von Dingen, die man besser nicht berührt oder genauer betrachtet – die Vergangenheit dieses Ortes ist so undurchsichtig wie die Schatten, die die Gasse durchziehen.\n\nEs ist ein Ort, der einem leise zuflüstert, dass das Ungewisse im Osten ebenso unsicher ist wie das Gefühl, das sich in der Dunkelheit der Gasse verbirgt. Doch wenn die Neugier zu stark wird, bleibt nur der Gang in das, was vor einem liegt, oder die Entscheidung, den sicheren Weg zurückzuwählen.",
+        "system_prompt": "Die enge Gasse zwischen den alten Mauern wirkt wie ein vergessener Pfad für Verzweifelte und Unvorsichtige. Die Wände aus groben Ziegelsteinen sind im Laufe der Jahre zerbröckelt und tragen eine mehlige Oberfläche – besser nicht fragen, warum. Dicke Feuchtigkeit durchzieht die Luft, als hätte der Ort jegliche Frische aufgegeben und den muffigen Geruch des Verfalls für immer bewahrt.\n\nEin strenger Duft liegt hier – alte Erde, fauliges Wasser und etwas, das wie verschwundenes Leben riecht. Der Boden ist matschig, uneben, übersät mit seltsamen dunklen Flecken. Ein Ort, den der gesunde Verstand meiden möchte, der jedoch eine seltsame Anziehungskraft auf jene ausübt, die das Unbekannte nicht scheuen.\n\nAm Ende der Gasse erkennt man einen dunklen Durchgang. Nach Osten könnte man weitergehen, wenn man den Mut aufbringt. Oder man wendet den Blick zurück, weg von diesem schmierigen Ort, der mehr Fragen als Antworten hinterlässt. Die Gasse scheint zu flüstern, dass hier nichts von Wert zu finden ist – kein Glanz, kein Schatz. Nur Verfall und müde Dunkelheit.\n\nDie Ziegelwände wirken spröde, als hätte der Zahn der Zeit sie regelrecht zermahlen. Ein feiner, pulvriger Belag überzieht sie, als lösten sie sich langsam in Staub auf, während sie ein Geheimnis bewahren, das nur die Zeit kennt. Die Vergangenheit dieses Ortes ist so undurchsichtig wie die Schatten, die ihn durchziehen.\n\nEin Ort, der zuflüstert, dass das Ungewisse im Osten ebenso unsicher ist wie die Dunkelheit der Gasse selbst. Doch wenn die Neugier zu stark wird, bleibt nur der Gang vorwärts – oder die Entscheidung für den sicheren Weg zurück.",
         "ambient_sound_volume": 100,
-        "ambient_sound": "ambient_sehr_leichter_wind.wav"
+        "ambient_sound": "map/ambient_sehr_leichter_wind.wav"
       },
       "name": "NorthOfHouse",
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "4e3d6362-9cba-b7c4-91b7-957c1ebc0c32",
+          "id": "5f1a842b-d2a2-6451-dc38-62dec0337777",
           "name": "untersuche_den_ort",
           "description": "Du kannst den Ort untersuchen und versuchen ob hier interessante Dinge zu finden sind-",
           "sound_effect": "",
@@ -395,7 +395,7 @@
           ]
         },
         {
-          "id": "ad3728e7-203f-2cf0-90a6-02cec7c11a6a",
+          "id": "0440a613-a917-db12-91b6-16baaa691547",
           "name": "nehme_das_ei",
           "description": "Du kannst das Goldene Ei aufnemen",
           "sound_effect": "effect_retrogame.wav",
@@ -434,7 +434,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "6523a8bc-c3a0-06f3-cc9d-1af0f9203b38",
+          "id": "1bff2c66-adc1-a0ca-876a-40a1302b4a24",
           "name": "untersuche_die_hosen",
           "description": "Die Unterhosen auf der Wäschelene Untersuchen. Das Untersuchen der Hosen wird allerdings keine neuen Erkenntnisse oder iInformationen bringen. Ausser, dass diese Hosen so ihre \"Spuren\" haben",
           "sound_effect": "reaktion_bouaaaa.wav",
@@ -482,7 +482,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "f3e935d9-5aa1-e2ad-5abb-c3e9de43dcd3",
+          "id": "ec1df51e-a829-3952-ada7-9668d520d9d0",
           "name": "nehme_das_ei",
           "description": "Du kannst das Goldene Ei, welches in einem Nest liegt, nehmen.",
           "sound_effect": "effect_retrogame.wav",
@@ -507,7 +507,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "111ce7d3-e8a1-b63e-2a26-d8091730a374",
+          "id": "fd03b6f5-79df-3366-6610-b060f6cb5a60",
           "name": "durchsuche_die_kammern",
           "description": "Du durchsuchst die Kammern nach etwas brauchbaren.",
           "sound_effect": "",
@@ -520,7 +520,7 @@
           ]
         },
         {
-          "id": "d3426eca-4e08-2bcd-1afb-e91e054b9351",
+          "id": "758967f4-5728-4d40-103c-c485bc08ea14",
           "name": "nehme_die_flasche",
           "description": "Du nimmst eine Flasche aus einer der Kammern.",
           "sound_effect": "effect_retrogame.wav",
@@ -536,7 +536,7 @@
           ]
         },
         {
-          "id": "c0d7b65b-a1bf-7fb4-f676-505abb7610ff",
+          "id": "f396c7c2-98b6-c7cd-034e-4a79c9c9cc5e",
           "name": "pinkel_in_die_flasche",
           "description": "Du pinkelst in die Flasche und machst die fast voll.",
           "sound_effect": "effect-sink-with-water.wav",

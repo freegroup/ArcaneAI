@@ -405,7 +405,7 @@ export default {
   padding: 4px 6px;
   border-bottom: 1px solid var(--game-border-color);
   font-family: var(--game-font-family-mono);
-  font-size: 12px;
+  font-size: var(--game-font-size-md);
   gap: 4px;
 }
 

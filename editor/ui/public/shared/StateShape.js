@@ -77,6 +77,12 @@ StateShape = draw2d.shape.box.VBox.extend({
         this.createPort("input")
         this.createPort("output")
 
+        this.installEditPolicy(new draw2d.policy.figure.AntSelectionFeedbackPolicy({
+           color: "#e94560",
+           stroke: 6,
+           dasharray: "- "
+        }));
+  
         this.add(this.stateNameLabel);
         this.stateNameLabel.on("contextmenu", (emitter, event) => {
             ContextMenu.show({

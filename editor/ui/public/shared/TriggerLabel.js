@@ -33,6 +33,11 @@ var TriggerLabel = draw2d.shape.basic.Label.extend({
             system_prompt: this.getSystemPrompt,
         });
 
+        this.installEditPolicy(new draw2d.policy.figure.AntSelectionFeedbackPolicy({
+           color: "#e94560",
+           stroke: 6,
+           dasharray: "- "
+        }));
         this.on("change:userData", (emitter, event) => {
             this.updateStyle()
         })
