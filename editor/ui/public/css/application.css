@@ -71,17 +71,16 @@ body {
     justify-content: center;
     padding: 6px 12px;
     margin-right: 6px;
-    font-family: 'Press Start 2P', cursive;
-    font-size: 10px;
+    font-family: 'Ithaca', monospace;
+    font-size: 19px;
+    letter-spacing: 2px;
     color: #fff;
     background-color: var(--accent-primary);
     border: 3px solid #000;
     border-radius: 0;
-    box-shadow: inset -3px -3px 0px 0px rgba(0, 0, 0, 0.4),
-        inset 3px 3px 0px 0px rgba(255, 255, 255, 0.2);
+    box-shadow: inset -3px -3px 0px 0px rgba(0, 0, 0, 0.4),  inset 3px 3px 0px 0px rgba(255, 255, 255, 0.2);
     cursor: pointer;
     text-align: center;
-    text-transform: uppercase;
     transition: transform 0.1s, background-color 0.2s;
     user-select: none;
 }
@@ -128,7 +127,7 @@ body {
 #canvas_zoom>button {
     background-color: var(--toolbar-bg);
     color: var(--accent-secondary);
-    font-family: 'Press Start 2P', cursive;
+    font-family: 'Ithaca', monospace;
     font-size: 12px;
     border: 2px solid #000;
     border-radius: 0;

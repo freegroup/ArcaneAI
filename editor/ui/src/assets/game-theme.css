@@ -93,8 +93,8 @@ body {
   --game-transition-slow: 0.5s ease;
 
   /* Typography */
-  --game-font-family: 'Ithaca', 'Noto Sans', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --game-font-family-mono: 'Ithaca', 'Noto Sans Mono', 'Consolas', 'Monaco', 'Lucida Console', monospace;
+  --game-font-family: 'Ithaca', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --game-font-family-mono: 'Ithaca', 'Monaco', 'Lucida Console', monospace;
   --game-font-family-retro: 'Ithaca', monospace;
 
   --game-font-size-xs: 15px;

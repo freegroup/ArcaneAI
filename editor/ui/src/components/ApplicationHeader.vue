@@ -138,21 +138,21 @@ export default {
 }
 
 .app-header__title-main {
-  font-family: var(--game-font-family-retro, 'Press Start 2P', monospace);
+  font-family: var(--game-font-family-retro);
   font-size: 48px;
   color: var(--game-accent-secondary);
   letter-spacing: 6px;
 }
 
 .app-header__title-sub {
-  font-family: var(--game-font-family-retro, 'Press Start 2P', monospace);
+  font-family: var(--game-font-family-retro);
   font-size: 48px;
   letter-spacing: 4px;
   color: var(--game-text-secondary);
 }
 
 .app-header__tagline {
-  font-family: var(--game-font-family-retro, 'Press Start 2P', monospace);
+  font-family: var(--game-font-family-retro);
   font-size: 24px;
   color: var(--game-text-muted);
   text-transform: uppercase;
@@ -165,7 +165,7 @@ export default {
 .app-header__version {
   position: absolute;
   right: 16px;
-  font-family: var(--game-font-family-retro, 'Press Start 2P', monospace);
+  font-family: var(--game-font-family-retro);
   font-size: 7px;
   color: var(--game-text-muted);
   opacity: 0.6;

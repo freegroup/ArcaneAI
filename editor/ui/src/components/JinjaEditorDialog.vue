@@ -547,7 +547,7 @@ export default {
   opacity: 0.5;
   border-radius: 0; /* Eckiger Rahmen für 8-bit Look */
   color: var(--game-text-secondary);
-  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-family: 'Ithaca', monospace;
   font-size: 10px;
   transition: all 0.1s ease;
   box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);

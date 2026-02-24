@@ -16,6 +16,10 @@
       :width="sidebarCollapsed ? 0 : sidebarWidth"
       class="property-drawer"
     >
+    <!-- Toggle Button - outside drawer, always visible -->
+    <button class="sidebar-toggle" @click="toggleSidebar" :title="sidebarCollapsed ? 'Expand panel' : 'Collapse panel'">
+        {{ sidebarCollapsed ? '◀' : '▶' }}
+    </button>
       <!-- Property content -->
       <div class="property-drawer__content" v-show="!sidebarCollapsed">
         <EncounterPropertyView v-if="draw2dFrameContent" :draw2dFrame="draw2dFrameContent"/>
@@ -25,16 +29,7 @@
       </div>
     </v-navigation-drawer>
 
-    <!-- Toggle Button - outside drawer, always visible -->
-    <RetroButton 
-      class="sidebar-toggle" 
-      size="icon"
-      @click="toggleSidebar" 
-      :title="sidebarCollapsed ? 'Expand panel' : 'Collapse panel'"
-    >
-      {{ sidebarCollapsed ? '◀' : '▶' }}
-    </RetroButton>
-  
+
     <!-- Chat Dialog -->
     <ChatDialog 
       v-model="showChatDialog" 
@@ -57,7 +52,7 @@ import StateTriggerProperty from './StateTriggerProperty.vue';
 import ConnectionTriggerProperty from './ConnectionTriggerProperty.vue';
 import EncounterPropertyView from './EncounterPropertyView.vue';
 import ChatDialog from '../components/ChatDialog.vue';
-import RetroButton from '../components/RetroButton.vue';
+
 import EncounterNewDialog from '../components/EncounterNewDialog.vue';
 import { MessageTypes } from '../../public/shared/SharedConstants.js';
 import ViewComposer from '../utils/ViewComposer.js';
@@ -69,7 +64,7 @@ export default {
     ConnectionTriggerProperty,
     EncounterPropertyView,
     ChatDialog,
-    RetroButton,
+   
     EncounterNewDialog
   },
   data() {
@@ -376,26 +371,6 @@ export default {
 }
 </style>
 
-<style scoped>
-/* Toggle Button - fixed position, always visible */
-.sidebar-toggle {
-  position: fixed;
-  right: v-bind('sidebarCollapsed ? "0px" : sidebarWidth + "px"');
-  top: 50%;
-  transform: translateY(-50%);
-  width: 32px;
-  height: 48px;
-  z-index: 1001;
-  transition: right 0.3s ease;
-  padding: 0;
-}
-
-/* We override the retro-btn defaults for the specialized toggle */
-.sidebar-toggle :deep(.retro-btn) {
-  border-radius: 4px 0 0 4px;
-  border-right: none;
-}
-</style>
 
 <style>
 /* Property Drawer - matching left navigation */
@@ -440,8 +415,8 @@ export default {
 <style scoped>
 /* Toggle Button - fixed position, always visible */
 .sidebar-toggle {
-  position: fixed;
-  right: v-bind('sidebarCollapsed ? "0px" : sidebarWidth + "px"');
+  position: absolute;
+  left: -24px;
   top: 50%;
   transform: translateY(-50%);
   width: 24px;
@@ -456,8 +431,8 @@ export default {
   align-items: center;
   justify-content: center;
   font-size: 12px;
-  z-index: 1001;
-  transition: right 0.3s ease, background 0.2s ease;
+  z-index: 100;
+  transition: background 0.2s ease;
 }
 
 .sidebar-toggle:hover {
