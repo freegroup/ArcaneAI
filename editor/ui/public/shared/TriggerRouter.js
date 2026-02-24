@@ -4,7 +4,7 @@
  * 
  * @extends draw2d.layout.connection.InteractiveManhattanBridgedConnectionRouter
  */
-var TriggerRouter = draw2d.layout.connection.InteractiveManhattanBridgedConnectionRouter.extend({
+var TriggerRouter = draw2d.layout.connection.InteractiveManhattanConnectionRouter.extend({
   
   NAME: "TriggerRouter",
 

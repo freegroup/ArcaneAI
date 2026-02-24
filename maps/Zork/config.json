@@ -1,0 +1,11 @@
+{
+  "name": "Zork I: The Great Underground Empire",
+  "description": "A port of the classic 1980 Infocom text adventure game Zork I",
+  "author": "Converted from original Infocom ZIL source",
+  "version": "1.0.0",
+  "settings": {
+    "enableInventory": true,
+    "enableScore": true,
+    "maxScore": 350
+  }
+}
