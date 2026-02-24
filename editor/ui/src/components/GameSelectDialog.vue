@@ -3,7 +3,6 @@
     <v-card class="game-select-dialog">
       <DialogHeader 
         title="Select a Game" 
-        icon="mdi-gamepad-variant"
         @close="closeDialog" 
       />
       <v-card-text class="dialog-content">
@@ -22,9 +21,9 @@
       </v-card-text>
       <v-card-actions class="dialog-actions">
         <v-spacer></v-spacer>
-        <button @click="closeDialog" class="retro-btn retro-btn--secondary retro-btn--sm">
+        <RetroButton @click="closeDialog" variant="secondary">
           Cancel
-        </button>
+        </RetroButton>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -33,9 +32,10 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import DialogHeader from './DialogHeader.vue';
+import RetroButton from './RetroButton.vue';
 
 export default {
-  components: { DialogHeader },
+  components: { DialogHeader, RetroButton },
   props: {
     dialog: {
       type: Boolean,
@@ -98,7 +98,7 @@ export default {
 
 
 .dialog-content {
-  padding: var(--game-spacing-lg);
+
   background: var(--game-bg-secondary);
 }
 
@@ -110,7 +110,7 @@ export default {
   background: var(--game-bg-primary);
   border: 2px solid var(--game-border-color);
   border-radius: var(--game-radius-md);
-  padding: var(--game-spacing-sm);
+
   margin: 0;
   box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
 }
@@ -144,38 +144,31 @@ export default {
 
 /* List Items - 8-Bit Style */
 .scrollable-list li {
-  padding: var(--game-spacing-md);
   cursor: pointer;
   background: var(--game-bg-secondary);
-  border: 2px solid var(--game-border-color);
-  border-radius: var(--game-radius-sm);
-  margin-bottom: var(--game-spacing-sm);
+  border: 2px solid transparent; /* Always present to prevent layout shift */
+  padding: 12px 16px; /* Added padding for better look and stability */
+  margin-bottom: 4px;
   color: var(--game-text-primary);
-  font-family: var(--game-font-family-mono);
   font-size: var(--game-font-size-md);
-  font-weight: 600;
+  letter-spacing: 4px;
   transition: all var(--game-transition-fast);
-  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
 }
 
 .scrollable-list li:hover {
   background: var(--game-input-hover);
   border-color: var(--game-accent-primary);
   color: var(--game-accent-secondary);
-  transform: translateX(5px);
-  box-shadow: -3px 0 0 var(--game-accent-primary), 
-              0 0 15px rgba(233, 69, 96, 0.3);
-  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.8),
-               0 0 8px var(--game-accent-secondary);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .scrollable-list li:active {
-  transform: translateX(3px);
-  box-shadow: -2px 0 0 var(--game-accent-primary);
+  background: var(--game-accent-primary);
+  color: var(--game-text-primary);
 }
 
 .dialog-actions {
-  padding: var(--game-spacing-lg);
   border-top: 1px solid var(--game-border-color);
   background: var(--game-bg-tertiary);
 }

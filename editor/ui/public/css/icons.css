@@ -1,0 +1,108 @@
+.pencil {
+    width: 16px;
+    height: 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+.pencil::after {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: 1px;
+    height: 1px;
+    background: transparent;
+    box-shadow:
+    12px 2px 0 0 #FFFFFF,
+    13px 2px 0 0 #FFFFFF,
+    11px 3px 0 0 #FFFFFF,
+    12px 3px 0 0 #FFFFFF,
+    13px 3px 0 0 #D27D00,
+    14px 3px 0 0 #FFFFFF,
+    10px 4px 0 0 #FFFFFF,
+    11px 4px 0 0 #FFFFFF,
+    12px 4px 0 0 #FFFFFF,
+    13px 4px 0 0 #FFFFFF,
+    14px 4px 0 0 #D27D00,
+    15px 4px 0 0 #FFFFFF,
+    9px 5px 0 0 #FFFFFF,
+    10px 5px 0 0 #FFFFFF,
+    11px 5px 0 0 #9D9D9D,
+    12px 5px 0 0 #9D9D9D,
+    13px 5px 0 0 #FFFFFF,
+    14px 5px 0 0 #FFFFFF,
+    15px 5px 0 0 #FFFFFF,
+    8px 6px 0 0 #FFFFFF,
+    9px 6px 0 0 #FFFFFF,
+    10px 6px 0 0 #9D9D9D,
+    11px 6px 0 0 #9D9D9D,
+    12px 6px 0 0 #9D9D9D,
+    13px 6px 0 0 #9D9D9D,
+    14px 6px 0 0 #FFFFFF,
+    7px 7px 0 0 #FFFFFF,
+    8px 7px 0 0 #FFFFFF,
+    9px 7px 0 0 #9D9D9D,
+    10px 7px 0 0 #9D9D9D,
+    11px 7px 0 0 #9D9D9D,
+    12px 7px 0 0 #9D9D9D,
+    13px 7px 0 0 #FFFFFF,
+    6px 8px 0 0 #FFFFFF,
+    7px 8px 0 0 #FFFFFF,
+    8px 8px 0 0 #9D9D9D,
+    9px 8px 0 0 #9D9D9D,
+    10px 8px 0 0 #9D9D9D,
+    11px 8px 0 0 #9D9D9D,
+    12px 8px 0 0 #FFFFFF,
+    5px 9px 0 0 #FFFFFF,
+    6px 9px 0 0 #FFFFFF,
+    7px 9px 0 0 #9D9D9D,
+    8px 9px 0 0 #9D9D9D,
+    9px 9px 0 0 #9D9D9D,
+    10px 9px 0 0 #9D9D9D,
+    11px 9px 0 0 #FFFFFF,
+    4px 10px 0 0 #FFFFFF,
+    5px 10px 0 0 #FFFFFF,
+    6px 10px 0 0 #9D9D9D,
+    7px 10px 0 0 #9D9D9D,
+    8px 10px 0 0 #9D9D9D,
+    9px 10px 0 0 #9D9D9D,
+    10px 10px 0 0 #FFFFFF,
+    3px 11px 0 0 #FFFFFF,
+    4px 11px 0 0 #FFFFFF,
+    5px 11px 0 0 #9D9D9D,
+    6px 11px 0 0 #9D9D9D,
+    7px 11px 0 0 #9D9D9D,
+    8px 11px 0 0 #9D9D9D,
+    9px 11px 0 0 #FFFFFF,
+    2px 12px 0 0 #FFFFFF,
+    3px 12px 0 0 #FFFFFF,
+    4px 12px 0 0 #9D9D9D,
+    5px 12px 0 0 #9D9D9D,
+    6px 12px 0 0 #9D9D9D,
+    7px 12px 0 0 #9D9D9D,
+    8px 12px 0 0 #FFFFFF,
+    2px 13px 0 0 #FFFFFF,
+    3px 13px 0 0 #FFFFFF,
+    4px 13px 0 0 #9D9D9D,
+    5px 13px 0 0 #9D9D9D,
+    6px 13px 0 0 #9D9D9D,
+    7px 13px 0 0 #FFFFFF,
+    2px 14px 0 0 #FFFFFF,
+    3px 14px 0 0 #FFFFFF,
+    4px 14px 0 0 #FFFFFF,
+    5px 14px 0 0 #FFFFFF,
+    6px 14px 0 0 #FFFFFF,
+    2px 15px 0 0 #FFFFFF,
+    3px 15px 0 0 #FFFFFF,
+    4px 15px 0 0 #FFFFFF,
+    5px 15px 0 0 #FFFFFF;
+}
+
+/* 16x16 Pixel Icon */
+
+/* Verwendung:
+   <div class="pencil"></div>
+   
+   Skalierung mit transform: scale(2), scale(4), etc.
+*/

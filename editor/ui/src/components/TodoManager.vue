@@ -10,13 +10,14 @@
         placeholder="Add a new todo item..."
         @keyup.enter="addTodo"
       />
-      <button 
-        class="todo-add-btn"
+      <RetroActionButton
+        variant="success"
         :disabled="!newTodoText.trim()"
         @click="addTodo"
+        title="Add todo"
       >
         <v-icon size="small">mdi-plus</v-icon>
-      </button>
+      </RetroActionButton>
     </div>
     
     <!-- Pending todos -->
@@ -33,8 +34,8 @@
           class="todo-checkbox"
         />
         <span class="todo-text">{{ todo.text }}</span>
-        <button class="todo-edit-btn" @click="openEditDialog(todo)">✎</button>
-        <button class="todo-delete-btn" @click="removeTodo(todo)">X</button>
+        <RetroActionButton variant="secondary" @click="openEditDialog(todo)" class="todo-action-btn">✎</RetroActionButton>
+        <RetroActionButton variant="danger" @click="removeTodo(todo)" class="todo-action-btn">X</RetroActionButton>
       </div>
     </div>
     
@@ -53,8 +54,8 @@
           class="todo-checkbox"
         />
         <span class="todo-text">{{ todo.text }}</span>
-        <button class="todo-edit-btn" @click="openEditDialog(todo)">✎</button>
-        <button class="todo-delete-btn" @click="removeTodo(todo)">X</button>
+        <RetroActionButton variant="secondary" @click="openEditDialog(todo)" class="todo-action-btn">✎</RetroActionButton>
+        <RetroActionButton variant="danger" @click="removeTodo(todo)" class="todo-action-btn">X</RetroActionButton>
       </div>
     </div>
     
@@ -75,12 +76,14 @@
 <script>
 import { mapGetters } from 'vuex';
 import TodoEditDialog from './TodoEditDialog.vue';
+import RetroActionButton from './RetroActionButton.vue';
 
 export default {
   name: 'TodoManager',
   
   components: {
-    TodoEditDialog
+    TodoEditDialog,
+    RetroActionButton
   },
   
   data() {
@@ -236,11 +239,10 @@ export default {
 label {
   display: block;
   margin: 0 0 var(--game-spacing-xs) 0;
-  font-size: var(--game-font-size-xs);
+  font-size: var(--game-font-size-md);
   color: var(--game-accent-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-weight: 600;
+  letter-spacing: 2px;
 }
 
 /* Todo Input Container */
@@ -256,7 +258,6 @@ label {
   border: 1px solid var(--game-input-border);
   border-radius: 0;
   color: var(--game-text-primary);
-  font-size: var(--game-font-size-md);
   outline: none;
 }
 
@@ -264,25 +265,8 @@ label {
   border-color: var(--game-input-focus);
 }
 
-.todo-add-btn {
-  background: var(--game-accent-primary);
-  color: var(--game-text-primary);
-  border: none;
-  padding: var(--game-spacing-sm) var(--game-spacing-md);
-  cursor: pointer;
-  transition: all var(--game-transition-fast);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.todo-add-btn:hover:not(:disabled) {
-  background: var(--game-accent-secondary);
-}
-
-.todo-add-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.todo-input-container input:focus {
+  border-color: var(--game-input-focus);
 }
 
 /* Todo Section */
@@ -297,7 +281,7 @@ label {
 }
 
 .section-label {
-  font-size: var(--game-font-size-xs) !important;
+  font-size: var(--game-font-size-md) !important;
   color: var(--game-text-muted) !important;
   margin-bottom: var(--game-spacing-sm) !important;
 }
@@ -325,7 +309,7 @@ label {
 
 .todo-text {
   flex: 1;
-  font-size: var(--game-font-size-sm);
+  font-size: var(--game-font-size-md);
   color: var(--game-text-primary);
 }
 
@@ -334,49 +318,14 @@ label {
   color: var(--game-text-muted);
 }
 
-/* 8-bit Buttons */
-.todo-edit-btn, .todo-delete-btn {
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-family: var(--game-font-family-retro);
-  font-weight: bold;
-  transition: all var(--game-transition-fast);
+/* 8-bit Action Buttons Visibility */
+.todo-action-btn {
   opacity: 0;
-  flex-shrink: 0;
-  border: none;
+  transition: opacity var(--game-transition-fast);
 }
 
-.todo-item:hover .todo-edit-btn,
-.todo-item:hover .todo-delete-btn {
+.todo-item:hover .todo-action-btn {
   opacity: 1;
-}
-
-.todo-edit-btn {
-  background: #4a9f4a;
-  color: white;
-  font-size: 12px;
-  box-shadow: inset -2px -2px 0px 0px #2d6a2d;
-}
-
-.todo-edit-btn:hover {
-  background: #5cb85c;
-  box-shadow: inset -3px -3px 0px 0px #2d6a2d;
-}
-
-.todo-delete-btn {
-  background: var(--game-accent-primary);
-  color: white;
-  font-size: 10px;
-  box-shadow: inset -2px -2px 0px 0px #8c2022;
-}
-
-.todo-delete-btn:hover {
-  background: #ce372b;
-  box-shadow: inset -3px -3px 0px 0px #8c2022;
 }
 
 .empty-state {
@@ -384,6 +333,5 @@ label {
   color: var(--game-text-muted);
   font-size: var(--game-font-size-sm);
   padding: var(--game-spacing-lg);
-  font-style: italic;
 }
 </style>

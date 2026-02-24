@@ -93,13 +93,13 @@
             @keyup.enter="sendMessage"
             class="chat-input"
           />
-          <button 
-            class="retro-btn retro-btn--proceed"
+          <RetroButton 
+            variant="proceed"
             :disabled="!inputMessage.trim() || connecting || sending"
             @click="sendMessage"
           >
             Send
-          </button>
+          </RetroButton>
         </div>
       </v-card-actions>
     </v-card>
@@ -110,12 +110,13 @@
 import axios from 'axios';
 import { mapState, mapGetters } from 'vuex';
 import DialogHeader from './DialogHeader.vue';
+import RetroButton from './RetroButton.vue';
 
 const API_BASE_URL = process.env.VUE_APP_API_BASE_URL || '';
 
 export default {
   name: 'ChatDialog',
-  components: { DialogHeader },
+  components: { DialogHeader, RetroButton },
   props: {
     modelValue: {
       type: Boolean,
@@ -429,23 +430,11 @@ export default {
 
 .item-number {
   width: 50px;
-  background: var(--game-input-bg);
-  border: 1px solid var(--game-border-color);
-  color: var(--game-text-primary);
-  font-family: var(--game-font-family-mono);
-  font-size: 12px;
-  padding: 2px 4px;
   text-align: right;
 }
 
 .item-text {
   width: 60px;
-  background: var(--game-input-bg);
-  border: 1px solid var(--game-border-color);
-  color: var(--game-text-primary);
-  font-family: var(--game-font-family-mono);
-  font-size: 12px;
-  padding: 2px 4px;
 }
 
 .inventory-empty {
@@ -453,7 +442,7 @@ export default {
   font-style: italic;
   text-align: center;
   padding: var(--game-spacing-md);
-  font-size: var(--game-font-size-xs);
+  font-size: var(--game-font-size-md);
 }
 
 /* Messages Area */
@@ -505,7 +494,7 @@ export default {
 .user-message .message-content {
   background: var(--game-accent-primary);
   color: white;
-  padding: var(--game-spacing-sm) var(--game-spacing-md);
+
   border: 2px solid #8c2022;
   font-family: var(--game-font-family-retro);
   font-size: var(--game-font-size-sm);
@@ -519,7 +508,6 @@ export default {
 .ai-message .message-content {
   background: var(--game-bg-tertiary);
   color: var(--game-text-primary);
-  padding: var(--game-spacing-sm) var(--game-spacing-md);
   border: 2px solid var(--game-border-color);
   font-family: var(--game-font-family-retro);
   font-size: var(--game-font-size-sm);
@@ -535,7 +523,7 @@ export default {
   color: var(--game-accent-secondary);
   padding: var(--game-spacing-xs) var(--game-spacing-md);
   font-family: var(--game-font-family-mono);
-  font-size: var(--game-font-size-xs);
+  font-size: var(--game-font-size-md);
   opacity: 0.8;
 }
 
@@ -595,14 +583,6 @@ export default {
 
 .chat-input {
   flex: 1;
-  background: var(--game-input-bg);
-  border: 2px solid var(--game-border-color);
-  color: var(--game-text-primary);
-  padding: var(--game-spacing-sm) var(--game-spacing-md);
-  font-family: var(--game-font-family-retro);
-  font-size: var(--game-font-size-sm);
-  outline: none;
-  transition: border-color 0.2s;
 }
 
 .chat-input:focus {
@@ -618,35 +598,4 @@ export default {
   cursor: not-allowed;
 }
 
-/* Retro Button Styles (matching theme) */
-.retro-btn {
-  background: var(--game-accent-primary);
-  color: white;
-  border: none;
-  padding: var(--game-spacing-sm) var(--game-spacing-lg);
-  font-family: var(--game-font-family-retro);
-  font-size: var(--game-font-size-sm);
-  cursor: pointer;
-  transition: all 0.15s;
-  box-shadow: inset -4px -4px 0px 0px #8c2022;
-}
-
-.retro-btn--proceed {
-  background: var(--game-accent-secondary);
-  box-shadow: inset -4px -4px 0px 0px rgba(0,0,0,0.4);
-}
-
-.retro-btn:hover:not(:disabled) {
-  filter: brightness(1.1);
-  box-shadow: inset -6px -6px 0px 0px rgba(0,0,0,0.4);
-}
-
-.retro-btn:active:not(:disabled) {
-  box-shadow: inset 4px 4px 0px 0px rgba(0,0,0,0.4);
-}
-
-.retro-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
 </style>

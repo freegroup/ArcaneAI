@@ -107,7 +107,7 @@
 
       <v-card-actions class="dialog-actions">
         <v-spacer></v-spacer>
-        <v-btn class="btn-8bit btn-secondary" @click="close">Cancel</v-btn>
+        <RetroButton @click="close" variant="secondary">Cancel</RetroButton>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -116,6 +116,7 @@
 <script>
 import SoundManager from '@/utils/SoundManager';
 import DialogHeader from './DialogHeader.vue';
+import RetroButton from './RetroButton.vue';
 
 export default {
   name: 'SoundSelectDialog',
@@ -135,7 +136,7 @@ export default {
     }
   },
 
-  components: { DialogHeader },
+  components: { DialogHeader, RetroButton },
   emits: ['update:modelValue', 'select'],
 
   data() {
@@ -436,7 +437,7 @@ export default {
   white-space: nowrap;
   font-size: 14px;
   font-family: var(--game-font-family-retro);
-  letter-spacing: 0.5px;
+  letter-spacing: 2px;
 }
 
 .file-item {
@@ -536,62 +537,6 @@ export default {
   gap: 12px;
 }
 
-/* 8-bit Style Buttons */
-.btn-8bit {
-  font-family: var(--game-font-family-retro) !important;
-  font-size: 12px !important;
-  letter-spacing: 1px !important;
-  text-transform: uppercase !important;
-  border-radius: 0 !important;
-  padding: 8px 20px !important;
-  min-width: 100px !important;
-  height: 36px !important;
-  transition: all var(--game-transition-fast) !important;
-}
-
-.btn-8bit.btn-primary {
-  background: var(--game-accent-primary) !important;
-  color: var(--game-text-primary) !important;
-  box-shadow: inset -4px -4px 0px 0px #8c2022,
-              0 0 0 3px black !important;
-}
-
-.btn-8bit.btn-primary:hover:not(:disabled) {
-  background: var(--game-accent-tertiary) !important;
-  box-shadow: inset -6px -6px 0px 0px #8c2022,
-              0 0 0 3px black !important;
-}
-
-.btn-8bit.btn-primary:active:not(:disabled) {
-  box-shadow: inset 4px 4px 0px 0px #8c2022,
-              0 0 0 3px black !important;
-}
-
-.btn-8bit.btn-primary:disabled {
-  background: var(--game-text-muted) !important;
-  box-shadow: inset -4px -4px 0px 0px #555,
-              0 0 0 3px #555 !important;
-  opacity: 0.5 !important;
-  cursor: not-allowed !important;
-}
-
-.btn-8bit.btn-secondary {
-  background: var(--game-bg-secondary) !important;
-  color: var(--game-text-primary) !important;
-  box-shadow: inset -4px -4px 0px 0px #333,
-              0 0 0 3px var(--game-border-color) !important;
-}
-
-.btn-8bit.btn-secondary:hover {
-  background: var(--game-input-hover) !important;
-  box-shadow: inset -6px -6px 0px 0px #333,
-              0 0 0 3px var(--game-border-highlight) !important;
-}
-
-.btn-8bit.btn-secondary:active {
-  box-shadow: inset 4px 4px 0px 0px #333,
-              0 0 0 3px var(--game-border-color) !important;
-}
 
 /* Scrollbar styling */
 .column::-webkit-scrollbar,

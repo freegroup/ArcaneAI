@@ -1,66 +1,71 @@
 <template>
     <div class="property-view"  v-if="jsonData.type === 'TriggerConnection'">
 
-        <div class="label-with-help">
-          <label>Trigger Name</label>
-          <HelpButton @click="openHelp('triggerName')" />
+        <div class="field-group">
+          <div class="label-with-help">
+            <label>Trigger Name</label>
+            <HelpButton @click="openHelp('triggerName')" />
+          </div>
+          <input
+              id="triggerName"
+              type="text"
+              label="Name"
+              v-model="jsonData.name"
+              @input="onTriggerNameInput"
+          />
         </div>
-        <input
-            id="triggerName"
-            type="text"
-            label="Name"
-            v-model="jsonData.name"
-            @input="onTriggerNameInput"
-        />
 
         <!-- Sound Effect Selection with Finder Dialog -->
-        <div class="label-with-help">
-          <label>Sound Effect</label>
-          <HelpButton @click="openHelp('soundEffect')" />
-        </div>
-        <div class="sound-selection">
+        <div class="field-group">
+          <div class="label-with-help">
+            <label>Sound Effect</label>
+            <HelpButton @click="openHelp('soundEffect')" />
+          </div>
+          <div class="sound-selection">
           <div class="sound-display" @click="showSoundPicker = true">
-            <v-icon size="small" class="sound-icon">mdi-music-note</v-icon>
             <span class="sound-name">{{ jsonData.userData.sound_effect || 'No sound selected' }}</span>
             <v-icon size="small" class="browse-icon">mdi-folder-open</v-icon>
           </div>
-          <v-btn icon size="small" @click="toggleSound" :disabled="!jsonData.userData.sound_effect">
-            <v-icon size="small">{{ isPlaying ? 'mdi-stop' : 'mdi-play' }}</v-icon>
-          </v-btn>
-        </div>
+            <v-btn icon size="small" @click="toggleSound" :disabled="!jsonData.userData.sound_effect">
+              <v-icon size="small">{{ isPlaying ? 'mdi-stop' : 'mdi-play' }}</v-icon>
+            </v-btn>
+          </div>
 
-        <!-- Sound Picker Dialog -->
-        <SoundSelectDialog
-          v-model="showSoundPicker"
-          :files="soundFiles"
-          :currentValue="jsonData.userData.sound_effect"
-          @select="onSoundSelected"
-        />
-
-        <div class="sound-duration" v-if="jsonData.userData.sound_effect">
-          <v-text-field
-            v-model.number="jsonData.userData.sound_effect_duration"
-            label="Sound Effect Duration"
-            :suffix="'seconds'"
-            density="compact"
-            type="number"
-            min="0"
-            max="600"
-            @input="onDataChange"
-              append-icon="mdi-clock"
-            outlined
+          <!-- Sound Picker Dialog -->
+          <SoundSelectDialog
+            v-model="showSoundPicker"
+            :files="soundFiles"
+            :currentValue="jsonData.userData.sound_effect"
+            @select="onSoundSelected"
           />
-        </div>
 
-        <div  v-if="jsonData.userData.sound_effect">
-          <v-slider
-            v-if="jsonData.userData"
-            v-model="jsonData.userData.sound_effect_volume"
-            :min="1"
-            :max="100"
-            :step="1"
-            append-icon="mdi-volume-high"
-          />
+          <div class="sound-controls" v-if="jsonData.userData.sound_effect">
+            <div class="sound-control-row">
+              <v-text-field
+                v-model.number="jsonData.userData.sound_effect_duration"
+                label="Sound Effect Duration"
+                :suffix="'seconds'"
+                density="compact"
+                type="number"
+                min="0"
+                max="600"
+                @input="onDataChange"
+                outlined
+                hide-details
+              />
+              <v-icon class="sound-control-icon">mdi-clock</v-icon>
+            </div>
+            <div class="sound-control-row">
+              <v-slider
+                v-model="jsonData.userData.sound_effect_volume"
+                :min="1"
+                :max="100"
+                :step="1"
+                hide-details
+              />
+              <v-icon class="sound-control-icon">mdi-volume-high</v-icon>
+            </div>
+          </div>
         </div>
         
         <div class="property-view__section">
@@ -76,15 +81,7 @@
                 v-model="jsonData.userData.description"
                 @input="onDataChange"
             ></textarea>
-            <v-btn 
-              icon 
-              size="small" 
-              class="expand-btn" 
-              @click="showActionEditor = true"
-              title="Open in fullscreen editor"
-            >
-              <v-icon size="small">mdi-arrow-expand</v-icon>
-            </v-btn>
+            <ExpandButton @click="showActionEditor = true" />
           </div>
         </div>
 
@@ -101,20 +98,12 @@
                 @input="onDataChange"
                 placeholder="Enter what happens on success of the action"
             ></textarea>
-            <v-btn 
-              icon 
-              size="small" 
-              class="expand-btn" 
-              @click="showSuccessEditor = true"
-              title="Open in fullscreen editor"
-            >
-              <v-icon size="small">mdi-arrow-expand</v-icon>
-            </v-btn>
+            <ExpandButton @click="showSuccessEditor = true" />
           </div>
         </div>
 
         <!-- Textarea for Conditions -->
-        <div>
+        <div class="field-group">
           <div class="label-with-help">
             <label for="conditions">Conditions</label>
             <HelpButton @click="openHelp('conditions')" />
@@ -127,7 +116,7 @@
           ></textarea>
         </div>
 
-        <div>
+        <div class="field-group">
           <div class="label-with-help">
             <label for="actions">Actions</label>
             <HelpButton @click="openHelp('actions')" />
@@ -170,11 +159,12 @@
   import JinjaEditorDialog from '@/components/JinjaEditorDialog.vue';
   import SoundSelectDialog from '@/components/SoundSelectDialog.vue';
   import HelpButton from '@/components/HelpButton.vue';
+  import ExpandButton from '@/components/ExpandButton.vue';
   import "codemirror/theme/material-darker.css";
 
   export default {
     name: 'PropertyView',
-    components: { ExtendedHelpDialog, JinjaEditorDialog, SoundSelectDialog, HelpButton },
+    components: { ExtendedHelpDialog, JinjaEditorDialog, SoundSelectDialog, HelpButton, ExpandButton },
     props: {
         draw2dFrame: {
             type: Object,
@@ -543,33 +533,12 @@
     border-left: 1px solid var(--game-border-color);
   }
 
-  .property-view label {
-    display: block;
-    margin: 0 0 var(--game-spacing-xs) 0;
-    font-size: var(--game-font-size-xs);
-    color: var(--game-accent-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-weight: 600;
-  }
-
   /* Override for labels inside label-with-help */
   .label-with-help label {
     display: inline-block !important;
     margin: 0 !important;
   }
 
-  .property-view input {
-    width: 100%;
-    padding: var(--game-spacing-sm) var(--game-spacing-md);
-    background: var(--game-input-bg);
-    border: 1px solid var(--game-input-border);
-    border-radius: var(--game-radius-md);
-    color: var(--game-text-primary);
-    font-size: var(--game-font-size-md);
-    transition: all var(--game-transition-fast);
-    outline: none;
-  }
 
   /* Retro 8-Bit Font for Trigger Name */
   .property-view input#triggerName {
@@ -578,34 +547,8 @@
     letter-spacing: 2px;
     color: var(--game-accent-secondary);
     text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
-    padding: var(--game-spacing-md) var(--game-spacing-lg);
   }
 
-  .property-view input:hover {
-    background: var(--game-input-hover);
-    border-color: var(--game-border-highlight);
-  }
-
-  .property-view input:focus {
-    border-color: var(--game-input-focus);
-    box-shadow: 0 0 0 2px rgba(233, 69, 96, 0.2);
-  }
-
-  .property-view textarea {
-    width: 100%;
-    padding: var(--game-spacing-sm) var(--game-spacing-md);
-    background: var(--game-input-bg);
-    border: 1px solid var(--game-input-border);
-    border-radius: var(--game-radius-md);
-    color: var(--game-text-primary);
-    font-size: var(--game-font-size-md);
-    font-family: var(--game-font-family-mono);
-    resize: vertical;
-    min-height: 80px;
-    transition: all var(--game-transition-fast);
-    outline: none;
-    overflow-y: auto;
-  }
 
   /* Sections that can grow but have a minimum height to prevent squashing */
   .property-view__section {
@@ -628,15 +571,6 @@
     resize: none;
   }
 
-  .property-view textarea:hover {
-    background: var(--game-input-hover);
-    border-color: var(--game-border-highlight);
-  }
-
-  .property-view textarea:focus {
-    border-color: var(--game-input-focus);
-    box-shadow: 0 0 0 2px rgba(233, 69, 96, 0.2);
-  }
 
   .sound-selection {
     display: flex;
@@ -644,24 +578,28 @@
     gap: var(--game-spacing-sm);
   }
 
-  /* Sound Display - clickable field to open picker */
+  /* Sound Display - clickable field to open picker (same style as input/textarea) */
   .sound-display {
     flex: 1;
     display: flex;
     align-items: center;
     gap: var(--game-spacing-sm);
-    padding: var(--game-spacing-sm) var(--game-spacing-md);
+    cursor: pointer;
+    min-height: 36px;
     background: var(--game-input-bg);
     border: 1px solid var(--game-input-border);
-    border-radius: var(--game-radius-md);
-    cursor: pointer;
+    padding: var(--game-spacing-xs) var(--game-spacing-sm);
     transition: all var(--game-transition-fast);
-    min-height: 36px;
   }
 
   .sound-display:hover {
     background: var(--game-input-hover);
     border-color: var(--game-border-highlight);
+  }
+
+  .sound-display:focus {
+    border-color: var(--game-input-focus);
+    box-shadow: 0 0 0 2px rgba(233, 69, 96, 0.2);
   }
 
   .sound-display .sound-icon {
@@ -717,19 +655,39 @@
     box-shadow: var(--game-shadow-glow);
   }
 
-  .sound-duration :deep(.v-text-field) {
+  /* Sound Controls - Duration and Volume with aligned icons */
+  .sound-controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--game-spacing-sm);
     margin-top: var(--game-spacing-sm);
   }
 
-  .sound-duration :deep(.v-field) {
+  .sound-control-row {
+    display: flex;
+    align-items: center;
+    gap: var(--game-spacing-sm);
+  }
+
+  .sound-control-row :deep(.v-text-field),
+  .sound-control-row :deep(.v-slider) {
+    flex: 1;
+  }
+
+  .sound-control-row :deep(.v-field) {
     background: var(--game-input-bg);
     border: 1px solid var(--game-input-border);
     border-radius: var(--game-radius-md);
   }
 
+  .sound-control-icon {
+    width: 24px;
+    flex-shrink: 0;
+    color: var(--game-text-muted);
+  }
+
   /* Slider Styling - Vuetify 3 */
   :deep(.v-slider) {
-    margin-top: var(--game-spacing-sm);
     margin-inline: 0;
   }
 
@@ -760,30 +718,10 @@
     position: relative;
   }
 
-  .expand-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    z-index: 10;
-    background: var(--game-accent-primary) !important;
-    color: var(--game-text-primary) !important;
-    box-shadow: var(--game-shadow-md);
-    transition: all var(--game-transition-fast);
-    opacity: 0.33;
-    min-width: 28px !important;
-    width: 28px !important;
-    height: 28px !important;
-  }
-
-  .expand-btn:hover {
-    background: var(--game-accent-tertiary) !important;
-    box-shadow: var(--game-shadow-glow);
-    transform: scale(1.1);
-    opacity: 1;
-  }
-
-  .expand-btn :deep(.v-icon) {
-    font-size: 18px !important;
+  /* Field Group Container */
+  .field-group {
+    display: flex;
+    flex-direction: column;
   }
 
   /* Label with Help Icon */

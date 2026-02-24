@@ -17,17 +17,15 @@
       </v-card-text>
       <v-card-actions class="dialog-actions">
         <v-spacer></v-spacer>
-        <button @click="closeDialog" class="retro-btn retro-btn--secondary retro-btn--sm">
+        <RetroButton @click="closeDialog" variant="secondary">
           Cancel
-        </button>
-        <button 
+        </RetroButton>
+        <RetroButton 
           @click="createDialog" 
           :disabled="isCreateDisabled" 
-          class="retro-btn retro-btn--sm"
-          :class="{ 'retro-btn--disabled': isCreateDisabled }"
         >
           Create
-        </button>
+        </RetroButton>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -36,9 +34,10 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import DialogHeader from './DialogHeader.vue';
+import RetroButton from './RetroButton.vue';
 
 export default {
-  components: { DialogHeader },
+  components: { DialogHeader, RetroButton },
   props: {
     dialog: {
       type: Boolean,

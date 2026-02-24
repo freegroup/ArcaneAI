@@ -18,17 +18,15 @@
       </v-card-text>
       <v-card-actions class="dialog-actions">
         <v-spacer></v-spacer>
-        <button @click="close" class="retro-btn retro-btn--secondary retro-btn--sm">
+        <RetroButton @click="close" variant="secondary">
           Cancel
-        </button>
-        <button 
+        </RetroButton>
+        <RetroButton 
           @click="createEncounter" 
           :disabled="isCreateDisabled" 
-          class="retro-btn retro-btn--sm"
-          :class="{ 'retro-btn--disabled': isCreateDisabled }"
         >
           Create
-        </button>
+        </RetroButton>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -37,10 +35,11 @@
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
 import DialogHeader from './DialogHeader.vue';
+import RetroButton from './RetroButton.vue';
 
 export default {
   name: 'EncounterNewDialog',
-  components: { DialogHeader },
+  components: { DialogHeader, RetroButton },
   
   props: {
     modelValue: {

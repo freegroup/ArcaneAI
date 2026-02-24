@@ -19,8 +19,8 @@
       </v-card-text>
       
       <v-card-actions class="todo-edit-actions">
-        <button class="btn-cancel" @click="cancel">Cancel</button>
-        <button class="btn-save" @click="save" :disabled="!localText.trim()">Save</button>
+        <RetroButton variant="secondary" @click="cancel">Cancel</RetroButton>
+        <RetroButton variant="primary" @click="save" :disabled="!localText.trim()">Save</RetroButton>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -28,12 +28,14 @@
 
 <script>
 import DialogHeader from './DialogHeader.vue';
+import RetroButton from './RetroButton.vue';
 
 export default {
   name: 'TodoEditDialog',
   
   components: {
-    DialogHeader
+    DialogHeader,
+    RetroButton
   },
   
   props: {
@@ -110,11 +112,10 @@ export default {
 .todo-edit-content label {
   display: block;
   margin: 0 0 var(--game-spacing-xs) 0;
-  font-size: var(--game-font-size-xs);
+  font-size: var(--game-font-size-md);
   color: var(--game-accent-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-weight: 600;
+  letter-spacing: 4px;
 }
 
 .todo-edit-content textarea {
@@ -143,49 +144,5 @@ export default {
   padding: var(--game-spacing-md) var(--game-spacing-lg) var(--game-spacing-lg) !important;
   background: var(--game-bg-tertiary);
   border-top: 1px solid var(--game-border-color);
-}
-
-/* 8-bit Button Style */
-.btn-cancel,
-.btn-save {
-  font-family: var(--game-font-family-retro);
-  font-size: 12px;
-  font-weight: bold;
-  padding: var(--game-spacing-sm) var(--game-spacing-lg);
-  border: none;
-  cursor: pointer;
-  transition: all var(--game-transition-fast);
-}
-
-.btn-cancel {
-  background: var(--game-bg-tertiary);
-  color: var(--game-text-muted);
-  box-shadow: inset -3px -3px 0px 0px rgba(0, 0, 0, 0.3);
-}
-
-.btn-cancel:hover {
-  background: var(--game-bg-secondary);
-  color: var(--game-text-primary);
-}
-
-.btn-save {
-  background: var(--game-accent-primary);
-  color: white;
-  box-shadow: inset -3px -3px 0px 0px #8c2022;
-}
-
-.btn-save:hover:not(:disabled) {
-  background: #ce372b;
-  box-shadow: inset -4px -4px 0px 0px #8c2022;
-}
-
-.btn-save:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.btn-save:active:not(:disabled),
-.btn-cancel:active {
-  box-shadow: inset 3px 3px 0px 0px rgba(0, 0, 0, 0.3);
 }
 </style>

@@ -3,7 +3,6 @@
     <!-- 8-Bit Retro Header -->
     <div class="inventory-header">
       <div class="inventory-header__title">
-        <v-icon class="inventory-header__icon">mdi-treasure-chest</v-icon>
         <span>GAME INVENTORY</span>
         <HelpButton @click="showHelp = true" />
       </div>
@@ -46,9 +45,9 @@
               ></v-select>
             </td>
             <td>
-              <v-btn @click="addItem" class="add-btn" :disabled="!canAddItem">
+              <RetroActionButton @click="addItem" variant="success" :disabled="!canAddItem">
                 +
-              </v-btn>
+              </RetroActionButton>
             </td>
           </tr>
           
@@ -76,9 +75,9 @@
               ></v-select>
             </td>
             <td>
-              <v-btn size="small" @click="removeItem(item.key)" class="delete-btn">
+              <RetroActionButton @click="removeItem(item.key)" variant="danger">
                 X
-              </v-btn>
+              </RetroActionButton>
             </td>
           </tr>
         </tbody>
@@ -106,12 +105,14 @@
 import { mapGetters, mapActions } from 'vuex';
 import ExtendedHelpDialog from '../components/ExtendedHelpDialog.vue';
 import HelpButton from '../components/HelpButton.vue';
+import RetroActionButton from '../components/RetroActionButton.vue';
 
 export default {
   name: 'InventoryView',
   components: {
     ExtendedHelpDialog,
-    HelpButton
+    HelpButton,
+    RetroActionButton
   },
   data() {
     return {
@@ -269,15 +270,6 @@ export default {
   font-family: var(--game-font-family-retro);
   font-size: var(--screen-wide-header-font-size, 16px);
   letter-spacing: var(--screen-wide-header-letter-spacing, 2px);
-  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8),
-               0 0 10px var(--game-accent-secondary);
-}
-
-.inventory-header__icon {
-  color: var(--game-accent-secondary);
-  font-size: var(--screen-wide-header-icon-size, 32px);
-  filter: drop-shadow(0 0 8px var(--game-accent-secondary));
-  animation: pulse 2s ease-in-out infinite;
 }
 
 @keyframes pulse {
@@ -316,10 +308,6 @@ export default {
     letter-spacing: var(--screen-medium-header-letter-spacing);
   }
   
-  .inventory-header__icon {
-    font-size: var(--screen-medium-header-icon-size);
-  }
-  
   .inventory-header__info {
     font-size: var(--screen-medium-header-info-size);
   }
@@ -335,10 +323,6 @@ export default {
     font-size: var(--screen-small-header-font-size);
     gap: var(--screen-small-header-gap);
     letter-spacing: var(--screen-small-header-letter-spacing);
-  }
-  
-  .inventory-header__icon {
-    font-size: var(--screen-small-header-icon-size);
   }
   
   .inventory-header__info {
@@ -361,97 +345,7 @@ export default {
   padding: 12px 8px !important;
 }
 
-.input-row :deep(.v-field) {
-  background: var(--game-bg-primary);
-  border: 2px solid var(--game-border-color);
-  border-radius: var(--game-radius-sm);
-  font-family: var(--game-font-family-mono);
-  font-size: 15px;
-}
 
-.input-row :deep(.v-field:hover) {
-  border-color: var(--game-border-highlight);
-}
-
-.input-row :deep(.v-field--focused) {
-  border-color: var(--game-accent-primary);
-  box-shadow: 0 0 8px rgba(233, 69, 96, 0.3);
-}
-
-.input-row :deep(.v-field__input) {
-  color: var(--game-text-primary);
-  padding: 10px 12px;
-  min-height: 42px;
-}
-
-.input-row :deep(.v-field__input::placeholder) {
-  color: var(--game-text-muted);
-  opacity: 0.7;
-  font-size: 14px;
-}
-
-/* Add Button - 8-Bit Style (Green = Positive) */
-.add-btn {
-  background: var(--game-success) !important;
-  border-radius: 0 !important;
-  min-width: 32px !important;
-  height: 32px !important;
-  padding: 0 !important;
-  position: relative !important;
-  box-shadow: inset -4px -4px 0px 0px #1e7e34 !important;
-  transition: all var(--game-transition-fast) !important;
-  font-family: var(--game-font-family-retro) !important;
-  font-size: 16px !important;
-  color: white !important;
-  line-height: 1 !important;
-}
-
-.add-btn::before {
-  content: '';
-  position: absolute;
-  top: -3px;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-top: 3px solid black;
-  border-bottom: 3px solid black;
-  box-sizing: content-box;
-}
-
-.add-btn::after {
-  content: '';
-  position: absolute;
-  left: -3px;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  border-left: 3px solid black;
-  border-right: 3px solid black;
-  box-sizing: content-box;
-}
-
-.add-btn:hover {
-  background: #229954 !important;
-  box-shadow: inset -6px -6px 0px 0px #1e7e34 !important;
-}
-
-.add-btn:active {
-  box-shadow: inset 4px 4px 0px 0px #1e7e34 !important;
-}
-
-.add-btn:disabled {
-  background: var(--game-text-muted) !important;
-  box-shadow: inset -4px -4px 0px 0px #555 !important;
-  opacity: 0.5 !important;
-  cursor: not-allowed !important;
-}
-
-.add-btn:disabled::before,
-.add-btn:disabled::after {
-  border-color: #555 !important;
-}
-
-/* Inventory List */
 .inventory-list {
   overflow-y: auto;
   flex: 1;
@@ -478,23 +372,18 @@ export default {
   color: var(--game-text-primary);
   font-family: var(--game-font-family-mono);
   font-size: 14px;
-  font-weight: 600;
   padding: 8px;
 }
 
 .inventory-list :deep(td:first-child) {
   color: var(--game-accent-secondary);
-  font-weight: 700;
 }
 
-.inventory-list :deep(.v-field) {
-  background: var(--game-bg-secondary);
-  border: 1px solid var(--game-border-color);
-  border-radius: var(--game-radius-sm);
-  font-family: var(--game-font-family-mono);
+.prompt-field {
+  flex: 1;
 }
 
-.inventory-list :deep(.v-field:hover) {
+.prompt-field:focus {
   border-color: var(--game-border-highlight);
 }
 
@@ -509,60 +398,7 @@ export default {
   min-height: 32px;
 }
 
-/* Delete Button - 8-Bit Style mit inset shadow */
-.delete-btn {
-  background: var(--game-accent-primary) !important;
-  border-radius: 0 !important;
-  min-width: 32px !important;
-  height: 32px !important;
-  padding: 0 !important;
-  position: relative !important;
-  box-shadow: inset -4px -4px 0px 0px #8c2022 !important;
-  transition: all var(--game-transition-fast) !important;
-}
-
-.delete-btn::before {
-  content: '';
-  position: absolute;
-  top: -3px;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-top: 3px solid black;
-  border-bottom: 3px solid black;
-  box-sizing: content-box;
-}
-
-.delete-btn::after {
-  content: '';
-  position: absolute;
-  left: -3px;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  border-left: 3px solid black;
-  border-right: 3px solid black;
-  box-sizing: content-box;
-}
-
-.delete-btn {
-  font-family: var(--game-font-family-retro) !important;
-  font-size: 14px !important;
-  color: white !important;
-  line-height: 1 !important;
-  letter-spacing: 0 !important;
-}
-
-.delete-btn:hover {
-  background: #ce372b !important;
-  box-shadow: inset -6px -6px 0px 0px #8c2022 !important;
-}
-
-.delete-btn:active {
-  box-shadow: inset 4px 4px 0px 0px #8c2022 !important;
-}
-
-/* Scrollbar */
+/* Inventory List Scrollbar */
 .inventory-list::-webkit-scrollbar {
   width: 12px;
 }
@@ -598,7 +434,6 @@ export default {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
 }
 
 /* Success Toast (Green) */

@@ -1,51 +1,55 @@
 <template>
     <div class="property-view" v-if="jsonData.type === 'StateShape'">
 
-        <div class="label-with-help">
-          <label>State Name</label>
-          <HelpButton @click="openHelp('stateName')" />
+        <div class="field-group">
+          <div class="label-with-help">
+            <label>State Name</label>
+            <HelpButton @click="openHelp('stateName')" />
+          </div>
+          <input
+              ref="nameInput"
+              id="stateName"
+              type="text"
+              v-model="jsonData.name"
+              @input="onDataChange"
+          />
         </div>
-        <input
-            ref="nameInput"
-            id="stateName"
-            type="text"
-            v-model="jsonData.name"
-            @input="onDataChange"
-        />
 
         <!-- Ambient Sound Selection with Finder Dialog -->
-        <div class="label-with-help">
-          <label>Ambient Sound</label>
-          <HelpButton @click="openHelp('ambientSound')" />
-        </div>
-        <div class="sound-selection">
+        <div class="field-group">
+          <div class="label-with-help">
+            <label>Ambient Sound</label>
+            <HelpButton @click="openHelp('ambientSound')" />
+          </div>
+          <div class="sound-selection">
           <div class="sound-display" @click="showSoundPicker = true">
             <v-icon size="small" class="sound-icon">mdi-music-note</v-icon>
             <span class="sound-name">{{ jsonData.userData.ambient_sound || 'No sound selected' }}</span>
             <v-icon size="small" class="browse-icon">mdi-folder-open</v-icon>
           </div>
           
-          <v-btn icon size="small" @click="toggleSound" :disabled="!jsonData.userData.ambient_sound">
-            <v-icon size="small">{{ isPlaying ? 'mdi-stop' : 'mdi-play' }}</v-icon>
-          </v-btn>
-        </div>
+            <v-btn icon size="small" @click="toggleSound" :disabled="!jsonData.userData.ambient_sound">
+              <v-icon size="small">{{ isPlaying ? 'mdi-stop' : 'mdi-play' }}</v-icon>
+            </v-btn>
+          </div>
 
-        <!-- Sound Picker Dialog -->
-        <SoundSelectDialog
+          <!-- Sound Picker Dialog -->
+          <SoundSelectDialog
           v-model="showSoundPicker"
           :files="soundFiles"
           :currentValue="jsonData.userData.ambient_sound"
-          @select="onSoundSelected"
-        />
-        <div>
-          <v-slider
-            v-if="jsonData.userData"
-            v-model="jsonData.userData.ambient_sound_volume"
-            :min="1"
-            :max="100"
-            :step="1"
-            append-icon="mdi-volume-high"
+            @select="onSoundSelected"
           />
+          <div>
+            <v-slider
+              v-if="jsonData.userData"
+              v-model="jsonData.userData.ambient_sound_volume"
+              :min="1"
+              :max="100"
+              :step="1"
+              append-icon="mdi-volume-high"
+            />
+          </div>
         </div>
         
         <div class="property-view__section">
@@ -61,15 +65,7 @@
                 placeholder="test placeholder"
                 @change="onDataChange"
             />
-            <v-btn 
-              icon 
-              size="small" 
-              class="expand-btn" 
-              @click="showJinjaEditor = true"
-              title="Open in fullscreen editor"
-            >
-              <v-icon size="small">mdi-arrow-expand</v-icon>
-            </v-btn>
+            <ExpandButton @click="showJinjaEditor = true" />
           </div>
         </div>
 
@@ -98,6 +94,7 @@
   import JinjaEditorDialog from '@/components/JinjaEditorDialog.vue';
   import SoundSelectDialog from '@/components/SoundSelectDialog.vue';
   import HelpButton from '@/components/HelpButton.vue';
+  import ExpandButton from '@/components/ExpandButton.vue';
 
   import Codemirror from "codemirror-editor-vue3";
   import "codemirror/addon/display/placeholder.js";
@@ -108,7 +105,7 @@
 
   export default {
     name: 'PropertyView',
-    components: { Codemirror, ExtendedHelpDialog, JinjaEditorDialog, SoundSelectDialog, HelpButton },
+    components: { Codemirror, ExtendedHelpDialog, JinjaEditorDialog, SoundSelectDialog, HelpButton, ExpandButton },
     props: {
         draw2dFrame: {
             type: Object,
@@ -303,33 +300,17 @@
     font-size: var(--game-font-size-sm);
     border-left: 1px solid var(--game-border-color);
   }
-  .property-view label {
-    display: block;
-    margin: 0 0 var(--game-spacing-xs) 0;
-    font-size: var(--game-font-size-xs);
-    color: var(--game-accent-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-weight: 600;
-  }
   .label-with-help label { display: inline-block !important; margin: 0 !important; }
-  .property-view input {
-    width: 100%;
-    padding: var(--game-spacing-sm) var(--game-spacing-md);
-    background: var(--game-input-bg);
-    border: 1px solid var(--game-input-border);
-    border-radius: 0;
-    color: var(--game-text-primary);
-    font-size: var(--game-font-size-md);
-    transition: all var(--game-transition-fast);
-    outline: none;
+  .property-view textarea {
+    resize: vertical;
+    min-height: 100px;
+    flex: 1;
   }
   .property-view input#stateName {
     font-family: var(--game-font-family-retro);
     font-size: 18px;
     letter-spacing: 2px;
     color: var(--game-accent-secondary);
-    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
     padding: var(--game-spacing-md) var(--game-spacing-lg);
   }
   .property-view input:hover { background: var(--game-input-hover); border-color: var(--game-border-highlight); }
@@ -377,8 +358,6 @@
     flex-direction: column; 
     min-height: 0; 
   }
-  .expand-btn { position: absolute; top: 8px; right: 8px; z-index: 10; background: var(--game-accent-primary) !important; opacity: 0.33; }
-  .expand-btn:hover { opacity: 1; }
   .code-editor { flex: 1; display: flex; flex-direction: column; min-height: 0; }
   .code-editor :deep(.CodeMirror) {
     font-size: var(--game-font-size-md);
@@ -390,5 +369,6 @@
     padding: var(--game-spacing-sm);
     height: 100%;
   }
+  .field-group { display: flex; flex-direction: column; }
   .label-with-help { display: inline-flex; align-items: center; gap: 4px; margin-bottom: var(--game-spacing-xs); }
 </style>

@@ -13,13 +13,12 @@
       </v-card-text>
       <v-card-actions class="dialog-actions">
         <v-spacer></v-spacer>
-        <RetroButton @click="cancel" variant="secondary" size="sm">
+        <RetroButton @click="cancel" variant="secondary">
           Cancel
         </RetroButton>
         <RetroButton 
           @click="confirmDelete" 
           variant="reset" 
-          size="sm"
         >
           Delete
         </RetroButton>
@@ -86,11 +85,11 @@ export default {
 }
 
 .confirm-text {
-  font-family: var(--game-font-family-retro);
   font-size: var(--game-font-size-md);
   color: var(--game-text-primary);
   text-align: center;
   margin: var(--game-spacing-md) 0;
+  letter-spacing: 4px;
   line-height: 1.6;
 }
 

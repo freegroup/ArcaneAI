@@ -1,25 +1,29 @@
 <template>
   <div v-if="showViewProperties" class="property-view">
     <!-- View Name Section -->
-    <label>{{ isWorldView ? 'View' : 'Encounter' }} Name</label>
-    <input
-      id="encounterName"
-      type="text"
-      v-model="localName"
-      :readonly="isWorldView"
-      :class="{ 'readonly-name': isWorldView }"
-      @input="!isWorldView && debouncedSaveName()"
-      placeholder="Enter encounter name..."
-    />
+    <div class="field-group">
+      <label>{{ isWorldView ? 'View' : 'Encounter' }} Name</label>
+      <input
+        id="encounterName"
+        type="text"
+        v-model="localName"
+        :readonly="isWorldView"
+        :class="{ 'readonly-name': isWorldView }"
+        @input="!isWorldView && debouncedSaveName()"
+        placeholder="Enter encounter name..."
+      />
+    </div>
 
     <!-- Description Section -->
-    <label>Description</label>
-    <textarea
-      v-model="localDescription"
-      placeholder="Describe what this view represents..."
-      rows="4"
-      @input="saveDescription"
-    />
+    <div class="field-group">
+      <label>Description</label>
+      <textarea
+        v-model="localDescription"
+        placeholder="Describe what this view represents..."
+        rows="4"
+        @input="saveDescription"
+      />
+    </div>
     
     <!-- Todo List Section (Extracted to Component) -->
     <TodoManager />
@@ -216,51 +220,13 @@ export default {
   border-left: 1px solid var(--game-border-color);
 }
 
-.property-view label {
-  display: block;
-  margin: 0 0 var(--game-spacing-xs) 0;
-  font-size: var(--game-font-size-xs);
-  color: var(--game-accent-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-weight: 600;
-}
-
-.property-view textarea,
-.property-view input[type="text"] {
-  width: 100%;
-  padding: var(--game-spacing-sm) var(--game-spacing-md);
-  background: var(--game-input-bg);
-  border: 1px solid var(--game-input-border);
-  border-radius: 0;
-  color: var(--game-text-primary);
-  font-size: var(--game-font-size-md);
-  font-family: inherit;
-  transition: all var(--game-transition-fast);
-  outline: none;
+.property-view textarea {
   resize: vertical;
-}
-
-.property-view textarea:hover,
-.property-view input[type="text"]:hover {
-  background: var(--game-input-hover);
-  border-color: var(--game-border-highlight);
-}
-
-.property-view textarea:focus,
-.property-view input[type="text"]:focus {
-  border-color: var(--game-input-focus);
-  box-shadow: 0 0 0 2px rgba(233, 69, 96, 0.2);
 }
 
 /* Encounter Name - Special styling */
 .property-view input#encounterName {
-  font-family: var(--game-font-family-retro);
-  font-size: 18px;
-  letter-spacing: 2px;
   color: var(--game-accent-secondary);
-  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
-  padding: var(--game-spacing-md) var(--game-spacing-lg);
 }
 
 /* Readonly name style for World view */
@@ -276,5 +242,15 @@ export default {
   background: transparent;
   border-color: transparent;
   box-shadow: none;
+}
+
+/* Field Group Container */
+.field-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.field-group label {
+  margin-bottom: var(--game-spacing-xs);
 }
 </style>

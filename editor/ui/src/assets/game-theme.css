@@ -3,8 +3,16 @@
  * Central design variables for consistent game-like appearance
  */
 
-/* Import Noto Sans for regular text and Press Start 2P for retro headers */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Noto+Sans+Mono:wght@400;500;600;700&family=Press+Start+2P&display=swap');
+/* Import Noto Sans for regular text */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Noto+Sans+Mono:wght@400;500;600;700&display=swap');
+
+/* Local Retro Font: Ithaca */
+@font-face {
+  font-family: 'Ithaca';
+  src: url('./fonts/ithaca-font/Ithaca-LVB75.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
 /* Global Layout - Required for Vuetify v-app to fill viewport */
 html,
@@ -13,6 +21,10 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  font-family: var(--game-font-family);
+  -webkit-font-smoothing: none;
+  /* Keeps pixel fonts sharp */
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Vuetify v-application must fill viewport */
@@ -22,90 +34,105 @@ body {
 
 :root {
   /* Color Palette - Dark Fantasy Theme */
-  --game-bg-primary: #1a1a2e;          /* Deep dark blue-black */
-  --game-bg-secondary: #16213e;        /* Slightly lighter dark blue */
-  --game-bg-tertiary: #0f3460;         /* Muted deep blue */
-  
-  --game-accent-primary: #e94560;      /* Vibrant red/pink - for important actions */
-  --game-accent-secondary: #f39c12;    /* Golden yellow - for highlights */
-  --game-accent-tertiary: #8e44ad;     /* Purple - for special items */
-  
-  --game-text-primary: #e0e0e0;        /* Light gray - main text */
-  --game-text-secondary: #a0a0a0;      /* Medium gray - secondary text */
-  --game-text-muted: #6b6b6b;          /* Dark gray - labels */
-  
-  --game-border-color: #2c3e50;        /* Subtle border */
-  --game-border-highlight: #34495e;    /* Highlighted border */
-  
-  --game-success: #27ae60;             /* Green - success states */
-  --game-warning: #f39c12;             /* Orange - warnings */
-  --game-danger: #e74c3c;              /* Red - errors */
-  --game-info: #3498db;                /* Blue - info */
-  
+  --game-bg-primary: #1a1a2e;
+  /* Deep dark blue-black */
+  --game-bg-secondary: #16213e;
+  /* Slightly lighter dark blue */
+  --game-bg-tertiary: #0f3460;
+  /* Muted deep blue */
+
+  --game-accent-primary: #e94560;
+  /* Vibrant red/pink - for important actions */
+  --game-accent-secondary: #f39c12;
+  /* Golden yellow - for highlights */
+  --game-accent-tertiary: #8e44ad;
+  /* Purple - for special items */
+
+  --game-text-primary: #e0e0e0;
+  /* Light gray - main text */
+  --game-text-secondary: #a0a0a0;
+  /* Medium gray - secondary text */
+  --game-text-muted: #6b6b6b;
+  /* Dark gray - labels */
+
+  --game-border-color: #2c3e50;
+  /* Subtle border */
+  --game-border-highlight: #34495e;
+  /* Highlighted border */
+
+  --game-success: #27ae60;
+  /* Green - success states */
+  --game-warning: #f39c12;
+  /* Orange - warnings */
+  --game-danger: #e74c3c;
+  /* Red - errors */
+  --game-info: #3498db;
+  /* Blue - info */
+
   /* Spacing */
   --game-spacing-xs: 4px;
   --game-spacing-sm: 8px;
   --game-spacing-md: 16px;
   --game-spacing-lg: 24px;
   --game-spacing-xl: 32px;
-  
+
   /* Border Radius */
   --game-radius-sm: 4px;
   --game-radius-md: 8px;
   --game-radius-lg: 12px;
-  
+
   /* Shadows - Game-like depth */
   --game-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
   --game-shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
   --game-shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5);
   --game-shadow-glow: 0 0 20px rgba(233, 69, 96, 0.3);
-  
+
   /* Transitions */
   --game-transition-fast: 0.15s ease;
   --game-transition-normal: 0.3s ease;
   --game-transition-slow: 0.5s ease;
-  
+
   /* Typography */
-  --game-font-family: 'Noto Sans', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --game-font-family-mono: 'Noto Sans Mono', 'Consolas', 'Monaco', 'Lucida Console', monospace;
-  --game-font-family-retro: 'Press Start 2P', cursive;
-  
-  --game-font-size-xs: 11px;
-  --game-font-size-sm: 13px;
-  --game-font-size-md: 15px;
-  --game-font-size-lg: 18px;
-  --game-font-size-xl: 24px;
-  
+  --game-font-family: 'Ithaca', 'Noto Sans', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --game-font-family-mono: 'Ithaca', 'Noto Sans Mono', 'Consolas', 'Monaco', 'Lucida Console', monospace;
+  --game-font-family-retro: 'Ithaca', monospace;
+
+  --game-font-size-xs: 15px;
+  --game-font-size-sm: 18px;
+  --game-font-size-md: 24px;
+  --game-font-size-lg: 30px;
+  --game-font-size-xl: 48px;
+
   /* Input/Controls */
   --game-input-bg: #0f3460;
   --game-input-border: #2c3e50;
   --game-input-focus: #e94560;
   --game-input-hover: #16213e;
-  
+
   /* Scrollbar */
   --game-scrollbar-thumb: #2c3e50;
   --game-scrollbar-track: #16213e;
-  
+
   /* ===========================================
    * RESPONSIVE SCREEN SIZE VARIABLES
    * screen-wide: >= 1440px (Large monitors)
    * screen-medium: 1024px - 1439px (Laptops)
    * screen-small: < 1024px (Tablets/Small)
    * =========================================== */
-  
+
   /* Header Sizes - Wide Screens (Default) */
   --screen-wide-header-padding-y: var(--game-spacing-lg);
-  --screen-wide-header-font-size: 16px;
+  --screen-wide-header-font-size: 30px;
   --screen-wide-header-icon-size: 32px;
   --screen-wide-header-info-size: 24px;
   --screen-wide-header-letter-spacing: 2px;
   --screen-wide-header-gap: var(--game-spacing-md);
-  
+
   /* Navigation Drawer - Wide Screens (Default) */
   --screen-wide-drawer-width: 240px;
   --screen-wide-drawer-item-padding: 16px;
   --screen-wide-drawer-spacer: 16px;
-  
+
   /* App Toolbar - Wide Screens (Default) */
   --screen-wide-toolbar-height: 64px;
   --screen-wide-toolbar-font-size: 16px;
@@ -124,12 +151,12 @@ body {
     --screen-medium-header-info-size: 18px;
     --screen-medium-header-letter-spacing: 1px;
     --screen-medium-header-gap: var(--game-spacing-sm);
-    
+
     /* Navigation Drawer - Medium Screens (25% narrower) */
     --screen-medium-drawer-width: 180px;
     --screen-medium-drawer-item-padding: 5px;
     --screen-medium-drawer-spacer: 5px;
-    
+
     /* App Toolbar - Medium Screens (smaller) */
     --screen-medium-toolbar-height: 48px;
     --screen-medium-toolbar-font-size: 12px;
@@ -149,12 +176,12 @@ body {
     --screen-small-header-info-size: 16px;
     --screen-small-header-letter-spacing: 1px;
     --screen-small-header-gap: var(--game-spacing-xs);
-    
+
     /* Navigation Drawer - Small Screens */
     --screen-small-drawer-width: 150px;
     --screen-small-drawer-item-padding: 4px;
     --screen-small-drawer-spacer: 4px;
-    
+
     /* App Toolbar - Small Screens */
     --screen-small-toolbar-height: 40px;
     --screen-small-toolbar-font-size: 10px;
@@ -197,135 +224,45 @@ body {
 }
 
 /* ===========================================
- * RETRO BUTTON - 8-Bit Style
- * Use class "retro-btn" for consistent styling
- * Modifiers: --proceed (gold), --reset (red), --secondary (dark)
+ * GLOBAL ELEMENT DEFAULTS 
+ * Centralizing these reduces redundancy in components
  * =========================================== */
-.retro-btn {
-  --btn-bg: #92CD41;
-  --btn-bg-hover: #76c442;
-  --btn-shadow: #4AA52E;
-  --btn-outline: 4px;
-  --btn-shadow-width: 3px;
-  
-  background: var(--btn-bg);
-  display: inline-block;
-  position: relative;
-  text-align: center;
-  font-size: 12px;
-  padding: 10px 16px;
-  font-family: var(--game-font-family-retro);
-  text-decoration: none;
-  color: white;
-  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
-  border: none;
-  border-radius: 0;
-  cursor: pointer;
-  box-shadow: inset calc(var(--btn-shadow-width) * -1) calc(var(--btn-shadow-width) * -1) 0px 0px var(--btn-shadow);
-  transition: all var(--game-transition-fast);
+label {
+  display: block;
+  margin: 0 0 var(--game-spacing-xs) 0;
+  font-size: var(--game-font-size-md);
+  color: var(--game-accent-secondary);
+  letter-spacing: 4px;
 }
 
-.retro-btn:hover,
-.retro-btn:focus {
-  background: var(--btn-bg-hover);
-  box-shadow: inset calc(var(--btn-shadow-width) * -1.5) calc(var(--btn-shadow-width) * -1.5) 0px 0px var(--btn-shadow);
-  outline: none;
-}
-
-.retro-btn:active {
-  box-shadow: inset var(--btn-shadow-width) var(--btn-shadow-width) 0px 0px var(--btn-shadow);
-}
-
-/* Pixel border effect using pseudo-elements */
-.retro-btn::before,
-.retro-btn::after {
-  content: '';
-  position: absolute;
+input[type="text"],
+input[type="number"],
+input[type="email"],
+textarea,
+select {
   width: 100%;
-  height: 100%;
-  box-sizing: content-box;
-  pointer-events: none;
-}
-
-.retro-btn::before {
-  top: calc(var(--btn-outline) * -1);
-  left: 0;
-  border-top: var(--btn-outline) black solid;
-  border-bottom: var(--btn-outline) black solid;
-}
-
-.retro-btn::after {
-  left: calc(var(--btn-outline) * -1);
-  top: 0;
-  border-left: var(--btn-outline) black solid;
-  border-right: var(--btn-outline) black solid;
-}
-
-/* Golden/Proceed variant */
-.retro-btn--proceed {
-  --btn-bg: #F7D51D;
-  --btn-bg-hover: #F2C409;
-  --btn-shadow: #E59400;
-  color: #1a1a2e;
-  text-shadow: none;
-}
-
-/* Red/Reset/Danger variant */
-.retro-btn--reset {
-  --btn-bg: #E76E55;
-  --btn-bg-hover: #CE372B;
-  --btn-shadow: #8C2022;
-}
-
-/* Secondary/Dark variant (gray background) */
-.retro-btn--secondary {
-  --btn-bg: #4a5568;
-  --btn-bg-hover: #5a6578;
-  --btn-shadow: #2d3748;
-  color: white;
-}
-
-/* Small size variant */
-.retro-btn--sm {
-  --btn-outline: 3px;
-  --btn-shadow-width: 2px;
-  font-size: 10px;
-  padding: 6px 10px;
-}
-
-/* Large size variant */
-.retro-btn--lg {
-  --btn-outline: 5px;
-  --btn-shadow-width: 4px;
-  font-size: 16px;
-  padding: 14px 24px;
-}
-
-/* Disabled state */
-.retro-btn:disabled,
-.retro-btn--disabled {
-  --btn-bg: #666;
-  --btn-bg-hover: #666;
-  --btn-shadow: #444;
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-/* Icon button variant (square, for close buttons etc.) */
-.retro-btn--icon {
-  --btn-outline: 3px;
-  --btn-shadow-width: 2px;
-  --btn-bg: var(--game-accent-primary);
-  --btn-bg-hover: #CE372B;
-  --btn-shadow: #8C2022;
-  width: 28px;
-  height: 28px;
-  min-width: 28px;
-  padding: 0;
-  font-size: 14px;
+  padding: var(--game-spacing-xs) var(--game-spacing-sm);
+  background: var(--game-input-bg);
+  border: 1px solid var(--game-input-border);
+  border-radius: 0;
+  color: var(--game-text-primary);
+  font-size: var(--game-font-size-md);
+  letter-spacing: 4px;
+  transition: all var(--game-transition-fast);
+  outline: none;
   line-height: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
 }
 
+input:hover,
+textarea:hover,
+select:hover {
+  background: var(--game-input-hover);
+  border-color: var(--game-border-highlight);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--game-input-focus);
+  box-shadow: 0 0 0 2px rgba(233, 69, 96, 0.2);
+}

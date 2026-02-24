@@ -4,7 +4,6 @@
     <!-- 8-Bit Retro Header -->
     <div class="personality-header">
       <div class="personality-header__title">
-        <v-icon class="personality-header__icon">mdi-account-alert</v-icon>
         <span>AI CHARACTER PERSONALITY</span>
         <HelpButton @click="showHelp = true" />
       </div>
@@ -26,46 +25,29 @@
         @click="toggleAiAssist"
       >
         <v-icon size="small">{{ aiAssistExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-        <span class="ai-assist-title">
-          <v-icon size="small" color="primary">mdi-robot</v-icon>
-          AI Assist
-        </span>
+        <AIAssistLabel />
       </div>
 
       <transition name="expand">
         <div v-if="aiAssistExpanded" class="ai-assist-content">
           <!-- Response/Explanation Area -->
           <div class="ai-response-area">
-            <div v-if="!aiResponse && !aiLoading" class="ai-helper-text">
-              <v-icon size="small" color="primary">mdi-information-outline</v-icon>
-              <div>
-                <strong>Wie funktioniert AI Assist?</strong>
-                <p>Gib der AI eine Anweisung, wie sie deinen Text verbessern soll:</p>
-                <ul>
-                  <li>"Verbessere die Grammatik und Rechtschreibung"</li>
-                  <li>"Übersetze ins Englische"</li>
-                  <li>"Mache den Text dramatischer"</li>
-                  <li>"Vereinfache die Sprache"</li>
-                </ul>
-              </div>
+            <div v-if="!aiResponse && !aiLoading">
+              <AIAssistHelpText />
             </div>
 
-            <div v-if="aiLoading" class="ai-loading">
-              <v-progress-circular indeterminate color="primary" size="20"></v-progress-circular>
-              <span>AI arbeitet...</span>
-            </div>
+            <AIAssistLoading v-if="aiLoading">AI arbeitet...</AIAssistLoading>
 
             <div v-if="aiResponse" class="ai-result">
               <div class="ai-result-header">
                 <strong>Verbesserter Text:</strong>
-                <button 
+                <RetroButton 
                   @click="applyAiResult" 
-                  class="retro-btn retro-btn--sm"
                   title="Text in Editor übernehmen"
                 >
                   <v-icon size="small">mdi-check</v-icon>
                   Apply to Editor
-                </button>
+                </RetroButton>
               </div>
               <div class="ai-result-text">{{ aiResponse }}</div>
               <div v-if="aiComment || wordCountInfo" class="ai-comment">
@@ -78,27 +60,13 @@
             </div>
           </div>
 
-          <!-- Prompt Input -->
-          <div class="ai-prompt-input">
-            <input
-              ref="promptInput"
-              v-model="aiPrompt"
-              type="text"
-              placeholder="z.B. 'Verbessere die Grammatik' oder 'Übersetze ins Englische'"
-              @keyup.enter="improveText"
-              :disabled="aiLoading"
-              class="prompt-field"
-            />
-            <button 
-              @click="improveText" 
-              class="retro-btn retro-btn--sm"
-              :disabled="!aiPrompt.trim() || aiLoading"
-              title="Text verbessern"
-            >
-              <v-icon size="small">mdi-magic-staff</v-icon>
-              Send
-            </button>
-          </div>
+          <AIAssistInput
+            ref="promptInput"
+            v-model="aiPrompt"
+            :loading="aiLoading"
+            placeholder="z.B. 'Verbessere die Grammatik' oder 'Übersetze ins Englische'"
+            @send="improveText"
+          />
         </div>
       </transition>
     </div>
@@ -118,6 +86,11 @@ import { mapGetters, mapActions } from 'vuex';
 import axios from 'axios';
 import ExtendedHelpDialog from '../components/ExtendedHelpDialog.vue';
 import HelpButton from '../components/HelpButton.vue';
+import RetroButton from '../components/RetroButton.vue';
+import AIAssistLabel from '../components/AIAssistLabel.vue';
+import AIAssistHelpText from '../components/AIAssistHelpText.vue';
+import AIAssistLoading from '../components/AIAssistLoading.vue';
+import AIAssistInput from '../components/AIAssistInput.vue';
 
 import Codemirror from "codemirror-editor-vue3";
 import "codemirror/addon/display/placeholder.js";
@@ -133,7 +106,12 @@ export default {
   components: { 
     Codemirror,
     ExtendedHelpDialog,
-    HelpButton
+    HelpButton,
+    RetroButton,
+    AIAssistLabel,
+    AIAssistHelpText,
+    AIAssistLoading,
+    AIAssistInput
   },
   data(){
     return {
@@ -295,16 +273,9 @@ export default {
   font-family: var(--game-font-family-retro);
   font-size: var(--screen-wide-header-font-size, 16px);
   letter-spacing: var(--screen-wide-header-letter-spacing, 2px);
-  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8),
-               0 0 10px var(--game-accent-secondary);
 }
 
-.personality-header__icon {
-  color: var(--game-accent-secondary);
-  font-size: var(--screen-wide-header-icon-size, 32px);
-  filter: drop-shadow(0 0 8px var(--game-accent-secondary));
-  animation: pulse 2s ease-in-out infinite;
-}
+
 
 /* Responsive header for laptop screens (60% height) */
 @media (max-width: 1439px) {
@@ -316,10 +287,6 @@ export default {
     font-size: var(--screen-medium-header-font-size);
     gap: var(--screen-medium-header-gap);
     letter-spacing: var(--screen-medium-header-letter-spacing);
-  }
-  
-  .personality-header__icon {
-    font-size: var(--screen-medium-header-icon-size);
   }
   
   .personality-header__info {
@@ -338,11 +305,7 @@ export default {
     gap: var(--screen-small-header-gap);
     letter-spacing: var(--screen-small-header-letter-spacing);
   }
-  
-  .personality-header__icon {
-    font-size: var(--screen-small-header-icon-size);
-  }
-  
+
   .personality-header__info {
     font-size: var(--screen-small-header-info-size);
   }
@@ -388,13 +351,13 @@ export default {
 }
 
 .full-height-editor >>> .CodeMirror {
-  font-size: 18px;
+  font-size: 30px;
+  letter-spacing: 2px;
   font-family: var(--game-font-family-mono) !important;
   background: var(--game-bg-primary) !important;
   border: 2px solid var(--game-border-color);
-  border-radius: var(--game-radius-md);
   height: 100%;
-  line-height: 1.6;
+  line-height: 1;
 }
 
 .full-height-editor >>> .CodeMirror-gutters {
@@ -427,14 +390,6 @@ export default {
   background: var(--game-bg-hover);
 }
 
-.ai-assist-title {
-  display: flex;
-  align-items: center;
-  gap: var(--game-spacing-sm);
-  font-weight: 600;
-  color: var(--game-text-primary);
-}
-
 .ai-assist-content {
   padding: var(--game-spacing-md);
   background: var(--game-bg-secondary);
@@ -464,41 +419,6 @@ export default {
   background: var(--game-bg-primary);
   border: 1px solid var(--game-border-color);
   border-radius: var(--game-radius-md);
-}
-
-.ai-helper-text {
-  display: flex;
-  gap: var(--game-spacing-md);
-  color: var(--game-text-secondary);
-  font-size: 0.9em;
-}
-
-.ai-helper-text strong {
-  color: var(--game-text-primary);
-  display: block;
-  margin-bottom: var(--game-spacing-sm);
-}
-
-.ai-helper-text p {
-  margin: var(--game-spacing-sm) 0;
-}
-
-.ai-helper-text ul {
-  margin: var(--game-spacing-sm) 0;
-  padding-left: 20px;
-}
-
-.ai-helper-text li {
-  margin: 4px 0;
-}
-
-.ai-loading {
-  display: flex;
-  align-items: center;
-  gap: var(--game-spacing-md);
-  justify-content: center;
-  padding: var(--game-spacing-lg);
-  color: var(--game-text-secondary);
 }
 
 .ai-result {
@@ -540,41 +460,8 @@ export default {
 }
 
 .word-count-info {
-  font-weight: 600;
   color: var(--game-accent-color);
   font-style: normal;
   margin-bottom: 4px;
-}
-
-/* AI Prompt Input */
-.ai-prompt-input {
-  display: flex;
-  gap: var(--game-spacing-sm);
-  align-items: center;
-}
-
-.prompt-field {
-  flex: 1;
-  padding: var(--game-spacing-sm) var(--game-spacing-md);
-  background: var(--game-bg-primary);
-  border: 1px solid var(--game-border-color);
-  border-radius: var(--game-radius-sm);
-  color: var(--game-text-primary);
-  font-size: 0.95em;
-  transition: border-color 0.2s;
-}
-
-.prompt-field:focus {
-  outline: none;
-  border-color: var(--game-border-highlight);
-}
-
-.prompt-field:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.prompt-field::placeholder {
-  color: var(--game-text-muted);
 }
 </style>

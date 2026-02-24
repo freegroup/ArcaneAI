@@ -40,9 +40,6 @@
       v-model="showChatDialog" 
       :stateName="chatDialogStateName"
     />
-    
-    <!-- Add Encounter Dialog -->
-    <EncounterNewDialog v-model="showEncounterDialog" />
   </div>
 </template>
 
@@ -53,7 +50,6 @@ import StateTriggerProperty from './StateTriggerProperty.vue';
 import ConnectionTriggerProperty from './ConnectionTriggerProperty.vue';
 import EncounterPropertyView from './EncounterPropertyView.vue';
 import ChatDialog from '../components/ChatDialog.vue';
-import EncounterNewDialog from '../components/EncounterNewDialog.vue';
 import RetroButton from '../components/RetroButton.vue';
 import { MessageTypes } from '../../public/shared/SharedConstants.js';
 import ViewComposer from '../utils/ViewComposer.js';
@@ -65,7 +61,6 @@ export default {
     ConnectionTriggerProperty,
     EncounterPropertyView,
     ChatDialog,
-    EncounterNewDialog,
     RetroButton
   },
   data() {
@@ -75,7 +70,6 @@ export default {
       isCanvasUpdate: false,
       showChatDialog: false,
       chatDialogStateName: '',
-      showEncounterDialog: false,
       sidebarCollapsed: false
     };
   },
@@ -120,17 +114,6 @@ export default {
       deep: true,
       immediate: false,
     },
-    '$route.query.addEncounter': {
-      immediate: true,
-      handler(value) {
-        if (value === 'true') {
-          this.showEncounterDialog = true;
-          this.$nextTick(() => {
-            this.$router.replace({ query: {} });
-          });
-        }
-      }
-    }
   },
   methods: {
     ...mapActions('model', ['setModel', 'mergeModel', 'removeState', 'removeConnection', 'saveModel']),
@@ -218,12 +201,6 @@ export default {
       this.updateDraw2dFrame();
     });
 
-    // Listen for global event to open add encounter dialog
-    this.addEncounterHandler = () => {
-      this.showEncounterDialog = true;
-    };
-    window.addEventListener('open-add-encounter-dialog', this.addEncounterHandler);
-
     this.messageHandler = (event) => {
       if (event.origin !== window.location.origin) return;
       const message = event.data;
@@ -258,9 +235,6 @@ export default {
   beforeUnmount() {
     if (this.messageHandler) {
       window.removeEventListener('message', this.messageHandler);
-    }
-    if (this.addEncounterHandler) {
-      window.removeEventListener('open-add-encounter-dialog', this.addEncounterHandler);
     }
   }
 };

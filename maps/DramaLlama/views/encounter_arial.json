@@ -1,0 +1,12 @@
+{
+  "viewId": "encounter_arial",
+  "viewType": "encounter",
+  "encounterConfig": {
+    "name": "arial",
+    "description": "",
+    "todos": []
+  },
+  "stateLayouts": {},
+  "connectionRoutes": {},
+  "rafts": []
+}

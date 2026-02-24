@@ -1,13 +1,10 @@
 <template>
   <v-app-bar border dark class="app-toolbar">
-    <v-btn icon class="home-btn">
-      <v-icon>mdi-home</v-icon>
-    </v-btn>
     
-    <button @click="newFileDialog" class="retro-btn retro-btn--secondary retro-btn--sm">New Game</button>
-    <button @click="openFileDialog" class="retro-btn retro-btn--secondary retro-btn--sm">Load Game</button>
-    <button @click="save" class="retro-btn retro-btn--secondary retro-btn--sm">Save Game</button>
-    <button @click="newEncounterDialog" class="retro-btn retro-btn--secondary retro-btn--sm">Add Encounter</button>
+    <RetroButton @click="newFileDialog" variant="secondary">New Game</RetroButton>
+    <RetroButton @click="openFileDialog" variant="secondary">Load Game</RetroButton>
+    <RetroButton @click="save" variant="secondary">Save Game</RetroButton>
+    <RetroButton @click="newEncounterDialog" variant="secondary">Add Encounter</RetroButton>
     
     <v-spacer></v-spacer>
 
@@ -22,12 +19,14 @@ import { mapActions } from 'vuex';
 import GameNewDialog from './GameNewDialog.vue';
 import GameSelectDialog from './GameSelectDialog.vue';
 import EncounterNewDialog from './EncounterNewDialog.vue';
+import RetroButton from './RetroButton.vue';
 
 export default {
   components: {
     GameSelectDialog,
     GameNewDialog,
     EncounterNewDialog,
+    RetroButton,
   },
   data() {
     return {
@@ -69,40 +68,12 @@ export default {
   border-top: 2px solid var(--game-accent-secondary) !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), 
               inset 0 -2px 0 rgba(0, 0, 0, 0.4) !important;
+  overflow: visible !important;
 }
 
 .v-toolbar__content {
   background: transparent !important;
-}
-
-/* Home Icon Button */
-.v-toolbar .v-btn[icon],
-.v-toolbar .v-btn--icon {
-  background: rgba(243, 156, 18, 0.15) !important;
-  border: 2px solid var(--game-accent-secondary) !important;
-  margin-right: var(--game-spacing-md) !important;
-  transition: all var(--game-transition-fast) !important;
-}
-
-.v-toolbar .v-btn[icon]:hover,
-.v-toolbar .v-btn--icon:hover {
-  background: var(--game-accent-secondary) !important;
-  border-color: var(--game-accent-tertiary) !important;
-  box-shadow: 0 0 15px var(--game-accent-secondary) !important;
-  transform: scale(1.15) !important;
-}
-
-.v-toolbar .v-btn[icon] .v-icon,
-.v-toolbar .v-btn--icon .v-icon {
-  color: var(--game-accent-secondary) !important;
-  font-size: 28px !important;
-  filter: drop-shadow(0 0 6px var(--game-accent-secondary));
-}
-
-.v-toolbar .v-btn[icon]:hover .v-icon,
-.v-toolbar .v-btn--icon:hover .v-icon {
-  color: var(--game-text-primary) !important;
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+  overflow: visible !important;
 }
 
 /* Toolbar Retro Buttons */

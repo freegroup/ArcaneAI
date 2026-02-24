@@ -2,13 +2,15 @@
   <v-app id="app">
     <application-header />
 
-    <!-- Navigation Drawer -->
+    <!-- Navigation Drawer - Only show if a game is loaded -->
     <v-navigation-drawer
+      v-if="currentGameName"
       permanent
       :rail="isCompact"
       :width="drawerWidth"
       class="nav-drawer"
     >
+      <!-- ... existing drawer content ... -->
       <!-- Toggle button -->
       <v-list-item 
         @click="toggleDrawerCompact" 
@@ -32,39 +34,42 @@
           v-for="item in navigationItems.filter(i => i.title !== 'Game Map')"
           :key="item.title"
           :to="item.route($route.params.gameName)"
-          :prepend-icon="item.icon"
           :title="isCompact ? undefined : item.title"
           class="nav-drawer__item"
         >
+          <template v-slot:prepend>
+            <span class="nav-drawer__bullet">-</span>
+          </template>
         </v-list-item>
 
         <!-- Game Map Header -->
-        <template v-if="!isCompact && $route.params.gameName">
+        <template v-if="!isCompact && currentGameName">
           <v-list-item
-            prepend-icon="mdi-state-machine"
             class="nav-drawer__item nav-drawer__header nav-drawer__header--clickable"
           >
             <template v-slot:prepend>
-              <v-icon icon="mdi-state-machine"></v-icon>
+              <span class="nav-drawer__bullet">-</span>
             </template>
             <v-list-item-title class="nav-drawer__header-title">Game Map</v-list-item-title>
             <template v-slot:append>
-              <RetroButton
+              <RetroActionButton
                 @click.stop="openAddEncounterDialog"
-                size="icon"
+                variant="success"
                 class="nav-drawer__add-btn"
                 title="Add new encounter"
-              >+</RetroButton>
+              >+</RetroActionButton>
             </template>
           </v-list-item>
 
           <!-- World Item -->
           <v-list-item
-            :to="`/game/${$route.params.gameName}/world`"
-            prepend-icon="mdi-earth"
+            :to="`/game/${currentGameName}/world`"
             title="World"
             class="nav-drawer__subitem"
           >
+            <template v-slot:prepend>
+              <span class="nav-drawer__bullet">-</span>
+            </template>
             <template v-slot:append>
               <v-badge
                 v-if="getOpenTodosForWorld() > 0"
@@ -80,11 +85,13 @@
           <v-list-item
             v-for="encounter in encountersList"
             :key="encounter"
-            :to="`/game/${$route.params.gameName}/encounter/${encounter}`"
-            prepend-icon="mdi-map-marker"
+            :to="`/game/${currentGameName}/encounter/${encounter}`"
             :title="getEncounterDisplayName(encounter)"
             class="nav-drawer__subitem"
           >
+            <template v-slot:prepend>
+              <span class="nav-drawer__bullet">-</span>
+            </template>
             <template v-slot:append>
               <v-badge
                 v-if="getOpenTodosForEncounter(encounter) > 0"
@@ -92,30 +99,35 @@
                 color="warning"
                 inline
               ></v-badge>
-              <RetroButton
-                @click.stop="openDeleteDialog(encounter)"
-                variant="reset"
-                size="icon"
+              <RetroActionButton
+                @click.stop.prevent="openDeleteDialog(encounter)"
+                variant="danger"
                 class="nav-drawer__delete-btn"
                 title="Delete encounter"
-              >X</RetroButton>
+              >-</RetroActionButton>
             </template>
           </v-list-item>
         </template>
 
         <!-- Compact mode alternative -->
         <v-list-item
-          v-else-if="isCompact && $route.params.gameName"
-          :to="`/game/${$route.params.gameName}/world`"
-          prepend-icon="mdi-state-machine"
+          v-else-if="isCompact && currentGameName"
+          :to="`/game/${currentGameName}/world`"
           class="nav-drawer__item"
         >
+          <template v-slot:prepend>
+            <span class="nav-drawer__bullet">-</span>
+          </template>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
     <v-main class="content-area">
-      <router-view :key="$route.fullPath"></router-view>
+      <!-- Show welcome/empty state if no game is loaded -->
+      <ArcaneAIEmptyState v-if="!currentGameName" />
+      
+      <!-- Otherwise show the actual content -->
+      <router-view v-else :key="$route.fullPath"></router-view>
     </v-main>
 
     <!-- Delete Encounter Dialog -->
@@ -125,33 +137,41 @@
       :encounter-name="deletingEncounterName"
       @confirm="handleEncounterDelete"
     />
+    
+    <!-- Add Encounter Dialog - available globally when game is loaded -->
+    <EncounterNewDialog v-model="showEncounterDialog" />
   </v-app>
 </template>
 
 <script>
 import ApplicationHeader from './components/ApplicationHeader.vue';
 import ConfirmEncounterDeleteDialog from './components/ConfirmEncounterDeleteDialog.vue';
-import RetroButton from './components/RetroButton.vue';
+import EncounterNewDialog from './components/EncounterNewDialog.vue';
+import RetroActionButton from './components/RetroActionButton.vue';
+import ArcaneAIEmptyState from './components/ArcaneAIEmptyState.vue';
 import { mapActions } from 'vuex';
 
 export default {
   components: {
     ApplicationHeader,
     ConfirmEncounterDeleteDialog,
-    RetroButton,
+    EncounterNewDialog,
+    RetroActionButton,
+    ArcaneAIEmptyState,
   },
   data() {
     return {
       navigationItems: [
-        { title: 'Personality',    route: (gameName) => gameName ? `/game/${gameName}/personality` : '#', icon: 'mdi-account-alert-outline'},
-        { title: 'Welcome Prompt', route: (gameName) => gameName ? `/game/${gameName}/welcome` : '#', icon: 'mdi-message-text-clock-outline'},
-        { title: 'Inventory',      route: (gameName) => gameName ? `/game/${gameName}/inventory` : '#', icon: 'mdi-hand-coin-outline' },
-        { title: 'Game Map',       route: (gameName) => gameName ? `/game/${gameName}/world` : '#', icon: 'mdi-state-machine'     },
+        { title: 'Personality',    route: (gameName) => gameName ? `/game/${gameName}/personality` : '#' },
+        { title: 'Welcome Prompt', route: (gameName) => gameName ? `/game/${gameName}/welcome` : '#' },
+        { title: 'Inventory',      route: (gameName) => gameName ? `/game/${gameName}/inventory` : '#' },
+        { title: 'Game Map',       route: (gameName) => gameName ? `/game/${gameName}/world` : '#' },
       ],
       isCompact: false,
       deleteDialogVisible: false,
       deletingEncounterId: '',
       deletingEncounterName: '',
+      showEncounterDialog: false,
     };
   },
   computed: {
@@ -164,7 +184,12 @@ export default {
       return 300;
     },
     currentGameName() {
-      return this.$store.getters['game/gameName'] || this.$route.params.gameName || null;
+      const storeName = this.$store.getters['game/gameName'];
+      const routeName = this.$route.params.gameName;
+      
+      // Prefer store name if valid, but fallback to route param to avoid flicker
+      if (storeName && storeName !== 'unknown') return storeName;
+      return routeName || null;
     },
     encountersList() {
       return this.$store.getters['encounters/encounterNames'] || [];
@@ -183,6 +208,23 @@ export default {
   },
   beforeUnmount() {
     window.removeEventListener('beforeunload', this.handleBeforeUnload);
+  },
+  watch: {
+    // Watch for route changes to load game when navigating via URL
+    '$route.params.gameName': {
+      immediate: true,
+      async handler(newGameName, oldGameName) {
+        // Skip if same game or no game name
+        if (!newGameName || newGameName === oldGameName) return;
+        
+        // Skip if game is already loaded in store
+        const currentStoreGame = this.$store.getters['game/gameName'];
+        if (currentStoreGame === newGameName) return;
+        
+        // Load the game
+        await this.loadGame(newGameName);
+      }
+    }
   },
   methods: {
     ...mapActions('game', {
@@ -237,29 +279,32 @@ export default {
       }
     },
     openAddEncounterDialog() {
-      const targetPath = `/game/${this.$route.params.gameName}/world`;
-      if (this.$route.path === targetPath) {
-        window.dispatchEvent(new CustomEvent('open-add-encounter-dialog'));
-      } else {
-        this.$router.push({
-          path: targetPath,
-          query: { addEncounter: 'true' }
-        });
-      }
+      this.showEncounterDialog = true;
     },
     async handleEncounterDelete(encounterId) {
+      console.log('[App] handleEncounterDelete START', encounterId);
       try {
+        const gameName = this.currentGameName;
         const viewId = `encounter_${encounterId}`;
+        
+        console.log('[App] Calling views/deleteView', { gameName, viewId });
         await this.$store.dispatch('views/deleteView', {
-          gameName: this.$route.params.gameName,
+          gameName,
           viewId
         });
-        await this.$store.dispatch('encounters/fetchEncounters', this.$route.params.gameName);
+        
+        console.log('[App] Calling encounters/fetchEncounters', gameName);
+        await this.$store.dispatch('encounters/fetchEncounters', gameName);
+        
         if (this.$route.params.encounterId === encounterId) {
-          this.$router.replace(`/game/${this.$route.params.gameName}/world`);
+          console.log('[App] Current route is deleted encounter, redirecting to world');
+          this.$router.replace(`/game/${gameName}/world`);
         }
+        console.log('[App] handleEncounterDelete SUCCESS');
       } catch (error) {
-        console.error('Failed to delete encounter:', error);
+        console.error('[App] handleEncounterDelete ERROR:', error);
+        // Alert user of failure so it doesn't just "fail silently"
+        alert(`Failed to delete encounter: ${error.message || 'Unknown error'}`);
       }
     },
   },
@@ -290,12 +335,11 @@ export default {
   padding: 8px 16px;
   margin: 0 8px 8px 8px;
   background: rgba(243, 156, 18, 0.1);
-  border: 2px solid var(--game-accent-secondary);
 }
 
 .nav-drawer__game-label {
-  font-family: var(--game-font-family-retro, 'Press Start 2P', monospace);
-  font-size: 10px;
+  font-size: 28px;
+  letter-spacing: 2px;
   color: var(--game-accent-secondary);
 }
 
@@ -304,49 +348,53 @@ export default {
   padding: var(--game-spacing-md) 0 !important;
 }
 
-.nav-drawer__item {
-  margin: var(--game-spacing-xs) var(--game-spacing-sm) !important;
+.nav-drawer__item .v-list-item-title {
+  font-size: 20px !important;
+  letter-spacing: 1.5px;
 }
 
-.nav-drawer__item.v-list-item--active {
-  background: rgba(233, 69, 96, 0.15) !important;
-  border-left: 3px solid var(--game-accent-secondary) !important;
-  border-top: 2px solid var(--game-accent-secondary) !important;
-  border-bottom: 2px solid var(--game-accent-primary) !important;
+.nav-drawer__item.v-list-item--active .v-list-item-title {
+  color: var(--game-accent-secondary) !important;
 }
 
 .nav-drawer__subitem {
-  margin: 0 var(--game-spacing-sm) !important;
-  padding-left: 40px !important;
-  min-height: 32px !important;
+  padding-left: 32px !important;
 }
 
-.nav-drawer__subitem.v-list-item--active {
-  background: rgba(233, 69, 96, 0.1) !important;
-  border-left: 2px solid var(--game-accent-secondary) !important;
+.nav-drawer__subitem .v-list-item-title {
+  font-size: 18px !important;
+  letter-spacing: 1px;
+}
+
+.nav-drawer__subitem.v-list-item--active .v-list-item-title {
+  color: var(--game-accent-secondary) !important;
 }
 
 .nav-drawer__header {
-  opacity: 0.7 !important;
   margin-top: var(--game-spacing-md) !important;
-  border-top: 1px solid rgba(233, 69, 96, 0.2) !important;
+  border-top: 2px solid rgba(233, 69, 96, 0.3) !important;
 }
 
 .nav-drawer__header-title {
   font-weight: 600 !important;
-  font-size: 0.75rem !important;
+  font-size: 12px !important;
   text-transform: uppercase !important;
+  letter-spacing: 1.5px;
+  color: var(--game-text-muted) !important;
+  opacity: 0.85;
 }
 
-/* Specialized Overrides for Drawer Buttons */
-.nav-drawer__add-btn {
-  width: 20px;
-  height: 20px;
+.nav-drawer__bullet {
+  font-family: var(--game-font-family-retro);
+  font-size: 20px;
+  color: var(--game-accent-secondary);
+  width: 24px;
+  display: inline-block;
+  text-align: center;
+  margin-right: 8px;
 }
 
 .nav-drawer__delete-btn {
-  width: 20px;
-  height: 20px;
   opacity: 0;
 }
 
@@ -366,7 +414,7 @@ export default {
   /* header is 128px on large, 48px on small */
   --header-height: 128px;
   height: calc(100vh - var(--header-height));
-  overflow: hidden;
+  overflow: auto;  /* Changed from hidden to allow scrolling for EmptyState */
 }
 
 @media (max-width: 959px) { /* Vuetify sm breakpoint */

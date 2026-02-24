@@ -1,0 +1,213 @@
+/* 
+ * Common Canvas Theme - 8-Bit Retro Style
+ * Shared between Encounter and Game diagrams
+ */
+
+:root {
+    --canvas-bg: #1e1e2e;
+    --toolbar-bg: #16213e;
+    --accent-primary: #e94560;
+    --accent-secondary: #f39c12;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    --border-color: #2c3e50;
+}
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    overflow: hidden;
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+    background-color: var(--canvas-bg);
+    color: var(--text-primary);
+    -webkit-text-size-adjust: 100%;
+}
+
+#container {
+    overflow: scroll;
+}
+
+#canvas {
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+#canvas_toolbar {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    background-color: var(--toolbar-bg);
+    border-bottom: 4px solid #000;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3);
+    padding: 12px;
+    z-index: 1000;
+}
+
+.toolbar_delimiter {
+    margin-right: 12px;
+    height: 24px;
+    width: 4px;
+    background-color: #000;
+}
+
+/* 8-Bit Retro Button (Formerly Glassy) */
+.glassy-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    margin-right: 6px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    color: #fff;
+    background-color: var(--accent-primary);
+    border: 3px solid #000;
+    border-radius: 0;
+    box-shadow: inset -3px -3px 0px 0px rgba(0, 0, 0, 0.4),
+        inset 3px 3px 0px 0px rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    text-align: center;
+    text-transform: uppercase;
+    transition: transform 0.1s, background-color 0.2s;
+    user-select: none;
+}
+
+.glassy-button:hover {
+    background-color: #ff5e78;
+    transform: translateY(-2px);
+    box-shadow: inset -3px -3px 0px 0px rgba(0, 0, 0, 0.4),
+        inset 3px 3px 0px 0px rgba(255, 255, 255, 0.3),
+        0 4px 0 rgba(0, 0, 0, 0.3);
+}
+
+.glassy-button:active {
+    transform: translateY(2px);
+    box-shadow: inset 3px 3px 0px 0px rgba(0, 0, 0, 0.4);
+}
+
+.glassy-button:disabled {
+    background-color: #4a4e69;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: inset -3px -3px 0px 0px rgba(0, 0, 0, 0.2);
+    opacity: 0.7;
+}
+
+/* Specific variants */
+.glassy-button.secondary {
+    background-color: var(--game-bg-tertiary, #0f3460);
+}
+
+/* Zoom Controls */
+#canvas_zoom {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    gap: 4px;
+    background-color: #000;
+    padding: 4px;
+    z-index: 1001;
+    border: 2px solid var(--accent-secondary);
+}
+
+#canvas_zoom>button {
+    background-color: var(--toolbar-bg);
+    color: var(--accent-secondary);
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+    border: 2px solid #000;
+    border-radius: 0;
+    padding: 8px;
+    min-width: 40px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s;
+}
+
+#canvas_zoom>button:hover {
+    background-color: var(--accent-secondary);
+    color: #000;
+}
+
+/* Fullscreen Controls */
+#canvas_fullscreen {
+    position: fixed;
+    top: 72px;
+    right: 24px;
+    z-index: 1001;
+    background-color: #000;
+    padding: 4px;
+    border: 2px solid var(--accent-secondary);
+}
+
+#canvas_fullscreen_toggle {
+    background-color: var(--toolbar-bg);
+    color: var(--accent-secondary);
+    border: 2px solid #000;
+    border-radius: 0;
+    padding: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+#canvas_fullscreen_toggle:hover {
+    background-color: var(--accent-secondary);
+    color: #000;
+}
+
+#canvas_fullscreen_toggle svg {
+    display: block;
+}
+
+#pseudoCheckbox {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.cursor-move {
+    cursor: move;
+}
+
+/* 8-Bit Scrollbar */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border: 3px solid #000;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}

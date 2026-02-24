@@ -3,7 +3,6 @@
     <v-card class="help-dialog">
       <DialogHeader 
         :title="title" 
-        icon="mdi-help-circle"
         @close="close" 
       />
 
@@ -12,9 +11,9 @@
 
       <v-card-actions class="help-dialog-actions">
         <v-spacer></v-spacer>
-        <button @click="close" class="retro-btn retro-btn--proceed retro-btn--sm">
+        <RetroButton @click="close" variant="proceed">
           Got it!
-        </button>
+        </RetroButton>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -22,10 +21,11 @@
 
 <script>
 import DialogHeader from './DialogHeader.vue';
+import RetroButton from './RetroButton.vue';
 
 export default {
   name: 'ExtendedHelpDialog',
-  components: { DialogHeader },
+  components: { DialogHeader, RetroButton },
   props: {
     modelValue: {
       type: Boolean,
@@ -73,7 +73,7 @@ export default {
 
 .help-dialog-content {
   padding: var(--game-spacing-xl);
-  font-size: var(--game-font-size-md);
+  font-size: var(--game-font-size-md) !important;
   line-height: 1.6;
   color: var(--game-text-primary);
   max-height: 400px;
@@ -83,18 +83,17 @@ export default {
 /* HTML Elements in Help Text */
 .help-dialog-content :deep(strong) {
   color: var(--game-accent-secondary);
-  font-weight: 700;
+  font-weight: 100;
 }
 
 .help-dialog-content :deep(code) {
   background: rgba(233, 69, 96, 0.15);
   color: #ffa07a;
-  padding: 3px 8px;
+  padding: 3px 4px;
   border-radius: 0;
   font-family: var(--game-font-family-mono);
-  font-size: 14px;
+  font-size: var(--game-font-size-md);
   border: 1px solid rgba(233, 69, 96, 0.3);
-  font-weight: 500;
 }
 
 .help-dialog-content :deep(pre) {

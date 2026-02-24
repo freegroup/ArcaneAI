@@ -12,13 +12,12 @@ export default {
 <style scoped>
 /* 8-bit Style Help Button */
 .help-btn-8bit {
-  font-family: var(--game-font-family-retro);
-  font-size: 12px;
+  font-size: 24px;
   color: var(--game-text-muted);
   background: var(--game-bg-secondary);
   border: 2px solid var(--game-border-color);
-  width: 18px;
-  height: 18px;
+  width: 24px;
+  height: 24px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -29,9 +28,8 @@ export default {
 }
 
 .help-btn-8bit:hover {
-  color: var(--game-accent-secondary);
-  border-color: var(--game-accent-secondary);
+  color: var(--game-success);;
+  border-color: var(--game-success);;
   background: var(--game-input-hover);
-  transform: scale(1.1);
 }
 </style>

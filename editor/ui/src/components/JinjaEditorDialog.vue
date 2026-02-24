@@ -46,50 +46,36 @@
           @click="toggleAiAssist"
         >
           <v-icon size="small">{{ aiAssistExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-          <span class="ai-assist-title">
-            <v-icon size="small" color="primary">mdi-robot</v-icon>
-            AI Assist
-          </span>
+          <AIAssistLabel />
         </div>
 
         <transition name="expand">
           <div v-if="aiAssistExpanded" class="ai-assist-content">
             <!-- Response/Explanation Area -->
             <div class="ai-response-area">
-              <div v-if="!aiResponse && !aiLoading" class="ai-helper-text">
-                <v-icon size="small" color="primary">mdi-information-outline</v-icon>
-                <div>
-                  <strong>Wie funktioniert AI Assist?</strong>
-                  <p>Gib der AI eine Anweisung, wie sie deinen Text verbessern soll:</p>
-                  <ul>
-                    <li>"Verbessere die Grammatik und Rechtschreibung"</li>
-                    <li>"Übersetze ins Englische"</li>
-                    <li>"Mache den Text dramatischer"</li>
-                    <li>"Vereinfache die Sprache"</li>
-                  </ul>
+            <div v-if="!aiResponse && !aiLoading">
+              <AIAssistHelpText>
+                <template #footer>
                   <p class="jinja-note">
                     <v-icon size="x-small">mdi-shield-check</v-icon>
                     Alle Jinja-Tags bleiben erhalten!
                   </p>
-                </div>
-              </div>
+                </template>
+              </AIAssistHelpText>
+            </div>
 
-              <div v-if="aiLoading" class="ai-loading">
-                <v-progress-circular indeterminate color="primary" size="20"></v-progress-circular>
-                <span>AI arbeitet...</span>
-              </div>
+                <AIAssistLoading v-if="aiLoading">AI arbeitet...</AIAssistLoading>
 
               <div v-if="aiResponse" class="ai-result">
                 <div class="ai-result-header">
                   <strong>Verbesserter Text:</strong>
-                  <button 
-                    @click="applyAiResult" 
-                    class="retro-btn retro-btn--sm"
-                    title="Text in Editor übernehmen"
-                  >
-                    <v-icon size="small">mdi-check</v-icon>
-                    Apply to Editor
-                  </button>
+                <RetroButton 
+                  @click="applyAiResult" 
+                  title="Text in Editor übernehmen"
+                >
+                  <v-icon size="small">mdi-check</v-icon>
+                  Apply to Editor
+                </RetroButton>
                 </div>
                 <div class="ai-result-text">{{ aiResponse }}</div>
                 <div v-if="aiComment || wordCountInfo" class="ai-comment">
@@ -102,27 +88,13 @@
               </div>
             </div>
 
-            <!-- Prompt Input -->
-            <div class="ai-prompt-input">
-              <input
-                ref="promptInput"
-                v-model="aiPrompt"
-                type="text"
-                placeholder="z.B. 'Verbessere die Grammatik' oder 'Übersetze ins Englische'"
-                @keyup.enter="improveText"
-                :disabled="aiLoading"
-                class="prompt-field"
-              />
-              <button 
-                @click="improveText" 
-                class="retro-btn retro-btn--sm"
-                :disabled="!aiPrompt.trim() || aiLoading"
-                title="Text verbessern"
-              >
-                <v-icon size="small">mdi-magic-staff</v-icon>
-                Send
-              </button>
-            </div>
+            <AIAssistInput
+              ref="promptInput"
+              v-model="aiPrompt"
+              :loading="aiLoading"
+              placeholder="z.B. 'Verbessere die Grammatik' oder 'Übersetze ins Englische'"
+              @send="improveText"
+            />
           </div>
         </transition>
       </div>
@@ -130,12 +102,12 @@
       <!-- Editor Action Bar -->
       <v-card-actions class="dialog-actions">
         <v-spacer></v-spacer>
-        <button @click="cancel" class="retro-btn retro-btn--secondary retro-btn--sm">
+        <RetroButton @click="cancel" variant="secondary">
           Cancel
-        </button>
-        <button @click="save" class="retro-btn retro-btn--sm">
+        </RetroButton>
+        <RetroButton @click="save">
           Save
-        </button>
+        </RetroButton>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -146,6 +118,11 @@ import axios from 'axios';
 import MonacoEditor from 'monaco-editor-vue3';
 import * as monaco from 'monaco-editor';
 import DialogHeader from './DialogHeader.vue';
+import RetroButton from './RetroButton.vue';
+import AIAssistLabel from './AIAssistLabel.vue';
+import AIAssistHelpText from './AIAssistHelpText.vue';
+import AIAssistLoading from './AIAssistLoading.vue';
+import AIAssistInput from './AIAssistInput.vue';
 
 const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
 
@@ -212,7 +189,12 @@ export default {
   name: 'JinjaEditorDialog',
   components: {
     MonacoEditor,
-    DialogHeader
+    DialogHeader,
+    RetroButton,
+    AIAssistLabel,
+    AIAssistHelpText,
+    AIAssistLoading,
+    AIAssistInput
   },
   props: {
     modelValue: {
@@ -540,7 +522,7 @@ export default {
 }
 
 .dialog-actions {
-  padding: var(--game-spacing-lg);
+
   border-top: 1px solid var(--game-border-color);
   background: var(--game-bg-tertiary);
 }
@@ -553,7 +535,6 @@ export default {
 .editor-toolbar {
   display: flex;
   gap: var(--game-spacing-sm);
-  padding: var(--game-spacing-sm) var(--game-spacing-md);
   background: var(--game-bg-tertiary);
   border-bottom: 1px solid var(--game-border-color);
 }
@@ -618,7 +599,7 @@ export default {
   display: flex;
   align-items: center;
   gap: var(--game-spacing-sm);
-  padding: var(--game-spacing-md);
+ 
   cursor: pointer;
   user-select: none;
   transition: background-color 0.2s;
@@ -628,16 +609,7 @@ export default {
   background: var(--game-bg-hover);
 }
 
-.ai-assist-title {
-  display: flex;
-  align-items: center;
-  gap: var(--game-spacing-sm);
-  font-weight: 600;
-  color: var(--game-text-primary);
-}
-
 .ai-assist-content {
-  padding: var(--game-spacing-md);
   background: var(--game-bg-secondary);
 }
 
@@ -661,32 +633,9 @@ export default {
   max-height: 200px;
   overflow-y: auto;
   margin-bottom: var(--game-spacing-md);
-  padding: var(--game-spacing-md);
   background: var(--game-bg-primary);
   border: 1px solid var(--game-border-color);
   border-radius: var(--game-radius-md);
-}
-
-.ai-helper-text {
-  display: flex;
-  gap: var(--game-spacing-md);
-  color: var(--game-text-secondary);
-  font-size: 0.9em;
-}
-
-.ai-helper-text strong {
-  color: var(--game-text-primary);
-  display: block;
-  margin-bottom: var(--game-spacing-sm);
-}
-
-.ai-helper-text p {
-  margin: var(--game-spacing-sm) 0;
-}
-
-.ai-helper-text ul {
-  margin: var(--game-spacing-sm) 0;
-  padding-left: 20px;
 }
 
 .ai-helper-text li {
@@ -703,15 +652,6 @@ export default {
   border-radius: var(--game-radius-sm);
   font-size: 0.85em;
   color: var(--game-accent-color);
-}
-
-.ai-loading {
-  display: flex;
-  align-items: center;
-  gap: var(--game-spacing-md);
-  justify-content: center;
-  padding: var(--game-spacing-lg);
-  color: var(--game-text-secondary);
 }
 
 .ai-result {
@@ -753,41 +693,10 @@ export default {
 }
 
 .word-count-info {
-  font-weight: 600;
+
   color: var(--game-accent-color);
   font-style: normal;
   margin-bottom: 4px;
 }
 
-/* AI Prompt Input */
-.ai-prompt-input {
-  display: flex;
-  gap: var(--game-spacing-sm);
-  align-items: center;
-}
-
-.prompt-field {
-  flex: 1;
-  padding: var(--game-spacing-sm) var(--game-spacing-md);
-  background: var(--game-bg-primary);
-  border: 1px solid var(--game-border-color);
-  border-radius: var(--game-radius-sm);
-  color: var(--game-text-primary);
-  font-size: 0.95em;
-  transition: border-color 0.2s;
-}
-
-.prompt-field:focus {
-  outline: none;
-  border-color: var(--game-border-highlight);
-}
-
-.prompt-field:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.prompt-field::placeholder {
-  color: var(--game-text-muted);
-}
 </style>

@@ -7,24 +7,23 @@
         <span v-if="title" class="dialog-header__title">{{ title }}</span>
       </slot>
     </div>
-    <RetroButton 
+    <RetroActionButton 
       class="dialog-header__close" 
-      size="icon" 
-      variant="reset"
+      variant="danger"
       @click="$emit('close')" 
       title="Close"
     >
       X
-    </RetroButton>
+    </RetroActionButton>
   </div>
 </template>
 
 <script>
-import RetroButton from './RetroButton.vue';
+import RetroActionButton from './RetroActionButton.vue';
 
 export default {
   name: 'DialogHeader',
-  components: { RetroButton },
+  components: { RetroActionButton },
   emits: ['close'],
   props: {
     title: {
@@ -51,7 +50,7 @@ export default {
         'mdi-account-alert': '☺',
         'mdi-pencil': '✎'
       };
-      return iconMap[this.icon] || '●';
+      return iconMap[this.icon] || '■';
     }
   }
 };
@@ -77,27 +76,15 @@ export default {
 
 /* 8-bit Style Icon */
 .dialog-header__icon-8bit {
-  font-family: var(--game-font-family-retro);
-  font-size: 24px;
+  font-size: 40px;
   color: var(--game-accent-secondary);
-  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8),
-               0 0 8px var(--game-accent-secondary);
   min-width: 32px;
   text-align: center;
 }
 
 .dialog-header__title {
   color: var(--game-accent-secondary);
-  font-family: var(--game-font-family-retro);
-  font-size: 16px;
-  letter-spacing: 2px;
-  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8),
-               0 0 8px var(--game-accent-secondary);
-}
-
-/* 8-bit Close Button Specialized Overrides */
-.dialog-header__close {
-  width: 36px;
-  height: 36px;
+  font-size: 30px;
+  letter-spacing: 4px;
 }
 </style>

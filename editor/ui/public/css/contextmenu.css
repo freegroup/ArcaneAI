@@ -1,0 +1,41 @@
+:root {
+    --pane-bg-color: #1a1a2e;
+    --tint-color: #e94560;
+    --text-color: #e0e0e0;
+}
+
+.context-menu-list {
+    border: 3px solid #000 !important;
+    background: var(--pane-bg-color) !important;
+    box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.5) !important;
+    margin: 0;
+    padding: 4px !important;
+    font-family: 'Press Start 2P', cursive !important;
+    font-size: 10px !important;
+    border-radius: 0 !important;
+}
+
+.context-menu-list .context-menu-separator {
+    border-bottom: 2px solid #000;
+    margin: 4px 0;
+}
+
+.context-menu-list .context-menu-item {
+    color: var(--text-color);
+    padding: 8px 12px 8px 30px;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.context-menu-list .context-menu-item.hover {
+    background-color: var(--tint-color);
+    color: #fff;
+}
+
+.context-menu-list .context-menu-item.disabled {
+    color: #6b6b6b;
+}
+
+.context-menu-list .context-menu-item.disabled.hover {
+    background-color: transparent;
+}

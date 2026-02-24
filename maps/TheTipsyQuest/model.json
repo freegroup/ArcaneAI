@@ -12,7 +12,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "ea493e8c-8099-746d-910e-1b3b56e36517",
+          "id": "fd2f6b9f-d5b9-231a-3384-3065e6c9dcf0",
           "name": "untersuche_den_raum",
           "description": "Du kannst den Raum untersuchen un ihn mal Beschreiben.",
           "sound_effect": "effect_tuer_aufschliessen.wav",
@@ -38,7 +38,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "63a483ee-e936-f5e2-dbb8-2d5e3d3fdc36",
+          "id": "87987342-80f1-535c-411e-b7dd75d4323f",
           "name": "untersuche_den_raum",
           "description": "Du kannst den Raum untersuchen und durchsuchen und vielleicht findest Du Dinge die Du gebrauchen kannst.  Du siehst ein paar Dinge",
           "sound_effect": "laufen_teppich.wav",
@@ -52,7 +52,7 @@
           ]
         },
         {
-          "id": "721fe2d7-6940-7377-df91-0445e59c7e60",
+          "id": "33edafe7-fd20-6609-ae68-13106f09bab6",
           "name": "nehme_das_packet",
           "description": "Du nimmst das weisse Packet mit den seltsamen Röllchen, welches unter der langen Tafel liegt, an dich.",
           "sound_effect": "effect_retrogame.wav",
@@ -68,7 +68,7 @@
           ]
         },
         {
-          "id": "54e34ad9-339a-1a71-634d-64121df4ccdf",
+          "id": "79c99bfd-c0a9-e6b3-4ae8-09d549804607",
           "name": "gebe_packet_dem_waechter",
           "description": "Du gibst den Wächter das seltsame Packet",
           "sound_effect": "effect_mann_streckt_sich.wav",
@@ -85,7 +85,7 @@
           ]
         },
         {
-          "id": "ed268602-e331-d3f8-2c9e-662753a22f3c",
+          "id": "e7886e6d-5615-5146-c036-ee1788dd74db",
           "name": "rede_mit_waechter",
           "description": "Di sprichts den Wächter an und fragt mal was er so treibt...egal...du redets einfach mit ihm",
           "sound_effect": "effect_gaehnen.wav",
@@ -98,7 +98,7 @@
           "actions": []
         },
         {
-          "id": "710fc0bb-5855-89c0-a99c-bfcfa85439a9",
+          "id": "6a0db764-6579-0111-9915-c99dcc59ab24",
           "name": "werfe_muenze_ein",
           "description": "Du hast eine Münze und kannst diese Münze in den spielautomaten einwerfen.",
           "sound_effect": "song_traurig_01.mp3",
@@ -113,7 +113,7 @@
           ]
         },
         {
-          "id": "6fa6f111-0e09-f851-533e-e1f8cc014b3b",
+          "id": "ada04ac0-8fe4-25a3-ee8f-492146b64ebe",
           "name": "oeffne_tuer_mit_gewalt",
           "description": "Du öffnest die Tür zu \"Gelben Höhle\" mit Gewalt. Entweder eintreten, rennen, dagegen schlagen. Jede art von Gewalt öffnet die Tür.",
           "sound_effect": "aktion_etwas_im_raum_umwerfen_dose.mp3",
@@ -141,7 +141,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "50bfe571-e402-c47b-91bb-732c2620a5b8",
+          "id": "07803d31-ac83-9156-59b3-4eb2317e366d",
           "name": "schau_aus_dem_Fenster",
           "description": "Du kannst aus dem Fenster sehen und siehst....tata.....den Briefkasten und ein wenig Wald. Es ist die Stelle an der du vorher draussen da stands.",
           "sound_effect": "",
@@ -152,7 +152,7 @@
           "actions": []
         },
         {
-          "id": "9fb2f975-3cfd-8590-e3f0-9cbef3c80f1f",
+          "id": "8ee92f46-b613-e34a-dd7c-1a9ca39265e2",
           "name": "untersuche_den_raum",
           "description": "Du kannst den Raum genauer untersuchen und mitteilen wie dieser aussieht",
           "sound_effect": "",
@@ -165,7 +165,7 @@
           ]
         },
         {
-          "id": "08e3d9f1-095e-160e-6d79-62c73a5eb3a8",
+          "id": "6a07f2fe-418c-0c56-f1bb-5bc2ddeb4bc0",
           "name": "nehme_karotte",
           "description": "Du nimmst, die angesabberten, Karotten.",
           "sound_effect": "effect_retrogame.wav",
@@ -180,7 +180,7 @@
           ]
         },
         {
-          "id": "6eed4c4a-e210-8e63-da5d-a9ad4296ebcd",
+          "id": "3f1b86b7-d2f0-8f97-ccaa-bc1c6987b04d",
           "name": "gebe_die_karotten",
           "description": "Du wirfst die Karotten dem \"Wesen\" oder dem Hund \"Kerberos\" vor die Schnauze die er dann isst.",
           "sound_effect": "eating-crispy-cookies.wav",
@@ -210,7 +210,7 @@
       "stateType": "START",
       "trigger": [
         {
-          "id": "dd3fb4a5-bca2-93cb-9287-06d9f845df80",
+          "id": "568f17a8-ca24-baaf-e338-87927e97b55c",
           "name": "untersuche_das_fenster",
           "description": "Du kannst das Fenster untersuchen und beschreibst, dass man es öffnen könnte. Es fällt dir ein Türschild auf was in der nähe angebracht ist.",
           "sound_effect": "mixkit-air-woosh-1489.wav",
@@ -223,7 +223,7 @@
           ]
         },
         {
-          "id": "c34528e7-2cad-b74e-4b6c-d97809a03f3a",
+          "id": "25f25dd7-6ff3-c3a3-cb0e-9751315675d8",
           "name": "oeffne_das_fenster",
           "description": "Du öffnest das Fenster indem du es nach oben schiebst.",
           "sound_effect": "effect_schiebetuer_oeffnen.wav",
@@ -238,7 +238,7 @@
           ]
         },
         {
-          "id": "dbe7db54-9725-99b2-f5f0-a10c1cd0d7c2",
+          "id": "39edcfa8-5000-cc1c-926b-bab1dbcecd1b",
           "name": "untersuche_das_haus",
           "description": "Man kann das Haus hier nach seinem Zustand untersuchen oder mal nachsehen ob es Türen, Fenster hat in die man in das Haus gelingen könnte. Es fällt dir aber ein Türschild  auf",
           "sound_effect": "",
@@ -249,7 +249,7 @@
           "actions": []
         },
         {
-          "id": "2d7bddbb-b806-9b6f-7e94-557e6cc87ca0",
+          "id": "43ce3198-b53d-12c5-a176-f57e5ec17938",
           "name": "untersuche_die_tuer",
           "description": "Die kannst die Tür untersuchen und festellen, dass diese unüberwindbar ist. Kein reinkommen auf irgendeine Weise. Es fällt die aber ein Türschild auf",
           "sound_effect": "",
@@ -260,7 +260,7 @@
           "actions": []
         },
         {
-          "id": "20eecace-245f-9138-2741-9b65bc5a8ee9",
+          "id": "3e77c1b0-7f0c-8488-c561-9ef6d61704ad",
           "name": "nehme_stock",
           "description": "Ein Stock, der in der nähe liegt kann genommen werden",
           "sound_effect": "effect_retrogame.wav",
@@ -288,7 +288,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "69b8caf3-2e0a-5431-dcf7-09491d624a2f",
+          "id": "0057f819-9716-88cc-f984-6ff1c9b150b9",
           "name": "nehme_den_brief",
           "description": "Nehme den Brief der aus dem Briefkasten herausschaut.",
           "sound_effect": "effect_retrogame.wav",
@@ -301,7 +301,7 @@
           ]
         },
         {
-          "id": "befdbb85-6fc6-7586-5b2c-dd5db69aebb1",
+          "id": "27ed4931-db3f-8272-be9f-865c4c82cbf2",
           "name": "lese_den_brief_vor",
           "description": "Lese den Brief Wortgetreu vor, nahdem du ihn genommen hast",
           "sound_effect": "",
@@ -314,7 +314,7 @@
           "actions": []
         },
         {
-          "id": "20b2cdf9-335a-c2cc-9f8e-b5603ee24432",
+          "id": "a2add3ab-a74f-d6ee-4da9-caeec2c84efc",
           "name": "nehme_ratte",
           "description": "Du steckst unter Ekel die Ratte in deine Tasche",
           "sound_effect": "effect_retrogame.wav",
@@ -329,7 +329,7 @@
           ]
         },
         {
-          "id": "882401b5-2fcb-9f12-d95e-d29e8d7458c9",
+          "id": "eb5fd956-f609-6cf5-4e2f-366576a194b1",
           "name": "nehme_muenze",
           "description": "Auf dem Boden liegt eine Münze die du nehmen kannst",
           "sound_effect": "effect_retrogame.wav",
@@ -358,7 +358,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "66621720-894c-6ba1-b6cb-a45aea29ca77",
+          "id": "2f44fb6a-0c34-8afa-3fbf-678a3aa1be54",
           "name": "faelle_den_baum",
           "description": "Das Fällen des Baumes, oder umsägen, ist keine gute Idee. Du wirst es versuchen, aber es funktioniert niemals. Du wolltest doch tatsächlich diesen wunderschönen Baum für dein Spielvergnügen fällen. Alter – und das in diesen Zeiten! Schon mal was von Nachhaltigkeit gehört?",
           "sound_effect": "effect_erstaunte_frau.wav",
@@ -382,7 +382,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "4ff4105e-103c-c6a3-f2f8-7f3897f73985",
+          "id": "7abe6b25-d58e-b311-7156-36c22a440b05",
           "name": "untersuche_den_ort",
           "description": "Du kannst den Ort untersuchen und versuchen ob hier interessante Dinge zu finden sind-",
           "sound_effect": "",
@@ -395,7 +395,7 @@
           ]
         },
         {
-          "id": "8a1eff66-d7e9-b976-3634-f58b5063d27d",
+          "id": "bcd50f09-6592-d348-870a-741dff30f7eb",
           "name": "nehme_das_ei",
           "description": "Du kannst das Goldene Ei aufnemen",
           "sound_effect": "effect_retrogame.wav",
@@ -434,7 +434,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "ea7e65c0-ddb4-278b-c936-3bca198c6865",
+          "id": "5a3a8361-72e2-2a59-4a6e-57c5b62121b5",
           "name": "untersuche_die_hosen",
           "description": "Die Unterhosen auf der Wäschelene Untersuchen. Das Untersuchen der Hosen wird allerdings keine neuen Erkenntnisse oder iInformationen bringen. Ausser, dass diese Hosen so ihre \"Spuren\" haben",
           "sound_effect": "reaktion_bouaaaa.wav",
@@ -482,7 +482,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "6af1270d-4bf7-bad2-12e3-d439f97bfe34",
+          "id": "b032426b-9917-b10d-4ae2-1104b00496c5",
           "name": "nehme_das_ei",
           "description": "Du kannst das Goldene Ei, welches in einem Nest liegt, nehmen.",
           "sound_effect": "effect_retrogame.wav",
@@ -507,7 +507,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "18d6e25d-054f-98d2-f610-3bdb134e820d",
+          "id": "c6fd7e8c-0a74-cbf8-d54b-8b625aacbc1a",
           "name": "durchsuche_die_kammern",
           "description": "Du durchsuchst die Kammern nach etwas brauchbaren.",
           "sound_effect": "",
@@ -520,7 +520,7 @@
           ]
         },
         {
-          "id": "d90aeba4-d7e7-6058-8a83-a7bd93fe62ba",
+          "id": "0eb3f0e0-8f85-c8b8-c2c7-d525f7648f89",
           "name": "nehme_die_flasche",
           "description": "Du nimmst eine Flasche aus einer der Kammern.",
           "sound_effect": "effect_retrogame.wav",
@@ -536,7 +536,7 @@
           ]
         },
         {
-          "id": "2497c73a-d536-a85b-9dd1-55b2132aa1e6",
+          "id": "69d51e5a-5dcf-15a4-97a7-117065af803c",
           "name": "pinkel_in_die_flasche",
           "description": "Du pinkelst in die Flasche und machst die fast voll.",
           "sound_effect": "effect-sink-with-water.wav",
@@ -929,7 +929,8 @@
         "sound_effect_volume": 100,
         "sound_effect": "laufen_kiesweg.wav",
         "description": "Du kannst wieder zurück zu dem Haus gehen.\nDu gehst zum Haus.\nGehe zurück.\nzum Haus.",
-        "system_prompt": "Du bist wieder an der vorderseite des Hauses angelangt."
+        "system_prompt": "Du bist wieder an der vorderseite des Hauses angelangt.",
+        "sound_effect_duration": 2
       },
       "source": {
         "node": "a35009fb-3584-e9f9-8284-a756fd2ff86f",
@@ -1000,7 +1001,8 @@
         "description": "Du kannst wieder zurück zu dem Haus gehen.\nDu gehst zum Haus.\nGehe zurück.\nzum Haus.",
         "system_prompt": "Gott Sei Dank. Wenigstens trockene Füsse und wieder an der Vorderseite des Hauses.",
         "sound_effect_volume": 100,
-        "sound_effect": "laufen_matschiger_weg.wav"
+        "sound_effect": "laufen_matschiger_weg.wav",
+        "sound_effect_duration": 2
       },
       "source": {
         "node": "00209ce5-d897-70e6-4ce0-6be075c90804",
@@ -1045,7 +1047,8 @@
         "sound_effect": "laufen_waldweg.wav",
         "description": "Du gehst vom Haus zum Briefkasten gehen, laufen, springen oder wenn es jemand möchte sogar fliegen (auf die Nase) :-)",
         "system_prompt": "Du bist nun bei dem Baum angekommen",
-        "sound_effect_volume": 100
+        "sound_effect_volume": 100,
+        "sound_effect_duration": 2
       },
       "source": {
         "node": "eb5b6e6b-5ae0-772a-12d3-670e58816128",
@@ -1067,7 +1070,8 @@
         "description": "Du kannst nach Süden gehen.",
         "system_prompt": "Du bist nun im Süden vom Haus...es ist trocken aber windig hier.",
         "sound_effect_volume": 100,
-        "sound_effect": "laufen_kiesweg.wav"
+        "sound_effect": "laufen_kiesweg.wav",
+        "sound_effect_duration": 2
       },
       "source": {
         "node": "eb5b6e6b-5ae0-772a-12d3-670e58816128",
@@ -1089,7 +1093,8 @@
         "description": "Du gehst an die Nördliche Seite des Hauses. Es ist eine Art um das Haus herum zu gehen. Ein wenig jedenfalls.",
         "system_prompt": "Du stehst nun an der nördlichen Seite des Hauses. Super (ironie). Hier ist ausser Moos nix los. Nass und feucht ist der Boden. äääh. Darf ich wieder in das Trockene...bitte bitte",
         "sound_effect_volume": 100,
-        "sound_effect": "laufen_matschiger_weg.wav"
+        "sound_effect": "laufen_matschiger_weg.wav",
+        "sound_effect_duration": 2
       },
       "source": {
         "node": "eb5b6e6b-5ae0-772a-12d3-670e58816128",
@@ -1111,7 +1116,8 @@
         "sound_effect_volume": 29,
         "sound_effect": "laufen_matschiger_weg.wav",
         "description": "Du kannst nach Osten laufen und erreichst den hinteren Teil des Hauses. \nGehe nach hinten vom Haus.",
-        "system_prompt": "Du bist nun hinter dem Haus auf einer Lichtung."
+        "system_prompt": "Du bist nun hinter dem Haus auf einer Lichtung.",
+        "sound_effect_duration": 2
       },
       "source": {
         "node": "00209ce5-d897-70e6-4ce0-6be075c90804",
@@ -1132,7 +1138,8 @@
       "userData": {
         "sound_effect_volume": 100,
         "sound_effect": "laufen_matschiger_weg.wav",
-        "description": "Du gehst nach Norden und bist dann am Nordteil des Hauses"
+        "description": "Du gehst nach Norden und bist dann am Nordteil des Hauses",
+        "sound_effect_duration": 2
       },
       "source": {
         "node": "a90fbdc1-baf9-c77c-2b28-515845099561",
@@ -1154,7 +1161,8 @@
         "sound_effect": "laufen_teppich.wav",
         "sound_effect_volume": 100,
         "description": "Di kannst in den oberen Stock die Treppe hoch gehen.",
-        "system_prompt": "Du bist nun auf dem Dachboden"
+        "system_prompt": "Du bist nun auf dem Dachboden",
+        "sound_effect_duration": 2
       },
       "source": {
         "node": "2810494b-931f-da59-fd9d-6deba4385fe0",
@@ -1229,7 +1237,8 @@
         "sound_effect": "laufen_teppich.wav",
         "description": "Du kannst in den unteren Stock gelangen indem du die Treppe runter gehst.",
         "system_prompt": "Da stehst Du nun. In einem Raum voller Alchemi oder Hexenküche. mmmh nun gut.",
-        "sound_effect_volume": 100
+        "sound_effect_volume": 100,
+        "sound_effect_duration": 2
       },
       "source": {
         "node": "ef034ed5-b552-cce0-03f4-14e8389171d1",

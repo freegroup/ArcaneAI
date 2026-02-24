@@ -15,12 +15,9 @@
         
         <!-- Bottom Row: Toolbar -->
         <div class="app-header__toolbar">
-          <v-btn icon class="home-btn" @click="goHome">
-            <v-icon>mdi-home</v-icon>
-          </v-btn>
-          <RetroButton @click="newFileDialog" variant="secondary" size="sm">New Game</RetroButton>
-          <RetroButton @click="openFileDialog" variant="secondary" size="sm">Load Game</RetroButton>
-          <RetroButton @click="save" variant="secondary" size="sm">
+          <RetroButton @click="newFileDialog" variant="secondary">New Game</RetroButton>
+          <RetroButton @click="openFileDialog" variant="secondary">Load Game</RetroButton>
+          <RetroButton @click="save" variant="secondary">
             Save Game<span v-if="hasUnsavedChanges" class="unsaved-indicator">*</span>
           </RetroButton>
         </div>
@@ -29,12 +26,9 @@
     
     <!-- Small Screen: Just toolbar row -->
     <template v-else>
-      <v-btn icon class="home-btn" @click="goHome">
-        <v-icon>mdi-home</v-icon>
-      </v-btn>
-      <RetroButton @click="newFileDialog" variant="secondary" size="sm">New Game</RetroButton>
-      <RetroButton @click="openFileDialog" variant="secondary" size="sm">Load Game</RetroButton>
-      <RetroButton @click="save" variant="secondary" size="sm">
+      <RetroButton @click="newFileDialog" variant="secondary">New Game</RetroButton>
+      <RetroButton @click="openFileDialog" variant="secondary">Load Game</RetroButton>
+      <RetroButton @click="save" variant="secondary">
         Save Game<span v-if="hasUnsavedChanges" class="unsaved-indicator">*</span>
       </RetroButton>
       <v-spacer></v-spacer>
@@ -145,25 +139,24 @@ export default {
 
 .app-header__title-main {
   font-family: var(--game-font-family-retro, 'Press Start 2P', monospace);
-  font-size: 32px;
+  font-size: 48px;
   color: var(--game-accent-secondary);
-  text-shadow: 2px 2px 0 var(--game-accent-primary), 4px 4px 0 rgba(0, 0, 0, 0.5);
-  letter-spacing: 2px;
+  letter-spacing: 6px;
 }
 
 .app-header__title-sub {
   font-family: var(--game-font-family-retro, 'Press Start 2P', monospace);
-  font-size: 20px;
+  font-size: 48px;
+  letter-spacing: 4px;
   color: var(--game-text-secondary);
-  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
 }
 
 .app-header__tagline {
   font-family: var(--game-font-family-retro, 'Press Start 2P', monospace);
-  font-size: 14px;
+  font-size: 24px;
   color: var(--game-text-muted);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 4px;
   border-left: 2px solid var(--game-accent-primary);
   padding-left: 16px;
   margin-left: 8px;
@@ -188,28 +181,6 @@ export default {
 
 .app-header__toolbar .retro-btn {
   margin: 0 var(--game-spacing-sm) !important;
-}
-
-/* Home Button */
-.app-header .home-btn {
-  background: rgba(243, 156, 18, 0.15) !important;
-  border: 2px solid var(--game-accent-secondary) !important;
-  margin-right: var(--game-spacing-md) !important;
-}
-
-.app-header .home-btn:hover {
-  background: var(--game-accent-secondary) !important;
-  box-shadow: 0 0 15px var(--game-accent-secondary) !important;
-  transform: scale(1.15) !important;
-}
-
-.app-header .home-btn .v-icon {
-  color: var(--game-accent-secondary) !important;
-  font-size: 28px !important;
-}
-
-.app-header .home-btn:hover .v-icon {
-  color: var(--game-text-primary) !important;
 }
 
 /* Unsaved changes indicator */
