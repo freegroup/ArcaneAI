@@ -45,10 +45,14 @@ export default {
     modelValue: {
       type: Boolean,
       default: false
+    },
+    initialName: {
+      type: String,
+      default: ''
     }
   },
   
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'created'],
   
   data() {
     return {
@@ -82,8 +86,8 @@ export default {
   watch: {
     modelValue(newVal) {
       if (newVal) {
-        // Dialog opened - reset state and focus input
-        this.encounterName = '';
+        // Dialog opened - set initial name (or reset) and focus input
+        this.encounterName = this.initialName || '';
         this.nameError = '';
         this.focusInput();
       }
@@ -129,11 +133,14 @@ export default {
         await this.fetchEncounters(this.gameName);
         console.log(`[EncounterNewDialog] Encounters list refreshed`);
         
-        // Step 3: Navigate to the new encounter
+        // Step 3: Emit created event with viewId
+        this.$emit('created', viewId);
+        
+        // Step 4: Navigate to the new encounter
         const encounterId = viewId.replace('encounter_', '');
         this.$router.push(`/game/${this.gameName}/encounter/${encounterId}`);
         
-        // Step 4: Close dialog
+        // Step 5: Close dialog
         this.close();
       } catch (error) {
         console.error(`[EncounterNewDialog] Failed to create encounter:`, error);

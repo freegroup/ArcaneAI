@@ -160,42 +160,17 @@ View = draw2d.Canvas.extend({
         this.on("contextmenu", (emitter, event) => {
             let figure = this.getBestFigure(event.x, event.y)      
   
-            if (figure !== null) {
-              let {x,y} = event
-              let items = null
-      
-              if (figure instanceof Raft) {
-                items = {
-                    "label":  {name: "Add Label"},
-                    "delete": {name: "Delete"},
-                }
-              } 
-
-              if(items){
-                $.contextMenu({
-                  selector: 'body',
-                  events: {
-                    hide: () => {
-                      $.contextMenu('destroy')
-                    }
-                  },
-                  callback: (key, options) => {
-                    switch (key) {
-                      case "label":
-                        $("#inputModal").modal("show");
-
-                        // Handle the modal's save button
-                        const saveButton = document.getElementById("modalSaveButton");
-                        const inputField = document.getElementById("modalInput");
-          
-                        // Clear previous input
-                        inputField.value = "";
-          
-                        const saveHandler = () => {
-                          const userInput = inputField.value.trim();
-                          if (userInput) {
+            if (figure !== null && figure instanceof Raft) {
+              ContextMenu.show({
+                x: event.x,
+                y: event.y,
+                canvas: this,
+                items: {
+                    "label": { name: "Add Label", callback: () => {
+                        const userInput = prompt("Enter label text:");
+                        if (userInput && userInput.trim()) {
                             let label = new draw2d.shape.basic.Label({
-                              text: userInput,
+                              text: userInput.trim(),
                               stroke: 0, 
                               x: 20,
                               y: 40,
@@ -205,24 +180,13 @@ View = draw2d.Canvas.extend({
                             let locator = new draw2d.layout.locator.SmartDraggableLocator();
                             label.installEditor(new LabelInplaceEditor());
                             figure.add(label, locator);
-                          }
-                          // Cleanup modal
-                          $("#inputModal").modal("hide");
-                          saveButton.removeEventListener("click", saveHandler); // Remove event listener to avoid duplicates
-                        };
-          
-                        saveButton.addEventListener("click", saveHandler);
-                        break
-                      case "delete":
-                        this.getCommandStack().execute(new draw2d.command.CommandDelete(figure))
-                        break
-                    }
-                  },
-                  x: x,
-                  y: y,
-                  items: items
-                })
-              }
+                        }
+                    }},
+                    "delete": { name: "Delete", callback: () => {
+                        this.getCommandStack().execute(new draw2d.command.CommandDelete(figure));
+                    }}
+                }
+              });
             }
           })
 	  },

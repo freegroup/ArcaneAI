@@ -174,29 +174,14 @@ var TriggerConnection= draw2d.Connection.extend({
     },
 
     onContextMenu:function(x,y){
-
-        $.contextMenu({
-            selector: 'body',
-            events:
-            {
-                hide: () => { $.contextMenu( 'destroy' ); }
-            },
-            callback: (key, options) => {
-               switch(key){
-               case "delete":
-                   this.getCanvas().getCommandStack().execute(
-                    new draw2d.command.CommandDelete(this)
-                   );
-               default:
-                   break;
-               }
-
-            },
-            x:x,
-            y:y,
-            items:
-            {
-                "delete": {name: "Delete"}
+        ContextMenu.show({
+            x: x,
+            y: y,
+            canvas: this.getCanvas(),
+            items: {
+                "delete": { name: "Delete", callback: () => {
+                    this.getCanvas().getCommandStack().execute(new draw2d.command.CommandDelete(this));
+                }}
             }
         });
     },

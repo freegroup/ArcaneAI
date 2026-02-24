@@ -78,53 +78,35 @@ StateShape = draw2d.shape.box.VBox.extend({
 
         this.add(this.stateNameLabel);
         this.stateNameLabel.on("contextmenu", (emitter, event) => {
-            $.contextMenu({
-                selector: 'body', 
-                events:{  
-                    hide: () => { $.contextMenu( 'destroy' ); }
-                },
-                callback: (key, options) => {
-                   switch(key){
-                   case "delete":
-                       this.getCanvas().getCommandStack().execute(
-                            new draw2d.command.CommandDelete(this)
-                        )
-                       break;
-                    case "add":
-                        setTimeout(() => {
-                            this.addTrigger("_new_").onDoubleClick();
-                        },10);
-                        break;
-                    case "chatFromHere":
-                        // Send C2V event to Vue parent to open chat dialog from this state
+            ContextMenu.show({
+                x: event.x,
+                y: event.y,
+                canvas: this.getCanvas(),
+                items: {
+                    "add": { name: "Add Trigger", callback: () => {
+                        setTimeout(() => this.addTrigger("_new_").onDoubleClick(), 10);
+                    }},
+                    "sep1": {},
+                    "chatFromHere": { name: "Chat from here", icon: "fa-comments", callback: () => {
                         window.parent.postMessage({
                             type: MessageTypes.C2V_CHAT_FROM_HERE,
                             stateName: this.getName()
                         }, '*');
-                        break;
-                    case "start":
+                    }},
+                    "viewFromHere": { name: "View from Here...", icon: "fa-eye", callback: () => {
+                        this.createViewFromHere();
+                    }},
+                    "sep2": {},
+                    "start": { name: "Set as Start", callback: () => {
                         this.setStateType(StateType.START);
-                        // Notify Vue that model changed
-                        window.parent.postMessage({
-                            type: MessageTypes.C2V_MODEL_CHANGED
-                        }, '*');
-                        break;
-                    default:
-                       break;
-                   }
-                },
-                x:event.x,
-                y:event.y,
-                items: {
-                    "add": {name: "Add Trigger"},
-                    "sep1": "---------",
-                    "chatFromHere": {name: "Chat from here", icon: "fa-comments"},
-                    "sep2": "---------",
-                    "start": {name: "Set as Start"},
-                    "delete": {name: "Delete"},
+                        window.parent.postMessage({ type: MessageTypes.C2V_MODEL_CHANGED }, '*');
+                    }},
+                    "delete": { name: "Delete", callback: () => {
+                        this.getCanvas().getCommandStack().execute(new draw2d.command.CommandDelete(this));
+                    }}
                 }
-            })
-        })
+            });
+        });
     },
      
     setStateType: function(stateType) 
@@ -186,40 +168,22 @@ StateShape = draw2d.shape.box.VBox.extend({
          
          var _table=this;
          label.on("contextmenu", (emitter, event) => {
-             $.contextMenu({
-                 selector: 'body', 
-                 events:
-                 {  
-                     hide: () => { $.contextMenu( 'destroy' ); }
-                 },
-                 callback: (key, options) => {
-                    switch(key){
-                    case "rename":
-                        setTimeout(() => {
-                            emitter.onDoubleClick();
-                        },10);
-                        break;
-                    case "new":
-                        setTimeout(() => {
-                            _table.addTrigger("_new_").onDoubleClick();
-                        },10);
-                        break;
-                    case "delete":
-                        // with undo/redo support
+             ContextMenu.show({
+                 x: event.x,
+                 y: event.y,
+                 canvas: _table.getCanvas(),
+                 items: {
+                    "new": { name: "Add Trigger", callback: () => {
+                        setTimeout(() => _table.addTrigger("_new_").onDoubleClick(), 10);
+                    }},
+                    "rename": { name: "Rename Trigger", callback: () => {
+                        setTimeout(() => emitter.onDoubleClick(), 10);
+                    }},
+                    "sep1": {},
+                    "delete": { name: "Delete Trigger", callback: () => {
                         var cmd = new draw2d.command.CommandDelete(emitter);
                         emitter.getCanvas().getCommandStack().execute(cmd);
-                    default:
-                        break;
-                    }
-                 },
-                 x:event.x,
-                 y:event.y,
-                 items: 
-                 {
-                    "new": {name: "Add Trigger"},
-                    "rename": {name: "Rename Trigger"},
-                    "sep1":   "---------",
-                     "delete": {name: "Delete Trigger"}
+                    }}
                  }
              });
          });
@@ -328,6 +292,65 @@ StateShape = draw2d.shape.box.VBox.extend({
          return memento;
      },
      
+    /**
+     * @method
+     * Creates a new view from this state and all directly connected states/connections.
+     * Sends the view data to Vue which will show a dialog for naming.
+     */
+    createViewFromHere: function()
+    {
+        const canvas = this.getCanvas();
+        if (!canvas) return;
+        
+        // Collect all connected states and connections (same logic as 'h' key highlight)
+        const collectedStates = new Set();
+        const collectedConnections = new Set();
+        
+        // Add this state
+        collectedStates.add(this);
+        
+        // Get all connections from this state's ports
+        this.getPorts().each((i, port) => {
+            port.getConnections().each((i, con) => {
+                collectedConnections.add(con);
+                // Add connected states
+                const sourceParent = con.getSourceParent();
+                const targetParent = con.getTargetParent();
+                if (sourceParent && sourceParent.NAME === "StateShape") {
+                    collectedStates.add(sourceParent);
+                }
+                if (targetParent && targetParent.NAME === "StateShape") {
+                    collectedStates.add(targetParent);
+                }
+            });
+        });
+        
+        // Serialize states with original positions
+        const states = [];
+        collectedStates.forEach(state => {
+            const memento = state.getPersistentAttributes();
+            states.push(memento);
+        });
+        
+        // Serialize connections with routing info
+        const connections = [];
+        collectedConnections.forEach(con => {
+            const memento = con.getPersistentAttributes();
+            connections.push(memento);
+        });
+        
+        // Build view data
+        const viewData = [...states, ...connections];
+        
+        // Send request to Vue to show the dialog
+        // Vue will use EncounterNewDialog with pre-filled name
+        window.parent.postMessage({
+            type: MessageTypes.C2V_CREATE_VIEW_FROM_STATE,
+            defaultName: this.getName(),
+            viewData: viewData
+        }, '*');
+    },
+
      /**
       * @method 
       * Read all attributes from the serialized properties and transfer them into the shape.
