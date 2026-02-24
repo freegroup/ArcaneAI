@@ -14,7 +14,7 @@ var TriggerConnection= draw2d.Connection.extend({
     init:function(attr, setter, getter)
     {
       // Speichere die Standardfarbe
-      this.defaultColor = "#14997c";
+      this.defaultColor = "#27ae60";
 
       // Erstelle den Arrow Decorator mit der gleichen Farbe wie die Connection
       this.arrowDecorator = new draw2d.decoration.connection.ArrowDecorator();
@@ -25,7 +25,7 @@ var TriggerConnection= draw2d.Connection.extend({
                 targetDecorator: this.arrowDecorator,
                 stroke:5,
                 color: this.defaultColor,
-                radius: 50,
+                radius: 20,
                 router:routerToUse
             , ...attr},
             {
@@ -45,7 +45,7 @@ var TriggerConnection= draw2d.Connection.extend({
           fontSize: 18,
           stroke: 2,
           bgColor: "#cce5bc",
-          fontFamily: "Ithaca, 'Press Start 2P', monospace",
+          fontFamily: "Ithaca, monospace",
           color : this.defaultColor
       });
       

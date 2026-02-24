@@ -15,7 +15,7 @@ var TriggerLabel = draw2d.shape.basic.Label.extend({
             color : "#f39c12",
             editor:new draw2d.ui.LabelEditor(),
             cssClass: "cursor-pointer",
-            fontFamily: "Ithaca, 'Press Start 2P', monospace",
+            fontFamily: "Ithaca, monospace",
             userData: {
                 actions: [],
                 conditions: [],

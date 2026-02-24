@@ -29,7 +29,6 @@
 
   <link type="text/css" rel="stylesheet" href="../css/application.css" />
   <link type="text/css" rel="stylesheet" href="../css/contextmenu.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
 	<style>
     .draw2d_InputPort{
@@ -91,11 +90,37 @@ document.addEventListener("DOMContentLoaded", () => {
       // Note: Parent forwards V2C messages to iframe via postMessage
       window.addEventListener("message", receiveMessage, false);
 
-      // NOW notify parent that canvas is ready (after listener is set up)
-      window.parent.postMessage({ 
-        type: MessageTypes.C2V_CANVAS_READY,
-        source: 'canvas:encounter'
-      }, window.location.origin);
+      // Wait for Ithaca font to load, then notify parent that canvas is ready
+      const notifyCanvasReady = () => {
+        window.parent.postMessage({ 
+          type: MessageTypes.C2V_CANVAS_READY,
+          source: 'canvas:encounter'
+        }, window.location.origin);
+      };
+
+      // Check if Font Loading API is available
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => {
+          // Additional check: ensure Ithaca font is actually loaded
+          if (document.fonts.check('12px Ithaca')) {
+            notifyCanvasReady();
+          } else {
+            // Font not available yet, load it explicitly
+            const font = new FontFace('Ithaca', 'url(../fonts/Ithaca-LVB75.ttf)');
+            font.load().then(() => {
+              document.fonts.add(font);
+              notifyCanvasReady();
+            }).catch(() => {
+              // Font loading failed, proceed anyway
+              console.warn('Ithaca font failed to load');
+              notifyCanvasReady();
+            });
+          }
+        });
+      } else {
+        // Fallback for browsers without Font Loading API
+        setTimeout(notifyCanvasReady, 500);
+      }
 
       // Wird für Mousetrap benötigt. Sonst kommen keine Evnets an.
       //

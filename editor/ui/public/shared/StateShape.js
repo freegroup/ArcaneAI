@@ -46,7 +46,7 @@ StateShape = draw2d.shape.box.VBox.extend({
             resizeable:true,
             cssClass: "cursor-move",
             textAlign: "center",
-            fontFamily: "Ithaca, 'Press Start 2P', monospace"
+            fontFamily: "Ithaca, monospace"
         })
   
     	this._super(
