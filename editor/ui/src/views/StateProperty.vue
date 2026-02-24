@@ -139,15 +139,61 @@
         helpTexts: {
           stateName: {
             title: 'State Name',
-            text: 'The unique identifier for this game state.'
+            text: `<p>A label to identify this state in your diagram.</p>
+
+<p><strong>Good to know:</strong></p>
+<ul>
+  <li>This name is <em>just for you</em> — it helps you navigate</li>
+  <li>It has <strong>no effect</strong> on the AI or game behavior</li>
+  <li>Choose names that are meaningful and easy to remember</li>
+</ul>
+
+<p><strong>Tips:</strong></p>
+<ul>
+  <li>Use descriptive names like "TavernEntrance" or "BossFight"</li>
+  <li>Keep it short but recognizable</li>
+  <li>Only letters and numbers are allowed</li>
+</ul>`
           },
           ambientSound: {
             title: 'Ambient Sound',
-            text: 'Background music or ambient sounds that play continuously.'
+            text: `<p>Select a background sound that plays continuously in this scene.</p>
+
+<p><strong>Purpose:</strong></p>
+<ul>
+  <li>Sets the emotional tone and atmosphere</li>
+  <li>Reinforces the feeling you want to evoke</li>
+  <li>Immerses the player deeper into the scene</li>
+</ul>
+
+<p><strong>Examples:</strong></p>
+<ul>
+  <li><em>Tavern</em> → crowd chatter, clinking glasses</li>
+  <li><em>Forest</em> → birds, rustling leaves, wind</li>
+  <li><em>Dungeon</em> → dripping water, distant echoes</li>
+  <li><em>Battle</em> → tense music, war drums</li>
+</ul>
+
+<p>Choose sounds that support the mood you want players to feel.</p>`
           },
           sceneDescription: {
             title: 'Scene Description',
-            text: 'Describe this location in detail for the AI.'
+            text: `<p>Describe this location vividly for the game engine. A rich description helps the AI create immersive, authentic responses.</p>
+
+<p><strong>Include sensory details:</strong></p>
+<ul>
+  <li>What the player <em>sees</em> (lighting, colors, objects)</li>
+  <li>What they <em>hear</em> (ambient sounds, echoes)</li>
+  <li>What they <em>smell</em> (smoke, flowers, decay)</li>
+  <li>The <em>atmosphere</em> (mood, tension, comfort)</li>
+</ul>
+
+<p><strong>Best practices:</strong></p>
+<ul>
+  <li>Be specific but concise</li>
+  <li>Focus on details that matter for player interaction</li>
+  <li>Avoid excessive prose that may confuse the AI</li>
+</ul>`
           }
         }
       };

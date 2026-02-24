@@ -204,7 +204,7 @@
             text: `<strong>The Unique Identifier for this Action</strong><br><br>
             Use descriptive names like <code>open_door</code> or <code>take_key</code>. This name is used internally and helps you organize your game logic.<br><br>
             <strong>🎯 AI Matching Importance:</strong><br>
-            A well-chosen, descriptive name also helps the AI match this action with player input more accurately. The clearer and more specific the name, the better the AI can identify and execute the correct trigger when the player expresses their intent.<br><br>
+            A well-chosen, descriptive name also helps the AI match this action with player input more accurately. The clearer and more specific the name, the better the AI can identify and execute the correct action when the player expresses their intent.<br><br>
             <strong>Good Examples:</strong>
             <ul>
               <li><code>open_door</code> - Clear and specific ✅</li>
@@ -221,11 +221,33 @@
           },
           soundEffect: {
             title: 'Sound Effect',
-            text: 'A sound effect that plays when this trigger activates. Choose a sound that matches the action, like a door opening, footsteps, or an item pickup. The sound provides audio feedback to enhance player immersion.'
+            text: 'A sound effect that plays when this action activates. Choose a sound that matches the action, like a door opening, footsteps, or an item pickup. The sound provides audio feedback to enhance player immersion.'
           },
           actionDescription: {
             title: 'Action Description',
-            text: 'Describe this action in detail. The AI uses this text to match player input against available actions. Be specific about what the player wants to do (e.g., "open the door", "take the key", "examine the chest"). If the AI determines that the player\'s input matches this action description, the trigger will execute. The better you describe the action, the more accurately the AI can recognize player intent.'
+            text: `<p>Describe what the player wants to do. The AI uses this text to match player input against available actions.</p>
+
+<p><strong>How it works:</strong></p>
+<ul>
+  <li>When a player types something, the AI compares it to all action descriptions</li>
+  <li>If there's a match, this action executes</li>
+  <li>Better descriptions = more accurate recognition</li>
+</ul>
+
+<p><strong>Good examples:</strong></p>
+<ul>
+  <li><em>"open the wooden door"</em></li>
+  <li><em>"take the rusty key from the table"</em></li>
+  <li><em>"examine the old chest in the corner"</em></li>
+  <li><em>"talk to the bartender"</em></li>
+</ul>
+
+<p><strong>Tips:</strong></p>
+<ul>
+  <li>Be specific about the object and action</li>
+  <li>Use natural language the player might type</li>
+  <li>Include context if it helps (location, appearance)</li>
+</ul>`
           },
           onSuccess: {
             title: 'On Success',
@@ -251,7 +273,7 @@
           actions: {
             title: 'Actions',
             text: `<strong>What Happens When Action Succeeds</strong><br><br>
-            Actions are executed when the trigger activates successfully. Use this to modify the game state and update the player's inventory. Enter one action per line.<br><br>
+            Actions are executed when the action activates successfully. Use this to modify the game state and update the player's inventory. Enter one action per line.<br><br>
             <strong>Example:</strong><br>
             For the action "collect_coin", you could update the inventory:<br>
             <code>coins = coins + 1</code><br><br>

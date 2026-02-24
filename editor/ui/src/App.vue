@@ -349,7 +349,7 @@ export default {
 }
 
 .nav-drawer__item .v-list-item-title {
-  font-size: 20px !important;
+  font-size: var(--game-font-size-md) !important;
   letter-spacing: 1.5px;
 }
 
@@ -362,8 +362,8 @@ export default {
 }
 
 .nav-drawer__subitem .v-list-item-title {
-  font-size: 18px !important;
-  letter-spacing: 1px;
+  font-size: var(--game-font-size-md) !important;
+  letter-spacing: 1.5px;
 }
 
 .nav-drawer__subitem.v-list-item--active .v-list-item-title {
