@@ -1,0 +1,212 @@
+{
+  "viewId": "encounter_hexenkueche",
+  "viewType": "encounter",
+  "encounterConfig": {
+    "name": "Hexenkueche",
+    "description": "",
+    "todos": []
+  },
+  "stateLayouts": {
+    "2810494b-931f-da59-fd9d-6deba4385fe0": {
+      "x": 3440,
+      "y": 2025
+    },
+    "63c0f27a-716e-804c-6873-cd99b945b63f": {
+      "x": 4019,
+      "y": 2079
+    },
+    "3253ff2a-a920-09d5-f033-ca759a778e19": {
+      "x": 2774,
+      "y": 1989
+    },
+    "ef034ed5-b552-cce0-03f4-14e8389171d1": {
+      "x": 3445,
+      "y": 1120
+    }
+  },
+  "connectionRoutes": {
+    "989418ec-97b6-5deb-cc9e-6efb728e7abe": {
+      "vertex": [
+        {
+          "x": 4201.5,
+          "y": 2123.9
+        },
+        {
+          "x": 4263.66,
+          "y": 2123.9
+        },
+        {
+          "x": 4263.66,
+          "y": 2344.18
+        },
+        {
+          "x": 3307.85,
+          "y": 2344.18
+        },
+        {
+          "x": 3307.85,
+          "y": 2124.8
+        },
+        {
+          "x": 3440,
+          "y": 2124.8
+        }
+      ],
+      "routingMetaData": {
+        "routedByUserInteraction": true,
+        "fromDir": 1,
+        "toDir": 3
+      }
+    },
+    "8f02374a-2e87-6b7d-1456-60c3e18e1e4a": {
+      "vertex": [
+        {
+          "x": 2995.18,
+          "y": 2125.53
+        },
+        {
+          "x": 3191.19,
+          "y": 2125.53
+        },
+        {
+          "x": 3191.19,
+          "y": 2124.8
+        },
+        {
+          "x": 3440,
+          "y": 2124.8
+        }
+      ],
+      "routingMetaData": {
+        "routedByUserInteraction": true,
+        "fromDir": 1,
+        "toDir": 3
+      }
+    },
+    "f5138464-199b-eadf-8630-1dc314be30d0": {
+      "vertex": [
+        {
+          "x": 3630,
+          "y": 1164.9
+        },
+        {
+          "x": 3905.15,
+          "y": 1164.9
+        },
+        {
+          "x": 3905.15,
+          "y": 1718.85
+        },
+        {
+          "x": 3309.31,
+          "y": 1718.85
+        },
+        {
+          "x": 3309.31,
+          "y": 2124.8
+        },
+        {
+          "x": 3440,
+          "y": 2124.8
+        }
+      ],
+      "routingMetaData": {
+        "routedByUserInteraction": true,
+        "fromDir": 1,
+        "toDir": 3
+      }
+    },
+    "0681715b-72c3-3f3f-76d5-7a09ca61634b": {
+      "vertex": [
+        {
+          "x": 3636.18,
+          "y": 2124.8
+        },
+        {
+          "x": 3867.81,
+          "y": 2124.8
+        },
+        {
+          "x": 3867.81,
+          "y": 2123.9
+        },
+        {
+          "x": 4019,
+          "y": 2123.9
+        }
+      ],
+      "routingMetaData": {
+        "routedByUserInteraction": true,
+        "fromDir": 1,
+        "toDir": 3
+      }
+    },
+    "be61249f-51c3-70ed-9f80-d6a20bd52919": {
+      "vertex": [
+        {
+          "x": 3636.18,
+          "y": 2124.8
+        },
+        {
+          "x": 3726.02,
+          "y": 2124.8
+        },
+        {
+          "x": 3726.02,
+          "y": 1832.6
+        },
+        {
+          "x": 3360.38,
+          "y": 1832.6
+        },
+        {
+          "x": 3360.38,
+          "y": 1164.9
+        },
+        {
+          "x": 3445,
+          "y": 1164.9
+        }
+      ],
+      "routingMetaData": {
+        "routedByUserInteraction": true,
+        "fromDir": 1,
+        "toDir": 3
+      }
+    },
+    "5ac0136d-7bdb-1076-7770-c9dc55f75537": {
+      "vertex": [
+        {
+          "x": 3636.18,
+          "y": 2124.8
+        },
+        {
+          "x": 3726.02,
+          "y": 2124.8
+        },
+        {
+          "x": 3726.02,
+          "y": 2476.29
+        },
+        {
+          "x": 2675.31,
+          "y": 2476.29
+        },
+        {
+          "x": 2675.31,
+          "y": 2125.53
+        },
+        {
+          "x": 2774,
+          "y": 2125.53
+        }
+      ],
+      "routingMetaData": {
+        "routedByUserInteraction": true,
+        "fromDir": 1,
+        "toDir": 3
+      }
+    }
+  },
+  "rafts": []
+}
