@@ -1,0 +1,80 @@
+{
+  "viewId": "encounter_kalterraum",
+  "viewType": "encounter",
+  "encounterConfig": {
+    "name": "KalterRaum",
+    "description": "",
+    "todos": []
+  },
+  "stateLayouts": {
+    "63c0f27a-716e-804c-6873-cd99b945b63f": {
+      "x": 4019,
+      "y": 2079
+    },
+    "2810494b-931f-da59-fd9d-6deba4385fe0": {
+      "x": 3440,
+      "y": 2025
+    }
+  },
+  "connectionRoutes": {
+    "0681715b-72c3-3f3f-76d5-7a09ca61634b": {
+      "vertex": [
+        {
+          "x": 3636.24,
+          "y": 2125.09
+        },
+        {
+          "x": 3867.81,
+          "y": 2125.09
+        },
+        {
+          "x": 3867.81,
+          "y": 2123.78
+        },
+        {
+          "x": 4019,
+          "y": 2123.78
+        }
+      ],
+      "routingMetaData": {
+        "routedByUserInteraction": true,
+        "fromDir": 1,
+        "toDir": 3
+      }
+    },
+    "989418ec-97b6-5deb-cc9e-6efb728e7abe": {
+      "vertex": [
+        {
+          "x": 4201.49,
+          "y": 2123.78
+        },
+        {
+          "x": 4263.66,
+          "y": 2123.78
+        },
+        {
+          "x": 4263.66,
+          "y": 2344.18
+        },
+        {
+          "x": 3307.85,
+          "y": 2344.18
+        },
+        {
+          "x": 3307.85,
+          "y": 2125.09
+        },
+        {
+          "x": 3440,
+          "y": 2125.09
+        }
+      ],
+      "routingMetaData": {
+        "routedByUserInteraction": true,
+        "fromDir": 1,
+        "toDir": 3
+      }
+    }
+  },
+  "rafts": []
+}

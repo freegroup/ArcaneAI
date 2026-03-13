@@ -40,9 +40,29 @@
   --_bg: var(--color-success);
 }
 
-/* Danger variant */
+/* Danger variant — acrylic */
 [data-theme="elegant"] .themed-action-btn--danger {
-  --_bg: var(--color-danger);
+  background: rgba(var(--color-danger-rgb), 0.22) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(var(--color-danger-rgb), 0.5) !important;
+  color: var(--color-danger) !important;
+  transform: none !important;
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.25),
+    0 0 10px rgba(var(--color-danger-rgb), 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="elegant"] .themed-action-btn--danger:hover {
+  background: rgba(var(--color-danger-rgb), 0.35) !important;
+  border-color: rgba(var(--color-danger-rgb), 0.7) !important;
+  filter: none !important;
+  transform: none !important;
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(var(--color-danger-rgb), 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
 }
 
 /* Secondary variant */

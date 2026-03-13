@@ -19,6 +19,7 @@
   --color-info: #64b5f6;
   --color-accent-1-rgb: 108, 138, 255;
   --color-accent-2-rgb: 80, 216, 144;
+  --color-danger-rgb: 240, 98, 146;
 }
 
 /* Base typography — set once, inherited everywhere */
