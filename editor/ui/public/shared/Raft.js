@@ -103,7 +103,7 @@ Raft = draw2d.shape.composite.Raft.extend({
             var figure =  eval("new "+json.type+"()");
 
             // apply all attributes
-            figure.attr({...json, fontFamily: "'Press Start 2P', monospace"});
+            figure.attr({...json, fontFamily: getVar('--global-font-family', 'Ithaca, monospace')});
 
             // instantiate the locator
             var locator =  eval("new "+json.locator+"()");

@@ -41,10 +41,10 @@ var TriggerConnection= draw2d.Connection.extend({
           padding:{left:10, top:5, right:10, bottom:5},
           radius: 5,
           fontColor: getVar('--connection-label-font', '#3f3f34'),
-          fontSize: 18,
+          fontSize: parseInt(getVar('--global-font-size', '18')),
           stroke: 2,
           bgColor: getVar('--connection-label-bg', '#cce5bc'),
-          fontFamily: "Ithaca, monospace",
+          fontFamily: getVar('--global-font-family', 'Ithaca, monospace'),
           color : this.defaultColor
       });
       

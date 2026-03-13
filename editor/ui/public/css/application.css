@@ -110,6 +110,10 @@
   --connection-label-bg: #f39c12;
   --selection-color: #e94560;
 
+  /* Global font (read by JS via getVar()) */
+  --global-font-family: Ithaca, monospace;
+  --global-font-size: 24;
+
   /* Raft */
   --raft-bg: #c3eae4;
   --raft-border: #000000;
@@ -170,6 +174,10 @@
   --connection-label-font: #1c1410;
   --connection-label-bg: #e8a849;
   --selection-color: #e8a849;
+
+  /* Global font */
+  --global-font-family: Ithaca, monospace;
+  --global-font-size: 24;
 
   /* Raft */
   --raft-bg: #f5e6d0;
@@ -261,7 +269,7 @@
   /* State shapes */
   --state-normal-font: #6c8aff;
   --state-normal-bg: #1e2330;
-  --state-normal-border: #2a3040;
+  --state-normal-border: #6c8aff;
   --state-start-font: #50d890;
   --state-start-bg: #141820;
   --state-start-border: #2a3040;
@@ -272,6 +280,10 @@
   --connection-label-font: #0f1117;
   --connection-label-bg: #6c8aff;
   --selection-color: #6c8aff;
+
+  /* Global font */
+  --global-font-family: Verdana, 'Noto Sans', sans-serif;
+  --global-font-size: 16;
 
   /* Raft */
   --raft-bg: #e8f0f8;

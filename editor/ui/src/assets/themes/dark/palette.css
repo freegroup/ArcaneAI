@@ -21,6 +21,9 @@
   --color-accent-1-rgb: 233, 69, 96;
   --color-accent-2-rgb: 243, 156, 18;
   --color-danger-rgb: 231, 76, 60;
+  /* Global font */
+  --global-font-family: Ithaca, monospace;
+  --global-font-size: 24;
 }
 
 /* Base typography — set once, inherited everywhere */

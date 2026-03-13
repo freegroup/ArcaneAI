@@ -1,26 +1,34 @@
-let NORMAL_STYLE = {
-    stroke: 4,
-    fontSize:24,
-    radius:1,
-    fontColor: getVar('--state-normal-font', '#f39c12'),
-    bgColor: getVar('--state-normal-bg', '#0f3460'),
-    color: getVar('--state-normal-border', '#349be8'),
-}
-
-let START_STYLE = {
-    stroke: 4,
-    fontSize:24,
-    padding:20,
-    fontColor: getVar('--state-start-font', '#03c524'),
-    bgColor: getVar('--state-start-bg', '#281b58'),
-    color: getVar('--state-start-border', '#c6bee1'),
-}
-
-let END_STYLE = {
-    stroke: 4,
-    fontColor: getVar('--state-end-font', '#3f3f3f'),
-    bgColor: getVar('--state-end-bg', '#ffcccb'),
-    color: getVar('--state-end-border', '#d9534f'),
+function getStateStyles() {
+    let _font = getVar('--global-font-family', 'Ithaca, monospace');
+    let _fontSize = parseInt(getVar('--global-font-size', '24'));
+    return {
+        NORMAL: {
+            stroke: 4,
+            fontSize: _fontSize,
+            fontFamily: _font,
+            radius:1,
+            fontColor: getVar('--state-normal-font', '#f39c12'),
+            bgColor: getVar('--state-normal-bg', '#0f3460'),
+            color: getVar('--state-normal-border', '#349be8'),
+        },
+        START: {
+            stroke: 4,
+            fontSize: _fontSize,
+            fontFamily: _font,
+            padding:20,
+            fontColor: getVar('--state-start-font', '#03c524'),
+            bgColor: getVar('--state-start-bg', '#281b58'),
+            color: getVar('--state-start-border', '#c6bee1'),
+        },
+        END: {
+            stroke: 4,
+            fontSize: _fontSize,
+            fontFamily: _font,
+            fontColor: getVar('--state-end-font', '#3f3f3f'),
+            bgColor: getVar('--state-end-bg', '#ffcccb'),
+            color: getVar('--state-end-border', '#d9534f'),
+        }
+    };
 }
 
 const StateType = Object.freeze({
@@ -35,17 +43,17 @@ StateShape = draw2d.shape.box.VBox.extend({
 	
     init : function(attr, setter, getter)
     {
+        var styles = getStateStyles();
         this.start = false
         this.stateNameLabel = new draw2d.shape.basic.Label({
-            text:"StateName", 
-            ...NORMAL_STYLE,
-            radius: 5, 
+            text:"StateName",
+            ...styles.NORMAL,
+            radius: 5,
             padding:4,
             bold:false,
             resizeable:true,
             cssClass: "cursor-move",
-            textAlign: "center",
-            fontFamily: "Ithaca, monospace"
+            textAlign: "center"
         })
   
     	this._super(
@@ -129,13 +137,14 @@ StateShape = draw2d.shape.box.VBox.extend({
         }
 
         this.stateType = stateType;
+        var styles = getStateStyles();
 
         if (this.stateType === StateType.START) {
-            this.stateNameLabel.attr(START_STYLE);
+            this.stateNameLabel.attr(styles.START);
         } else if (this.stateType === StateType.END) {
-            this.stateNameLabel.attr(END_STYLE);
+            this.stateNameLabel.attr(styles.END);
         } else {
-            this.stateNameLabel.attr(NORMAL_STYLE);
+            this.stateNameLabel.attr(styles.NORMAL);
         }
 
         return this;
@@ -294,6 +303,7 @@ StateShape = draw2d.shape.box.VBox.extend({
         delete memento.align
         delete memento.width
         delete memento.height
+        delete memento.fontFamily
 
          return memento;
      },
@@ -372,6 +382,7 @@ StateShape = draw2d.shape.box.VBox.extend({
         delete memento.radius
         delete memento.width
         delete memento.height
+        delete memento.fontFamily
 
         this._super(memento);
          

@@ -20,6 +20,9 @@
   --color-accent-1-rgb: 108, 138, 255;
   --color-accent-2-rgb: 80, 216, 144;
   --color-danger-rgb: 240, 98, 146;
+  /* Global font */
+  --global-font-family: Verdana, 'Noto Sans', sans-serif;
+  --global-font-size: 16;
 }
 
 /* Base typography — set once, inherited everywhere */

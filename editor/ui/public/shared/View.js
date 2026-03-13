@@ -175,7 +175,7 @@ View = draw2d.Canvas.extend({
                               x: 20,
                               y: 40,
                               bold: true,
-                              fontFamily: "'Press Start 2P', monospace", 
+                              fontFamily: getVar('--global-font-family', 'Ithaca, monospace'), 
                             });
                             let locator = new draw2d.layout.locator.SmartDraggableLocator();
                             label.installEditor(new LabelInplaceEditor());
