@@ -52,12 +52,12 @@
             </template>
             <v-list-item-title class="nav-drawer__header-title">Game Map</v-list-item-title>
             <template v-slot:append>
-              <RetroActionButton
+              <ThemedActionButton
                 @click.stop="openAddEncounterDialog"
                 variant="success"
                 class="nav-drawer__add-btn"
                 title="Add new encounter"
-              >+</RetroActionButton>
+              >+</ThemedActionButton>
             </template>
           </v-list-item>
 
@@ -99,12 +99,12 @@
                 color="warning"
                 inline
               ></v-badge>
-              <RetroActionButton
+              <ThemedActionButton
                 @click.stop.prevent="openDeleteDialog(encounter)"
                 variant="danger"
                 class="nav-drawer__delete-btn"
                 title="Delete encounter"
-              >-</RetroActionButton>
+              >-</ThemedActionButton>
             </template>
           </v-list-item>
         </template>
@@ -147,7 +147,7 @@
 import ApplicationHeader from './components/ApplicationHeader.vue';
 import ConfirmEncounterDeleteDialog from './components/ConfirmEncounterDeleteDialog.vue';
 import EncounterNewDialog from './components/EncounterNewDialog.vue';
-import RetroActionButton from './components/RetroActionButton.vue';
+import ThemedActionButton from './components/ThemedActionButton.vue';
 import ArcaneAIEmptyState from './components/ArcaneAIEmptyState.vue';
 import { mapActions } from 'vuex';
 
@@ -156,7 +156,7 @@ export default {
     ApplicationHeader,
     ConfirmEncounterDeleteDialog,
     EncounterNewDialog,
-    RetroActionButton,
+    ThemedActionButton,
     ArcaneAIEmptyState,
   },
   data() {
@@ -312,86 +312,19 @@ export default {
 </script>
 
 <style>
-/* Navigation Drawer */
-.nav-drawer {
-  background: var(--game-bg-secondary) !important;
-  border-right: 3px solid var(--game-accent-primary) !important;
-  border-radius: 0 !important;
-}
+/* Navigation Drawer — structural layout only, visual styles in theme files */
 
 .nav-drawer__toggle {
-  min-height: 64px !important;
   cursor: pointer;
 }
 
-.nav-drawer__toggle .v-icon {
-  color: var(--game-accent-secondary) !important;
-  font-size: 28px !important;
-  filter: drop-shadow(0 0 8px var(--game-accent-secondary)) !important;
-  transition: all var(--game-transition-fast) !important;
-}
-
-.nav-drawer__game-name {
-  padding: 8px 16px;
-  margin: 0 8px 8px 8px;
-  background: rgba(243, 156, 18, 0.1);
-}
-
-.nav-drawer__game-label {
-  font-size: 28px;
-  letter-spacing: 2px;
-  color: var(--game-accent-secondary);
-}
-
-.nav-drawer__list {
-  background: transparent !important;
-  padding: var(--game-spacing-md) 0 !important;
-}
-
-.nav-drawer__item .v-list-item-title {
-  font-size: var(--game-font-size-md) !important;
-  letter-spacing: 1.5px;
-}
-
-.nav-drawer__item.v-list-item--active .v-list-item-title {
-  color: var(--game-accent-secondary) !important;
-}
-
-.nav-drawer__subitem {
-  padding-left: 32px !important;
-}
-
-.nav-drawer__subitem .v-list-item-title {
-  font-size: var(--game-font-size-md) !important;
-  letter-spacing: 1.5px;
-}
-
-.nav-drawer__subitem.v-list-item--active .v-list-item-title {
-  color: var(--game-accent-secondary) !important;
-}
-
-.nav-drawer__header {
-  margin-top: var(--game-spacing-md) !important;
-  border-top: 2px solid rgba(233, 69, 96, 0.3) !important;
-}
-
-.nav-drawer__header-title {
-  font-weight: 600 !important;
-  font-size: 12px !important;
-  text-transform: uppercase !important;
-  letter-spacing: 1.5px;
-  color: var(--game-text-muted) !important;
-  opacity: 0.85;
+.nav-drawer__header--clickable {
+  cursor: pointer;
 }
 
 .nav-drawer__bullet {
-  font-family: var(--game-font-family-retro);
-  font-size: 20px;
-  color: var(--game-accent-secondary);
-  width: 24px;
   display: inline-block;
   text-align: center;
-  margin-right: 8px;
 }
 
 .nav-drawer__delete-btn {
@@ -403,7 +336,6 @@ export default {
 }
 
 .nav-drawer__delete-spacer {
-  width: 20px;
   display: inline-block;
 }
 </style>
@@ -414,7 +346,7 @@ export default {
   /* header is 128px on large, 48px on small */
   --header-height: 128px;
   height: calc(100vh - var(--header-height));
-  overflow: auto;  /* Changed from hidden to allow scrolling for EmptyState */
+  overflow: auto;
 }
 
 @media (max-width: 959px) { /* Vuetify sm breakpoint */
@@ -424,7 +356,6 @@ export default {
 }
 
 .content-area :deep(.v-main__wrap) {
-  height: 100%;
   display: flex;
   flex-direction: column;
 }

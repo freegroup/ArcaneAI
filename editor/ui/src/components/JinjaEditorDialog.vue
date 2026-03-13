@@ -2,10 +2,9 @@
   <v-dialog v-model="isOpen" max-width="900px" persistent>
     <v-card class="jinja-editor-dialog">
       <!-- Dialog Header -->
-      <DialogHeader 
-        title="Scene Description Editor" 
-        icon="mdi-code-braces"
-        @close="cancel" 
+      <DialogHeader
+        title="Scene Description Editor"
+        @close="cancel"
       />
 
       <!-- Editor Toolbar -->
@@ -69,13 +68,13 @@
               <div v-if="aiResponse" class="ai-result">
                 <div class="ai-result-header">
                   <strong>Verbesserter Text:</strong>
-                <RetroButton 
+                <ThemedButton 
                   @click="applyAiResult" 
                   title="Text in Editor übernehmen"
                 >
                   <v-icon size="small">mdi-check</v-icon>
                   Apply to Editor
-                </RetroButton>
+                </ThemedButton>
                 </div>
                 <div class="ai-result-text">{{ aiResponse }}</div>
                 <div v-if="aiComment || wordCountInfo" class="ai-comment">
@@ -102,12 +101,12 @@
       <!-- Editor Action Bar -->
       <v-card-actions class="dialog-actions">
         <v-spacer></v-spacer>
-        <RetroButton @click="cancel" variant="secondary">
+        <ThemedButton @click="cancel" variant="secondary">
           Cancel
-        </RetroButton>
-        <RetroButton @click="save">
+        </ThemedButton>
+        <ThemedButton @click="save">
           Save
-        </RetroButton>
+        </ThemedButton>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -118,7 +117,7 @@ import axios from 'axios';
 import MonacoEditor from 'monaco-editor-vue3';
 import * as monaco from 'monaco-editor';
 import DialogHeader from './DialogHeader.vue';
-import RetroButton from './RetroButton.vue';
+import ThemedButton from './ThemedButton.vue';
 import AIAssistLabel from './AIAssistLabel.vue';
 import AIAssistHelpText from './AIAssistHelpText.vue';
 import AIAssistLoading from './AIAssistLoading.vue';
@@ -190,7 +189,7 @@ export default {
   components: {
     MonacoEditor,
     DialogHeader,
-    RetroButton,
+    ThemedButton,
     AIAssistLabel,
     AIAssistHelpText,
     AIAssistLoading,
@@ -494,26 +493,9 @@ export default {
 </script>
 
 <style scoped>
-/* Override Vuetify defaults */
-.jinja-editor-dialog :deep(.v-card) {
-  background: var(--game-bg-secondary) !important;
-  color: var(--game-text-primary) !important;
-}
-
-.jinja-editor-dialog {
-  background: var(--game-bg-secondary);
-  color: var(--game-text-primary);
-  border: 2px solid var(--game-border-highlight);
-  border-radius: var(--game-radius-lg);
-  box-shadow: var(--game-shadow-lg);
-}
-
-
 .dialog-content {
   padding: 0;
-  height: 500px;
   overflow: hidden;
-  background: var(--game-bg-secondary);
 }
 
 .monaco-editor {
@@ -521,182 +503,77 @@ export default {
   height: 100%;
 }
 
-.dialog-actions {
-
-  border-top: 1px solid var(--game-border-color);
-  background: var(--game-bg-tertiary);
-}
-
-.dialog-actions .retro-btn {
-  margin-left: var(--game-spacing-md);
-}
-
 /* Editor Toolbar */
 .editor-toolbar {
   display: flex;
-  gap: var(--game-spacing-sm);
-  background: var(--game-bg-tertiary);
-  border-bottom: 1px solid var(--game-border-color);
 }
 
 .toolbar-btn {
-  background: var(--game-bg-secondary);
-  border: 3px solid var(--game-border-color);
-  padding: 6px 8px;
   cursor: not-allowed;
-  opacity: 0.5;
-  border-radius: 0; /* Eckiger Rahmen für 8-bit Look */
-  color: var(--game-text-secondary);
-  font-family: 'Ithaca', monospace;
-  font-size: 10px;
-  transition: all 0.1s ease;
-  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
   position: relative;
 }
 
 .toolbar-btn:not(:disabled) {
   cursor: pointer;
-  opacity: 1;
-  color: var(--game-text-primary);
-  background: var(--game-bg-primary);
-  border-color: var(--game-border-highlight);
-}
-
-.toolbar-btn:not(:disabled):hover {
-  background: var(--game-accent-color);
-  border-color: var(--game-accent-color);
-  color: var(--game-bg-primary);
-  transform: translate(1px, 1px);
-  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
-}
-
-.toolbar-btn:not(:disabled):active {
-  transform: translate(3px, 3px);
-  box-shadow: none;
 }
 
 /* Undo/Redo Icons */
 .undo-icon {
   display: inline-block;
-  font-size: 32px;
-  line-height: 0.5;
 }
 
 .redo-icon {
   display: inline-block;
-  font-size: 32px;
-  line-height: 0.5;
-  transform: scaleX(-1); /* Horizontale Spiegelung für Redo */
+  transform: scaleX(-1);
 }
 
 /* AI Assist Panel */
-.ai-assist-panel {
-  border-top: 1px solid var(--game-border-color);
-  background: var(--game-bg-tertiary);
-}
-
 .ai-assist-header {
   display: flex;
   align-items: center;
-  gap: var(--game-spacing-sm);
- 
   cursor: pointer;
   user-select: none;
-  transition: background-color 0.2s;
-}
-
-.ai-assist-header:hover {
-  background: var(--game-bg-hover);
-}
-
-.ai-assist-content {
-  background: var(--game-bg-secondary);
 }
 
 /* Expand transition */
 .expand-enter-active,
 .expand-leave-active {
-  transition: all 0.3s ease;
-  max-height: 400px;
   overflow: hidden;
-}
-
-.expand-enter-from,
-.expand-leave-to {
-  max-height: 0;
-  opacity: 0;
 }
 
 /* AI Response Area */
 .ai-response-area {
-  min-height: 120px;
-  max-height: 200px;
   overflow-y: auto;
-  margin-bottom: var(--game-spacing-md);
-  background: var(--game-bg-primary);
-  border: 1px solid var(--game-border-color);
-  border-radius: var(--game-radius-md);
-}
-
-.ai-helper-text li {
-  margin: 4px 0;
 }
 
 .jinja-note {
   display: flex;
   align-items: center;
-  gap: 4px;
-  margin-top: var(--game-spacing-sm);
-  padding: var(--game-spacing-sm);
-  background: var(--game-bg-secondary);
-  border-radius: var(--game-radius-sm);
-  font-size: 0.85em;
-  color: var(--game-accent-color);
 }
 
 .ai-result {
   display: flex;
   flex-direction: column;
-  gap: var(--game-spacing-sm);
 }
 
 .ai-result-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--game-spacing-sm);
 }
 
 .ai-result-text {
-  padding: var(--game-spacing-md);
-  background: var(--game-bg-secondary);
-  border: 1px solid var(--game-border-highlight);
-  border-radius: var(--game-radius-sm);
   white-space: pre-wrap;
   word-wrap: break-word;
-  font-family: 'Consolas', 'Monaco', monospace;
-  font-size: 0.95em;
-  line-height: 1.5;
 }
 
 .ai-comment {
   display: flex;
   align-items: flex-start;
-  gap: var(--game-spacing-sm);
-  padding: var(--game-spacing-sm);
-  background: var(--game-bg-tertiary);
-  border-left: 3px solid var(--game-accent-color);
-  border-radius: var(--game-radius-sm);
-  font-size: 0.9em;
-  color: var(--game-text-secondary);
   font-style: italic;
 }
 
 .word-count-info {
-
-  color: var(--game-accent-color);
   font-style: normal;
-  margin-bottom: 4px;
 }
-
 </style>

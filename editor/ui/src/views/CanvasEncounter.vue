@@ -64,6 +64,7 @@ export default {
   computed: {
     ...mapGetters('game', ['encounters', 'gameName']),
     ...mapGetters('views', ['currentView']),
+    ...mapGetters('settings', ['currentTheme']),
     
     encounterId() {
       // Router param is :encounterName (not :encounterId)
@@ -128,7 +129,10 @@ export default {
           this.$router.replace({ query: {} });
         }
       }
-    }
+    },
+    currentTheme(theme) {
+      this.sendThemeToCanvas(theme);
+    },
   },
   methods: {
     ...mapActions('model', ['mergeModel', 'removeState', 'removeConnection', 'saveModel']),
@@ -203,12 +207,21 @@ export default {
     },
     
     sendDocumentToCanvas(document) {
-      window.postMessage({ 
-        type: MessageTypes.V2C_SET_DOCUMENT, 
+      window.postMessage({
+        type: MessageTypes.V2C_SET_DOCUMENT,
         data: JSON.parse(JSON.stringify(document)),
         source: `vue:encounter:${this.viewId}`
       }, '*');
-    }
+    },
+
+    sendThemeToCanvas(theme) {
+      if (this.draw2dFrameContent) {
+        this.draw2dFrameContent.postMessage({
+          type: MessageTypes.V2C_SET_THEME,
+          theme: theme
+        }, '*');
+      }
+    },
   },
   mounted() {
     // Restore sidebar state from localStorage
@@ -230,6 +243,7 @@ export default {
         case MessageTypes.C2V_CANVAS_READY:
           this.updateDraw2dFrame();
           this.canvasReady = true;
+          this.sendThemeToCanvas(this.currentTheme);
           if (this.composedDiagram && this.composedDiagram.length > 0) {
             this.sendDocumentToCanvas(this.composedDiagram);
           }
@@ -270,39 +284,24 @@ export default {
 .canvas-encounter-container {
   display: flex;
   flex: 1 1 auto;
-  height: 100%;
-  min-height: 0;
-  width: 100%;
 }
 
 .iframe-container {
   flex: 1;
-  min-width: 0;
-  min-height: 0;
   display: flex;
 }
 
 .iframe-container iframe {
   flex: 1;
-  width: 100%;
-  height: 100%;
   border: none;
 }
 
 .sidebar-panel {
-  width: 350px;
   flex-shrink: 0;
-  border-left: 1px solid var(--game-border-color);
-  background: var(--game-bg-secondary);
   display: flex;
   flex-direction: column;
-}
-
-/* Breite Monitore (≥1440px): Doppelt so breites Sidebar */
-@media (min-width: 1440px) {
-  .sidebar-panel {
-    width: 600px;
-  }
+  position: relative;
+  overflow: visible;
 }
 
 .sidebar-content {
@@ -310,40 +309,17 @@ export default {
   overflow-y: auto;
 }
 
-/* Sidebar needs position relative for toggle button */
-.sidebar-panel {
-  position: relative;
-  transition: width 0.3s ease;
-  overflow: visible;
-}
-
 /* Sidebar Toggle Button */
 .sidebar-toggle {
   position: absolute;
-  left: -24px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 24px;
-  height: 48px;
-  background: var(--game-accent-primary);
-  color: white;
-  border: 2px solid var(--game-border-color);
-  border-right: none;
-  border-radius: 4px 0 0 4px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
   z-index: 100;
-  transition: background 0.2s ease;
 }
 
-.sidebar-toggle:hover {
-  background: var(--game-accent-secondary);
-}
-
-/* Collapsed state - minimal width for toggle button visibility */
+/* Collapsed state */
 .sidebar-collapsed {
   width: 0 !important;
   min-width: 0 !important;

@@ -1,0 +1,64 @@
+/*
+ * Elegant Theme — Palette & Global Defaults
+ * Cool, refined colors with modern thin typography.
+ */
+[data-theme="elegant"] {
+  --color-bg-1: #0f1117;
+  --color-bg-2: #171b24;
+  --color-bg-3: #1e2330;
+  --color-accent-1: #6c8aff;
+  --color-accent-2: #50d890;
+  --color-accent-3: #a78bfa;
+  --color-text-1: #e8eaf0;
+  --color-text-2: #9ca3b0;
+  --color-text-muted: #5c6370;
+  --color-border: #2a3040;
+  --color-border-highlight: #3a4255;
+  --color-success: #50d890;
+  --color-danger: #f06292;
+  --color-info: #64b5f6;
+  --color-accent-1-rgb: 108, 138, 255;
+  --color-accent-2-rgb: 80, 216, 144;
+}
+
+/* Base typography — set once, inherited everywhere */
+[data-theme="elegant"],
+[data-theme="elegant"] * {
+  font-family: Verdana, 'Noto Sans', 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Prevent Vuetify overlay container from blocking pointer events globally.
+   Only active overlays (open dialogs) should receive events. */
+[data-theme="elegant"] .v-overlay-container {
+  pointer-events: none !important;
+}
+[data-theme="elegant"] .v-overlay-container > .v-overlay--active {
+  pointer-events: auto !important;
+}
+[data-theme="elegant"] .v-navigation-drawer__scrim {
+  pointer-events: none !important;
+}
+
+/* Text selection */
+[data-theme="elegant"] ::selection {
+  background: rgba(108, 138, 255, 0.3);
+  color: var(--color-text-1);
+}
+
+[data-theme="elegant"] ::-moz-selection {
+  background: rgba(108, 138, 255, 0.3);
+  color: var(--color-text-1);
+}
+
+/* Labels */
+[data-theme="elegant"] label {
+  display: block;
+  margin: 0 0 6px 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-accent-2);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}

@@ -1,0 +1,21 @@
+/*
+ * Dark Fantasy Theme — State Shapes & Connections
+ */
+:root {
+  /* --- State Shapes --- */
+  --state-normal-font: var(--color-accent-2);
+  --state-normal-bg: var(--color-bg-3);
+  --state-normal-border: #349be8;
+  --state-start-font: #03c524;
+  --state-start-bg: #281b58;
+  --state-start-border: #c6bee1;
+  --state-end-font: #3f3f3f;
+  --state-end-bg: #ffcccb;
+  --state-end-border: #d9534f;
+
+  /* --- Connections & Triggers --- */
+  --connection-color: var(--color-success);
+  --connection-label-font: #3f3f34;
+  --connection-label-bg: #cce5bc;
+  --selection-color: var(--color-accent-1);
+}

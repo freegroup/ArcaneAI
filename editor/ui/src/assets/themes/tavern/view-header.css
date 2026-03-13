@@ -1,0 +1,134 @@
+/*
+ * Fantasy Tavern Theme — View Headers
+ * Used by: Personality, WelcomePrompt, Inventory
+ */
+
+/* --- Personality Header --- */
+[data-theme="tavern"] .personality-header {
+  padding: 24px 24px;
+  background: linear-gradient(135deg, var(--color-bg-3) 0%, var(--color-bg-1) 100%);
+  border-bottom: 3px solid var(--color-accent-1);
+  border-top: 2px solid var(--color-accent-2);
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="tavern"] .personality-header__title {
+  gap: 16px;
+  color: var(--color-accent-2);
+  font-size: 30px;
+  letter-spacing: 2px;
+}
+
+[data-theme="tavern"] .personality-header__info {
+  color: var(--color-text-2);
+  font-size: 24px;
+  transition: all 0.15s ease;
+}
+
+[data-theme="tavern"] .personality-header__info:hover {
+  color: var(--color-accent-2);
+  filter: drop-shadow(0 0 8px var(--color-accent-2));
+  transform: scale(1.1);
+}
+
+/* --- Welcome Header --- */
+[data-theme="tavern"] .welcome-header {
+  padding: 24px 24px;
+  background: linear-gradient(135deg, var(--color-bg-3) 0%, var(--color-bg-1) 100%);
+  border-bottom: 3px solid var(--color-accent-1);
+  border-top: 2px solid var(--color-accent-2);
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="tavern"] .welcome-header__title {
+  gap: 16px;
+  color: var(--color-accent-2);
+  font-size: 30px;
+  letter-spacing: 2px;
+}
+
+[data-theme="tavern"] .welcome-header__info {
+  color: var(--color-text-2);
+  font-size: 24px;
+  transition: all 0.15s ease;
+}
+
+[data-theme="tavern"] .welcome-header__info:hover {
+  color: var(--color-accent-2);
+  filter: drop-shadow(0 0 8px var(--color-accent-2));
+  transform: scale(1.1);
+}
+
+/* --- Inventory Header --- */
+[data-theme="tavern"] .inventory-header {
+  padding: 24px 24px;
+  background: linear-gradient(135deg, var(--color-bg-3) 0%, var(--color-bg-1) 100%);
+  border-bottom: 3px solid var(--color-accent-1);
+  border-top: 2px solid var(--color-accent-2);
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="tavern"] .inventory-header__title {
+  gap: 16px;
+  color: var(--color-accent-2);
+  font-size: 30px;
+  letter-spacing: 2px;
+}
+
+[data-theme="tavern"] .inventory-header__info {
+  color: var(--color-text-2);
+  font-size: 24px;
+  transition: all 0.15s ease;
+}
+
+[data-theme="tavern"] .inventory-header__info:hover {
+  color: var(--color-accent-2);
+  filter: drop-shadow(0 0 8px var(--color-accent-2));
+  transform: scale(1.1);
+}
+
+/* --- Responsive: Medium Screens (1024px - 1439px) --- */
+@media (max-width: 1439px) {
+  [data-theme="tavern"] .personality-header,
+  [data-theme="tavern"] .welcome-header,
+  [data-theme="tavern"] .inventory-header {
+    padding: 14px 24px;
+  }
+
+  [data-theme="tavern"] .personality-header__title,
+  [data-theme="tavern"] .welcome-header__title,
+  [data-theme="tavern"] .inventory-header__title {
+    font-size: 13px;
+    gap: 8px;
+    letter-spacing: 1px;
+  }
+
+  [data-theme="tavern"] .personality-header__info,
+  [data-theme="tavern"] .welcome-header__info,
+  [data-theme="tavern"] .inventory-header__info {
+    font-size: 18px;
+  }
+}
+
+/* --- Responsive: Small Screens (< 1024px) --- */
+@media (max-width: 1023px) {
+  [data-theme="tavern"] .personality-header,
+  [data-theme="tavern"] .welcome-header,
+  [data-theme="tavern"] .inventory-header {
+    padding: 12px 16px;
+  }
+
+  [data-theme="tavern"] .personality-header__title,
+  [data-theme="tavern"] .welcome-header__title,
+  [data-theme="tavern"] .inventory-header__title {
+    font-size: 11px;
+    gap: 4px;
+    letter-spacing: 1px;
+  }
+
+  [data-theme="tavern"] .personality-header__info,
+  [data-theme="tavern"] .welcome-header__info,
+  [data-theme="tavern"] .inventory-header__info {
+    font-size: 16px;
+  }
+}

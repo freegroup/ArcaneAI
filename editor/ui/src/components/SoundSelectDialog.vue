@@ -1,10 +1,9 @@
 <template>
   <v-dialog v-model="dialogVisible" max-width="900" @update:model-value="onDialogChange">
     <v-card class="sound-picker-dialog">
-      <DialogHeader 
-        title="Select Sound" 
-        icon="mdi-music-box"
-        @close="close" 
+      <DialogHeader
+        title="Select Sound"
+        @close="close"
       />
 
       <!-- Search Bar -->
@@ -107,7 +106,7 @@
 
       <v-card-actions class="dialog-actions">
         <v-spacer></v-spacer>
-        <RetroButton @click="close" variant="secondary">Cancel</RetroButton>
+        <ThemedButton @click="close" variant="secondary">Cancel</ThemedButton>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -116,7 +115,7 @@
 <script>
 import SoundManager from '@/utils/SoundManager';
 import DialogHeader from './DialogHeader.vue';
-import RetroButton from './RetroButton.vue';
+import ThemedButton from './ThemedButton.vue';
 
 export default {
   name: 'SoundSelectDialog',
@@ -136,7 +135,7 @@ export default {
     }
   },
 
-  components: { DialogHeader, RetroButton },
+  components: { DialogHeader, ThemedButton },
   emits: ['update:modelValue', 'select'],
 
   data() {
@@ -357,20 +356,8 @@ export default {
 </script>
 
 <style scoped>
-.sound-picker-dialog {
-  background: var(--game-bg-primary);
-  color: var(--game-text-primary);
-}
-
-
-.search-bar {
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--game-border-color);
-}
-
 .dialog-content {
   padding: 0 !important;
-  height: 400px;
   overflow: hidden;
 }
 
@@ -383,51 +370,25 @@ export default {
 }
 
 .column {
-  min-width: 150px;
   width: 200px;
   max-width: 400px;
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  border-right: 3px solid var(--game-accent-primary);
   flex-shrink: 0;
   resize: horizontal;
   position: relative;
 }
 
 .column:last-child {
-  border-right: none;
-  /* Last column (file column) can be wider */
   width: 250px;
   max-width: 500px;
-}
-
-/* Red resize border indicator */
-.column:not(:last-child):hover {
-  border-right-color: var(--game-accent-tertiary);
-}
-
-/* Resize handle - limited styling support but try */
-.column::-webkit-resizer {
-  background: var(--game-accent-primary);
 }
 
 .column-item {
   display: flex;
   align-items: center;
-  padding: 8px 12px;
   cursor: pointer;
-  transition: background-color 0.15s;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.column-item:hover {
-  background: var(--game-input-hover);
-}
-
-.column-item.selected {
-  background: var(--game-accent-primary);
-  color: var(--game-text-primary);
 }
 
 .item-name {
@@ -435,9 +396,6 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 14px;
-  font-family: var(--game-font-family-retro);
-  letter-spacing: 2px;
 }
 
 .file-item {
@@ -446,31 +404,6 @@ export default {
 
 .file-item:hover {
   text-decoration: underline;
-}
-
-.clear-icon,
-.folder-icon {
-  margin-right: 12px;
-  color: var(--game-accent-secondary);
-}
-
-.column-item.selected .clear-icon,
-.column-item.selected .folder-icon {
-  color: var(--game-text-primary);
-}
-
-.folder-arrow {
-  opacity: 0.6;
-  margin-left: 4px;
-}
-
-.play-btn {
-  margin-right: 8px;
-  color: var(--game-accent-secondary) !important;
-}
-
-.play-btn:hover {
-  color: var(--game-accent-primary) !important;
 }
 
 /* Search Results View */
@@ -482,34 +415,22 @@ export default {
 }
 
 .search-results-header {
-  padding: 12px 16px;
-  font-size: 12px;
-  color: var(--game-text-secondary);
-  border-bottom: 1px solid var(--game-border-color);
   flex-shrink: 0;
 }
 
 .search-results-list {
   flex: 1;
   overflow-y: auto;
-  padding: 8px 0;
 }
 
 .search-result-item {
   display: flex;
   align-items: center;
-  padding: 6px 16px;
   cursor: pointer;
-  transition: background-color 0.15s;
-}
-
-.search-result-item:hover {
-  background: var(--game-input-hover);
 }
 
 .search-result-item .file-name {
   flex: 1;
-  font-size: 13px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -523,45 +444,5 @@ export default {
 .selected-display {
   display: flex;
   align-items: center;
-  padding: 8px 16px;
-  background: var(--game-bg-secondary);
-  border-top: 1px solid var(--game-border-color);
-  font-size: 12px;
-  color: var(--game-text-secondary);
-}
-
-/* Dialog Actions */
-.dialog-actions {
-  border-top: 1px solid var(--game-border-color);
-  padding: 12px 16px;
-  gap: 12px;
-}
-
-
-/* Scrollbar styling */
-.column::-webkit-scrollbar,
-.search-results-list::-webkit-scrollbar,
-.finder-columns::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-.column::-webkit-scrollbar-track,
-.search-results-list::-webkit-scrollbar-track,
-.finder-columns::-webkit-scrollbar-track {
-  background: var(--game-bg-primary);
-}
-
-.column::-webkit-scrollbar-thumb,
-.search-results-list::-webkit-scrollbar-thumb,
-.finder-columns::-webkit-scrollbar-thumb {
-  background: var(--game-border-color);
-  border-radius: 4px;
-}
-
-.column::-webkit-scrollbar-thumb:hover,
-.search-results-list::-webkit-scrollbar-thumb:hover,
-.finder-columns::-webkit-scrollbar-thumb:hover {
-  background: var(--game-text-muted);
 }
 </style>

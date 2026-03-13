@@ -1,0 +1,86 @@
+/*
+ * Elegant Theme — Todo Manager (.todo-manager)
+ */
+
+[data-theme="elegant"] .todo-manager {
+  gap: 8px;
+}
+
+[data-theme="elegant"] .todo-manager label {
+  margin: 0 0 6px 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-accent-2);
+  letter-spacing: 1.5px;
+}
+
+/* Todo Input Container */
+[data-theme="elegant"] .todo-input-container {
+  gap: 8px;
+}
+
+[data-theme="elegant"] .todo-input-container input {
+  padding: 10px 16px;
+  background: var(--color-bg-3);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-1);
+}
+
+[data-theme="elegant"] .todo-input-container input:focus {
+  border-color: var(--color-accent-1);
+}
+
+/* Todo Section */
+[data-theme="elegant"] .todo-section {
+  border-left: 1px solid var(--color-border);
+  padding-left: 16px;
+  margin-top: 8px;
+}
+
+[data-theme="elegant"] .completed-section {
+  margin-top: 24px;
+}
+
+[data-theme="elegant"] .section-label {
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: var(--color-text-muted) !important;
+  margin-bottom: 8px !important;
+}
+
+/* Todo Item */
+[data-theme="elegant"] .todo-item {
+  gap: 8px;
+  padding: 4px 0;
+  transition: background 0.15s ease;
+}
+
+[data-theme="elegant"] .todo-item:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+[data-theme="elegant"] .todo-checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-accent-1);
+}
+
+[data-theme="elegant"] .todo-text {
+  font-size: 15px;
+  color: var(--color-text-1);
+}
+
+[data-theme="elegant"] .todo-item.completed .todo-text {
+  color: var(--color-text-muted);
+}
+
+[data-theme="elegant"] .todo-action-btn {
+  transition: opacity 0.15s ease;
+}
+
+[data-theme="elegant"] .todo-manager .empty-state {
+  color: var(--color-text-muted);
+  font-size: 14px;
+  padding: 24px;
+}

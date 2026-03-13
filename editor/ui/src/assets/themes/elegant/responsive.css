@@ -1,0 +1,65 @@
+/*
+ * Elegant Theme — Responsive Overrides
+ *
+ * screen-wide:   >= 1440px (Large monitors) — defaults in component theme files
+ * screen-medium: 1024px - 1439px (Laptops)
+ * screen-small:  < 1024px (Tablets/Small)
+ */
+
+/* Medium Screens (Laptops: 1024px - 1439px) */
+@media (max-width: 1439px) {
+  [data-theme="elegant"] .app-header__branding {
+    height: 48px;
+    padding: 0 8px;
+    gap: 8px;
+  }
+
+  [data-theme="elegant"] .app-header__title-main,
+  [data-theme="elegant"] .app-header__title-sub {
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+
+  [data-theme="elegant"] .app-header__tagline {
+    font-size: 12px;
+  }
+
+  [data-theme="elegant"] .app-header__toolbar {
+    height: 48px;
+  }
+
+  [data-theme="elegant"] .app-toolbar .themed-btn {
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    padding: 0 12px !important;
+  }
+}
+
+/* Small Screens (Tablets: < 1024px) */
+@media (max-width: 1023px) {
+  [data-theme="elegant"] .app-header__branding {
+    height: 40px;
+    padding: 0 4px;
+    gap: 4px;
+  }
+
+  [data-theme="elegant"] .app-header__title-main,
+  [data-theme="elegant"] .app-header__title-sub {
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+
+  [data-theme="elegant"] .app-header__tagline {
+    font-size: 10px;
+  }
+
+  [data-theme="elegant"] .app-header__toolbar {
+    height: 40px;
+  }
+
+  [data-theme="elegant"] .app-toolbar .themed-btn {
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    padding: 0 8px !important;
+  }
+}

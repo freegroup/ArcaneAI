@@ -72,14 +72,14 @@ View = draw2d.Canvas.extend({
                 
                 var writer = new draw2d.io.json.Writer();
                 writer.marshal(this, (json) => {
-                    if( json.length ===0)
-                        return
+                  if( json.length ===0)
+                    return
                       
-                window.parent.postMessage({ 
-                    type: MessageTypes.C2V_DOCUMENT_UPDATED, 
-                    data: json,
-                    source: 'canvas:shared'
-                }, '*');
+                  window.parent.postMessage({ 
+                      type: MessageTypes.C2V_DOCUMENT_UPDATED, 
+                      data: json,
+                      source: 'canvas:shared'
+                  }, '*');
                 
                 });                
             }

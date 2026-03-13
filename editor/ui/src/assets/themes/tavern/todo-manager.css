@@ -1,0 +1,84 @@
+/*
+ * Fantasy Tavern Theme — Todo Manager (.todo-manager)
+ */
+
+[data-theme="tavern"] .todo-manager {
+  gap: 8px;
+}
+
+[data-theme="tavern"] .todo-manager label {
+  margin: 0 0 4px 0;
+  font-size: 24px;
+  color: var(--color-accent-2);
+  letter-spacing: 2px;
+}
+
+/* Todo Input Container */
+[data-theme="tavern"] .todo-input-container {
+  gap: 8px;
+}
+
+[data-theme="tavern"] .todo-input-container input {
+  padding: 8px 16px;
+  background: var(--color-bg-3);
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  color: var(--color-text-1);
+}
+
+[data-theme="tavern"] .todo-input-container input:focus {
+  border-color: var(--color-accent-1);
+}
+
+/* Todo Section */
+[data-theme="tavern"] .todo-section {
+  border-left: 1px solid var(--color-border);
+  padding-left: 16px;
+  margin-top: 8px;
+}
+
+[data-theme="tavern"] .completed-section {
+  margin-top: 24px;
+}
+
+[data-theme="tavern"] .section-label {
+  font-size: 24px !important;
+  color: var(--color-text-muted) !important;
+  margin-bottom: 8px !important;
+}
+
+/* Todo Item */
+[data-theme="tavern"] .todo-item {
+  gap: 8px;
+  padding: 4px 0;
+  transition: background 0.15s ease;
+}
+
+[data-theme="tavern"] .todo-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+[data-theme="tavern"] .todo-checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-accent-1);
+}
+
+[data-theme="tavern"] .todo-text {
+  font-size: 24px;
+  color: var(--color-text-1);
+}
+
+[data-theme="tavern"] .todo-item.completed .todo-text {
+  color: var(--color-text-muted);
+}
+
+[data-theme="tavern"] .todo-action-btn {
+  transition: opacity 0.15s ease;
+}
+
+[data-theme="tavern"] .todo-manager .empty-state {
+  color: var(--color-text-muted);
+  font-size: 18px;
+  padding: 24px;
+}

@@ -45,9 +45,9 @@
               ></v-select>
             </td>
             <td>
-              <RetroActionButton @click="addItem" variant="success" :disabled="!canAddItem">
+              <ThemedActionButton @click="addItem" variant="success" :disabled="!canAddItem">
                 +
-              </RetroActionButton>
+              </ThemedActionButton>
             </td>
           </tr>
           
@@ -75,9 +75,9 @@
               ></v-select>
             </td>
             <td>
-              <RetroActionButton @click="removeItem(item.key)" variant="danger">
+              <ThemedActionButton @click="removeItem(item.key)" variant="danger">
                 X
-              </RetroActionButton>
+              </ThemedActionButton>
             </td>
           </tr>
         </tbody>
@@ -105,14 +105,14 @@
 import { mapGetters, mapActions } from 'vuex';
 import ExtendedHelpDialog from '../components/ExtendedHelpDialog.vue';
 import HelpButton from '../components/HelpButton.vue';
-import RetroActionButton from '../components/RetroActionButton.vue';
+import ThemedActionButton from '../components/ThemedActionButton.vue';
 
 export default {
   name: 'InventoryView',
   components: {
     ExtendedHelpDialog,
     HelpButton,
-    RetroActionButton
+    ThemedActionButton
   },
   data() {
     return {
@@ -246,208 +246,28 @@ export default {
 .inventory-container {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  background: var(--game-bg-secondary);
-  padding: 0;
-  overflow: hidden; /* NUR .inventory-list soll scrollen, nicht der Container */
+  overflow: hidden;
   box-sizing: border-box;
 }
 
 /* 8-Bit Retro Header */
 .inventory-header {
-  padding: var(--screen-wide-header-padding-y, var(--game-spacing-lg)) var(--game-spacing-lg);
-  background: linear-gradient(135deg, var(--game-bg-tertiary) 0%, #1a1a2e 100%);
-  border-bottom: 3px solid var(--game-accent-primary);
-  border-top: 2px solid var(--game-accent-secondary);
-  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.3);
 }
 
 .inventory-header__title {
   display: flex;
   align-items: center;
-  gap: var(--screen-wide-header-gap, var(--game-spacing-md));
-  color: var(--game-accent-secondary);
-  font-family: var(--game-font-family-retro);
-  font-size: var(--screen-wide-header-font-size, 16px);
-  letter-spacing: var(--screen-wide-header-letter-spacing, 2px);
 }
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-    filter: drop-shadow(0 0 8px var(--game-accent-secondary));
-  }
-  50% {
-    transform: scale(1.05);
-    filter: drop-shadow(0 0 12px var(--game-accent-secondary));
-  }
-}
-
-.inventory-header__info {
-  color: var(--game-text-secondary);
-  font-size: var(--screen-wide-header-info-size, 24px);
-  cursor: pointer;
-  transition: all var(--game-transition-fast);
-}
-
-.inventory-header__info:hover {
-  color: var(--game-accent-secondary);
-  filter: drop-shadow(0 0 8px var(--game-accent-secondary));
-  transform: scale(1.1);
-}
-
-/* Responsive header for laptop screens (60% height) */
-@media (max-width: 1439px) {
-  .inventory-header {
-    padding: var(--screen-medium-header-padding-y) var(--game-spacing-lg);
-  }
-  
-  .inventory-header__title {
-    font-size: var(--screen-medium-header-font-size);
-    gap: var(--screen-medium-header-gap);
-    letter-spacing: var(--screen-medium-header-letter-spacing);
-  }
-  
-  .inventory-header__info {
-    font-size: var(--screen-medium-header-info-size);
-  }
-}
-
-/* Responsive header for small screens */
-@media (max-width: 1023px) {
-  .inventory-header {
-    padding: var(--screen-small-header-padding-y) var(--game-spacing-md);
-  }
-  
-  .inventory-header__title {
-    font-size: var(--screen-small-header-font-size);
-    gap: var(--screen-small-header-gap);
-    letter-spacing: var(--screen-small-header-letter-spacing);
-  }
-  
-  .inventory-header__info {
-    font-size: var(--screen-small-header-info-size);
-  }
-}
-
-/* Input Row (First Row in Table) - Hervorgehoben */
-.input-row {
-  background: var(--game-bg-tertiary) !important;
-  border-bottom: 3px solid var(--game-accent-primary) !important;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
-}
-
-.input-row:hover {
-  background: var(--game-bg-tertiary) !important;
-}
-
-.input-row td {
-  padding: 12px 8px !important;
-}
-
 
 .inventory-list {
   overflow-y: auto;
   flex: 1;
-  min-height: 0; /* WICHTIG: Erlaubt flex-item zu schrumpfen */
-  padding: var(--game-spacing-sm);
-  background: var(--game-bg-primary);
 }
 
-.inventory-list :deep(.v-table) {
-  background: transparent;
-  color: var(--game-text-primary);
-}
-
-.inventory-list :deep(tbody tr) {
-  border-bottom: 1px solid var(--game-border-color);
-  transition: all var(--game-transition-fast);
-}
-
-.inventory-list :deep(tbody tr:hover) {
-  background: var(--game-input-hover);
-}
-
-.inventory-list :deep(td) {
-  color: var(--game-text-primary);
-  font-family: var(--game-font-family-mono);
-  font-size: 14px;
-  padding: 8px;
-}
-
-.inventory-list :deep(td:first-child) {
-  color: var(--game-accent-secondary);
-}
-
-.prompt-field {
-  flex: 1;
-}
-
-.prompt-field:focus {
-  border-color: var(--game-border-highlight);
-}
-
-.inventory-list :deep(.v-field--focused) {
-  border-color: var(--game-accent-primary);
-}
-
-.inventory-list :deep(.v-field__input) {
-  color: var(--game-text-primary);
-  font-size: 13px;
-  padding: 4px 8px;
-  min-height: 32px;
-}
-
-/* Inventory List Scrollbar */
-.inventory-list::-webkit-scrollbar {
-  width: 12px;
-}
-
-.inventory-list::-webkit-scrollbar-track {
-  background: var(--game-bg-tertiary);
-  border-radius: var(--game-radius-sm);
-}
-
-.inventory-list::-webkit-scrollbar-thumb {
-  background: var(--game-accent-primary);
-  border-radius: var(--game-radius-sm);
-  border: 2px solid var(--game-bg-tertiary);
-}
-
-.inventory-list::-webkit-scrollbar-thumb:hover {
-  background: var(--game-accent-tertiary);
-  box-shadow: 0 0 8px var(--game-accent-primary);
-}
-
-/* 8-Bit Toast Notification */
+/* Toast Notification */
 .toast-notification {
   position: fixed;
-  top: 80px;
-  right: 20px;
-  color: white;
-  padding: 16px 24px;
-  border-radius: 0;
-  border: 3px solid black;
   z-index: 9999;
-  font-family: var(--game-font-family-retro);
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-/* Success Toast (Green) */
-.toast-notification.toast-success {
-  background: var(--game-success);
-  box-shadow: inset -4px -4px 0px 0px #1e7e34,
-              0 8px 16px rgba(0, 0, 0, 0.4);
-}
-
-/* Error Toast (Red/Pink) */
-.toast-notification.toast-error {
-  background: var(--game-accent-primary);
-  box-shadow: inset -4px -4px 0px 0px #8c2022,
-              0 8px 16px rgba(0, 0, 0, 0.4);
 }
 
 /* Toast Slide Animation */
@@ -460,24 +280,12 @@ export default {
 }
 
 @keyframes toast-slide-in {
-  0% {
-    transform: translateX(400px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(0);
-    opacity: 1;
-  }
+  0% { transform: translateX(400px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
 }
 
 @keyframes toast-slide-out {
-  0% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(400px);
-    opacity: 0;
-  }
+  0% { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(400px); opacity: 0; }
 }
 </style>

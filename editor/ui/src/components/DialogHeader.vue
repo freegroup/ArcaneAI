@@ -2,28 +2,27 @@
   <div class="dialog-header">
     <div class="dialog-header__content">
       <slot>
-        <!-- Default: 8-bit Icon + Title -->
-        <span v-if="icon" class="dialog-header__icon-8bit">{{ iconChar }}</span>
+        <span v-if="icon" class="dialog-header__icon">{{ iconChar }}</span>
         <span v-if="title" class="dialog-header__title">{{ title }}</span>
       </slot>
     </div>
-    <RetroActionButton 
-      class="dialog-header__close" 
+    <ThemedActionButton
+      class="dialog-header__close"
       variant="danger"
-      @click="$emit('close')" 
+      @click="$emit('close')"
       title="Close"
     >
       X
-    </RetroActionButton>
+    </ThemedActionButton>
   </div>
 </template>
 
 <script>
-import RetroActionButton from './RetroActionButton.vue';
+import ThemedActionButton from './ThemedActionButton.vue';
 
 export default {
   name: 'DialogHeader',
-  components: { RetroActionButton },
+  components: { ThemedActionButton },
   emits: ['close'],
   props: {
     title: {
@@ -36,7 +35,6 @@ export default {
     }
   },
   computed: {
-    // Map MDI icons to 8-bit characters
     iconChar() {
       const iconMap = {
         'mdi-help-circle': '?',
@@ -61,30 +59,16 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--game-spacing-md) var(--game-spacing-lg);
-  background: linear-gradient(135deg, var(--game-bg-tertiary) 0%, #1a1a2e 100%);
-  border-bottom: 3px solid var(--game-accent-primary);
-  min-height: 56px;
 }
 
 .dialog-header__content {
   display: flex;
   align-items: center;
-  gap: var(--game-spacing-md);
   flex: 1;
 }
 
-/* 8-bit Style Icon */
-.dialog-header__icon-8bit {
-  font-size: 40px;
-  color: var(--game-accent-secondary);
+.dialog-header__icon {
   min-width: 32px;
   text-align: center;
-}
-
-.dialog-header__title {
-  color: var(--game-accent-secondary);
-  font-size: 30px;
-  letter-spacing: 4px;
 }
 </style>

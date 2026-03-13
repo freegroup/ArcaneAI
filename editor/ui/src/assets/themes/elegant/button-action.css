@@ -1,0 +1,61 @@
+/*
+ * Elegant Theme — ThemedActionButton (.themed-action-btn)
+ */
+[data-theme="elegant"] .themed-action-btn {
+  --_bg: var(--color-success);
+  --_shadow: rgba(0, 0, 0, 0.15);
+
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  margin: 2px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+  background: var(--_bg);
+  box-shadow: 0 1px 3px var(--_shadow);
+  transition: all 0.2s ease;
+}
+
+[data-theme="elegant"] .themed-action-btn:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 2px 6px var(--_shadow);
+  transform: translateY(-1px);
+}
+
+[data-theme="elegant"] .themed-action-btn:active {
+  transform: translateY(0);
+}
+
+/* No pixel borders */
+[data-theme="elegant"] .themed-action-btn::before,
+[data-theme="elegant"] .themed-action-btn::after {
+  display: none;
+}
+
+/* Success variant */
+[data-theme="elegant"] .themed-action-btn--success {
+  --_bg: var(--color-success);
+}
+
+/* Danger variant */
+[data-theme="elegant"] .themed-action-btn--danger {
+  --_bg: var(--color-danger);
+}
+
+/* Secondary variant */
+[data-theme="elegant"] .themed-action-btn--secondary {
+  --_bg: var(--color-bg-3);
+  border: 1px solid var(--color-border);
+}
+
+/* Disabled state */
+[data-theme="elegant"] .themed-action-btn:disabled {
+  --_bg: var(--color-bg-3);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+  opacity: 0.5;
+  box-shadow: none;
+}

@@ -1,0 +1,211 @@
+/*
+ * Fantasy Tavern Theme — Property Views
+ * Used by: StateProperty, StateTriggerProperty, ConnectionTriggerProperty, EncounterPropertyView
+ */
+
+/* --- Main Container --- */
+[data-theme="tavern"] .property-view {
+  background: var(--color-bg-1);
+  color: var(--color-text-1);
+  padding: 24px;
+  gap: 16px;
+  font-size: 18px;
+  border-left: 1px solid var(--color-border);
+}
+
+/* --- Labels --- */
+[data-theme="tavern"] .property-view label {
+  color: var(--color-text-1);
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+
+[data-theme="tavern"] .label-with-help {
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+[data-theme="tavern"] .label-with-help label {
+  margin: 0 !important;
+}
+
+[data-theme="tavern"] .field-group label {
+  margin-bottom: 4px;
+}
+
+/* --- Name Input (State/Trigger/Encounter) --- */
+[data-theme="tavern"] .property-view input#stateName,
+[data-theme="tavern"] .property-view input#triggerName,
+[data-theme="tavern"] .property-view input#encounterName {
+  font-size: 25px;
+  letter-spacing: 2px;
+  color: var(--color-accent-2);
+  padding: 16px 16px;
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.4);
+}
+
+/* --- Readonly Name (World view) --- */
+[data-theme="tavern"] .property-view input#encounterName.readonly-name {
+  background: transparent;
+}
+
+[data-theme="tavern"] .property-view input#encounterName.readonly-name:hover,
+[data-theme="tavern"] .property-view input#encounterName.readonly-name:focus {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+/* --- Textarea --- */
+[data-theme="tavern"] .property-view textarea {
+  min-height: 80px;
+}
+
+/* --- Section min-heights --- */
+[data-theme="tavern"] .property-view__section {
+  min-height: 180px;
+}
+
+[data-theme="tavern"] .property-view__section .code-editor {
+  min-height: 0;
+}
+
+/* --- Sound Display --- */
+[data-theme="tavern"] .sound-display {
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--color-bg-3);
+  border: 1px solid var(--color-border);
+  min-height: 36px;
+  transition: all 0.15s ease;
+}
+
+[data-theme="tavern"] .sound-display:hover {
+  background: var(--color-bg-2);
+  border-color: var(--color-border-highlight);
+}
+
+[data-theme="tavern"] .sound-display:focus {
+  border-color: var(--color-accent-1);
+  box-shadow: 0 0 0 2px rgba(var(--color-accent-1-rgb), 0.2);
+}
+
+[data-theme="tavern"] .sound-display .sound-icon {
+  color: var(--color-accent-2);
+}
+
+[data-theme="tavern"] .sound-display .sound-name {
+  font-size: 18px;
+  color: var(--color-text-1);
+}
+
+[data-theme="tavern"] .sound-display .browse-icon {
+  color: var(--color-text-muted);
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
+}
+
+[data-theme="tavern"] .sound-display:hover .browse-icon {
+  opacity: 1;
+  color: var(--color-accent-2);
+}
+
+[data-theme="tavern"] .sound-selection {
+  gap: 8px;
+}
+
+/* --- Sound Selection Vuetify Overrides --- */
+[data-theme="tavern"] .sound-selection .v-field {
+  background: var(--color-bg-3);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+[data-theme="tavern"] .sound-selection .v-field:hover {
+  background: var(--color-bg-2);
+  border-color: var(--color-border-highlight);
+}
+
+[data-theme="tavern"] .sound-selection .v-btn {
+  background: var(--color-accent-1) !important;
+  color: var(--color-text-1) !important;
+  border-radius: 2px !important;
+  min-width: 36px !important;
+  height: 36px !important;
+  transition: all 0.15s ease;
+}
+
+[data-theme="tavern"] .sound-selection .v-btn:hover {
+  background: var(--color-accent-3) !important;
+  box-shadow: 0 0 20px rgba(var(--color-accent-1-rgb), 0.3);
+}
+
+/* --- Sound Controls --- */
+[data-theme="tavern"] .sound-controls {
+  gap: 8px;
+  margin-top: 8px;
+}
+
+[data-theme="tavern"] .sound-control-row {
+  gap: 8px;
+}
+
+[data-theme="tavern"] .sound-control-row .v-field {
+  background: var(--color-bg-3);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+[data-theme="tavern"] .sound-control-icon {
+  width: 24px;
+  color: var(--color-text-muted);
+}
+
+/* --- Slider Styling --- */
+[data-theme="tavern"] .property-view .v-slider {
+  margin-top: 8px;
+}
+
+[data-theme="tavern"] .property-view .v-slider-track__background {
+  background: var(--color-border) !important;
+  opacity: 1 !important;
+}
+
+[data-theme="tavern"] .property-view .v-slider-track__fill {
+  background: var(--color-accent-1) !important;
+}
+
+[data-theme="tavern"] .property-view .v-slider-thumb__surface {
+  background: var(--color-accent-1) !important;
+  width: 20px !important;
+  height: 20px !important;
+  border-radius: 50% !important;
+  border: 2px solid var(--color-bg-1) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="tavern"] .property-view .v-slider-thumb:hover .v-slider-thumb__surface {
+  transform: scale(1.1);
+}
+
+/* --- CodeMirror in Property View --- */
+[data-theme="tavern"] .property-view .code-editor .CodeMirror {
+  font-size: 24px;
+  background: var(--color-bg-3);
+  color: var(--color-text-1);
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  padding: 8px;
+  height: 100%;
+}
+
+/* --- Input Hover/Focus in Property View --- */
+[data-theme="tavern"] .property-view input:hover {
+  background: var(--color-bg-2);
+  border-color: var(--color-border-highlight);
+}
+
+[data-theme="tavern"] .property-view input:focus {
+  border-color: var(--color-accent-1);
+  box-shadow: 0 0 0 2px rgba(var(--color-accent-1-rgb), 0.2);
+}

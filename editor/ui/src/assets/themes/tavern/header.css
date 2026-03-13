@@ -1,0 +1,73 @@
+/*
+ * Fantasy Tavern Theme — App Header (.app-header)
+ */
+
+/* Main container */
+[data-theme="tavern"] .app-header.v-toolbar {
+  background: linear-gradient(180deg, var(--color-bg-1) 0%, var(--color-bg-3) 100%) !important;
+  border-bottom: 3px solid var(--color-accent-1) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-theme="tavern"] .app-header .v-toolbar__content {
+  padding: 0 !important;
+}
+
+/* Branding Row */
+[data-theme="tavern"] .app-header__branding {
+  gap: 16px;
+  height: 80px;
+  padding: 0 16px;
+  border-bottom: 2px solid var(--color-accent-2);
+  background: linear-gradient(180deg, rgba(var(--color-accent-2-rgb), 0.1) 0%, transparent 100%);
+}
+
+[data-theme="tavern"] .app-header__title {
+  gap: 8px;
+  margin: 0;
+}
+
+[data-theme="tavern"] .app-header__title-main {
+  font-size: 48px;
+  color: var(--color-accent-2);
+  letter-spacing: 6px;
+}
+
+[data-theme="tavern"] .app-header__title-sub {
+  font-size: 48px;
+  letter-spacing: 4px;
+  color: var(--color-text-2);
+}
+
+[data-theme="tavern"] .app-header__tagline {
+  font-size: 24px;
+  color: var(--color-text-muted);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  border-left: 2px solid var(--color-accent-1);
+  padding-left: 16px;
+  margin-left: 8px;
+}
+
+[data-theme="tavern"] .app-header__version {
+  font-size: 7px;
+  color: var(--color-text-muted);
+  opacity: 0.6;
+}
+
+/* Toolbar Row */
+[data-theme="tavern"] .app-header__toolbar {
+  height: 48px;
+  padding: 0 8px;
+}
+
+[data-theme="tavern"] .app-header__toolbar .themed-btn {
+  margin: 0 8px !important;
+}
+
+/* Unsaved changes indicator */
+[data-theme="tavern"] .unsaved-indicator {
+  color: var(--color-accent-2);
+  font-weight: bold;
+  margin-left: 2px;
+}

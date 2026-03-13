@@ -1,10 +1,9 @@
 <template>
   <v-dialog v-model="dialogVisible" max-width="1100px" @click:outside="closeDialog">
     <v-card class="chat-dialog">
-      <DialogHeader 
-        :title="`Chat from: ${currentState || stateName}`" 
-        icon="mdi-account-alert"
-        @close="closeDialog" 
+      <DialogHeader
+        :title="`Chat from: ${currentState || stateName}`"
+        @close="closeDialog"
       />
 
       <v-card-text class="chat-container">
@@ -93,13 +92,13 @@
             @keyup.enter="sendMessage"
             class="chat-input"
           />
-          <RetroButton 
+          <ThemedButton 
             variant="proceed"
             :disabled="!inputMessage.trim() || connecting || sending"
             @click="sendMessage"
           >
             Send
-          </RetroButton>
+          </ThemedButton>
         </div>
       </v-card-actions>
     </v-card>
@@ -110,13 +109,13 @@
 import axios from 'axios';
 import { mapState, mapGetters } from 'vuex';
 import DialogHeader from './DialogHeader.vue';
-import RetroButton from './RetroButton.vue';
+import ThemedButton from './ThemedButton.vue';
 
 const API_BASE_URL = process.env.VUE_APP_API_BASE_URL || '';
 
 export default {
   name: 'ChatDialog',
-  components: { DialogHeader, RetroButton },
+  components: { DialogHeader, ThemedButton },
   props: {
     modelValue: {
       type: Boolean,
@@ -341,76 +340,28 @@ export default {
 </script>
 
 <style scoped>
-/* Remove rounded corners from v-dialog */
-:deep(.v-overlay__content) {
-  border-radius: 0 !important;
-}
-
-.chat-dialog {
-  background: var(--game-bg-secondary);
-  color: var(--game-text-primary);
-  border: 3px solid var(--game-border-highlight);
-  border-radius: 0;
-}
-
 .chat-container {
   padding: 0 !important;
   display: flex;
   flex-direction: row;
-  height: 500px;
   overflow: hidden;
 }
 
 /* Inventory Panel */
 .inventory-panel {
-  width: 400px;
-  min-width: 400px;
-  border-right: 2px solid var(--game-border-color);
   display: flex;
   flex-direction: column;
-  background: var(--game-bg-tertiary);
-}
-
-.inventory-header {
-  padding: var(--game-spacing-sm) var(--game-spacing-md);
-  background: var(--game-bg-secondary);
-  border-bottom: 2px solid var(--game-border-color);
-  font-family: var(--game-font-family-retro);
-  font-size: var(--game-font-size-sm);
-  font-weight: bold;
 }
 
 .inventory-list {
   flex: 1;
   overflow-y: auto;
-  padding: var(--game-spacing-sm);
-}
-
-.inventory-list::-webkit-scrollbar {
-  width: 6px;
-}
-
-.inventory-list::-webkit-scrollbar-track {
-  background: var(--game-bg-tertiary);
-}
-
-.inventory-list::-webkit-scrollbar-thumb {
-  background: var(--game-border-color);
 }
 
 .inventory-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 6px;
-  border-bottom: 1px solid var(--game-border-color);
-  font-family: var(--game-font-family-mono);
-  font-size: var(--game-font-size-md);
-  gap: 4px;
-}
-
-.inventory-item:last-child {
-  border-bottom: none;
 }
 
 .item-key {
@@ -418,31 +369,19 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: var(--game-text-secondary);
 }
 
 .item-checkbox {
-  width: 14px;
-  height: 14px;
   cursor: pointer;
-  accent-color: var(--game-accent-secondary);
 }
 
 .item-number {
-  width: 50px;
   text-align: right;
 }
 
-.item-text {
-  width: 60px;
-}
-
 .inventory-empty {
-  color: var(--game-text-muted);
   font-style: italic;
   text-align: center;
-  padding: var(--game-spacing-md);
-  font-size: var(--game-font-size-md);
 }
 
 /* Messages Area */
@@ -450,35 +389,13 @@ export default {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: var(--game-spacing-lg);
-  background: var(--game-bg-primary);
   display: flex;
   flex-direction: column;
-  gap: var(--game-spacing-md);
   scroll-behavior: smooth;
-}
-
-/* Custom scrollbar for messages area */
-.messages-area::-webkit-scrollbar {
-  width: 8px;
-}
-
-.messages-area::-webkit-scrollbar-track {
-  background: var(--game-bg-tertiary);
-}
-
-.messages-area::-webkit-scrollbar-thumb {
-  background: var(--game-border-color);
-  border-radius: 0;
-}
-
-.messages-area::-webkit-scrollbar-thumb:hover {
-  background: var(--game-accent-secondary);
 }
 
 /* Message Styles */
 .message {
-  max-width: 80%;
   animation: fadeIn 0.2s ease-out;
 }
 
@@ -491,59 +408,21 @@ export default {
   align-self: flex-end;
 }
 
-.user-message .message-content {
-  background: var(--game-accent-primary);
-  color: white;
-
-  border: 2px solid #8c2022;
-  font-family: var(--game-font-family-retro);
-  font-size: var(--game-font-size-sm);
-  box-shadow: inset -3px -3px 0px 0px rgba(0,0,0,0.3);
-}
-
 .ai-message {
   align-self: flex-start;
-}
-
-.ai-message .message-content {
-  background: var(--game-bg-tertiary);
-  color: var(--game-text-primary);
-  border: 2px solid var(--game-border-color);
-  font-family: var(--game-font-family-retro);
-  font-size: var(--game-font-size-sm);
-  box-shadow: inset -3px -3px 0px 0px rgba(0,0,0,0.2);
 }
 
 .system-message {
   align-self: center;
 }
 
-.system-message .message-content {
-  background: transparent;
-  color: var(--game-accent-secondary);
-  padding: var(--game-spacing-xs) var(--game-spacing-md);
-  font-family: var(--game-font-family-mono);
-  font-size: var(--game-font-size-md);
-  opacity: 0.8;
-}
-
-.error-message .message-content {
-  color: var(--game-accent-primary);
-}
-
 /* Typing Indicator - Three Bouncing Dots */
 .typing-indicator {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 0;
 }
 
 .typing-indicator .dot {
-  width: 8px;
-  height: 8px;
-  background: var(--game-accent-secondary);
-  border-radius: 0;
   animation: bounce 1.4s infinite ease-in-out both;
 }
 
@@ -569,15 +448,8 @@ export default {
 }
 
 /* Chat Actions */
-.chat-actions {
-  padding: var(--game-spacing-md) var(--game-spacing-lg);
-  border-top: 2px solid var(--game-border-color);
-  background: var(--game-bg-secondary);
-}
-
 .input-wrapper {
   display: flex;
-  gap: var(--game-spacing-md);
   width: 100%;
 }
 
@@ -585,17 +457,8 @@ export default {
   flex: 1;
 }
 
-.chat-input:focus {
-  border-color: var(--game-accent-secondary);
-}
-
-.chat-input::placeholder {
-  color: var(--game-text-muted);
-}
-
 .chat-input:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
-
 </style>

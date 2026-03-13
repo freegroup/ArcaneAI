@@ -1,0 +1,72 @@
+/*
+ * Elegant Theme — ThemedButton (.themed-btn)
+ * Clean, refined buttons without pixel borders.
+ */
+[data-theme="elegant"] .themed-btn {
+  --_bg: var(--color-success);
+  --_hover: #45c580;
+  --_shadow: rgba(0, 0, 0, 0.2);
+
+  padding: 8px 20px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: var(--_bg);
+  box-shadow: 0 2px 4px var(--_shadow);
+  transition: all 0.2s ease;
+}
+
+[data-theme="elegant"] .themed-btn:hover,
+[data-theme="elegant"] .themed-btn:focus {
+  background: var(--_hover);
+  box-shadow: 0 4px 8px var(--_shadow);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+[data-theme="elegant"] .themed-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px var(--_shadow);
+}
+
+/* No pixel borders in elegant theme */
+[data-theme="elegant"] .themed-btn::before,
+[data-theme="elegant"] .themed-btn::after {
+  display: none;
+}
+
+/* Proceed variant */
+[data-theme="elegant"] .themed-btn--proceed {
+  --_bg: var(--color-accent-2);
+  --_hover: #45c580;
+  color: var(--color-bg-1) !important;
+}
+
+/* Reset/Danger variant */
+[data-theme="elegant"] .themed-btn--reset {
+  --_bg: var(--color-danger);
+  --_hover: #e04880;
+}
+
+/* Secondary variant */
+[data-theme="elegant"] .themed-btn--secondary {
+  --_bg: var(--color-bg-3);
+  --_hover: var(--color-border-highlight);
+  border-color: var(--color-border);
+  color: var(--color-text-1) !important;
+}
+
+/* Disabled state */
+[data-theme="elegant"] .themed-btn:disabled,
+[data-theme="elegant"] .themed-btn--disabled {
+  --_bg: var(--color-bg-3);
+  --_hover: var(--color-bg-3);
+  color: var(--color-text-muted) !important;
+  cursor: not-allowed;
+  opacity: 0.5;
+  box-shadow: none;
+}

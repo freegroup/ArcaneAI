@@ -84,6 +84,7 @@ export default {
     ...mapGetters('game', ['gameName']),
     ...mapGetters('model', ['allStates', 'allConnections']),
     ...mapGetters('views', ['currentView']),
+    ...mapGetters('settings', ['currentTheme']),
     
     composedDiagram() {
       const model = {
@@ -120,6 +121,9 @@ export default {
       },
       deep: true,
       immediate: false,
+    },
+    currentTheme(theme) {
+      this.sendThemeToCanvas(theme);
     },
   },
   methods: {
@@ -188,11 +192,20 @@ export default {
     },
     
     sendDocumentToCanvas(document) {
-      window.postMessage({ 
-        type: MessageTypes.V2C_SET_DOCUMENT, 
+      window.postMessage({
+        type: MessageTypes.V2C_SET_DOCUMENT,
         data: JSON.parse(JSON.stringify(document)),
         source: 'vue:world'
       }, '*');
+    },
+
+    sendThemeToCanvas(theme) {
+      if (this.draw2dFrameContent) {
+        this.draw2dFrameContent.postMessage({
+          type: MessageTypes.V2C_SET_THEME,
+          theme: theme
+        }, '*');
+      }
     },
     
     /**
@@ -310,6 +323,7 @@ export default {
         case MessageTypes.C2V_CANVAS_READY:
           this.updateDraw2dFrame();
           this.canvasReady = true;
+          this.sendThemeToCanvas(this.currentTheme);
           if (this.composedDiagram && this.composedDiagram.length > 0) {
             this.sendDocumentToCanvas(this.composedDiagram);
           }
@@ -350,108 +364,34 @@ export default {
 
 <style scoped>
 .canvas-game-container {
-  width: 100%;
-  height: 100%;
   display: flex;
   overflow: hidden;
 }
 
 .iframe-container {
   flex: 1;
-  min-width: 0;
-  min-height: 0;
   display: flex;
 }
 
 .iframe-container iframe {
   flex: 1;
-  width: 100%;
-  height: 100%;
   border: none;
 }
-</style>
 
-
-<style>
-/* Property Drawer - matching left navigation */
-.property-drawer {
-  background: var(--game-bg-secondary) !important;
-  border-left: 3px solid var(--game-accent-primary) !important;
-  border-radius: 0 !important;
-}
-
-/* Content area */
-.property-drawer__content {
-  padding: var(--game-spacing-sm);
-  overflow-y: auto;
-  height: 100%;
-}
-</style>
-
-<style scoped>
-/* Container muss sich an den verfügbaren Platz anpassen, nicht an den Inhalt */
-.canvas-game-container {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  overflow: hidden;
-}
-
-.iframe-container {
-  flex: 1;
-  min-width: 0;
-  min-height: 0;
-  display: flex;
-}
-
-.iframe-container iframe {
-  flex: 1;
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-</style>
-
-<style scoped>
 /* Toggle Button - fixed position, always visible */
 .sidebar-toggle {
   position: absolute;
-  left: -24px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 24px;
-  height: 48px;
-  background: var(--game-accent-primary);
-  color: white;
-  border: 2px solid var(--game-border-color);
-  border-right: none;
-  border-radius: 4px 0 0 4px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
   z-index: 100;
-  transition: background 0.2s ease;
-}
-
-.sidebar-toggle:hover {
-  background: var(--game-accent-secondary);
 }
 </style>
 
 <style>
-/* Property Drawer - matching left navigation */
-.property-drawer {
-  background: var(--game-bg-secondary) !important;
-  border-left: 3px solid var(--game-accent-primary) !important;
-  border-radius: 0 !important;
-}
-
 /* Content area */
 .property-drawer__content {
-  padding: var(--game-spacing-sm);
   overflow-y: auto;
-  height: 100%;
 }
 </style>

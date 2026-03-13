@@ -1,0 +1,50 @@
+/*
+ * Dark Fantasy Theme — Palette & Global Defaults
+ * Core colors and base element styling.
+ */
+:root {
+  --color-bg-1: #1a1a2e;
+  --color-bg-2: #16213e;
+  --color-bg-3: #0f3460;
+  --color-accent-1: #e94560;
+  --color-accent-2: #f39c12;
+  --color-accent-3: #8e44ad;
+  --color-text-1: #e0e0e0;
+  --color-text-2: #a0a0a0;
+  --color-text-muted: #6b6b6b;
+  --color-border: #2c3e50;
+  --color-border-highlight: #34495e;
+  --color-success: #27ae60;
+  --color-danger: #e74c3c;
+  --color-info: #3498db;
+  /* RGB variants for rgba() usage */
+  --color-accent-1-rgb: 233, 69, 96;
+  --color-accent-2-rgb: 243, 156, 18;
+}
+
+/* Base typography — set once, inherited everywhere */
+body, body * {
+  font-family: 'Ithaca', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Text selection */
+::selection {
+  background: var(--color-accent-1);
+  color: var(--color-text-1);
+}
+
+::-moz-selection {
+  background: var(--color-accent-1);
+  color: var(--color-text-1);
+}
+
+/* Labels */
+label {
+  display: block;
+  margin: 0 0 4px 0;
+  font-size: 24px;
+  color: var(--color-accent-2);
+  letter-spacing: 4px;
+}

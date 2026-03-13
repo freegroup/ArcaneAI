@@ -1,0 +1,56 @@
+/*
+ * Fantasy Tavern Theme — Theme Selector (.theme-selector)
+ */
+
+[data-theme="tavern"] .theme-selector__trigger {
+  padding: 4px 10px;
+  gap: 6px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: #ffffff;
+  background: var(--color-bg-3);
+  border: 2px solid var(--color-accent-1);
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+[data-theme="tavern"] .theme-selector__trigger:hover {
+  border-color: var(--color-accent-2);
+  background: var(--color-bg-2);
+}
+
+[data-theme="tavern"] .theme-selector__arrow {
+  font-size: 10px;
+  color: var(--color-text-muted);
+  transition: transform 0.15s ease;
+}
+
+[data-theme="tavern"] .theme-selector__arrow--open {
+  transform: rotate(180deg);
+}
+
+[data-theme="tavern"] .theme-selector__dropdown {
+  padding: 4px 0;
+  background: var(--color-bg-1);
+  border: 2px solid var(--color-accent-1);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="tavern"] .theme-selector__option {
+  padding: 6px 14px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--color-text-1);
+  transition: background 0.1s ease;
+}
+
+[data-theme="tavern"] .theme-selector__option:hover {
+  background: var(--color-bg-3);
+  color: var(--color-accent-2);
+}
+
+[data-theme="tavern"] .theme-selector__option--active {
+  color: var(--color-accent-2);
+  background: var(--color-bg-2);
+}

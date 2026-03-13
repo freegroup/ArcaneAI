@@ -1041,15 +1041,9 @@
       "name": "gehe_zum_briefkasten"
     },
     "9e4689aa-e289-58e2-d84a-56c8ae74e61c": {
-      "type": "TriggerConnection",
       "id": "9e4689aa-e289-58e2-d84a-56c8ae74e61c",
-      "userData": {
-        "sound_effect": "laufen_waldweg.wav",
-        "description": "Du gehst vom Haus zum Briefkasten gehen, laufen, springen oder wenn es jemand möchte sogar fliegen (auf die Nase) :-)",
-        "system_prompt": "Du bist nun bei dem Baum angekommen",
-        "sound_effect_volume": 100,
-        "sound_effect_duration": 2
-      },
+      "name": "gehe_zum_baum",
+      "type": "TriggerConnection",
       "source": {
         "node": "eb5b6e6b-5ae0-772a-12d3-670e58816128",
         "port": "output0",
@@ -1061,7 +1055,13 @@
         "decoration": "draw2d.decoration.connection.ArrowDecorator",
         "name": "Tree"
       },
-      "name": "gehe_zum_baum"
+      "userData": {
+        "sound_effect": "laufen_waldweg.wav",
+        "description": "Du gehst vom Haus zum Briefkasten gehen, laufen, springen oder wenn es jemand möchte sogar fliegen (auf die Nase) :-)",
+        "system_prompt": "Du bist nun bei dem Baum angekommen",
+        "sound_effect_volume": 70,
+        "sound_effect_duration": 7
+      }
     },
     "61638c84-04dd-d795-1424-5f4faa5d44f0": {
       "type": "TriggerConnection",

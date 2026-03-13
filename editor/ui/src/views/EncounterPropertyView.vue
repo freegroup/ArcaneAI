@@ -207,52 +207,26 @@ export default {
 
 <style scoped>
 .property-view {
-  background: var(--game-bg-primary);
-  color: var(--game-text-primary);
   height: 100%;
   overflow: auto;
-  padding: var(--game-spacing-lg);
-  box-sizing: border-box; 
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: var(--game-spacing-md);
-  font-size: var(--game-font-size-sm);
-  border-left: 1px solid var(--game-border-color);
 }
 
 .property-view textarea {
   resize: vertical;
 }
 
-/* Encounter Name - Special styling */
-.property-view input#encounterName {
-  color: var(--game-accent-secondary);
-      font-size: 24px;
-    letter-spacing: 2px;
-    padding: var(--game-spacing-md) var(--game-spacing-md);
-}
-
 /* Readonly name style for World view */
 .property-view input#encounterName.readonly-name {
-  background: transparent;
   cursor: default;
   pointer-events: none;
-}
-
-.property-view input#encounterName.readonly-name:hover,
-.property-view input#encounterName.readonly-name:focus {
-  background: transparent;
-  border-color: transparent;
-  box-shadow: none;
 }
 
 /* Field Group Container */
 .field-group {
   display: flex;
   flex-direction: column;
-}
-
-.field-group label {
-  margin-bottom: var(--game-spacing-xs);
 }
 </style>

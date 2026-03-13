@@ -1,12 +1,14 @@
 <template>
-  <v-dialog :model-value="dialog" max-width="400" @click:outside="closeDialog" @update:model-value="updateDialog">
+  <v-dialog :model-value="dialog" max-width="500" @click:outside="closeDialog" @update:model-value="updateDialog">
     <v-card class="game-new-dialog">
-      <DialogHeader 
-        title="Create Game" 
-        icon="mdi-plus-box"
-        @close="closeDialog" 
+      <DialogHeader
+        title="Create Game"
+        @close="closeDialog"
       />
-      <v-card-text>
+      <v-card-text class="dialog-content">
+        <p class="dialog-description">
+          Every legend begins with a single step. Name your world and bring a new adventure to life.
+        </p>
         <v-text-field
           ref="nameInput"
           label="Name"
@@ -17,15 +19,15 @@
       </v-card-text>
       <v-card-actions class="dialog-actions">
         <v-spacer></v-spacer>
-        <RetroButton @click="closeDialog" variant="secondary">
+        <ThemedButton @click="closeDialog" variant="secondary">
           Cancel
-        </RetroButton>
-        <RetroButton 
+        </ThemedButton>
+        <ThemedButton 
           @click="createDialog" 
           :disabled="isCreateDisabled" 
         >
           Create
-        </RetroButton>
+        </ThemedButton>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -34,10 +36,10 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import DialogHeader from './DialogHeader.vue';
-import RetroButton from './RetroButton.vue';
+import ThemedButton from './ThemedButton.vue';
 
 export default {
-  components: { DialogHeader, RetroButton },
+  components: { DialogHeader, ThemedButton },
   props: {
     dialog: {
       type: Boolean,
@@ -100,12 +102,11 @@ export default {
     },
 
     focusInput() {
-      // Set focus on the input field when dialog opens
-      this.$nextTick(() => {
+      setTimeout(() => {
         if (this.$refs.nameInput) {
           this.$refs.nameInput.focus();
         }
-      });
+      }, 100);
     },
   },
   watch: {
@@ -120,17 +121,4 @@ export default {
 </script>
 
 <style scoped>
-.game-new-dialog {
-  background: var(--game-bg-secondary) !important;
-  color: var(--game-text-primary) !important;
-  border: 2px solid var(--game-border-highlight);
-  border-radius: 0;
-}
-
-.dialog-actions {
-  padding: var(--game-spacing-lg);
-  border-top: 1px solid var(--game-border-color);
-  background: var(--game-bg-tertiary);
-  gap: var(--game-spacing-md);
-}
 </style>

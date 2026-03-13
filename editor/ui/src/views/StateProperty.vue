@@ -334,87 +334,39 @@
 <style scoped>
   ::v-deep .v-input__details { display: none; }
   .property-view {
-    background: var(--game-bg-primary);
-    color: var(--game-text-primary);
     height: 100%;
     overflow-y: auto;
-    padding: var(--game-spacing-lg);
-    box-sizing: border-box; 
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: var(--game-spacing-md);
-    font-size: var(--game-font-size-sm);
-    border-left: 1px solid var(--game-border-color);
   }
-  .label-with-help label { display: inline-block !important; margin: 0 !important; }
+  .label-with-help label { display: inline-block !important; }
   .property-view textarea {
     resize: vertical;
-    min-height: 100px;
     flex: 1;
   }
-  .property-view input#stateName {
-    font-family: var(--game-font-family-retro);
-    font-size: 25px;
-    letter-spacing: 2px;
-    color: var(--game-accent-secondary);
-    padding: var(--game-spacing-md) var(--game-spacing-md);
-  }
-  .property-view input:hover { background: var(--game-input-hover); border-color: var(--game-border-highlight); }
-  .property-view input:focus { border-color: var(--game-input-focus); box-shadow: 0 0 0 2px rgba(233, 69, 96, 0.2); }
-  .sound-selection { display: flex; align-items: flex-start; gap: var(--game-spacing-sm); }
+  .sound-selection { display: flex; align-items: flex-start; }
   .sound-display {
     flex: 1;
     display: flex;
     align-items: center;
-    gap: var(--game-spacing-sm);
-    padding: var(--game-spacing-sm) var(--game-spacing-md);
-    background: var(--game-input-bg);
-    border: 1px solid var(--game-input-border);
     cursor: pointer;
-    transition: all var(--game-transition-fast);
-    min-height: 36px;
   }
-  .sound-display:hover { background: var(--game-input-hover); border-color: var(--game-border-highlight); }
-  .sound-display .sound-icon { color: var(--game-accent-secondary); flex-shrink: 0; }
-  .sound-display .sound-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--game-font-size-sm); color: var(--game-text-primary); }
-  .sound-display .browse-icon { color: var(--game-text-muted); flex-shrink: 0; opacity: 0.6; transition: opacity var(--game-transition-fast); }
-  .sound-display:hover .browse-icon { opacity: 1; color: var(--game-accent-secondary); }
-  .sound-selection :deep(.v-btn) {
-    background: var(--game-accent-primary) !important;
-    color: var(--game-text-primary) !important;
-    border-radius: 0 !important;
-    min-width: 36px !important;
-    height: 36px !important;
-  }
-  :deep(.v-slider) { margin-top: var(--game-spacing-sm); }
-  :deep(.v-slider-track__fill) { background: var(--game-accent-primary) !important; }
-  :deep(.v-slider-thumb__surface) { background: var(--game-accent-primary) !important; }
-  /* Sections that can grow but have a minimum height to prevent squashing */
+  .sound-display .sound-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sound-display .sound-icon { flex-shrink: 0; }
+  .sound-display .browse-icon { flex-shrink: 0; }
   .property-view__section {
     flex: 1;
     display: flex;
     flex-direction: column;
-    min-height: 250px; /* Codemirror needs a bit more space */
   }
-
-  .editor-container { 
-    position: relative; 
-    flex: 1; 
-    display: flex; 
-    flex-direction: column; 
-    min-height: 0; 
+  .editor-container {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
-  .code-editor { flex: 1; display: flex; flex-direction: column; min-height: 0; }
-  .code-editor :deep(.CodeMirror) {
-    font-size: var(--game-font-size-md);
-    font-family: var(--game-font-family-mono);
-    background: var(--game-input-bg);
-    color: var(--game-text-primary);
-    border: 1px solid var(--game-input-border);
-    border-radius: 0;
-    padding: var(--game-spacing-sm);
-    height: 100%;
-  }
+  .code-editor { flex: 1; display: flex; flex-direction: column; }
   .field-group { display: flex; flex-direction: column; }
-  .label-with-help { display: inline-flex; align-items: center; gap: 4px; margin-bottom: var(--game-spacing-xs); }
+  .label-with-help { display: inline-flex; align-items: center; }
 </style>

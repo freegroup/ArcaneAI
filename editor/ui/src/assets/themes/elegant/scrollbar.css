@@ -1,0 +1,23 @@
+/*
+ * Elegant Theme — Scrollbar
+ */
+
+[data-theme="elegant"] ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+[data-theme="elegant"] ::-webkit-scrollbar-track {
+  background: var(--color-bg-2);
+  border-radius: 6px;
+}
+
+[data-theme="elegant"] ::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 6px;
+  border: 2px solid var(--color-bg-2);
+}
+
+[data-theme="elegant"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-highlight);
+}

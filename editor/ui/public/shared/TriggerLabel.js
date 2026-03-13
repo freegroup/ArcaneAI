@@ -9,10 +9,10 @@ var TriggerLabel = draw2d.shape.basic.Label.extend({
             resizeable:true,
             radius: 5,
             stroke:2,
-            fontColor:"#3f3f34",
+            fontColor: getVar('--connection-label-font', '#3f3f34'),
             fontSize: 20,
-            bgColor: "#cce5bc",
-            color : "#f39c12",
+            bgColor: getVar('--connection-label-bg', '#cce5bc'),
+            color : getVar('--color-accent-2', '#f39c12'),
             editor:new draw2d.ui.LabelEditor(),
             cssClass: "cursor-pointer",
             fontFamily: "Ithaca, monospace",
@@ -34,7 +34,7 @@ var TriggerLabel = draw2d.shape.basic.Label.extend({
         });
 
         this.installEditPolicy(new draw2d.policy.figure.AntSelectionFeedbackPolicy({
-           color: "#e94560",
+           color: getVar('--selection-color', '#e94560'),
            stroke: 6,
            dasharray: "- "
         }));

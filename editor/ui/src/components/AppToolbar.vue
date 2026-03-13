@@ -1,10 +1,10 @@
 <template>
   <v-app-bar border dark class="app-toolbar">
     
-    <RetroButton @click="newFileDialog" variant="secondary">New Game</RetroButton>
-    <RetroButton @click="openFileDialog" variant="secondary">Load Game</RetroButton>
-    <RetroButton @click="save" variant="secondary">Save Game</RetroButton>
-    <RetroButton @click="newEncounterDialog" variant="secondary">Add Encounter</RetroButton>
+    <ThemedButton @click="newFileDialog" variant="secondary">New Game</ThemedButton>
+    <ThemedButton @click="openFileDialog" variant="secondary">Load Game</ThemedButton>
+    <ThemedButton @click="save" variant="secondary">Save Game</ThemedButton>
+    <ThemedButton @click="newEncounterDialog" variant="secondary">Add Encounter</ThemedButton>
     
     <v-spacer></v-spacer>
 
@@ -19,14 +19,14 @@ import { mapActions } from 'vuex';
 import GameNewDialog from './GameNewDialog.vue';
 import GameSelectDialog from './GameSelectDialog.vue';
 import EncounterNewDialog from './EncounterNewDialog.vue';
-import RetroButton from './RetroButton.vue';
+import ThemedButton from './ThemedButton.vue';
 
 export default {
   components: {
     GameSelectDialog,
     GameNewDialog,
     EncounterNewDialog,
-    RetroButton,
+    ThemedButton,
   },
   data() {
     return {
@@ -59,25 +59,13 @@ export default {
 </script>
 
 <style>
-/* Remove scoped to ensure styles apply */
+/* Structural layout only — visual styles in theme files */
 
-/* Override Vuetify App Bar - Fixed height of 48px */
-.v-toolbar {
-  background: linear-gradient(135deg, var(--game-bg-tertiary) 0%, #0a0a14 100%) !important;
-  border-bottom: 3px solid var(--game-accent-primary) !important;
-  border-top: 2px solid var(--game-accent-secondary) !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), 
-              inset 0 -2px 0 rgba(0, 0, 0, 0.4) !important;
+.app-toolbar.v-toolbar {
   overflow: visible !important;
 }
 
-.v-toolbar__content {
-  background: transparent !important;
+.app-toolbar .v-toolbar__content {
   overflow: visible !important;
-}
-
-/* Toolbar Retro Buttons */
-.app-toolbar .retro-btn {
-  margin: 0 var(--game-spacing-sm) !important;
 }
 </style>

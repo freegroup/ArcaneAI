@@ -387,7 +387,8 @@
           SoundManager.stopCurrentSound();
         } else if (this.jsonData.userData.sound_effect) {
           const volume = this.jsonData.userData.sound_effect_volume || 100;
-          SoundManager.playSound(this.jsonData.userData.sound_effect, volume);
+          const duration = this.jsonData.userData.sound_effect_duration || null;
+          SoundManager.playSound(this.jsonData.userData.sound_effect, volume, duration);
         }
       },
 
@@ -537,48 +538,26 @@
 </script>
   
 <style scoped>
-  ::v-deep .v-input__details {
-    display: none;
-  }
+  ::v-deep .v-input__details { display: none; }
 
   .property-view {
-    background: var(--game-bg-primary);
-    color: var(--game-text-primary);
     height: 100%;
     overflow-y: auto;
-    padding: var(--game-spacing-lg);
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: var(--game-spacing-md);
-    font-size: var(--game-font-size-sm);
-    border-left: 1px solid var(--game-border-color);
   }
 
   /* Override for labels inside label-with-help */
   .label-with-help label {
     display: inline-block !important;
-    margin: 0 !important;
   }
-
-
-  /* Retro 8-Bit Font for Trigger Name */
-  .property-view input#triggerName {
-    font-family: var(--game-font-family-retro);
-    font-size: 24px;
-    letter-spacing: 2px;
-    padding: var(--game-spacing-md) var(--game-spacing-md);
-    color: var(--game-accent-secondary);
-    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
-  }
-
 
   /* Sections that can grow but have a minimum height to prevent squashing */
   .property-view__section {
     flex: 1;
     display: flex;
     flex-direction: column;
-    min-height: 180px; /* Minimum space for label + textarea */
   }
 
   /* Textareas in flex containers */
@@ -586,7 +565,6 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    min-height: 0;
   }
 
   .editor-container textarea {
@@ -594,39 +572,19 @@
     resize: none;
   }
 
-
   .sound-selection {
     display: flex;
     align-items: flex-start;
-    gap: var(--game-spacing-sm);
   }
 
-  /* Sound Display - clickable field to open picker (same style as input/textarea) */
   .sound-display {
     flex: 1;
     display: flex;
     align-items: center;
-    gap: var(--game-spacing-sm);
     cursor: pointer;
-    min-height: 36px;
-    background: var(--game-input-bg);
-    border: 1px solid var(--game-input-border);
-    padding: var(--game-spacing-xs) var(--game-spacing-sm);
-    transition: all var(--game-transition-fast);
-  }
-
-  .sound-display:hover {
-    background: var(--game-input-hover);
-    border-color: var(--game-border-highlight);
-  }
-
-  .sound-display:focus {
-    border-color: var(--game-input-focus);
-    box-shadow: 0 0 0 2px rgba(233, 69, 96, 0.2);
   }
 
   .sound-display .sound-icon {
-    color: var(--game-accent-secondary);
     flex-shrink: 0;
   }
 
@@ -635,61 +593,14 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: var(--game-font-size-sm);
-    color: var(--game-text-primary);
   }
 
   .sound-display .browse-icon {
-    color: var(--game-text-muted);
     flex-shrink: 0;
-    opacity: 0.6;
-    transition: opacity var(--game-transition-fast);
-  }
-
-  .sound-display:hover .browse-icon {
-    opacity: 1;
-    color: var(--game-accent-secondary);
   }
 
   .sound-selection :deep(.v-select) {
     flex: 1;
-  }
-
-  .sound-selection :deep(.v-field) {
-    background: var(--game-input-bg);
-    border: 1px solid var(--game-input-border);
-    border-radius: var(--game-radius-md);
-  }
-
-  .sound-selection :deep(.v-field:hover) {
-    background: var(--game-input-hover);
-    border-color: var(--game-border-highlight);
-  }
-
-  .sound-selection :deep(.v-btn) {
-    background: var(--game-accent-primary);
-    color: var(--game-text-primary);
-    border-radius: var(--game-radius-md);
-    transition: all var(--game-transition-fast);
-  }
-
-  .sound-selection :deep(.v-btn:hover) {
-    background: var(--game-accent-tertiary);
-    box-shadow: var(--game-shadow-glow);
-  }
-
-  /* Sound Controls - Duration and Volume with aligned icons */
-  .sound-controls {
-    display: flex;
-    flex-direction: column;
-    gap: var(--game-spacing-sm);
-    margin-top: var(--game-spacing-sm);
-  }
-
-  .sound-control-row {
-    display: flex;
-    align-items: center;
-    gap: var(--game-spacing-sm);
   }
 
   .sound-control-row :deep(.v-text-field),
@@ -697,43 +608,22 @@
     flex: 1;
   }
 
-  .sound-control-row :deep(.v-field) {
-    background: var(--game-input-bg);
-    border: 1px solid var(--game-input-border);
-    border-radius: var(--game-radius-md);
+  .sound-controls {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sound-control-row {
+    display: flex;
+    align-items: center;
   }
 
   .sound-control-icon {
-    width: 24px;
     flex-shrink: 0;
-    color: var(--game-text-muted);
   }
 
-  /* Slider Styling - Vuetify 3 */
   :deep(.v-slider) {
     margin-inline: 0;
-  }
-
-  :deep(.v-slider-track__background) {
-    background: var(--game-border-color) !important;
-    opacity: 1 !important;
-  }
-
-  :deep(.v-slider-track__fill) {
-    background: var(--game-accent-primary) !important;
-  }
-
-  :deep(.v-slider-thumb__surface) {
-    background: var(--game-accent-primary) !important;
-    width: 20px !important;
-    height: 20px !important;
-    border-radius: 50% !important;
-    border: 2px solid var(--game-bg-primary) !important;
-    box-shadow: var(--game-shadow-md) !important;
-  }
-
-  :deep(.v-slider-thumb:hover .v-slider-thumb__surface) {
-    transform: scale(1.1);
   }
 
   /* Editor Container with Expand Button */
@@ -751,13 +641,9 @@
   .label-with-help {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    margin-bottom: var(--game-spacing-xs);
   }
 
   .label-with-help label {
-    margin: 0;
     display: inline-block;
   }
-
 </style>

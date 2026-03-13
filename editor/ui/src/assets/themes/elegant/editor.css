@@ -1,0 +1,20 @@
+/*
+ * Elegant Theme — Code Editor
+ */
+[data-theme="elegant"] .CodeMirror,
+[data-theme="elegant"] .code-editor {
+  font-size: 14px;
+  line-height: 1.6;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-bg-1);
+}
+
+/* Full-height editors (Personality, Welcome Prompt) — more breathing room */
+[data-theme="elegant"] .config-view .full-height-editor {
+  margin: 0 12px;
+}
+
+[data-theme="elegant"] .config-view .full-height-editor .CodeMirror {
+  padding: 12px 8px;
+}

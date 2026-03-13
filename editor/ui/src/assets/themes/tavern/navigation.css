@@ -1,0 +1,89 @@
+/*
+ * Fantasy Tavern Theme — Navigation Drawer (.nav-drawer)
+ */
+
+[data-theme="tavern"] .nav-drawer {
+  background: var(--color-bg-2) !important;
+  border-right: 3px solid var(--color-accent-1) !important;
+  border-radius: 0 !important;
+}
+
+[data-theme="tavern"] .nav-drawer__toggle {
+  min-height: 64px !important;
+}
+
+[data-theme="tavern"] .nav-drawer__toggle .v-icon {
+  color: var(--color-accent-2) !important;
+  font-size: 28px !important;
+  filter: drop-shadow(0 0 8px var(--color-accent-2)) !important;
+  transition: all 0.15s ease !important;
+}
+
+[data-theme="tavern"] .nav-drawer__game-name {
+  padding: 8px 16px;
+  margin: 0 8px 8px 8px;
+  background: rgba(var(--color-accent-2-rgb), 0.1);
+}
+
+[data-theme="tavern"] .nav-drawer__game-label {
+  font-size: 28px;
+  letter-spacing: 2px;
+  color: var(--color-accent-2);
+}
+
+[data-theme="tavern"] .nav-drawer__list {
+  background: transparent !important;
+  padding: 16px 0 !important;
+}
+
+[data-theme="tavern"] .nav-drawer__item .v-list-item-title {
+  font-size: 24px !important;
+  letter-spacing: 1.5px;
+}
+
+[data-theme="tavern"] .nav-drawer__item.v-list-item--active .v-list-item-title {
+  color: var(--color-accent-2) !important;
+}
+
+[data-theme="tavern"] .nav-drawer__subitem {
+  padding-left: 32px !important;
+}
+
+[data-theme="tavern"] .nav-drawer__subitem .v-list-item-title {
+  font-size: 24px !important;
+  letter-spacing: 1.5px;
+}
+
+[data-theme="tavern"] .nav-drawer__subitem.v-list-item--active .v-list-item-title {
+  color: var(--color-accent-2) !important;
+}
+
+[data-theme="tavern"] .nav-drawer__header {
+  margin-top: 16px !important;
+  border-top: 2px solid rgba(var(--color-accent-1-rgb), 0.3) !important;
+}
+
+[data-theme="tavern"] .nav-drawer__header-title {
+  font-weight: 600 !important;
+  font-size: 12px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.5px;
+  color: var(--color-text-muted) !important;
+  opacity: 0.85;
+}
+
+[data-theme="tavern"] .nav-drawer__bullet {
+  font-size: 20px;
+  color: var(--color-accent-2);
+  width: 24px;
+  margin-right: 8px;
+}
+
+[data-theme="tavern"] .nav-drawer__delete-spacer {
+  width: 20px;
+}
+
+/* Content Area */
+[data-theme="tavern"] .content-area .v-main__wrap {
+  height: 100%;
+}

@@ -1,0 +1,50 @@
+/*
+ * Fantasy Tavern Theme — Palette & Global Defaults
+ * Warm, inviting colors inspired by candlelit taverns and parchment.
+ */
+[data-theme="tavern"] {
+  --color-bg-1: #1c1410;
+  --color-bg-2: #2c2218;
+  --color-bg-3: #3d2e1e;
+  --color-accent-1: #e8a849;
+  --color-accent-2: #7ec88b;
+  --color-accent-3: #c87e5a;
+  --color-text-1: #f5e6d0;
+  --color-text-2: #c4a882;
+  --color-text-muted: #8a7560;
+  --color-border: #5a4332;
+  --color-border-highlight: #6d5240;
+  --color-success: #7ec88b;
+  --color-danger: #c0392b;
+  --color-info: #5dade2;
+  --color-accent-1-rgb: 232, 168, 73;
+  --color-accent-2-rgb: 126, 200, 139;
+}
+
+/* Base typography — set once, inherited everywhere */
+[data-theme="tavern"],
+[data-theme="tavern"] * {
+  font-family: 'Ithaca', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Text selection */
+[data-theme="tavern"] ::selection {
+  background: var(--color-accent-1);
+  color: var(--color-text-1);
+}
+
+[data-theme="tavern"] ::-moz-selection {
+  background: var(--color-accent-1);
+  color: var(--color-text-1);
+}
+
+/* Labels */
+[data-theme="tavern"] label {
+  display: block;
+  margin: 0 0 4px 0;
+  font-size: 24px;
+  color: var(--color-accent-2);
+  letter-spacing: 4px;
+}

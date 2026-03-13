@@ -1,0 +1,18 @@
+/*
+ * Elegant Theme — State Shapes & Connections
+ */
+[data-theme="elegant"] {
+  --state-normal-font: var(--color-accent-2);
+  --state-normal-bg: var(--color-bg-3);
+  --state-normal-border: var(--color-accent-1);
+  --state-start-font: #50d890;
+  --state-start-bg: #141824;
+  --state-start-border: #50d890;
+  --state-end-font: #f06292;
+  --state-end-bg: #1e1420;
+  --state-end-border: #f06292;
+  --connection-color: var(--color-success);
+  --connection-label-font: #1e2330;
+  --connection-label-bg: #d0f0e0;
+  --selection-color: var(--color-accent-1);
+}

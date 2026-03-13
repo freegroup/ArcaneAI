@@ -3,6 +3,7 @@ let storeInstance = null;
 
 class SoundManager {
   static currentAudio = null; // Store the current audio instance
+  static durationTimer = null; // Timer for duration-limited playback
   static listeners = []; // Event listeners for play/stop events
 
   /**
@@ -54,8 +55,10 @@ class SoundManager {
   /**
    * Download and play a sound by name. Stops any currently playing sound.
    * @param {string} soundName - The name of the sound to play.
+   * @param {number} volume - Volume level (1-100).
+   * @param {number} [duration] - Optional max duration in seconds. Sound stops after this time.
    */
-  static async playSound(soundName, volume=100) {
+  static async playSound(soundName, volume=100, duration=null) {
     if (!storeInstance) {
       console.error("SoundManager: Vuex store not initialized.")
       return
@@ -71,11 +74,23 @@ class SoundManager {
       SoundManager.currentAudio = new Audio(soundUrl)
       SoundManager.currentAudio.volume = volume / 100;
       SoundManager.currentAudio.play()
-      
+
       // Notify listeners that sound is playing
       SoundManager.notifyListeners(true);
 
+      // Stop after configured duration (if provided and > 0)
+      if (duration && duration > 0) {
+        SoundManager.durationTimer = setTimeout(() => {
+          SoundManager.durationTimer = null;
+          SoundManager.stopCurrentSound();
+        }, duration * 1000);
+      }
+
       SoundManager.currentAudio.onended = () => {
+        if (SoundManager.durationTimer) {
+          clearTimeout(SoundManager.durationTimer);
+          SoundManager.durationTimer = null;
+        }
         URL.revokeObjectURL(soundUrl)
         SoundManager.currentAudio = null
         // Notify listeners that sound stopped
@@ -88,6 +103,10 @@ class SoundManager {
    * Stop the currently playing sound, if any.
    */
   static stopCurrentSound() {
+    if (SoundManager.durationTimer) {
+      clearTimeout(SoundManager.durationTimer);
+      SoundManager.durationTimer = null;
+    }
     if (SoundManager.currentAudio) {
       SoundManager.currentAudio.pause();
       SoundManager.currentAudio.currentTime = 0;

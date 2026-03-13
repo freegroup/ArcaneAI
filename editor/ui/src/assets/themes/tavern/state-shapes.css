@@ -1,0 +1,21 @@
+/*
+ * Fantasy Tavern Theme — State Shapes & Connections
+ */
+[data-theme="tavern"] {
+  /* --- State Shapes --- */
+  --state-normal-font: var(--color-accent-2);
+  --state-normal-bg: var(--color-bg-3);
+  --state-normal-border: #c87e5a;
+  --state-start-font: #7ec88b;
+  --state-start-bg: #2a1e14;
+  --state-start-border: #a8d8b0;
+  --state-end-font: #5a4332;
+  --state-end-bg: #e8c4a0;
+  --state-end-border: #c0392b;
+
+  /* --- Connections & Triggers --- */
+  --connection-color: var(--color-success);
+  --connection-label-font: #3d2e1e;
+  --connection-label-bg: #d4e8c4;
+  --selection-color: var(--color-accent-1);
+}

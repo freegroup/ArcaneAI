@@ -1,0 +1,169 @@
+/*
+ * Fantasy Tavern Theme — Chat Dialog (.chat-dialog)
+ */
+
+[data-theme="tavern"] .chat-dialog {
+  background: var(--color-bg-2);
+  color: var(--color-text-1);
+  border: 2px solid var(--color-border-highlight);
+  border-radius: 4px;
+}
+
+[data-theme="tavern"] .chat-container {
+  height: 500px;
+}
+
+/* Inventory Panel */
+[data-theme="tavern"] .inventory-panel {
+  width: 400px;
+  min-width: 400px;
+  border-right: 2px solid var(--color-border);
+  background: var(--color-bg-3);
+}
+
+[data-theme="tavern"] .inventory-header {
+  padding: 8px 16px;
+  background: var(--color-bg-2);
+  border-bottom: 2px solid var(--color-border);
+  font-size: 18px;
+}
+
+[data-theme="tavern"] .inventory-list {
+  padding: 8px;
+}
+
+[data-theme="tavern"] .inventory-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+[data-theme="tavern"] .inventory-list::-webkit-scrollbar-track {
+  background: var(--color-bg-3);
+}
+
+[data-theme="tavern"] .inventory-list::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+}
+
+[data-theme="tavern"] .inventory-item {
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 24px;
+  gap: 4px;
+}
+
+[data-theme="tavern"] .inventory-item:last-child {
+  border-bottom: none;
+}
+
+[data-theme="tavern"] .item-key {
+  color: var(--color-text-2);
+}
+
+[data-theme="tavern"] .item-checkbox {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--color-accent-2);
+}
+
+[data-theme="tavern"] .item-number {
+  width: 50px;
+}
+
+[data-theme="tavern"] .item-text {
+  width: 60px;
+}
+
+[data-theme="tavern"] .inventory-empty {
+  color: var(--color-text-muted);
+  padding: 16px;
+  font-size: 24px;
+}
+
+/* Messages Area */
+[data-theme="tavern"] .messages-area {
+  padding: 24px;
+  background: var(--color-bg-1);
+  gap: 16px;
+}
+
+[data-theme="tavern"] .messages-area::-webkit-scrollbar {
+  width: 8px;
+}
+
+[data-theme="tavern"] .messages-area::-webkit-scrollbar-track {
+  background: var(--color-bg-3);
+}
+
+[data-theme="tavern"] .messages-area::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+[data-theme="tavern"] .messages-area::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-2);
+}
+
+/* Message Styles */
+[data-theme="tavern"] .message {
+  max-width: 80%;
+}
+
+[data-theme="tavern"] .user-message .message-content {
+  background: var(--color-accent-1);
+  color: white;
+  border: 2px solid var(--color-danger);
+  font-size: 18px;
+  box-shadow: inset -3px -3px 0px 0px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="tavern"] .ai-message .message-content {
+  background: var(--color-bg-3);
+  color: var(--color-text-1);
+  border: 2px solid var(--color-border);
+  font-size: 18px;
+  box-shadow: inset -3px -3px 0px 0px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="tavern"] .system-message .message-content {
+  background: transparent;
+  color: var(--color-accent-2);
+  padding: 4px 16px;
+  font-size: 24px;
+  opacity: 0.8;
+}
+
+[data-theme="tavern"] .error-message .message-content {
+  color: var(--color-accent-1);
+}
+
+/* Typing Indicator */
+[data-theme="tavern"] .typing-indicator {
+  gap: 4px;
+  padding: 4px 0;
+}
+
+[data-theme="tavern"] .typing-indicator .dot {
+  width: 8px;
+  height: 8px;
+  background: var(--color-accent-2);
+  border-radius: 4px;
+}
+
+/* Chat Actions */
+[data-theme="tavern"] .chat-actions {
+  padding: 16px 24px;
+  border-top: 2px solid var(--color-border);
+  background: var(--color-bg-2);
+}
+
+[data-theme="tavern"] .input-wrapper {
+  gap: 16px;
+}
+
+[data-theme="tavern"] .chat-input:focus {
+  border-color: var(--color-accent-2);
+}
+
+[data-theme="tavern"] .chat-input::placeholder {
+  color: var(--color-text-muted);
+}

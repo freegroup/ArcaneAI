@@ -1,0 +1,296 @@
+/*
+ * Elegant Theme — Dialog (.dialog-header, .*-dialog)
+ */
+[data-theme="elegant"] .dialog-overlay {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+[data-theme="elegant"] .dialog-container {
+  background: var(--color-bg-2);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="elegant"] .dialog-header {
+  min-height: 48px;
+  padding: 16px 24px;
+  gap: 16px;
+  background: linear-gradient(135deg, var(--color-bg-3) 0%, var(--color-bg-1) 100%);
+  border-bottom: 1px solid;
+  border-image: linear-gradient(
+    90deg,
+    rgba(108, 138, 255, 0.8) 0%,
+    rgba(108, 138, 255, 0.4) 40%,
+    rgba(108, 138, 255, 0.25) 100%
+  ) 1;
+  border-radius: 12px 12px 0 0;
+}
+
+[data-theme="elegant"] .dialog-header__icon {
+  font-size: 28px;
+  color: var(--color-accent-1);
+}
+
+[data-theme="elegant"] .dialog-header__title {
+  font-size: 18px;
+  font-weight: 300;
+  letter-spacing: 3px;
+  color: var(--color-accent-2);
+}
+
+[data-theme="elegant"] .dialog-content {
+  padding: 28px 32px;
+  color: var(--color-text-1);
+}
+
+[data-theme="elegant"] .dialog-description {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--color-text-2);
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--color-border);
+  font-style: italic;
+}
+
+[data-theme="elegant"] .dialog-description .desc-accent {
+  color: var(--color-accent-2);
+  font-weight: 500;
+  font-style: normal;
+}
+
+[data-theme="elegant"] .dialog-actions {
+  padding: 20px 32px;
+  gap: 12px;
+  background: var(--color-bg-3);
+  border-top: 1px solid var(--color-border);
+  border-radius: 0 0 12px 12px !important;
+  overflow: hidden;
+}
+
+[data-theme="elegant"] .dialog-list-item {
+  padding: 12px 16px;
+  letter-spacing: 1px;
+  border-radius: 6px;
+}
+
+/* ═══════════════════════════════════════════
+   Lamp Glow Effect — all dialogs
+   ═══════════════════════════════════════════ */
+
+/* Card wrapper — lamp glow effect */
+[data-theme="elegant"] .help-dialog,
+[data-theme="elegant"] .delete-encounter-dialog,
+[data-theme="elegant"] .game-select-dialog,
+[data-theme="elegant"] .game-new-dialog,
+[data-theme="elegant"] .encounter-new-dialog,
+[data-theme="elegant"] .todo-edit-dialog,
+[data-theme="elegant"] .sound-picker-dialog,
+[data-theme="elegant"] .import-state-dialog,
+[data-theme="elegant"] .jinja-editor-dialog,
+[data-theme="elegant"] .chat-dialog {
+  position: relative !important;
+  background: var(--color-bg-2) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  overflow: visible !important;
+  isolation: isolate;
+}
+
+/* Ensure all inner content has background (prevents transparency with overflow:visible) */
+[data-theme="elegant"] .help-dialog > .v-card-text,
+[data-theme="elegant"] .delete-encounter-dialog > .v-card-text,
+[data-theme="elegant"] .game-select-dialog > .v-card-text,
+[data-theme="elegant"] .game-new-dialog > .v-card-text,
+[data-theme="elegant"] .encounter-new-dialog > .v-card-text,
+[data-theme="elegant"] .todo-edit-dialog > .v-card-text,
+[data-theme="elegant"] .sound-picker-dialog > .v-card-text,
+[data-theme="elegant"] .import-state-dialog > .v-card-text,
+[data-theme="elegant"] .jinja-editor-dialog > .v-card-text,
+[data-theme="elegant"] .chat-dialog > .v-card-text,
+[data-theme="elegant"] .help-dialog > .dialog-content,
+[data-theme="elegant"] .delete-encounter-dialog > .dialog-content,
+[data-theme="elegant"] .game-select-dialog > .dialog-content,
+[data-theme="elegant"] .game-new-dialog > .dialog-content,
+[data-theme="elegant"] .encounter-new-dialog > .dialog-content,
+[data-theme="elegant"] .todo-edit-dialog > .dialog-content,
+[data-theme="elegant"] .sound-picker-dialog > .dialog-content,
+[data-theme="elegant"] .import-state-dialog > .dialog-content,
+[data-theme="elegant"] .jinja-editor-dialog > .dialog-content,
+[data-theme="elegant"] .chat-dialog > .dialog-content {
+  background: var(--color-bg-2);
+}
+
+/* Clip inner content to card border-radius */
+[data-theme="elegant"] .help-dialog > .dialog-header,
+[data-theme="elegant"] .delete-encounter-dialog > .dialog-header,
+[data-theme="elegant"] .game-select-dialog > .dialog-header,
+[data-theme="elegant"] .game-new-dialog > .dialog-header,
+[data-theme="elegant"] .encounter-new-dialog > .dialog-header,
+[data-theme="elegant"] .todo-edit-dialog > .dialog-header,
+[data-theme="elegant"] .sound-picker-dialog > .dialog-header,
+[data-theme="elegant"] .import-state-dialog > .dialog-header,
+[data-theme="elegant"] .jinja-editor-dialog > .dialog-header,
+[data-theme="elegant"] .chat-dialog > .dialog-header {
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+}
+
+[data-theme="elegant"] .help-dialog > :last-child,
+[data-theme="elegant"] .delete-encounter-dialog > :last-child,
+[data-theme="elegant"] .game-select-dialog > :last-child,
+[data-theme="elegant"] .game-new-dialog > :last-child,
+[data-theme="elegant"] .encounter-new-dialog > :last-child,
+[data-theme="elegant"] .todo-edit-dialog > :last-child,
+[data-theme="elegant"] .sound-picker-dialog > :last-child,
+[data-theme="elegant"] .import-state-dialog > :last-child,
+[data-theme="elegant"] .jinja-editor-dialog > :last-child,
+[data-theme="elegant"] .chat-dialog > :last-child {
+  border-radius: 0 0 12px 12px;
+  overflow: hidden;
+}
+
+/* Gradient border — luminous frame, bright left fading right */
+[data-theme="elegant"] .help-dialog::before,
+[data-theme="elegant"] .delete-encounter-dialog::before,
+[data-theme="elegant"] .game-select-dialog::before,
+[data-theme="elegant"] .game-new-dialog::before,
+[data-theme="elegant"] .encounter-new-dialog::before,
+[data-theme="elegant"] .todo-edit-dialog::before,
+[data-theme="elegant"] .sound-picker-dialog::before,
+[data-theme="elegant"] .import-state-dialog::before,
+[data-theme="elegant"] .jinja-editor-dialog::before,
+[data-theme="elegant"] .chat-dialog::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 14px;
+  background: linear-gradient(
+    90deg,
+    #a0b4ff 0%,
+    rgba(108, 138, 255, 0.8) 10%,
+    rgba(108, 138, 255, 0.4) 30%,
+    rgba(108, 138, 255, 0.12) 55%,
+    rgba(15, 17, 23, 0.4) 80%,
+    rgba(15, 17, 23, 0.2) 100%
+  );
+  box-shadow:
+    0 0 8px rgba(108, 138, 255, 0.4),
+    0 0 20px rgba(108, 138, 255, 0.15);
+  z-index: -1;
+}
+
+/* The lamp — softer ambient glow behind card, upper-left */
+[data-theme="elegant"] .help-dialog::after,
+[data-theme="elegant"] .delete-encounter-dialog::after,
+[data-theme="elegant"] .game-select-dialog::after,
+[data-theme="elegant"] .game-new-dialog::after,
+[data-theme="elegant"] .encounter-new-dialog::after,
+[data-theme="elegant"] .todo-edit-dialog::after,
+[data-theme="elegant"] .sound-picker-dialog::after,
+[data-theme="elegant"] .import-state-dialog::after,
+[data-theme="elegant"] .jinja-editor-dialog::after,
+[data-theme="elegant"] .chat-dialog::after {
+  content: '';
+  position: absolute;
+  left: -30px;
+  top: -15px;
+  width: 60px;
+  height: 45%;
+  background: rgba(108, 138, 255, 0.3);
+  filter: blur(35px);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+/* ═══════════════════════════════════════════
+   Help Dialog Content (ExtendedHelpDialog)
+   ═══════════════════════════════════════════ */
+[data-theme="elegant"] .help-dialog-content {
+  padding: 28px 32px !important;
+  font-size: 14px !important;
+  line-height: 1.8;
+  color: var(--color-text-2);
+  max-height: 450px;
+  background: var(--color-bg-2);
+}
+
+/* Intro paragraph — slightly larger, brighter */
+[data-theme="elegant"] .help-dialog-content p:first-child {
+  font-size: 15px;
+  color: var(--color-text-1);
+  margin-bottom: 16px;
+}
+
+/* Section headers (strong in paragraphs) */
+[data-theme="elegant"] .help-dialog-content strong {
+  color: var(--color-accent-2);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* Emphasis */
+[data-theme="elegant"] .help-dialog-content em {
+  color: var(--color-accent-1);
+  font-style: italic;
+}
+
+/* Lists */
+[data-theme="elegant"] .help-dialog-content ul {
+  margin: 8px 0 16px 0;
+  padding-left: 8px;
+  list-style: none;
+}
+
+[data-theme="elegant"] .help-dialog-content li {
+  position: relative;
+  padding: 6px 12px 6px 24px;
+  margin: 4px 0;
+  color: var(--color-text-2);
+  border-radius: 4px;
+  transition: background 0.15s ease;
+}
+
+/* Custom bullet — small accent dash */
+[data-theme="elegant"] .help-dialog-content li::before {
+  content: '—';
+  position: absolute;
+  left: 4px;
+  color: var(--color-accent-1);
+  opacity: 0.6;
+}
+
+/* Subtle hover on list items */
+[data-theme="elegant"] .help-dialog-content li:hover {
+  background: rgba(var(--color-accent-1-rgb), 0.04);
+}
+
+/* Code inline */
+[data-theme="elegant"] .help-dialog-content code {
+  background: rgba(var(--color-accent-1-rgb), 0.1);
+  color: var(--color-accent-2);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+  border: 1px solid rgba(var(--color-accent-1-rgb), 0.15);
+}
+
+/* Code blocks */
+[data-theme="elegant"] .help-dialog-content pre {
+  background: var(--color-bg-1);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin: 12px 0;
+}
+
+/* Actions footer */
+[data-theme="elegant"] .help-dialog-actions {
+  padding: 16px 32px !important;
+  background: var(--color-bg-3);
+  border-top: 1px solid var(--color-border);
+  border-radius: 0 0 12px 12px !important;
+  overflow: hidden;
+}

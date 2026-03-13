@@ -1,0 +1,26 @@
+/*
+ * Elegant Theme — Toast Notifications (.toast-notification)
+ */
+
+[data-theme="elegant"] .toast-notification {
+  top: 80px;
+  right: 20px;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+/* Success Toast */
+[data-theme="elegant"] .toast-notification.toast-success {
+  background: var(--color-success);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Error Toast */
+[data-theme="elegant"] .toast-notification.toast-error {
+  background: var(--color-danger);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}

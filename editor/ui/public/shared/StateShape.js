@@ -1,27 +1,26 @@
-
 let NORMAL_STYLE = {
     stroke: 4,
     fontSize:24,
     radius:1,
-    fontColor: "#f39c12",  
-    bgColor: "#0f3460", 
-    color: "#349be8",
+    fontColor: getVar('--state-normal-font', '#f39c12'),
+    bgColor: getVar('--state-normal-bg', '#0f3460'),
+    color: getVar('--state-normal-border', '#349be8'),
 }
 
 let START_STYLE = {
     stroke: 4,
     fontSize:24,
     padding:20,
-    fontColor: "#03c524",  
-    bgColor: "#281b58", 
-    color: "#c6bee1",
+    fontColor: getVar('--state-start-font', '#03c524'),
+    bgColor: getVar('--state-start-bg', '#281b58'),
+    color: getVar('--state-start-border', '#c6bee1'),
 }
 
 let END_STYLE = {
     stroke: 4,
-    fontColor: "#3f3f3f",
-    bgColor: "#ffcccb",
-    color: "#d9534f",
+    fontColor: getVar('--state-end-font', '#3f3f3f'),
+    bgColor: getVar('--state-end-bg', '#ffcccb'),
+    color: getVar('--state-end-border', '#d9534f'),
 }
 
 const StateType = Object.freeze({
@@ -78,7 +77,7 @@ StateShape = draw2d.shape.box.VBox.extend({
         this.createPort("output")
 
         this.installEditPolicy(new draw2d.policy.figure.AntSelectionFeedbackPolicy({
-           color: "#e94560",
+           color: getVar('--selection-color', '#e94560'),
            stroke: 6,
            dasharray: "- "
         }));

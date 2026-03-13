@@ -1,12 +1,18 @@
 <template>
-  <v-dialog v-model="dialogVisible" max-width="400" @update:model-value="onDialogChange">
+  <v-dialog v-model="dialogVisible" max-width="600" @update:model-value="onDialogChange">
     <v-card class="encounter-new-dialog">
-      <DialogHeader 
-        title="Create Encounter" 
-        icon="mdi-sword-cross"
-        @close="close" 
+      <DialogHeader
+        title="Create Encounter"
+        @close="close"
       />
-      <v-card-text>
+      <v-card-text class="dialog-content">
+        <p class="dialog-description">
+          An Encounter is a <span class="desc-accent">focused view</span> of your game —
+          a lens that reveals only the rooms and connections relevant to
+          a specific <span class="desc-accent">scenario</span>.
+          Build and refine one piece of the puzzle at a time.
+          Every connection or room you create here is automatically part of the <span class="desc-accent">World</span> map.
+        </p>
         <v-text-field
           ref="nameInput"
           label="Encounter Name"
@@ -18,15 +24,15 @@
       </v-card-text>
       <v-card-actions class="dialog-actions">
         <v-spacer></v-spacer>
-        <RetroButton @click="close" variant="secondary">
+        <ThemedButton @click="close" variant="secondary">
           Cancel
-        </RetroButton>
-        <RetroButton 
+        </ThemedButton>
+        <ThemedButton 
           @click="createEncounter" 
           :disabled="isCreateDisabled" 
         >
           Create
-        </RetroButton>
+        </ThemedButton>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -35,11 +41,11 @@
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
 import DialogHeader from './DialogHeader.vue';
-import RetroButton from './RetroButton.vue';
+import ThemedButton from './ThemedButton.vue';
 
 export default {
   name: 'EncounterNewDialog',
-  components: { DialogHeader, RetroButton },
+  components: { DialogHeader, ThemedButton },
   
   props: {
     modelValue: {
@@ -162,28 +168,15 @@ export default {
     },
 
     focusInput() {
-      this.$nextTick(() => {
+      setTimeout(() => {
         if (this.$refs.nameInput) {
           this.$refs.nameInput.focus();
         }
-      });
+      }, 100);
     },
   },
 };
 </script>
 
 <style scoped>
-.encounter-new-dialog {
-  background: var(--game-bg-secondary) !important;
-  color: var(--game-text-primary) !important;
-  border: 2px solid var(--game-border-highlight);
-  border-radius: 0;
-}
-
-.dialog-actions {
-  padding: var(--game-spacing-lg);
-  border-top: 1px solid var(--game-border-color);
-  background: var(--game-bg-tertiary);
-  gap: var(--game-spacing-md);
-}
 </style>

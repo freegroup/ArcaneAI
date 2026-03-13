@@ -10,14 +10,14 @@
         placeholder="Add a new todo item..."
         @keyup.enter="addTodo"
       />
-      <RetroActionButton
+      <ThemedActionButton
         variant="success"
         :disabled="!newTodoText.trim()"
         @click="addTodo"
         title="Add todo"
       >
         <v-icon size="small">mdi-plus</v-icon>
-      </RetroActionButton>
+      </ThemedActionButton>
     </div>
     
     <!-- Pending todos -->
@@ -34,8 +34,8 @@
           class="todo-checkbox"
         />
         <span class="todo-text">{{ todo.text }}</span>
-        <RetroActionButton variant="secondary" @click="openEditDialog(todo)" class="todo-action-btn">✎</RetroActionButton>
-        <RetroActionButton variant="danger" @click="removeTodo(todo)" class="todo-action-btn">X</RetroActionButton>
+        <ThemedActionButton variant="secondary" @click="openEditDialog(todo)" class="todo-action-btn">✎</ThemedActionButton>
+        <ThemedActionButton variant="danger" @click="removeTodo(todo)" class="todo-action-btn">X</ThemedActionButton>
       </div>
     </div>
     
@@ -54,8 +54,8 @@
           class="todo-checkbox"
         />
         <span class="todo-text">{{ todo.text }}</span>
-        <RetroActionButton variant="secondary" @click="openEditDialog(todo)" class="todo-action-btn">✎</RetroActionButton>
-        <RetroActionButton variant="danger" @click="removeTodo(todo)" class="todo-action-btn">X</RetroActionButton>
+        <ThemedActionButton variant="secondary" @click="openEditDialog(todo)" class="todo-action-btn">✎</ThemedActionButton>
+        <ThemedActionButton variant="danger" @click="removeTodo(todo)" class="todo-action-btn">X</ThemedActionButton>
       </div>
     </div>
     
@@ -76,14 +76,14 @@
 <script>
 import { mapGetters } from 'vuex';
 import TodoEditDialog from './TodoEditDialog.vue';
-import RetroActionButton from './RetroActionButton.vue';
+import ThemedActionButton from './ThemedActionButton.vue';
 
 export default {
   name: 'TodoManager',
   
   components: {
     TodoEditDialog,
-    RetroActionButton
+    ThemedActionButton
   },
   
   data() {
@@ -233,105 +233,43 @@ export default {
 .todo-manager {
   display: flex;
   flex-direction: column;
-  gap: var(--game-spacing-sm);
 }
 
 label {
   display: block;
-  margin: 0 0 var(--game-spacing-xs) 0;
-  font-size: var(--game-font-size-md);
-  color: var(--game-accent-secondary);
-  text-transform: uppercase;
-  letter-spacing: 2px;
 }
 
 /* Todo Input Container */
 .todo-input-container {
   display: flex;
-  gap: var(--game-spacing-sm);
 }
 
 .todo-input-container input {
   flex: 1;
-  padding: var(--game-spacing-sm) var(--game-spacing-md);
-  background: var(--game-input-bg);
-  border: 1px solid var(--game-input-border);
-  border-radius: 0;
-  color: var(--game-text-primary);
   outline: none;
-}
-
-.todo-input-container input:focus {
-  border-color: var(--game-input-focus);
-}
-
-.todo-input-container input:focus {
-  border-color: var(--game-input-focus);
-}
-
-/* Todo Section */
-.todo-section {
-  border-left: 2px solid var(--game-border-color);
-  padding-left: var(--game-spacing-md);
-  margin-top: var(--game-spacing-sm);
-}
-
-.completed-section {
-  margin-top: var(--game-spacing-lg);
-}
-
-.section-label {
-  font-size: var(--game-font-size-md) !important;
-  color: var(--game-text-muted) !important;
-  margin-bottom: var(--game-spacing-sm) !important;
 }
 
 /* Todo Item */
 .todo-item {
   display: flex;
   align-items: center;
-  gap: var(--game-spacing-sm);
-  padding: var(--game-spacing-xs) 0;
-  transition: background var(--game-transition-fast);
-}
-
-.todo-item:hover {
-  background: rgba(255, 255, 255, 0.03);
 }
 
 .todo-checkbox {
-  width: 16px;
-  height: 16px;
-  accent-color: var(--game-accent-primary);
   cursor: pointer;
   flex-shrink: 0;
 }
 
 .todo-text {
   flex: 1;
-  font-size: var(--game-font-size-md);
-  color: var(--game-text-primary);
 }
 
-.todo-item.completed .todo-text {
-  text-decoration: line-through;
-  color: var(--game-text-muted);
-}
-
-/* 8-bit Action Buttons Visibility */
+/* Action Buttons Visibility */
 .todo-action-btn {
   opacity: 0;
-  transition: opacity var(--game-transition-fast);
 }
 
 .todo-item:hover .todo-action-btn {
   opacity: 1;
-}
-
-.empty-state {
-  text-align: center;
-  color: var(--game-text-muted);
-  font-size: var(--game-font-size-sm);
-  padding: var(--game-spacing-lg);
 }
 </style>

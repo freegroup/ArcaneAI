@@ -1,0 +1,18 @@
+/*
+ * Dark Fantasy Theme — HelpButton (.help-btn)
+ */
+.help-btn {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--color-border);
+  font-size: 24px;
+  color: var(--color-text-muted);
+  background: var(--color-bg-2);
+  transition: all 0.15s ease;
+}
+
+.help-btn:hover {
+  color: var(--color-success);
+  border-color: var(--color-success);
+  background: var(--color-bg-2);
+}

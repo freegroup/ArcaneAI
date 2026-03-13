@@ -5,8 +5,8 @@ Raft = draw2d.shape.composite.Raft.extend({
     init : function(attr, setter, getter)
     {
         this._super({
-            bgColor:"#c3eae4", 
-            color:"#000000",
+            bgColor: getVar('--raft-bg', '#c3eae4'),
+            color: getVar('--raft-border', '#000000'),
             radius: 10
         , ...attr}, setter, getter);
     },

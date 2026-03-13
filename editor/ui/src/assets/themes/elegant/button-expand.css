@@ -1,0 +1,22 @@
+/*
+ * Elegant Theme — ExpandButton (.expand-btn)
+ */
+[data-theme="elegant"] .expand-btn {
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-bg-3);
+}
+
+[data-theme="elegant"] .expand-btn:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transform: scale(1.05);
+  border-color: var(--color-accent-1);
+}
+
+[data-theme="elegant"] .expand-btn__icon {
+  transform: scale(1.2);
+}

@@ -1,0 +1,100 @@
+/*
+ * Elegant Theme — Canvas (state diagram editor)
+ */
+[data-theme="elegant"] .canvas-container {
+  background: var(--color-bg-1);
+}
+
+[data-theme="elegant"] .canvas-toolbar {
+  padding: 10px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-2);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="elegant"] .glassy-button {
+  padding: 6px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="elegant"] .glassy-button:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  border-color: var(--color-accent-1);
+}
+
+[data-theme="elegant"] .toolbar-delimiter {
+  width: 1px;
+  height: 20px;
+  background: var(--color-border);
+}
+
+[data-theme="elegant"] .zoom-controls {
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 4px;
+}
+
+[data-theme="elegant"] .zoom-btn {
+  font-size: 12px;
+  padding: 6px;
+  border-radius: 4px;
+}
+
+[data-theme="elegant"] .canvas-scrollbar {
+  width: 8px;
+}
+
+/* Context Menu */
+[data-theme="elegant"] .context-menu {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  padding: 4px;
+}
+
+[data-theme="elegant"] .context-menu-item {
+  padding: 8px 14px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+[data-theme="elegant"] .context-menu-separator {
+  height: 1px;
+  background: var(--color-border);
+  margin: 4px 8px;
+}
+
+/* Pixel Modal */
+[data-theme="elegant"] .pixel-modal {
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="elegant"] .pixel-modal-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+[data-theme="elegant"] .pixel-modal-body {
+  padding: 16px;
+}
+
+[data-theme="elegant"] .pixel-modal-footer {
+  padding: 12px 16px;
+  border-top: 1px solid var(--color-border);
+  gap: 10px;
+}
+
+/* Raft */
+[data-theme="elegant"] .raft {
+  background: #e8f0f8;
+  border-color: var(--color-border);
+}

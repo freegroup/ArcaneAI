@@ -10,6 +10,9 @@ import model from './model';
 import views from './views';
 import config from './config';
 
+// UI settings (theme, preferences)
+import settings from './settings';
+
 const store = createStore({
   modules: {
     // Legacy modules
@@ -17,11 +20,14 @@ const store = createStore({
     games,
     sounds,
     encounters,
-    
+
     // New Overlay Pattern modules
     model,
     views,
     config,
+
+    // UI settings
+    settings,
   },
 });
 

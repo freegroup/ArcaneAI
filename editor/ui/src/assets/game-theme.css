@@ -1,12 +1,11 @@
-/* 
- * Game Theme - Dark Fantasy RPG Style
- * Central design variables for consistent game-like appearance
+/*
+ * ArcaneAI Theme System
+ * Entry point: fonts, theme imports, global layout.
  */
 
-/* Import Noto Sans for regular text */
+/* ===== Font Imports ===== */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Noto+Sans+Mono:wght@400;500;600;700&display=swap');
 
-/* Local Retro Font: Ithaca */
 @font-face {
   font-family: 'Ithaca';
   src: url('./fonts/ithaca-font/Ithaca-LVB75.ttf') format('truetype');
@@ -14,255 +13,20 @@
   font-style: normal;
 }
 
-/* Global Layout - Required for Vuetify v-app to fill viewport */
+/* ===== Theme Imports ===== */
+@import './themes/dark/index.css';
+@import './themes/tavern/index.css';
+@import './themes/elegant/index.css';
+
+/* ===== Global Layout ===== */
 html,
 body {
   height: 100%;
   margin: 0;
   padding: 0;
   overflow: hidden;
-  font-family: var(--game-font-family);
-  -webkit-font-smoothing: none;
-  /* Keeps pixel fonts sharp */
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Vuetify v-application must fill viewport */
 .v-application {
   height: 100%;
-}
-
-:root {
-  /* Color Palette - Dark Fantasy Theme */
-  --game-bg-primary: #1a1a2e;
-  /* Deep dark blue-black */
-  --game-bg-secondary: #16213e;
-  /* Slightly lighter dark blue */
-  --game-bg-tertiary: #0f3460;
-  /* Muted deep blue */
-
-  --game-accent-primary: #e94560;
-  /* Vibrant red/pink - for important actions */
-  --game-accent-secondary: #f39c12;
-  /* Golden yellow - for highlights */
-  --game-accent-tertiary: #8e44ad;
-  /* Purple - for special items */
-
-  --game-text-primary: #e0e0e0;
-  /* Light gray - main text */
-  --game-text-secondary: #a0a0a0;
-  /* Medium gray - secondary text */
-  --game-text-muted: #6b6b6b;
-  /* Dark gray - labels */
-
-  --game-border-color: #2c3e50;
-  /* Subtle border */
-  --game-border-highlight: #34495e;
-  /* Highlighted border */
-
-  --game-success: #27ae60;
-  /* Green - success states */
-  --game-warning: #f39c12;
-  /* Orange - warnings */
-  --game-danger: #e74c3c;
-  /* Red - errors */
-  --game-info: #3498db;
-  /* Blue - info */
-
-  /* Spacing */
-  --game-spacing-xs: 4px;
-  --game-spacing-sm: 8px;
-  --game-spacing-md: 16px;
-  --game-spacing-lg: 24px;
-  --game-spacing-xl: 32px;
-
-  /* Border Radius */
-  --game-radius-sm: 4px;
-  --game-radius-md: 8px;
-  --game-radius-lg: 12px;
-
-  /* Shadows - Game-like depth */
-  --game-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
-  --game-shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
-  --game-shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5);
-  --game-shadow-glow: 0 0 20px rgba(233, 69, 96, 0.3);
-
-  /* Transitions */
-  --game-transition-fast: 0.15s ease;
-  --game-transition-normal: 0.3s ease;
-  --game-transition-slow: 0.5s ease;
-
-  /* Typography */
-  --game-font-family: 'Ithaca', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --game-font-family-mono: 'Ithaca', 'Monaco', 'Lucida Console', monospace;
-  --game-font-family-retro: 'Ithaca', monospace;
-
-  --game-font-size-xs: 15px;
-  --game-font-size-sm: 18px;
-  --game-font-size-md: 24px;
-  --game-font-size-lg: 30px;
-  --game-font-size-xl: 48px;
-
-  /* Input/Controls */
-  --game-input-bg: #0f3460;
-  --game-input-border: #2c3e50;
-  --game-input-focus: #e94560;
-  --game-input-hover: #16213e;
-
-  /* Scrollbar */
-  --game-scrollbar-thumb: #2c3e50;
-  --game-scrollbar-track: #16213e;
-
-  /* ===========================================
-   * RESPONSIVE SCREEN SIZE VARIABLES
-   * screen-wide: >= 1440px (Large monitors)
-   * screen-medium: 1024px - 1439px (Laptops)
-   * screen-small: < 1024px (Tablets/Small)
-   * =========================================== */
-
-  /* Header Sizes - Wide Screens (Default) */
-  --screen-wide-header-padding-y: var(--game-spacing-lg);
-  --screen-wide-header-font-size: 30px;
-  --screen-wide-header-icon-size: 32px;
-  --screen-wide-header-info-size: 24px;
-  --screen-wide-header-letter-spacing: 2px;
-  --screen-wide-header-gap: var(--game-spacing-md);
-
-  /* Navigation Drawer - Wide Screens (Default) */
-  --screen-wide-drawer-width: 240px;
-  --screen-wide-drawer-item-padding: 16px;
-  --screen-wide-drawer-spacer: 16px;
-
-  /* App Toolbar - Wide Screens (Default) */
-  --screen-wide-toolbar-height: 64px;
-  --screen-wide-toolbar-font-size: 16px;
-  --screen-wide-toolbar-icon-size: 28px;
-  --screen-wide-toolbar-btn-padding: 0 20px;
-  --screen-wide-toolbar-letter-spacing: 2px;
-}
-
-/* Medium Screens (Laptops: 1024px - 1439px) */
-@media (max-width: 1439px) {
-  :root {
-    /* Header Sizes - Medium Screens (60% of wide) */
-    --screen-medium-header-padding-y: calc(var(--game-spacing-lg) * 0.6);
-    --screen-medium-header-font-size: 13px;
-    --screen-medium-header-icon-size: 24px;
-    --screen-medium-header-info-size: 18px;
-    --screen-medium-header-letter-spacing: 1px;
-    --screen-medium-header-gap: var(--game-spacing-sm);
-
-    /* Navigation Drawer - Medium Screens (25% narrower) */
-    --screen-medium-drawer-width: 180px;
-    --screen-medium-drawer-item-padding: 5px;
-    --screen-medium-drawer-spacer: 5px;
-
-    /* App Toolbar - Medium Screens (smaller) */
-    --screen-medium-toolbar-height: 48px;
-    --screen-medium-toolbar-font-size: 12px;
-    --screen-medium-toolbar-icon-size: 22px;
-    --screen-medium-toolbar-btn-padding: 0 12px;
-    --screen-medium-toolbar-letter-spacing: 1px;
-  }
-}
-
-/* Small Screens (Tablets: < 1024px) */
-@media (max-width: 1023px) {
-  :root {
-    /* Header Sizes - Small Screens (50% of wide) */
-    --screen-small-header-padding-y: calc(var(--game-spacing-lg) * 0.5);
-    --screen-small-header-font-size: 11px;
-    --screen-small-header-icon-size: 20px;
-    --screen-small-header-info-size: 16px;
-    --screen-small-header-letter-spacing: 1px;
-    --screen-small-header-gap: var(--game-spacing-xs);
-
-    /* Navigation Drawer - Small Screens */
-    --screen-small-drawer-width: 150px;
-    --screen-small-drawer-item-padding: 4px;
-    --screen-small-drawer-spacer: 4px;
-
-    /* App Toolbar - Small Screens */
-    --screen-small-toolbar-height: 40px;
-    --screen-small-toolbar-font-size: 10px;
-    --screen-small-toolbar-icon-size: 18px;
-    --screen-small-toolbar-btn-padding: 0 8px;
-    --screen-small-toolbar-letter-spacing: 1px;
-  }
-}
-
-/* Global Scrollbar Styling - Game Theme */
-::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--game-scrollbar-track);
-  border-radius: var(--game-radius-sm);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--game-scrollbar-thumb);
-  border-radius: var(--game-radius-sm);
-  border: 2px solid var(--game-scrollbar-track);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--game-border-highlight);
-}
-
-/* Selection Colors */
-::selection {
-  background: var(--game-accent-primary);
-  color: var(--game-text-primary);
-}
-
-::-moz-selection {
-  background: var(--game-accent-primary);
-  color: var(--game-text-primary);
-}
-
-/* ===========================================
- * GLOBAL ELEMENT DEFAULTS 
- * Centralizing these reduces redundancy in components
- * =========================================== */
-label {
-  display: block;
-  margin: 0 0 var(--game-spacing-xs) 0;
-  font-size: var(--game-font-size-md);
-  color: var(--game-accent-secondary);
-  letter-spacing: 4px;
-}
-
-input[type="text"],
-input[type="number"],
-input[type="email"],
-textarea,
-select {
-  width: 100%;
-  padding: var(--game-spacing-xs) var(--game-spacing-sm);
-  background: var(--game-input-bg);
-  border: 1px solid var(--game-input-border);
-  border-radius: 0;
-  color: var(--game-text-primary);
-  font-size: var(--game-font-size-md);
-  letter-spacing: 4px;
-  transition: all var(--game-transition-fast);
-  outline: none;
-  line-height: 1;
-}
-
-input:hover,
-textarea:hover,
-select:hover {
-  background: var(--game-input-hover);
-  border-color: var(--game-border-highlight);
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-  border-color: var(--game-input-focus);
-  box-shadow: 0 0 0 2px rgba(233, 69, 96, 0.2);
 }

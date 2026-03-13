@@ -1,0 +1,22 @@
+/*
+ * Elegant Theme — HelpButton (.help-btn)
+ */
+[data-theme="elegant"] .help-btn {
+  width: 22px;
+  height: 22px;
+  border: 1px solid rgba(var(--color-accent-1-rgb), 0.4);
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-accent-1);
+  background: rgba(var(--color-accent-1-rgb), 0.06);
+  position: relative;
+  z-index: 1;
+  transition: all 0.2s ease;
+}
+
+[data-theme="elegant"] .help-btn:hover {
+  color: var(--color-accent-1);
+  border-color: var(--color-accent-1);
+  background: rgba(108, 138, 255, 0.1);
+}

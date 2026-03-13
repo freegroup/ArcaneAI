@@ -1,0 +1,18 @@
+/*
+ * Fantasy Tavern Theme — Toolbar (.app-toolbar)
+ */
+
+[data-theme="tavern"] .app-toolbar.v-toolbar {
+  background: linear-gradient(135deg, var(--color-bg-3) 0%, #1a1208 100%) !important;
+  border-bottom: 3px solid var(--color-accent-1) !important;
+  border-top: 2px solid var(--color-accent-2) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), inset 0 -2px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="tavern"] .app-toolbar .v-toolbar__content {
+  background: transparent !important;
+}
+
+[data-theme="tavern"] .app-toolbar .themed-btn {
+  margin: 0 8px !important;
+}

@@ -1,11 +1,11 @@
 EditPolicy = draw2d.policy.canvas.BoundingboxSelectionPolicy.extend({
 
-    init: function () 
+    init: function ()
     {
       this._super()
     },
 
-    onMouseUp: function (canvas, x, y, shiftKey, ctrlKey) 
+    onMouseUp: function (canvas, x, y, shiftKey, ctrlKey)
     {
       if (shiftKey === true && this.mouseDownElement === null) {
         let rx = Math.min(x, this.x)
@@ -20,8 +20,8 @@ EditPolicy = draw2d.policy.canvas.BoundingboxSelectionPolicy.extend({
           height: rh,
           opacity: 0.7,
           stroke: 1,
-          color: "#d3e2fe",
-          bgColor: "#f3f6fc"
+          color: getVar('--raft-border-light', '#d3e2fe'),
+          bgColor: getVar('--raft-bg-light', '#f3f6fc')
         })
         canvas.add(raftFigure)
         this.boundingBoxFigure1.setCanvas(null)

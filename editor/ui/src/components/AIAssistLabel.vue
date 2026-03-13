@@ -17,11 +17,5 @@ export default {
 .ai-assist-label {
   display: flex;
   align-items: center;
-  gap: var(--game-spacing-sm);
-  font-family: var(--game-font-family-retro);
-  font-size: 24px;
-  color: var(--game-text-primary);
-  letter-spacing: 6px;
 }
-
 </style>

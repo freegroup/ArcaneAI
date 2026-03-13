@@ -23,46 +23,23 @@ export default {
 <style scoped>
 .ai-assist-help {
   display: flex;
-  gap: var(--game-spacing-md);
-  color: white;
 }
 
 .ai-assist-help__icon {
   flex-shrink: 0;
 }
 
-.ai-assist-help__title {
-  color: white;
-  margin-bottom: var(--game-spacing-sm);
-  font-size: var(--game-font-size-md);
-  letter-spacing: 4px;
-}
-
-.ai-assist-help__description {
-  margin: var(--game-spacing-sm) 0;
-  font-size: var(--game-font-size-sm);
-  letter-spacing: 4px;
-}
-
 .ai-assist-help__list {
-  margin: var(--game-spacing-sm) 0;
-  padding-left: 20px;
   list-style: none;
-  letter-spacing: 4px;
 }
 
 .ai-assist-help__list li {
-  margin: 8px 0;
-  font-size: var(--game-font-size-sm);
   position: relative;
-  padding-left: 15px;
-  letter-spacing: 4px;
 }
 
 .ai-assist-help__list li::before {
   content: '-';
   position: absolute;
   left: 0;
-  color: var(--game-accent-secondary);
 }
 </style>

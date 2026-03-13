@@ -10,23 +10,23 @@
       :disabled="loading"
       class="prompt-field"
     />
-    <RetroButton 
+    <ThemedButton 
       @click="handleSend" 
       :disabled="!modelValue.trim() || loading"
       title="Send instruction to AI"
     >
       <v-icon size="small">mdi-magic-staff</v-icon>
       Send
-    </RetroButton>
+    </ThemedButton>
   </div>
 </template>
 
 <script>
-import RetroButton from './RetroButton.vue';
+import ThemedButton from './ThemedButton.vue';
 
 export default {
   name: 'AIAssistInput',
-  components: { RetroButton },
+  components: { ThemedButton },
   props: {
     modelValue: {
       type: String,
@@ -60,33 +60,15 @@ export default {
 <style scoped>
 .ai-assist-input {
   display: flex;
-  gap: var(--game-spacing-sm);
   align-items: center;
 }
 
 .prompt-field {
   flex: 1;
-  padding: var(--game-spacing-sm) var(--game-spacing-md);
-  background: var(--game-input-bg);
-  border: 1px solid var(--game-input-border);
-  border-radius: 0;
-  color: var(--game-text-primary);
-  font-size: var(--game-font-size-md);
   outline: none;
-  font-family: inherit;
-  letter-spacing: 1px;
-}
-
-.prompt-field:focus {
-  border-color: var(--game-input-focus);
 }
 
 .prompt-field:disabled {
-  opacity: 0.6;
   cursor: not-allowed;
-}
-
-.prompt-field::placeholder {
-  color: var(--game-text-muted);
 }
 </style>

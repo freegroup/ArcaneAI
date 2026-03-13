@@ -1,0 +1,32 @@
+/*
+ * Elegant Theme — Sidebar
+ */
+[data-theme="elegant"] .canvas-sidebar {
+  width: 350px;
+  border-left: 1px solid var(--color-border);
+}
+
+[data-theme="elegant"] .canvas-sidebar--lg {
+  width: 600px;
+}
+
+[data-theme="elegant"] .sidebar-toggle {
+  width: 24px;
+  height: 40px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px 0 0 6px;
+  background: var(--color-bg-3);
+  color: var(--color-text-2);
+}
+
+/* --- Property Drawer (CanvasGame - Vuetify) --- */
+[data-theme="elegant"] .property-drawer {
+  background: var(--color-bg-2) !important;
+  border-left: 1px solid var(--color-border) !important;
+  border-radius: 0 !important;
+}
+
+[data-theme="elegant"] .property-drawer__content {
+  padding: 12px;
+  height: 100%;
+}

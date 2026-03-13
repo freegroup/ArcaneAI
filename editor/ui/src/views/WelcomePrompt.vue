@@ -41,13 +41,13 @@
             <div v-if="aiResponse" class="ai-result">
               <div class="ai-result-header">
                 <strong>Improved Text:</strong>
-                <RetroButton 
+                <ThemedButton 
                   @click="applyAiResult" 
                   title="Apply text to editor"
                 >
                   <v-icon size="small">mdi-check</v-icon>
                   Apply to Editor
-                </RetroButton>
+                </ThemedButton>
               </div>
               <div class="ai-result-text">{{ aiResponse }}</div>
               <div v-if="aiComment || wordCountInfo" class="ai-comment">
@@ -86,7 +86,7 @@ import { mapGetters, mapActions } from 'vuex';
 import axios from 'axios';
 import ExtendedHelpDialog from '../components/ExtendedHelpDialog.vue';
 import HelpButton from '../components/HelpButton.vue';
-import RetroButton from '../components/RetroButton.vue';
+import ThemedButton from '../components/ThemedButton.vue';
 import AIAssistLabel from '../components/AIAssistLabel.vue';
 import AIAssistHelpText from '../components/AIAssistHelpText.vue';
 import AIAssistLoading from '../components/AIAssistLoading.vue';
@@ -107,7 +107,7 @@ export default {
     Codemirror,
     ExtendedHelpDialog,
     HelpButton,
-    RetroButton,
+    ThemedButton,
     AIAssistLabel,
     AIAssistHelpText,
     AIAssistLoading,
@@ -243,10 +243,8 @@ export default {
 </script>
 
 <style scoped>
-/* Wrapper wie CanvasGame - volle Höhe des Parents */
+/* Wrapper - full height of parent */
 .welcome-wrapper {
-  width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -255,16 +253,10 @@ export default {
 
 .config-view {
   flex: 1;
-  min-height: 0; /* WICHTIG: Erlaubt zu schrumpfen */
-  width: 100%;
-  max-width: 100%; /* Verhindert Überlauf */
-  overflow: hidden; /* Kein Scrolling am Container - nur intern */
-  padding: var(--game-spacing-md); /* Padding statt margin am Editor */
-  padding-top: 0; /* Header braucht kein extra padding oben */
-  box-sizing: border-box; 
+  overflow: hidden;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  background: var(--game-bg-secondary);
 }
 
 /* 8-Bit Retro Header */
@@ -272,208 +264,75 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--screen-wide-header-padding-y, var(--game-spacing-lg)) var(--game-spacing-lg);
-  background: linear-gradient(135deg, var(--game-bg-tertiary) 0%, #1a1a2e 100%);
-  border-bottom: 3px solid var(--game-accent-primary);
-  border-top: 2px solid var(--game-accent-secondary);
-  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.3);
 }
 
 .welcome-header__title {
   display: flex;
   align-items: center;
-  gap: var(--screen-wide-header-gap, var(--game-spacing-md));
-  color: var(--game-accent-secondary);
-  font-family: var(--game-font-family-retro);
-  font-size: var(--screen-wide-header-font-size, 16px);
-  letter-spacing: var(--screen-wide-header-letter-spacing, 2px);
-}
-
-/* Responsive header for laptop screens (60% height) */
-@media (max-width: 1439px) {
-  .welcome-header {
-    padding: var(--screen-medium-header-padding-y) var(--game-spacing-lg);
-  }
-  
-  .welcome-header__title {
-    font-size: var(--screen-medium-header-font-size);
-    gap: var(--screen-medium-header-gap);
-    letter-spacing: var(--screen-medium-header-letter-spacing);
-  }
-  
-  .welcome-header__info {
-    font-size: var(--screen-medium-header-info-size);
-  }
-}
-
-/* Responsive header for small screens */
-@media (max-width: 1023px) {
-  .welcome-header {
-    padding: var(--screen-small-header-padding-y) var(--game-spacing-md);
-  }
-  
-  .welcome-header__title {
-    font-size: var(--screen-small-header-font-size);
-    gap: var(--screen-small-header-gap);
-    letter-spacing: var(--screen-small-header-letter-spacing);
-  }
-  
-  .welcome-header__info {
-    font-size: var(--screen-small-header-info-size);
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-    filter: drop-shadow(0 0 8px var(--game-accent-secondary));
-  }
-  50% {
-    transform: scale(1.05);
-    filter: drop-shadow(0 0 12px var(--game-accent-secondary));
-  }
-}
-
-.welcome-header__info {
-  color: var(--game-text-secondary);
-  font-size: var(--screen-wide-header-info-size, 24px);
-  cursor: pointer;
-  transition: all var(--game-transition-fast);
-}
-
-.welcome-header__info:hover {
-  color: var(--game-accent-secondary);
-  filter: drop-shadow(0 0 8px var(--game-accent-secondary));
-  transform: scale(1.1);
 }
 
 .full-height-editor {
-  flex: 1; 
-  min-height: 0; /* WICHTIG: Erlaubt dem flex-item zu schrumpfen */
-  overflow: hidden; /* Content scrollt im CodeMirror */
-  margin: 0; /* Kein margin - padding ist am Container */
-  margin-top: var(--game-spacing-md); /* Nur oben Abstand zum Header */
-  width: 100%;
+  flex: 1;
+  overflow: hidden;
   box-sizing: border-box;
-  transition: flex 0.3s ease;
 }
 
 .full-height-editor.editor-collapsed {
   flex: 0.6;
 }
 
-.full-height-editor >>> .CodeMirror {
-  font-size: 18px;
-  font-family: var(--game-font-family-mono) !important;
-  background: var(--game-bg-primary) !important;
-  border: 2px solid var(--game-border-color);
-  border-radius: var(--game-radius-md);
-  height: 100%;
-  line-height: 1.6;
-}
-
 .full-height-editor >>> .CodeMirror-gutters {
   display: none !important;
 }
 
-.full-height-editor >>> .CodeMirror-placeholder {
-  color: var(--game-text-muted) !important;
-  font-style: italic;
-}
-
 /* AI Assist Panel */
 .ai-assist-panel {
-  margin-top: auto;
-  border-top: 1px solid var(--game-border-color);
-  background: var(--game-bg-tertiary);
 }
 
 .ai-assist-header {
   display: flex;
   align-items: center;
-  gap: var(--game-spacing-sm);
-  padding: var(--game-spacing-md);
   cursor: pointer;
   user-select: none;
-  transition: background-color 0.2s;
-}
-
-.ai-assist-header:hover {
-  background: var(--game-bg-hover);
 }
 
 .ai-assist-content {
-  padding: var(--game-spacing-md);
-  background: var(--game-bg-secondary);
 }
 
 /* Expand transition */
 .expand-enter-active,
 .expand-leave-active {
-  transition: all 0.3s ease;
-  max-height: 400px;
   overflow: hidden;
 }
 
 .expand-enter-from,
 .expand-leave-to {
   max-height: 0;
-  opacity: 0;
 }
 
 /* AI Response Area */
 .ai-response-area {
-  min-height: 120px;
-  max-height: 200px;
   overflow-y: auto;
-  margin-bottom: var(--game-spacing-md);
-  padding: var(--game-spacing-md);
-  background: var(--game-bg-primary);
-  border: 1px solid var(--game-border-color);
-  border-radius: var(--game-radius-md);
 }
 
 .ai-result {
   display: flex;
   flex-direction: column;
-  gap: var(--game-spacing-sm);
 }
 
 .ai-result-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--game-spacing-sm);
 }
 
 .ai-result-text {
-  padding: var(--game-spacing-md);
-  background: var(--game-bg-secondary);
-  border: 1px solid var(--game-border-highlight);
-  border-radius: var(--game-radius-sm);
   white-space: pre-wrap;
   word-wrap: break-word;
-  font-family: 'Consolas', 'Monaco', monospace;
-  font-size: 0.95em;
-  line-height: 1.5;
 }
 
 .ai-comment {
   display: flex;
   align-items: flex-start;
-  gap: var(--game-spacing-sm);
-  padding: var(--game-spacing-sm);
-  background: var(--game-bg-tertiary);
-  border-left: 3px solid var(--game-accent-color);
-  border-radius: var(--game-radius-sm);
-  font-size: 0.9em;
-  color: var(--game-text-secondary);
-  font-style: italic;
-}
-
-.word-count-info {
-  color: var(--game-accent-color);
-  font-style: normal;
-  margin-bottom: 4px;
 }
 </style>

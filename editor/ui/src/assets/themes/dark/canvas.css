@@ -1,0 +1,93 @@
+/*
+ * Dark Fantasy Theme — Canvas
+ * Container-level styles for CanvasGame and CanvasEncounter.
+ * Canvas iframe internal styles remain CSS-variable driven (see canvas toolbar, zoom, etc. below).
+ */
+
+/* --- Canvas Containers --- */
+.canvas-game-container {
+  width: 100%;
+  height: 100%;
+}
+
+.canvas-encounter-container {
+  height: 100%;
+  min-height: 0;
+  width: 100%;
+}
+
+.iframe-container {
+  min-width: 0;
+  min-height: 0;
+}
+
+.iframe-container iframe {
+  width: 100%;
+  height: 100%;
+}
+
+/* --- Canvas iframe internal variables (consumed inside the iframe) --- */
+:root {
+  /* --- Canvas Toolbar --- */
+  --canvas-toolbar-padding: 12px;
+  --canvas-toolbar-border-width: 4px;
+  --canvas-toolbar-shadow: 0 4px 0 rgba(0, 0, 0, 0.3);
+  --canvas-bg: var(--color-bg-1);
+  --canvas-toolbar-bg: var(--color-bg-2);
+
+  /* --- Canvas Buttons (.glassy-button) --- */
+  --canvas-btn-padding: 6px 12px;
+  --canvas-btn-border-width: 3px;
+  --canvas-btn-radius: 0;
+  --canvas-btn-shadow: inset -3px -3px 0px 0px rgba(0, 0, 0, 0.4), inset 3px 3px 0px 0px rgba(255, 255, 255, 0.2);
+  --canvas-btn-hover-shadow: inset -3px -3px 0px 0px rgba(0, 0, 0, 0.4), inset 3px 3px 0px 0px rgba(255, 255, 255, 0.3), 0 4px 0 rgba(0, 0, 0, 0.3);
+  --canvas-btn-font-size: 19px;
+  --canvas-btn-letter-spacing: 2px;
+
+  /* --- Toolbar Delimiter --- */
+  --canvas-delimiter-width: 4px;
+  --canvas-delimiter-height: 24px;
+
+  /* --- Zoom Controls --- */
+  --canvas-zoom-padding: 4px;
+  --canvas-zoom-btn-padding: 8px;
+  --canvas-zoom-border-width: 2px;
+  --canvas-zoom-btn-radius: 0;
+  --canvas-zoom-btn-font-size: 12px;
+
+  /* --- Scrollbar --- */
+  --canvas-scrollbar-width: 12px;
+  --canvas-scrollbar-border-width: 3px;
+
+  /* --- Context Menu --- */
+  --contextmenu-padding: 4px;
+  --contextmenu-item-padding: 8px 12px;
+  --contextmenu-border-width: 3px;
+  --contextmenu-separator-width: 2px;
+  --contextmenu-shadow: 6px 6px 0px rgba(0, 0, 0, 0.5);
+  --contextmenu-label-font-size: 24px;
+
+  /* --- Pixel Modal --- */
+  --modal-header-padding: 12px 16px;
+  --modal-body-padding: 16px;
+  --modal-input-padding: 10px 12px;
+  --modal-footer-padding: 12px 16px;
+  --modal-footer-gap: 12px;
+  --modal-btn-padding: 10px 16px;
+  --modal-border-width: 4px;
+  --modal-header-border-width: 3px;
+  --modal-input-border-width: 3px;
+  --modal-footer-border-width: 3px;
+  --modal-btn-border-width: 3px;
+  --modal-shadow: 8px 8px 0px rgba(0, 0, 0, 0.5);
+  --modal-btn-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
+  --modal-header-font-size: 14px;
+  --modal-input-font-size: 14px;
+  --modal-btn-font-size: 12px;
+
+  /* --- Raft --- */
+  --raft-bg: #c3eae4;
+  --raft-border: #000000;
+  --raft-bg-light: #f3f6fc;
+  --raft-border-light: #d3e2fe;
+}

@@ -1,0 +1,8 @@
+/*
+ * Elegant Theme — View Headers (WelcomePrompt, Personality, Inventory)
+ */
+[data-theme="elegant"] .view-header {
+  background: linear-gradient(135deg, var(--color-bg-3) 0%, var(--color-bg-1) 100%);
+  border-bottom: 1px solid var(--color-accent-1);
+  box-shadow: none;
+}

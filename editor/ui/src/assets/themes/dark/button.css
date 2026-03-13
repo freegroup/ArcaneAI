@@ -1,0 +1,76 @@
+/*
+ * Dark Fantasy Theme — ThemedButton (.themed-btn)
+ */
+.themed-btn {
+  --_bg: var(--color-success);
+  --_hover: #229954;
+  --_shadow: #1e8449;
+
+  padding: 6px 16px;
+  border: none;
+  border-radius: 0;
+  font-size: 18px;
+  letter-spacing: 2px;
+  color: #ffffff;
+  background: var(--_bg);
+  box-shadow: inset -3px -3px 0px 0px var(--_shadow);
+  transition: all 0.15s ease;
+}
+
+.themed-btn:hover,
+.themed-btn:focus {
+  background: var(--_hover);
+  box-shadow: inset -4.5px -4.5px 0px 0px var(--_shadow);
+  outline: none;
+}
+
+.themed-btn:active {
+  box-shadow: inset 3px 3px 0px 0px var(--_shadow);
+}
+
+.themed-btn::before {
+  top: -4px;
+  left: 0;
+  border-top: 4px black solid;
+  border-bottom: 4px black solid;
+}
+
+.themed-btn::after {
+  left: -4px;
+  top: 0;
+  border-left: 4px black solid;
+  border-right: 4px black solid;
+}
+
+/* Proceed variant */
+.themed-btn--proceed {
+  --_bg: var(--color-accent-2);
+  --_hover: #e67e22;
+  --_shadow: #d35400;
+  color: var(--color-bg-1) !important;
+}
+
+/* Reset/Danger variant */
+.themed-btn--reset {
+  --_bg: var(--color-accent-1);
+  --_hover: #d32f2f;
+  --_shadow: #b71c1c;
+}
+
+/* Secondary variant */
+.themed-btn--secondary {
+  --_bg: var(--color-bg-3);
+  --_hover: var(--color-bg-2);
+  --_shadow: #0a0a14;
+  color: white !important;
+}
+
+/* Disabled state */
+.themed-btn:disabled,
+.themed-btn--disabled {
+  --_bg: #666;
+  --_hover: #666;
+  --_shadow: #444;
+  cursor: not-allowed;
+  opacity: 0.6;
+}

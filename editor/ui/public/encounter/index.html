@@ -82,6 +82,20 @@ document.addEventListener("DOMContentLoaded", () => {
           case MessageTypes.V2C_SET_SHAPE_DATA:
             app.view.setShapeData(message.data)
             break
+          case MessageTypes.V2C_SET_THEME:
+            // Apply theme to iframe's own document
+            if (message.theme === 'dark') {
+              document.documentElement.removeAttribute('data-theme');
+            } else {
+              document.documentElement.setAttribute('data-theme', message.theme);
+            }
+            // Re-render diagram so shapes pick up new CSS variables via getVar()
+            var writer = new draw2d.io.json.Writer();
+            writer.marshal(app.view, function(json) {
+              if (json.length === 0) return;
+              app.view.setDocumentData(json);
+            });
+            break
           default:
             console.warn('Unknown V2C message type:', message.type)
         }

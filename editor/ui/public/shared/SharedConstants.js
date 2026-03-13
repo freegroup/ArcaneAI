@@ -37,7 +37,14 @@
     root.ShapeTypes = result.ShapeTypes;
   }
 }(typeof self !== 'undefined' ? self : this, function () {
-  
+
+  // ====================================
+  // Theme Helper - Read CSS Custom Properties
+  // ====================================
+  const root = typeof self !== 'undefined' ? self : this;
+  root.getVar = (name, fallback) =>
+      getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback;
+
   // ====================================
   // Shape Types - Shape Identifiers
   // ====================================
@@ -76,6 +83,7 @@
     // V2C: Vue → Canvas Messages
     V2C_SET_DOCUMENT: 'v2c:setDocument',
     V2C_SET_SHAPE_DATA: 'v2c:setShapeData',
+    V2C_SET_THEME: 'v2c:setTheme',  // Vue sends theme change to canvas iframe
   };
   
   return {

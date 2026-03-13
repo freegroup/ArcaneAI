@@ -1,0 +1,63 @@
+/*
+ * Elegant Theme — App Header (.app-header)
+ */
+[data-theme="elegant"] .app-header {
+  background: linear-gradient(180deg, var(--color-bg-1) 0%, var(--color-bg-2) 100%);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="elegant"] .app-header__branding {
+  height: 80px;
+  padding: 0 20px;
+  gap: 20px;
+  border-bottom: 1px solid var(--color-border);
+  background: linear-gradient(180deg, rgba(108, 138, 255, 0.05) 0%, transparent 100%);
+}
+
+[data-theme="elegant"] .app-header__title {
+  font-size: 32px;
+  font-weight: 200;
+  letter-spacing: 8px;
+  color: var(--color-accent-1);
+}
+
+[data-theme="elegant"] .app-header__title-main {
+  font-size: 32px;
+  font-weight: 200;
+  letter-spacing: 8px;
+  color: var(--color-accent-1);
+}
+
+[data-theme="elegant"] .app-header__title-sub {
+  font-size: 32px;
+  font-weight: 300;
+  letter-spacing: 4px;
+  color: var(--color-text-2);
+}
+
+[data-theme="elegant"] .app-header__tagline {
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  border-left: 1px solid var(--color-accent-1);
+  padding-left: 16px;
+}
+
+[data-theme="elegant"] .app-header__version {
+  font-size: 8px;
+  color: var(--color-text-muted);
+  opacity: 0.5;
+}
+
+[data-theme="elegant"] .app-header__toolbar {
+  height: 48px;
+  padding: 0 8px;
+}
+
+[data-theme="elegant"] .app-header__unsaved {
+  color: var(--color-accent-2);
+  font-weight: bold;
+}

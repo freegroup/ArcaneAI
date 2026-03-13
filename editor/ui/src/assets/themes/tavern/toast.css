@@ -1,0 +1,28 @@
+/*
+ * Fantasy Tavern Theme — Toast Notifications (.toast-notification)
+ */
+
+[data-theme="tavern"] .toast-notification {
+  top: 80px;
+  right: 20px;
+  color: white;
+  padding: 16px 24px;
+  border-radius: 4px;
+  border: 3px solid #2a1e14;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+/* Success Toast */
+[data-theme="tavern"] .toast-notification.toast-success {
+  background: var(--color-success);
+  box-shadow: inset -4px -4px 0px 0px rgba(0, 0, 0, 0.3),
+              0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* Error Toast */
+[data-theme="tavern"] .toast-notification.toast-error {
+  background: var(--color-accent-1);
+  box-shadow: inset -4px -4px 0px 0px rgba(0, 0, 0, 0.3),
+              0 8px 16px rgba(0, 0, 0, 0.4);
+}

@@ -1,10 +1,9 @@
 <template>
   <v-dialog v-model="dialogVisible" max-width="600" @update:model-value="onDialogChange">
     <v-card class="import-state-dialog">
-      <DialogHeader 
-        title="Import State" 
-        icon="mdi-import"
-        @close="close" 
+      <DialogHeader
+        title="Import State"
+        @close="close"
       />
 
       <!-- Search Bar -->
@@ -63,7 +62,7 @@
 
       <v-card-actions class="dialog-actions">
         <v-spacer></v-spacer>
-        <RetroButton @click="close" variant="secondary">Cancel</RetroButton>
+        <ThemedButton @click="close" variant="secondary">Cancel</ThemedButton>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -72,7 +71,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import DialogHeader from './DialogHeader.vue';
-import RetroButton from './RetroButton.vue';
+import ThemedButton from './ThemedButton.vue';
 import { MessageTypes } from '../../public/shared/SharedConstants.js';
 import ViewComposer from '../utils/ViewComposer.js';
 
@@ -86,7 +85,7 @@ export default {
     }
   },
 
-  components: { DialogHeader, RetroButton },
+  components: { DialogHeader, ThemedButton },
   emits: ['update:modelValue'],
 
   data() {
@@ -321,19 +320,8 @@ export default {
 </script>
 
 <style scoped>
-.import-state-dialog {
-  background: var(--game-bg-primary);
-  color: var(--game-text-primary);
-}
-
-.search-bar {
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--game-border-color);
-}
-
 .dialog-content {
   padding: 0 !important;
-  height: 350px;
   overflow-y: auto;
 }
 
@@ -344,8 +332,6 @@ export default {
   align-items: center;
   justify-content: center;
   height: 100%;
-  gap: 16px;
-  color: var(--game-text-secondary);
 }
 
 /* Empty State */
@@ -355,40 +341,13 @@ export default {
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: var(--game-text-muted);
-  gap: 8px;
 }
 
 /* State List */
-.state-list {
-  padding: 8px 0;
-}
-
 .state-item {
   display: flex;
   align-items: center;
-  padding: 12px 16px;
   cursor: pointer;
-  transition: background-color 0.15s;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.state-item:hover {
-  background: var(--game-input-hover);
-}
-
-.state-item.selected {
-  background: var(--game-accent-primary);
-  color: var(--game-text-primary);
-}
-
-.state-icon {
-  margin-right: 12px;
-  color: var(--game-accent-secondary);
-}
-
-.state-item.selected .state-icon {
-  color: var(--game-text-primary);
 }
 
 .state-info {
@@ -400,7 +359,6 @@ export default {
 
 .state-name {
   font-weight: 500;
-  font-size: var(--game-font-size-sm);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -412,47 +370,8 @@ export default {
 }
 
 .state-description {
-  font-size: var(--game-font-size-xs);
-  color: var(--game-text-secondary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin-top: 2px;
-}
-
-.state-item.selected .state-description {
-  color: var(--game-text-primary);
-  opacity: 0.8;
-}
-
-.check-icon {
-  color: var(--game-text-primary);
-  margin-left: 8px;
-}
-
-/* Dialog Actions */
-.dialog-actions {
-  border-top: 1px solid var(--game-border-color);
-  padding: 12px 16px;
-  gap: 12px;
-}
-
-
-/* Scrollbar styling */
-.dialog-content::-webkit-scrollbar {
-  width: 8px;
-}
-
-.dialog-content::-webkit-scrollbar-track {
-  background: var(--game-bg-primary);
-}
-
-.dialog-content::-webkit-scrollbar-thumb {
-  background: var(--game-border-color);
-  border-radius: 4px;
-}
-
-.dialog-content::-webkit-scrollbar-thumb:hover {
-  background: var(--game-text-muted);
 }
 </style>

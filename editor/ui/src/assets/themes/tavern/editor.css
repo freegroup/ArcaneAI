@@ -1,0 +1,238 @@
+/*
+ * Fantasy Tavern Theme — Code Editor
+ * Used by: Personality, WelcomePrompt (full-height editors)
+ */
+
+/* --- Config View Container --- */
+[data-theme="tavern"] .config-view {
+  padding: 16px;
+  padding-top: 0;
+  background: var(--color-bg-2);
+  min-height: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* --- Wrapper sizing --- */
+[data-theme="tavern"] .personality-wrapper,
+[data-theme="tavern"] .welcome-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+/* --- Full Height Editor --- */
+[data-theme="tavern"] .full-height-editor {
+  margin: 0;
+  margin-top: 16px;
+  width: 100%;
+  min-height: 0;
+  transition: flex 0.3s ease;
+}
+
+[data-theme="tavern"] .full-height-editor .CodeMirror {
+  font-size: 30px;
+  letter-spacing: 2px;
+  background: var(--color-bg-1) !important;
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  height: 100%;
+  line-height: 1.6;
+}
+
+[data-theme="tavern"] .full-height-editor .CodeMirror-placeholder {
+  color: var(--color-text-muted) !important;
+  font-style: italic;
+}
+
+/* --- AI Assist Panel --- */
+[data-theme="tavern"] .ai-assist-panel {
+  margin-top: auto;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg-3);
+}
+
+[data-theme="tavern"] .ai-assist-header {
+  gap: 8px;
+  padding: 16px;
+  transition: background-color 0.2s;
+}
+
+[data-theme="tavern"] .ai-assist-header:hover {
+  background: var(--color-bg-2);
+}
+
+[data-theme="tavern"] .ai-assist-content {
+  padding: 16px;
+  background: var(--color-bg-2);
+}
+
+/* --- Expand Transition --- */
+[data-theme="tavern"] .expand-enter-active,
+[data-theme="tavern"] .expand-leave-active {
+  transition: all 0.3s ease;
+  max-height: 400px;
+}
+
+[data-theme="tavern"] .expand-enter-from,
+[data-theme="tavern"] .expand-leave-to {
+  opacity: 0;
+}
+
+/* --- AI Response Area --- */
+[data-theme="tavern"] .ai-response-area {
+  min-height: 120px;
+  max-height: 200px;
+  margin-bottom: 16px;
+  padding: 16px;
+  background: var(--color-bg-1);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+[data-theme="tavern"] .ai-result {
+  gap: 8px;
+}
+
+[data-theme="tavern"] .ai-result-header {
+  margin-bottom: 8px;
+}
+
+[data-theme="tavern"] .ai-result-text {
+  padding: 16px;
+  background: var(--color-bg-2);
+  border: 1px solid var(--color-border-highlight);
+  border-radius: 4px;
+  font-size: 0.95em;
+  line-height: 1.5;
+}
+
+[data-theme="tavern"] .ai-comment {
+  gap: 8px;
+  padding: 8px;
+  background: var(--color-bg-3);
+  border-left: 3px solid var(--color-accent-1);
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: var(--color-text-2);
+  font-style: italic;
+}
+
+[data-theme="tavern"] .word-count-info {
+  color: var(--color-accent-1);
+  font-style: normal;
+  margin-bottom: 4px;
+}
+
+/* --- Inventory Specific --- */
+[data-theme="tavern"] .inventory-container {
+  height: 100%;
+  background: var(--color-bg-2);
+  padding: 0;
+}
+
+[data-theme="tavern"] .inventory-list {
+  min-height: 0;
+  padding: 8px;
+  background: var(--color-bg-1);
+}
+
+[data-theme="tavern"] .inventory-list .v-table {
+  background: transparent;
+  color: var(--color-text-1);
+}
+
+[data-theme="tavern"] .inventory-list tbody tr {
+  border-bottom: 1px solid var(--color-border);
+  transition: all 0.15s ease;
+}
+
+[data-theme="tavern"] .inventory-list tbody tr:hover {
+  background: var(--color-bg-2);
+}
+
+[data-theme="tavern"] .inventory-list td {
+  color: var(--color-text-1);
+  font-size: 14px;
+  padding: 8px;
+}
+
+[data-theme="tavern"] .inventory-list td:first-child {
+  color: var(--color-accent-2);
+}
+
+[data-theme="tavern"] .inventory-list .v-field--focused {
+  border-color: var(--color-accent-1);
+}
+
+[data-theme="tavern"] .prompt-field:focus {
+  border-color: var(--color-border-highlight);
+}
+
+[data-theme="tavern"] .inventory-list .v-field__input {
+  color: var(--color-text-1);
+  font-size: 13px;
+  padding: 4px 8px;
+  min-height: 32px;
+}
+
+/* --- Input Row --- */
+[data-theme="tavern"] .input-row {
+  background: var(--color-bg-3) !important;
+  border-bottom: 3px solid var(--color-accent-1) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="tavern"] .input-row:hover {
+  background: var(--color-bg-3) !important;
+}
+
+[data-theme="tavern"] .input-row td {
+  padding: 12px 8px !important;
+}
+
+/* --- Inventory Scrollbar --- */
+[data-theme="tavern"] .inventory-list::-webkit-scrollbar {
+  width: 12px;
+}
+
+[data-theme="tavern"] .inventory-list::-webkit-scrollbar-track {
+  background: var(--color-bg-3);
+  border-radius: 4px;
+}
+
+[data-theme="tavern"] .inventory-list::-webkit-scrollbar-thumb {
+  background: var(--color-accent-1);
+  border-radius: 4px;
+  border: 2px solid var(--color-bg-3);
+}
+
+[data-theme="tavern"] .inventory-list::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-3);
+  box-shadow: 0 0 8px var(--color-accent-1);
+}
+
+/* --- Toast Notifications --- */
+[data-theme="tavern"] .toast-notification {
+  top: 80px;
+  right: 20px;
+  color: white;
+  padding: 16px 24px;
+  border-radius: 4px;
+  border: 3px solid #2a1e14;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+[data-theme="tavern"] .toast-notification.toast-success {
+  background: var(--color-success);
+  box-shadow: inset -4px -4px 0px 0px rgba(0, 0, 0, 0.3),
+              0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="tavern"] .toast-notification.toast-error {
+  background: var(--color-accent-1);
+  box-shadow: inset -4px -4px 0px 0px rgba(0, 0, 0, 0.3),
+              0 8px 16px rgba(0, 0, 0, 0.4);
+}

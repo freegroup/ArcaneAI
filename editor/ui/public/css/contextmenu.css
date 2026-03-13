@@ -8,44 +8,44 @@
 
 /* Native Context Menu Styles - matching game UI theme */
 .native-context-menu {
-    font-family: 'Ithaca', monospace;
+    font-family: var(--font-family-retro, 'Ithaca', monospace);
     list-style: none;
     margin: 0;
-    padding: 4px;
-    background: var(--game-bg-secondary, #1a1a2e);
-    border: 3px solid #000;
-    box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.5);
+    padding: var(--contextmenu-padding);
+    background: var(--dialog-bg, #1a1a2e);
+    border: var(--contextmenu-border-width) solid var(--dialog-border, black);
+    box-shadow: var(--contextmenu-shadow);
     min-width: 160px;
 }
 
 .native-context-menu__item {
     display: flex;
     align-items: center;
-    padding: 8px 12px;
+    padding: var(--contextmenu-item-padding);
     cursor: pointer;
-    color: var(--game-text-primary, #e0e0e0);
+    color: var(--dialog-text-color, #e0e0e0);
     transition: background 0.1s, color 0.1s;
 }
 
 .native-context-menu__item:hover {
-    background: var(--game-accent-primary, #e94560);
+    background: var(--color-accent-1, #e94560);
     color: #fff;
 }
 
 .native-context-menu__item--disabled {
-    color: var(--game-text-muted, #6b6b6b);
+    color: var(--color-text-muted, #6b6b6b);
     cursor: default;
 }
 
 .native-context-menu__item--disabled:hover {
     background: transparent;
-    color: var(--game-text-muted, #6b6b6b);
+    color: var(--color-text-muted, #6b6b6b);
 }
 
 .native-context-menu__icon {
     width: 20px;
     margin-right: 8px;
-    color: var(--game-accent-secondary, #f39c12);
+    color: var(--color-accent-2, #f39c12);
 }
 
 .native-context-menu__item:hover .native-context-menu__icon {
@@ -54,62 +54,62 @@
 
 .native-context-menu__label {
     flex: 1;
-    font-size: 24px;
+    font-size: var(--contextmenu-label-font-size);
 }
 
 .native-context-menu__separator {
     height: 0;
-    border-bottom: 2px solid #000;
+    border-bottom: var(--contextmenu-separator-width) solid var(--dialog-border, black);
     margin: 4px 0;
 }
 
-/* Legacy jQuery contextMenu styles - keep for backwards compatibility during transition */
+/* Legacy jQuery contextMenu styles */
 .context-menu-list {
-    border: 3px solid #000 !important;
-    background: var(--game-bg-secondary, #1a1a2e) !important;
-    box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.5);
-    padding: 4px;
+    border: var(--contextmenu-border-width) solid var(--dialog-border, black) !important;
+    background: var(--dialog-bg, #1a1a2e) !important;
+    box-shadow: var(--contextmenu-shadow);
+    padding: var(--contextmenu-padding);
     border-radius: 0 !important;
 }
 
 .context-menu-list .context-menu-separator {
-    border-bottom: 2px solid #000;
+    border-bottom: var(--contextmenu-separator-width) solid var(--dialog-border, black);
     margin: 4px 0;
 }
 
 .context-menu-list .context-menu-item {
-    color: var(--game-text-primary, #e0e0e0) !important;
+    color: var(--dialog-text-color, #e0e0e0) !important;
     background-color: transparent;
 }
 
 .context-menu-list .context-menu-item:hover,
 .context-menu-list .context-menu-item.hover {
-    background-color: var(--game-accent-primary, #e94560) !important;
+    background-color: var(--color-accent-1, #e94560) !important;
     color: #fff !important;
 }
 
 .context-menu-list .context-menu-item.disabled {
-    color: var(--game-text-muted, #6b6b6b) !important;
+    color: var(--color-text-muted, #6b6b6b) !important;
 }
 
 .context-menu-list .context-menu-item.disabled:hover,
 .context-menu-list .context-menu-item.disabled.hover {
     background-color: transparent !important;
-    color: var(--game-text-muted, #6b6b6b) !important;
+    color: var(--color-text-muted, #6b6b6b) !important;
 }
 
 /* ============================================
    8-bit Pixel Modal Dialog Styles
    ============================================ */
 
-/* Modal Overlay - semi-transparent dark background */
+/* Modal Overlay */
 .pixel-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.75);
+    background: var(--dialog-overlay, rgba(0, 0, 0, 0.75));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -118,70 +118,70 @@
 
 /* Modal Container */
 .pixel-modal {
-    background: var(--game-bg-secondary, #1a1a2e);
-    border: 4px solid #000;
-    box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.5);
+    background: var(--dialog-bg, #1a1a2e);
+    border: var(--modal-border-width) solid var(--dialog-border, black);
+    box-shadow: var(--modal-shadow);
     min-width: 320px;
     max-width: 90%;
 }
 
 /* Modal Header */
 .pixel-modal-header {
-    padding: 12px 16px;
-    border-bottom: 3px solid #000;
-    color: var(--game-text-primary, #e0e0e0);
-    font-size: 14px;
+    padding: var(--modal-header-padding);
+    border-bottom: var(--modal-header-border-width) solid var(--dialog-header-border, black);
+    color: var(--dialog-header-text, #e0e0e0);
+    font-size: var(--modal-header-font-size);
     font-weight: bold;
-    font-family: 'Ithaca', monospace;
-    background: rgba(0, 0, 0, 0.2);
+    font-family: var(--font-family-retro, 'Ithaca', monospace);
+    background: var(--dialog-header-bg, rgba(0, 0, 0, 0.2));
 }
 
 /* Modal Body */
 .pixel-modal-body {
-    padding: 16px;
+    padding: var(--modal-body-padding);
 }
 
 /* Modal Input Field */
 .pixel-modal-input {
     width: 100%;
-    padding: 10px 12px;
+    padding: var(--modal-input-padding);
     background: rgba(0, 0, 0, 0.3);
-    border: 3px solid #000;
+    border: var(--modal-input-border-width) solid var(--dialog-border, black);
     box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.3);
-    color: var(--game-text-primary, #e0e0e0);
-    font-size: 14px;
-    font-family: 'Ithaca', monospace;
+    color: var(--dialog-text-color, #e0e0e0);
+    font-size: var(--modal-input-font-size);
+    font-family: var(--font-family-retro, 'Ithaca', monospace);
     box-sizing: border-box;
 }
 
 .pixel-modal-input:focus {
     outline: none;
-    border-color: var(--game-accent-primary, #e94560);
+    border-color: var(--color-accent-1, #e94560);
 }
 
 .pixel-modal-input::placeholder {
-    color: var(--game-text-muted, #6b6b6b);
+    color: var(--color-text-muted, #6b6b6b);
 }
 
 /* Modal Footer */
 .pixel-modal-footer {
-    padding: 12px 16px;
-    border-top: 3px solid #000;
+    padding: var(--modal-footer-padding);
+    border-top: var(--modal-footer-border-width) solid var(--dialog-actionbar-border, black);
     display: flex;
     justify-content: flex-end;
-    gap: 12px;
-    background: rgba(0, 0, 0, 0.2);
+    gap: var(--modal-footer-gap);
+    background: var(--dialog-actionbar-bg, rgba(0, 0, 0, 0.2));
 }
 
 /* Modal Buttons */
 .pixel-modal-btn {
-    padding: 10px 16px;
-    border: 3px solid #000;
+    padding: var(--modal-btn-padding);
+    border: var(--modal-btn-border-width) solid var(--dialog-border, black);
     cursor: pointer;
-    font-size: 12px;
-    font-family: 'Ithaca', monospace;
+    font-size: var(--modal-btn-font-size);
+    font-family: var(--font-family-retro, 'Ithaca', monospace);
     transition: transform 0.1s, box-shadow 0.1s;
-    box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--modal-btn-shadow);
 }
 
 .pixel-modal-btn:hover {
@@ -195,11 +195,11 @@
 }
 
 .pixel-modal-btn--primary {
-    background: var(--game-accent-primary, #e94560);
+    background: var(--dialog-btn-primary-bg, #e94560);
     color: #fff;
 }
 
 .pixel-modal-btn--secondary {
-    background: var(--game-bg-secondary, #1a1a2e);
-    color: var(--game-text-primary, #e0e0e0);
+    background: var(--dialog-btn-secondary-bg, #1a1a2e);
+    color: var(--dialog-text-color, #e0e0e0);
 }

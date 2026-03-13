@@ -19,4 +19,7 @@ app.use(store)
 app.use(vuetify)
 app.use(InstallCodeMirror);
 
+// Apply persisted theme before first render
+store.dispatch('settings/initTheme');
+
 app.mount('#app')

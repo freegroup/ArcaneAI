@@ -1,0 +1,743 @@
+/*
+ * Fantasy Tavern Theme — Dialog Components
+ * Classes for: DialogHeader, ConfirmEncounterDeleteDialog, GameSelectDialog,
+ * GameNewDialog, EncounterNewDialog, ExtendedHelpDialog, TodoEditDialog,
+ * SoundSelectDialog, ImportStateDialog, JinjaEditorDialog
+ */
+
+/* ═══════════════════════════════════════════
+   DialogHeader
+   ═══════════════════════════════════════════ */
+
+[data-theme="tavern"] .dialog-header {
+  padding: 16px 24px;
+  background: linear-gradient(135deg, var(--color-bg-3) 0%, var(--color-bg-1) 100%);
+  border-bottom: 3px solid var(--color-accent-1);
+  min-height: 56px;
+}
+
+[data-theme="tavern"] .dialog-header__content {
+  gap: 16px;
+}
+
+[data-theme="tavern"] .dialog-header__icon {
+  font-size: 40px;
+  color: var(--color-accent-2);
+}
+
+[data-theme="tavern"] .dialog-header__title {
+  color: var(--color-accent-2);
+  font-size: 30px;
+  letter-spacing: 4px;
+}
+
+/* ═══════════════════════════════════════════
+   Common Dialog Card Styles
+   ═══════════════════════════════════════════ */
+
+[data-theme="tavern"] .delete-encounter-dialog {
+  background: var(--color-bg-2);
+  color: var(--color-text-1);
+  border: 2px solid var(--color-accent-1);
+  border-radius: 4px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="tavern"] .game-select-dialog {
+  background: var(--color-bg-2);
+  color: var(--color-text-1);
+  border: 2px solid var(--color-border-highlight);
+  border-radius: 4px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="tavern"] .game-select-dialog :deep(.v-card) {
+  background: var(--color-bg-2) !important;
+  color: var(--color-text-1) !important;
+}
+
+[data-theme="tavern"] .game-new-dialog {
+  background: var(--color-bg-2) !important;
+  color: var(--color-text-1) !important;
+  border: 2px solid var(--color-border-highlight);
+  border-radius: 4px;
+}
+
+[data-theme="tavern"] .encounter-new-dialog {
+  background: var(--color-bg-2) !important;
+  color: var(--color-text-1) !important;
+  border: 2px solid var(--color-border-highlight);
+  border-radius: 4px;
+}
+
+[data-theme="tavern"] .help-dialog {
+  background: var(--color-bg-2);
+  color: var(--color-text-1);
+  border: 2px solid var(--color-border-highlight);
+  border-radius: 4px;
+}
+
+[data-theme="tavern"] .todo-edit-dialog {
+  background: var(--color-bg-2) !important;
+  border: 2px solid var(--color-accent-1);
+  border-radius: 4px !important;
+}
+
+[data-theme="tavern"] .sound-picker-dialog {
+  background: var(--color-bg-1);
+  color: var(--color-text-1);
+  border-radius: 4px;
+}
+
+[data-theme="tavern"] .import-state-dialog {
+  background: var(--color-bg-1);
+  color: var(--color-text-1);
+  border-radius: 4px;
+}
+
+[data-theme="tavern"] .jinja-editor-dialog {
+  background: var(--color-bg-2);
+  color: var(--color-text-1);
+  border: 2px solid var(--color-border-highlight);
+  border-radius: 4px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="tavern"] .jinja-editor-dialog :deep(.v-card) {
+  background: var(--color-bg-2) !important;
+  color: var(--color-text-1) !important;
+}
+
+/* ═══════════════════════════════════════════
+   Dialog Overlay
+   ═══════════════════════════════════════════ */
+
+[data-theme="tavern"] :deep(.v-overlay__content) {
+  border-radius: 4px !important;
+}
+
+/* ═══════════════════════════════════════════
+   Dialog Content
+   ═══════════════════════════════════════════ */
+
+[data-theme="tavern"] .dialog-content {
+  background: var(--color-bg-2);
+}
+
+[data-theme="tavern"] .dialog-description {
+  font-size: 24px;
+  line-height: 1.5;
+  color: var(--color-text-2);
+  margin-bottom: 16px;
+}
+
+[data-theme="tavern"] .dialog-description .desc-accent {
+  color: var(--color-accent-2);
+}
+
+[data-theme="tavern"] .delete-encounter-dialog .dialog-content {
+  padding: 24px;
+  background: var(--color-bg-2);
+  min-height: 80px;
+}
+
+[data-theme="tavern"] .confirm-text {
+  font-size: 24px;
+  color: var(--color-text-1);
+  margin: 16px 0;
+  letter-spacing: 4px;
+  line-height: 1.6;
+}
+
+[data-theme="tavern"] .confirm-text strong {
+  color: var(--color-accent-2);
+}
+
+/* ═══════════════════════════════════════════
+   Dialog Actions (shared)
+   ═══════════════════════════════════════════ */
+
+[data-theme="tavern"] .dialog-actions {
+  padding: 16px 24px;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg-3);
+  gap: 16px;
+}
+
+[data-theme="tavern"] .dialog-actions > :deep(.themed-btn) {
+  margin-left: 16px;
+}
+
+[data-theme="tavern"] .dialog-actions .themed-btn {
+  margin-left: 16px;
+}
+
+/* ═══════════════════════════════════════════
+   Scrollable List (GameSelectDialog)
+   ═══════════════════════════════════════════ */
+
+[data-theme="tavern"] .scrollable-list {
+  min-height: 300px;
+  max-height: 400px;
+  background: var(--color-bg-1);
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  margin: 0;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="tavern"] .scrollable-list ul {
+  padding: 0;
+  margin: 0;
+}
+
+[data-theme="tavern"] .scrollable-list::-webkit-scrollbar {
+  width: 12px;
+}
+
+[data-theme="tavern"] .scrollable-list::-webkit-scrollbar-track {
+  background: var(--color-bg-3);
+  border-radius: 4px;
+}
+
+[data-theme="tavern"] .scrollable-list::-webkit-scrollbar-thumb {
+  background: var(--color-accent-1);
+  border-radius: 4px;
+  border: 2px solid var(--color-bg-3);
+}
+
+[data-theme="tavern"] .scrollable-list::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-3);
+  box-shadow: 0 0 8px var(--color-accent-1);
+}
+
+[data-theme="tavern"] .scrollable-list li {
+  background: var(--color-bg-2);
+  border: 2px solid transparent;
+  padding: 12px 16px;
+  margin-bottom: 4px;
+  color: var(--color-text-1);
+  font-size: 24px;
+  letter-spacing: 4px;
+  transition: all 0.15s ease;
+}
+
+[data-theme="tavern"] .scrollable-list li:hover {
+  background: var(--color-bg-2);
+  border-color: var(--color-accent-1);
+  color: var(--color-accent-2);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="tavern"] .scrollable-list li:active {
+  background: var(--color-accent-1);
+  color: var(--color-text-1);
+}
+
+/* ═══════════════════════════════════════════
+   Help Dialog Content (ExtendedHelpDialog)
+   ═══════════════════════════════════════════ */
+
+[data-theme="tavern"] .help-dialog-content {
+  padding: 32px;
+  font-size: 24px !important;
+  line-height: 1.6;
+  color: var(--color-text-2);
+  max-height: 400px;
+  background: var(--color-bg-2);
+}
+
+/* Intro paragraph — brighter, stands out */
+[data-theme="tavern"] .help-dialog-content p:first-child {
+  font-size: 26px;
+  color: var(--color-text-1);
+  margin-bottom: 16px;
+}
+
+/* Section headers */
+[data-theme="tavern"] .help-dialog-content :deep(strong),
+[data-theme="tavern"] .help-dialog-content strong {
+  color: var(--color-accent-2);
+  letter-spacing: 1px;
+}
+
+/* Emphasis */
+[data-theme="tavern"] .help-dialog-content :deep(em),
+[data-theme="tavern"] .help-dialog-content em {
+  color: var(--color-accent-1);
+  font-style: italic;
+}
+
+/* Lists */
+[data-theme="tavern"] .help-dialog-content :deep(ul),
+[data-theme="tavern"] .help-dialog-content ul {
+  margin: 8px 0 16px 0;
+  padding-left: 8px;
+  list-style: none;
+}
+
+[data-theme="tavern"] .help-dialog-content :deep(li),
+[data-theme="tavern"] .help-dialog-content li {
+  position: relative;
+  padding: 6px 12px 6px 28px;
+  margin: 4px 0;
+  color: var(--color-text-2);
+  border-left: 2px solid var(--color-accent-1);
+  border-radius: 0 4px 4px 0;
+  transition: background 0.1s ease;
+}
+
+/* Custom bullet — retro arrow */
+[data-theme="tavern"] .help-dialog-content :deep(li)::before,
+[data-theme="tavern"] .help-dialog-content li::before {
+  content: '>';
+  position: absolute;
+  left: 8px;
+  color: var(--color-accent-1);
+  font-weight: bold;
+}
+
+/* Hover on list items */
+[data-theme="tavern"] .help-dialog-content :deep(li):hover,
+[data-theme="tavern"] .help-dialog-content li:hover {
+  background: rgba(var(--color-accent-1-rgb), 0.06);
+  color: var(--color-text-1);
+}
+
+[data-theme="tavern"] .help-dialog-content :deep(code),
+[data-theme="tavern"] .help-dialog-content code {
+  background: rgba(var(--color-accent-1-rgb), 0.15);
+  color: var(--color-accent-2);
+  padding: 3px 4px;
+  border-radius: 4px;
+  font-size: 24px;
+  border: 1px solid rgba(var(--color-accent-1-rgb), 0.3);
+}
+
+[data-theme="tavern"] .help-dialog-content :deep(pre),
+[data-theme="tavern"] .help-dialog-content pre {
+  background: var(--color-bg-3);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 16px;
+  margin: 8px 0;
+}
+
+[data-theme="tavern"] .help-dialog-actions {
+  padding: 16px 24px;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg-3);
+}
+
+/* ═══════════════════════════════════════════
+   TodoEditDialog
+   ═══════════════════════════════════════════ */
+
+[data-theme="tavern"] .todo-edit-content {
+  padding: 24px !important;
+}
+
+[data-theme="tavern"] .todo-edit-content label {
+  margin: 0 0 4px 0;
+  font-size: 24px;
+  color: var(--color-accent-2);
+  text-transform: uppercase;
+  letter-spacing: 4px;
+}
+
+[data-theme="tavern"] .todo-edit-content textarea {
+  padding: 4px 8px;
+  background: var(--color-bg-3);
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  color: var(--color-text-1);
+  font-size: 24px;
+  transition: all 0.15s ease;
+}
+
+[data-theme="tavern"] .todo-edit-content textarea:focus {
+  border-color: var(--color-accent-1);
+  box-shadow: 0 0 0 2px rgba(var(--color-accent-1-rgb), 0.2);
+}
+
+[data-theme="tavern"] .todo-edit-actions {
+  gap: 16px;
+  padding: 16px 24px 24px !important;
+  background: var(--color-bg-3);
+  border-top: 1px solid var(--color-border);
+}
+
+/* ═══════════════════════════════════════════
+   SoundSelectDialog
+   ═══════════════════════════════════════════ */
+
+[data-theme="tavern"] .search-bar {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+[data-theme="tavern"] .sound-picker-dialog .dialog-content {
+  height: 400px;
+}
+
+[data-theme="tavern"] .column {
+  min-width: 150px;
+  border-right: 3px solid var(--color-accent-1);
+}
+
+[data-theme="tavern"] .column:last-child {
+  border-right: none;
+}
+
+[data-theme="tavern"] .column:not(:last-child):hover {
+  border-right-color: var(--color-accent-3);
+}
+
+[data-theme="tavern"] .column::-webkit-resizer {
+  background: var(--color-accent-1);
+}
+
+[data-theme="tavern"] .column-item {
+  padding: 8px 12px;
+  transition: background-color 0.15s;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="tavern"] .column-item:hover {
+  background: var(--color-bg-2);
+}
+
+[data-theme="tavern"] .column-item.selected {
+  background: var(--color-accent-1);
+  color: var(--color-text-1);
+}
+
+[data-theme="tavern"] .item-name {
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+
+[data-theme="tavern"] .clear-icon,
+[data-theme="tavern"] .folder-icon {
+  margin-right: 12px;
+  color: var(--color-accent-2);
+}
+
+[data-theme="tavern"] .column-item.selected .clear-icon,
+[data-theme="tavern"] .column-item.selected .folder-icon {
+  color: var(--color-text-1);
+}
+
+[data-theme="tavern"] .folder-arrow {
+  opacity: 0.6;
+  margin-left: 4px;
+}
+
+[data-theme="tavern"] .play-btn {
+  margin-right: 8px;
+  color: var(--color-accent-2) !important;
+}
+
+[data-theme="tavern"] .play-btn:hover {
+  color: var(--color-accent-1) !important;
+}
+
+/* Search Results */
+[data-theme="tavern"] .search-results-header {
+  padding: 12px 16px;
+  font-size: 12px;
+  color: var(--color-text-2);
+  border-bottom: 1px solid var(--color-border);
+}
+
+[data-theme="tavern"] .search-results-list {
+  padding: 8px 0;
+}
+
+[data-theme="tavern"] .search-result-item {
+  padding: 6px 16px;
+  transition: background-color 0.15s;
+}
+
+[data-theme="tavern"] .search-result-item:hover {
+  background: var(--color-bg-2);
+}
+
+[data-theme="tavern"] .search-result-item .file-name {
+  font-size: 13px;
+}
+
+/* Selected Display */
+[data-theme="tavern"] .selected-display {
+  padding: 8px 16px;
+  background: var(--color-bg-2);
+  border-top: 1px solid var(--color-border);
+  font-size: 12px;
+  color: var(--color-text-2);
+}
+
+/* Scrollbar styling (Sound Select) */
+[data-theme="tavern"] .column::-webkit-scrollbar,
+[data-theme="tavern"] .search-results-list::-webkit-scrollbar,
+[data-theme="tavern"] .finder-columns::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+[data-theme="tavern"] .column::-webkit-scrollbar-track,
+[data-theme="tavern"] .search-results-list::-webkit-scrollbar-track,
+[data-theme="tavern"] .finder-columns::-webkit-scrollbar-track {
+  background: var(--color-bg-1);
+}
+
+[data-theme="tavern"] .column::-webkit-scrollbar-thumb,
+[data-theme="tavern"] .search-results-list::-webkit-scrollbar-thumb,
+[data-theme="tavern"] .finder-columns::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+[data-theme="tavern"] .column::-webkit-scrollbar-thumb:hover,
+[data-theme="tavern"] .search-results-list::-webkit-scrollbar-thumb:hover,
+[data-theme="tavern"] .finder-columns::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* ═══════════════════════════════════════════
+   ImportStateDialog
+   ═══════════════════════════════════════════ */
+
+[data-theme="tavern"] .import-state-dialog .dialog-content {
+  height: 350px;
+}
+
+[data-theme="tavern"] .loading-state {
+  gap: 16px;
+  color: var(--color-text-2);
+}
+
+[data-theme="tavern"] .empty-state {
+  color: var(--color-text-muted);
+  gap: 8px;
+}
+
+[data-theme="tavern"] .state-list {
+  padding: 8px 0;
+}
+
+[data-theme="tavern"] .state-item {
+  padding: 12px 16px;
+  transition: background-color 0.15s;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="tavern"] .state-item:hover {
+  background: var(--color-bg-2);
+}
+
+[data-theme="tavern"] .state-item.selected {
+  background: var(--color-accent-1);
+  color: var(--color-text-1);
+}
+
+[data-theme="tavern"] .state-icon {
+  margin-right: 12px;
+  color: var(--color-accent-2);
+}
+
+[data-theme="tavern"] .state-item.selected .state-icon {
+  color: var(--color-text-1);
+}
+
+[data-theme="tavern"] .state-name {
+  font-size: 18px;
+}
+
+[data-theme="tavern"] .state-description {
+  font-size: 15px;
+  color: var(--color-text-2);
+  margin-top: 2px;
+}
+
+[data-theme="tavern"] .state-item.selected .state-description {
+  color: var(--color-text-1);
+  opacity: 0.8;
+}
+
+[data-theme="tavern"] .check-icon {
+  color: var(--color-text-1);
+  margin-left: 8px;
+}
+
+[data-theme="tavern"] .import-icon {
+  color: var(--color-text-2);
+  margin-left: 8px;
+}
+
+/* Scrollbar styling (ImportState) */
+[data-theme="tavern"] .import-state-dialog .dialog-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+[data-theme="tavern"] .import-state-dialog .dialog-content::-webkit-scrollbar-track {
+  background: var(--color-bg-1);
+}
+
+[data-theme="tavern"] .import-state-dialog .dialog-content::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+[data-theme="tavern"] .import-state-dialog .dialog-content::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* ═══════════════════════════════════════════
+   JinjaEditorDialog
+   ═══════════════════════════════════════════ */
+
+[data-theme="tavern"] .jinja-editor-dialog .dialog-content {
+  background: var(--color-bg-2);
+}
+
+[data-theme="tavern"] .jinja-editor-dialog .dialog-actions {
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg-3);
+}
+
+/* Editor Toolbar */
+[data-theme="tavern"] .editor-toolbar {
+  gap: 8px;
+  background: var(--color-bg-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+[data-theme="tavern"] .toolbar-btn {
+  background: var(--color-bg-2);
+  border: 3px solid var(--color-border);
+  padding: 6px 8px;
+  opacity: 0.5;
+  border-radius: 4px;
+  color: var(--color-text-2);
+  font-size: 10px;
+  transition: all 0.1s ease;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="tavern"] .toolbar-btn:not(:disabled) {
+  opacity: 1;
+  color: var(--color-text-1);
+  background: var(--color-bg-1);
+  border-color: var(--color-border-highlight);
+}
+
+[data-theme="tavern"] .toolbar-btn:not(:disabled):hover {
+  background: var(--color-accent-1);
+  border-color: var(--color-accent-1);
+  color: var(--color-bg-1);
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="tavern"] .toolbar-btn:not(:disabled):active {
+  transform: translate(3px, 3px);
+  box-shadow: none;
+}
+
+[data-theme="tavern"] .undo-icon {
+  font-size: 32px;
+  line-height: 0.5;
+}
+
+[data-theme="tavern"] .redo-icon {
+  font-size: 32px;
+  line-height: 0.5;
+}
+
+/* AI Assist Panel */
+[data-theme="tavern"] .ai-assist-panel {
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg-3);
+}
+
+[data-theme="tavern"] .ai-assist-header {
+  gap: 8px;
+  transition: background-color 0.2s;
+}
+
+[data-theme="tavern"] .ai-assist-header:hover {
+  background: var(--color-bg-2);
+}
+
+[data-theme="tavern"] .ai-assist-content {
+  background: var(--color-bg-2);
+}
+
+/* Expand transition */
+[data-theme="tavern"] .expand-enter-active,
+[data-theme="tavern"] .expand-leave-active {
+  transition: all 0.3s ease;
+  max-height: 400px;
+}
+
+[data-theme="tavern"] .expand-enter-from,
+[data-theme="tavern"] .expand-leave-to {
+  max-height: 0;
+  opacity: 0;
+}
+
+/* AI Response Area */
+[data-theme="tavern"] .ai-response-area {
+  min-height: 120px;
+  max-height: 200px;
+  margin-bottom: 16px;
+  background: var(--color-bg-1);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+[data-theme="tavern"] .ai-helper-text li {
+  margin: 4px 0;
+}
+
+[data-theme="tavern"] .jinja-note {
+  gap: 4px;
+  margin-top: 8px;
+  padding: 8px;
+  background: var(--color-bg-2);
+  border-radius: 4px;
+  font-size: 0.85em;
+  color: var(--color-accent-1);
+}
+
+[data-theme="tavern"] .ai-result {
+  gap: 8px;
+}
+
+[data-theme="tavern"] .ai-result-header {
+  margin-bottom: 8px;
+}
+
+[data-theme="tavern"] .ai-result-text {
+  padding: 16px;
+  background: var(--color-bg-2);
+  border: 1px solid var(--color-border-highlight);
+  border-radius: 4px;
+  font-size: 0.95em;
+  line-height: 1.5;
+}
+
+[data-theme="tavern"] .ai-comment {
+  gap: 8px;
+  padding: 8px;
+  background: var(--color-bg-3);
+  border-left: 3px solid var(--color-accent-1);
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: var(--color-text-2);
+}
+
+[data-theme="tavern"] .word-count-info {
+  color: var(--color-accent-1);
+  margin-bottom: 4px;
+}

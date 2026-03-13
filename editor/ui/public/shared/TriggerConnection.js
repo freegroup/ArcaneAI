@@ -13,8 +13,7 @@ var TriggerConnection= draw2d.Connection.extend({
 
     init:function(attr, setter, getter)
     {
-      // Speichere die Standardfarbe
-      this.defaultColor = "#27ae60";
+      this.defaultColor = getVar('--connection-color', '#27ae60');
 
       // Erstelle den Arrow Decorator mit der gleichen Farbe wie die Connection
       this.arrowDecorator = new draw2d.decoration.connection.ArrowDecorator();
@@ -41,10 +40,10 @@ var TriggerConnection= draw2d.Connection.extend({
           text:"trigger_name_to_fire",
           padding:{left:10, top:5, right:10, bottom:5},
           radius: 5,
-          fontColor:"#3f3f34",
+          fontColor: getVar('--connection-label-font', '#3f3f34'),
           fontSize: 18,
           stroke: 2,
-          bgColor: "#cce5bc",
+          bgColor: getVar('--connection-label-bg', '#cce5bc'),
           fontFamily: "Ithaca, monospace",
           color : this.defaultColor
       });
@@ -126,7 +125,7 @@ var TriggerConnection= draw2d.Connection.extend({
 
         // Apply selection feedback
         var originalStroke = this._selectionFeedbackState.stroke;
-        var lighterColor = new draw2d.util.Color("#df2f4c");
+        var lighterColor = new draw2d.util.Color(getVar('--selection-color', '#df2f4c'));
 
         // Apply the visual feedback using attr() for batch update
         this.attr({

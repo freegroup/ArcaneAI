@@ -1,0 +1,76 @@
+/*
+ * Fantasy Tavern Theme — ThemedButton (.themed-btn)
+ */
+[data-theme="tavern"] .themed-btn {
+  --_bg: var(--color-success);
+  --_hover: #6ab878;
+  --_shadow: #4a9860;
+
+  padding: 6px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 18px;
+  letter-spacing: 2px;
+  color: #ffffff;
+  background: var(--_bg);
+  box-shadow: inset -3px -3px 0px 0px var(--_shadow);
+  transition: all 0.15s ease;
+}
+
+[data-theme="tavern"] .themed-btn:hover,
+[data-theme="tavern"] .themed-btn:focus {
+  background: var(--_hover);
+  box-shadow: inset -4.5px -4.5px 0px 0px var(--_shadow);
+  outline: none;
+}
+
+[data-theme="tavern"] .themed-btn:active {
+  box-shadow: inset 3px 3px 0px 0px var(--_shadow);
+}
+
+[data-theme="tavern"] .themed-btn::before {
+  top: -4px;
+  left: 0;
+  border-top: 4px #2a1e14 solid;
+  border-bottom: 4px #2a1e14 solid;
+}
+
+[data-theme="tavern"] .themed-btn::after {
+  left: -4px;
+  top: 0;
+  border-left: 4px #2a1e14 solid;
+  border-right: 4px #2a1e14 solid;
+}
+
+/* Proceed variant */
+[data-theme="tavern"] .themed-btn--proceed {
+  --_bg: var(--color-accent-2);
+  --_hover: #d49540;
+  --_shadow: #b07830;
+  color: var(--color-bg-1) !important;
+}
+
+/* Reset/Danger variant */
+[data-theme="tavern"] .themed-btn--reset {
+  --_bg: var(--color-accent-1);
+  --_hover: #a83228;
+  --_shadow: #8c2820;
+}
+
+/* Secondary variant */
+[data-theme="tavern"] .themed-btn--secondary {
+  --_bg: var(--color-bg-3);
+  --_hover: var(--color-bg-2);
+  --_shadow: #1a1208;
+  color: white !important;
+}
+
+/* Disabled state */
+[data-theme="tavern"] .themed-btn:disabled,
+[data-theme="tavern"] .themed-btn--disabled {
+  --_bg: #5a5040;
+  --_hover: #5a5040;
+  --_shadow: #3a3228;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
