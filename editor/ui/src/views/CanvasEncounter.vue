@@ -4,7 +4,7 @@
     <div class="iframe-container">
       <iframe
         ref="draw2dFrame"
-        src="/encounter/index.html"
+        src="/canvas/encounter/index.html"
         frameborder="0"
       ></iframe>
     </div>

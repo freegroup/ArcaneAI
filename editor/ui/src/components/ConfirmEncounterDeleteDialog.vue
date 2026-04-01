@@ -19,7 +19,7 @@
           @click="confirmDelete" 
           variant="reset" 
         >
-          Delete
+          Remove
         </ThemedButton>
       </v-card-actions>
     </v-card>

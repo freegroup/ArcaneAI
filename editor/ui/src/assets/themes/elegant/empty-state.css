@@ -1,0 +1,41 @@
+/*
+ * Elegant Theme — Empty State
+ * Atmospheric dungeon/arcane scene for the "no game loaded" screen.
+ */
+[data-theme="elegant"] .empty-state {
+  background-color: #08060f;
+  background-image:
+    /* Mystischer Schein — Mitte */
+    radial-gradient(
+      ellipse 65% 45% at 50% 58%,
+      rgba(167, 139, 250, 0.22) 0%,
+      rgba(108, 138, 255, 0.08) 45%,
+      transparent 70%
+    ),
+    /* Bodennebel */
+    radial-gradient(
+      ellipse 110% 22% at 50% 100%,
+      rgba(108, 138, 255, 0.12) 0%,
+      transparent 65%
+    ),
+    /* Vignette — dunkle Ecken */
+    radial-gradient(
+      ellipse 140% 140% at 50% 50%,
+      transparent 25%,
+      rgba(0, 0, 0, 0.75) 100%
+    ),
+    /* Basis */
+    linear-gradient(
+      to bottom,
+      #0f1117 0%,
+      #12092a 55%,
+      #08060f 100%
+    );
+}
+
+[data-theme="elegant"] .empty-state__title {
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--color-accent-1);
+  letter-spacing: 2px;
+}

@@ -1,11 +1,14 @@
 import axios from 'axios';
 
 const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
+const RECENT_GAMES_KEY = 'arcaneai-recent-games';
+const MAX_RECENT_GAMES = 5;
 
 export default {
   namespaced: true,
   state: {
     games: [],
+    recentGames: [],
     currentGameName: null,
     loading: false,
     error: null,
@@ -13,6 +16,9 @@ export default {
   mutations: {
     SET_GAMES(state, games) {
       state.games = games;
+    },
+    SET_RECENT_GAMES(state, recentGames) {
+      state.recentGames = recentGames;
     },
     SET_CURRENT_GAME_NAME(state, gameName) {
       state.currentGameName = gameName;
@@ -26,12 +32,8 @@ export default {
   },
   actions: {
     async initialize({ dispatch }) {
-      try {
-        // Placeholder for future initialization
-        void dispatch; // Suppress unused variable warning
-      } catch (error) {
-        // Silent error handling
-      }
+      await dispatch('fetchGames');
+      await dispatch('loadRecentGames');
     },
 
     async fetchGames({ commit }) {
@@ -47,6 +49,43 @@ export default {
       }
     },
 
+    loadRecentGames({ commit, state }) {
+      try {
+        const stored = localStorage.getItem(RECENT_GAMES_KEY);
+        const all = stored ? JSON.parse(stored) : [];
+        const filtered = all
+          .filter(entry => state.games.includes(entry.name))
+          .sort((a, b) => b.lastOpened - a.lastOpened)
+          .slice(0, MAX_RECENT_GAMES);
+        commit('SET_RECENT_GAMES', filtered);
+      } catch {
+        commit('SET_RECENT_GAMES', []);
+      }
+    },
+
+    addRecentGame({ commit, state }, gameName) {
+      try {
+        const updated = [
+          { name: gameName, lastOpened: Date.now() },
+          ...state.recentGames.filter(e => e.name !== gameName),
+        ].slice(0, MAX_RECENT_GAMES);
+        commit('SET_RECENT_GAMES', updated);
+        localStorage.setItem(RECENT_GAMES_KEY, JSON.stringify(updated));
+      } catch {
+        // localStorage unavailable — silent fallback
+      }
+    },
+
+    removeRecentGame({ commit, state }, gameName) {
+      try {
+        const updated = state.recentGames.filter(e => e.name !== gameName);
+        commit('SET_RECENT_GAMES', updated);
+        localStorage.setItem(RECENT_GAMES_KEY, JSON.stringify(updated));
+      } catch {
+        // localStorage unavailable — silent fallback
+      }
+    },
+
     async createNewGame({ commit, dispatch }, gameName) {
       if( gameName===undefined || gameName.length===0){
         return // silently
@@ -57,17 +96,18 @@ export default {
       try {
         // POST to /games with name in body (RESTful - create resource)
         const response = await axios.post(`${API_BASE_URL}/games/`, { name: gameName });
-        
+
         // Use the sanitized name returned by the backend
         const actualGameName = response.data.game_name || gameName;
-        
+
         // Load the newly created game into the game store
         await dispatch('game/loadGame', actualGameName, { root: true });
         commit('SET_CURRENT_GAME_NAME', actualGameName);
-        
+
         // Refresh the games list
         await dispatch('fetchGames');
-        
+        dispatch('addRecentGame', actualGameName);
+
         // Return the actual game name so the caller can use it for navigation
         return actualGameName;
       } catch (error) {
@@ -89,6 +129,7 @@ export default {
         // Load the game into the game store
         await dispatch('game/loadGame', gameName, { root: true });
         commit('SET_CURRENT_GAME_NAME', gameName);
+        dispatch('addRecentGame', gameName);
       } catch (error) {
         commit('SET_ERROR', error.response?.data?.detail || 'Error selecting game');
         throw error;
@@ -106,10 +147,11 @@ export default {
       commit('SET_ERROR', null);
       try {
         await axios.delete(`${API_BASE_URL}/games/${gameName}`);
-        
+
         // Refresh the games list
         await dispatch('fetchGames');
-        
+        dispatch('removeRecentGame', gameName);
+
         // If this was the current game, clear it
         if (gameName === commit.state.currentGameName) {
           commit('SET_CURRENT_GAME_NAME', null);
@@ -124,6 +166,7 @@ export default {
   },
   getters: {
     games: (state) => state.games,
+    recentGames: (state) => state.recentGames,
     currentGameName: (state) => state.currentGameName,
     isLoading: (state) => state.loading,
     error: (state) => state.error,

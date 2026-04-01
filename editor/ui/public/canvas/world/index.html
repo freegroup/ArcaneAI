@@ -14,20 +14,23 @@
 
   <script src="../lib/draw2d.js"></script>
 
-  <script src="../shared/SharedConstants.js"></script>
-  <script src="../shared/ContextMenu.js"></script>
+  <script src="../../shared/SharedConstants.js"></script>
+  <script src="../../shared/ContextMenu.js"></script>
   <script src="./src/Application.js"></script>
-  <script src="../shared/EditPolicy.js"></script>
-  <script src="../shared/View.js"></script>
+  <script src="../../shared/EditPolicy.js"></script>
+  <script src="../../shared/View.js"></script>
   <script src="./src/Toolbar.js"></script>
-  <script src="../shared/TriggerLabel.js"></script>
-  <script src="../shared/TriggerSelectionFeedbackPolicy.js"></script>
-  <script src="../shared/TriggerRouter.js"></script>
-  <script src="../shared/TriggerConnection.js"></script>
-  <script src="../shared/StateShape.js"></script>
-  <script src="../shared/Raft.js"></script>
-  <script src="../shared/LabelInplaceEditor.js"></script>
+  <script src="../../shared/TriggerLabel.js"></script>
+  <script src="../../shared/TriggerSelectionFeedbackPolicy.js"></script>
+  <script src="../../shared/TriggerRouter.js"></script>
+  <script src="../../shared/TriggerConnection.js"></script>
+  <script src="../../shared/StateShape.js"></script>
+  <script src="../../shared/Raft.js"></script>
+  <script src="../../shared/LabelInplaceEditor.js"></script>
 
+  <link type="text/css" rel="stylesheet" href="../css/theme-dark.css" />
+  <link type="text/css" rel="stylesheet" href="../css/theme-tavern.css" />
+  <link type="text/css" rel="stylesheet" href="../css/theme-elegant.css" />
   <link type="text/css" rel="stylesheet" href="../css/application.css" />
   <link type="text/css" rel="stylesheet" href="../css/contextmenu.css" />
 
@@ -121,7 +124,7 @@
             notifyCanvasReady();
           } else {
             // Font not available yet, load it explicitly
-            const font = new FontFace('Ithaca', 'url(../fonts/Ithaca-LVB75.ttf)');
+            const font = new FontFace('Ithaca', 'url(../../fonts/Ithaca-LVB75.ttf)');
             font.load().then(() => {
               document.fonts.add(font);
               notifyCanvasReady();

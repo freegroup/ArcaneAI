@@ -17,7 +17,7 @@ export default {
   namespaced: true,
   
   state: {
-    gameName: "unknown",
+    gameName: null,
     loading: false,
     error: null,
   },

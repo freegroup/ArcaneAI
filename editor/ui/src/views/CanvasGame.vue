@@ -4,7 +4,7 @@
     <div class="iframe-container">
       <iframe
         ref="draw2dFrame"
-        src="/game/index.html"
+        src="/canvas/world/index.html"
         frameborder="0"
       ></iframe>
     </div>

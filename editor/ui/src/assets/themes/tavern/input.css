@@ -32,3 +32,25 @@
   border-color: var(--color-accent-1);
   box-shadow: 0 0 0 2px rgba(var(--color-accent-1-rgb), 0.2);
 }
+
+/* Vuetify v-text-field — label styling */
+[data-theme="tavern"] .v-field .v-label {
+  font-size: 24px;
+  letter-spacing: 4px;
+}
+
+[data-theme="tavern"] .v-field .v-label--floating {
+  transform: translateY(-6px) scale(0.85);
+  letter-spacing: 4px;
+  color: var(--color-accent-2);
+}
+
+[data-theme="tavern"] .v-field .v-field__input {
+  padding-top: 36px;
+  padding-inline-start: 16px;
+  font-size: 24px;
+}
+
+[data-theme="tavern"] .v-text-field__suffix {
+  padding-inline-start: 8px;
+}

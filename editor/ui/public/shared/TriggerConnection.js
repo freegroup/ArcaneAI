@@ -18,11 +18,12 @@ var TriggerConnection= draw2d.Connection.extend({
       // Erstelle den Arrow Decorator mit der gleichen Farbe wie die Connection
       this.arrowDecorator = new draw2d.decoration.connection.ArrowDecorator();
       this.arrowDecorator.setBackgroundColor(this.defaultColor);
+      this.arrowDecorator.setColor(this.defaultColor);
       
       this._super(
             {
                 targetDecorator: this.arrowDecorator,
-                stroke:5,
+                stroke: parseInt(getVar('--connection-stroke', '5')),
                 color: this.defaultColor,
                 radius: 20,
                 router:routerToUse
@@ -42,7 +43,7 @@ var TriggerConnection= draw2d.Connection.extend({
           radius: 5,
           fontColor: getVar('--connection-label-font', '#3f3f34'),
           fontSize: parseInt(getVar('--global-font-size', '18')),
-          stroke: 2,
+          stroke: parseInt(getVar('--label-stroke', '2')),
           bgColor: getVar('--connection-label-bg', '#cce5bc'),
           fontFamily: getVar('--global-font-family', 'Ithaca, monospace'),
           color : this.defaultColor
@@ -138,8 +139,7 @@ var TriggerConnection= draw2d.Connection.extend({
         // Apply visual feedback to the label (border color and stroke)
         this.label.attr({
             color: lighterColor,
-            stroke: this.label._selectionFeedbackState.stroke * 2,
-            bold: true
+            stroke: this.label._selectionFeedbackState.stroke * 2
         });
 
         // Apply visual feedback to the decorator
@@ -148,6 +148,7 @@ var TriggerConnection= draw2d.Connection.extend({
         // force redraw
         this.setTargetDecorator(this.targetDecorator)
     },
+
 
     resetHighlight: function(){
         // Restore original attributes if we have stored state

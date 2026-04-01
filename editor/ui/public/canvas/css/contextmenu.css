@@ -1,0 +1,99 @@
+/* 8-bit Ithaca Font */
+@font-face {
+    font-family: 'Ithaca';
+    src: url('../fonts/Ithaca-LVB75.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Native Context Menu Styles - matching game UI theme */
+.native-context-menu {
+    font-family: var(--global-font-family, 'Ithaca', monospace);
+    list-style: none;
+    margin: 0;
+    padding: var(--contextmenu-padding);
+    background: var(--contextmenu-bg, #1a1a2e);
+    border: var(--contextmenu-border-width) solid var(--contextmenu-border-color, black);
+    box-shadow: var(--contextmenu-shadow);
+    min-width: 160px;
+}
+
+.native-context-menu__item {
+    display: flex;
+    align-items: center;
+    padding: var(--contextmenu-item-padding);
+    cursor: pointer;
+    color: var(--contextmenu-text-color, #e0e0e0);
+    transition: background 0.1s, color 0.1s;
+}
+
+.native-context-menu__item:hover {
+    background: var(--color-accent-1, #e94560);
+    color: #fff;
+}
+
+.native-context-menu__item--disabled {
+    color: var(--color-text-muted, #6b6b6b);
+    cursor: default;
+}
+
+.native-context-menu__item--disabled:hover {
+    background: transparent;
+    color: var(--color-text-muted, #6b6b6b);
+}
+
+.native-context-menu__icon {
+    width: 20px;
+    margin-right: 8px;
+    color: var(--color-accent-2, #f39c12);
+}
+
+.native-context-menu__item:hover .native-context-menu__icon {
+    color: #fff;
+}
+
+.native-context-menu__label {
+    flex: 1;
+    font-size: var(--contextmenu-label-font-size);
+}
+
+.native-context-menu__separator {
+    height: 0;
+    border-bottom: var(--contextmenu-separator-width) solid var(--contextmenu-border-color, black);
+    margin: 4px 0;
+}
+
+/* Legacy jQuery contextMenu styles */
+.context-menu-list {
+    border: var(--contextmenu-border-width) solid var(--contextmenu-border-color, black) !important;
+    background: var(--contextmenu-bg, #1a1a2e) !important;
+    box-shadow: var(--contextmenu-shadow);
+    padding: var(--contextmenu-padding);
+    border-radius: 0 !important;
+}
+
+.context-menu-list .context-menu-separator {
+    border-bottom: var(--contextmenu-separator-width) solid var(--contextmenu-border-color, black);
+    margin: 4px 0;
+}
+
+.context-menu-list .context-menu-item {
+    color: var(--contextmenu-text-color, #e0e0e0) !important;
+    background-color: transparent;
+}
+
+.context-menu-list .context-menu-item:hover,
+.context-menu-list .context-menu-item.hover {
+    background-color: var(--color-accent-1, #e94560) !important;
+    color: #fff !important;
+}
+
+.context-menu-list .context-menu-item.disabled {
+    color: var(--color-text-muted, #6b6b6b) !important;
+}
+
+.context-menu-list .context-menu-item.disabled:hover,
+.context-menu-list .context-menu-item.disabled.hover {
+    background-color: transparent !important;
+    color: var(--color-text-muted, #6b6b6b) !important;
+}

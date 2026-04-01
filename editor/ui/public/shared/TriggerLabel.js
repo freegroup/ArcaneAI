@@ -8,7 +8,7 @@ var TriggerLabel = draw2d.shape.basic.Label.extend({
             padding:{left:10, top:5, right:10, bottom:5},
             resizeable:true,
             radius: 5,
-            stroke:2,
+            stroke: parseInt(getVar('--label-stroke', '2')),
             fontColor: getVar('--connection-label-font', '#3f3f34'),
             fontSize: parseInt(getVar('--global-font-size', '20')),
             bgColor: getVar('--connection-label-bg', '#cce5bc'),
@@ -35,7 +35,7 @@ var TriggerLabel = draw2d.shape.basic.Label.extend({
 
         this.installEditPolicy(new draw2d.policy.figure.AntSelectionFeedbackPolicy({
            color: getVar('--selection-color', '#e94560'),
-           stroke: 6,
+           stroke: parseInt(getVar('--selection-stroke', '6')),
            dasharray: "- "
         }));
         this.on("change:userData", (emitter, event) => {

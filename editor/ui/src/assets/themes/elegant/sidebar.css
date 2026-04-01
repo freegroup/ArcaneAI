@@ -13,20 +13,22 @@
 [data-theme="elegant"] .sidebar-toggle {
   width: 24px;
   height: 40px;
-  border: 1px solid var(--color-border);
+  border: 2px solid var(--color-accent-1);
   border-radius: 6px 0 0 6px;
   background: var(--color-bg-3);
-  color: var(--color-text-2);
+  color: var(--color-accent-1);
 }
 
 /* --- Property Drawer (CanvasGame - Vuetify) --- */
 [data-theme="elegant"] .property-drawer {
   background: var(--color-bg-2) !important;
-  border-left: 1px solid var(--color-border) !important;
+  border-left: 2px solid var(--color-accent-1) !important;
+  border-inline-start-width: 2px !important;
+  border-inline-start-color: var(--color-accent-1) !important;
   border-radius: 0 !important;
 }
 
 [data-theme="elegant"] .property-drawer__content {
-  padding: 12px;
+  padding: 0;
   height: 100%;
 }

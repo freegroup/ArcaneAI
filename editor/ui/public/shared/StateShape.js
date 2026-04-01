@@ -1,9 +1,10 @@
 function getStateStyles() {
     let _font = getVar('--global-font-family', 'Ithaca, monospace');
     let _fontSize = parseInt(getVar('--global-font-size', '24'));
+    let _stroke = parseInt(getVar('--state-stroke', '4'));
     return {
         NORMAL: {
-            stroke: 4,
+            stroke: _stroke,
             fontSize: _fontSize,
             fontFamily: _font,
             radius:1,
@@ -12,7 +13,7 @@ function getStateStyles() {
             color: getVar('--state-normal-border', '#349be8'),
         },
         START: {
-            stroke: 4,
+            stroke: _stroke,
             fontSize: _fontSize,
             fontFamily: _font,
             padding:20,
@@ -21,7 +22,7 @@ function getStateStyles() {
             color: getVar('--state-start-border', '#c6bee1'),
         },
         END: {
-            stroke: 4,
+            stroke: _stroke,
             fontSize: _fontSize,
             fontFamily: _font,
             fontColor: getVar('--state-end-font', '#3f3f3f'),
@@ -86,7 +87,7 @@ StateShape = draw2d.shape.box.VBox.extend({
 
         this.installEditPolicy(new draw2d.policy.figure.AntSelectionFeedbackPolicy({
            color: getVar('--selection-color', '#e94560'),
-           stroke: 6,
+           stroke: parseInt(getVar('--selection-stroke', '6')),
            dasharray: "- "
         }));
   

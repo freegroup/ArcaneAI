@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar class="app-header" :height="isLargeScreen ? 128 : 48">
+  <v-app-bar class="app-header" :height="headerHeight">
     <!-- Large Screen: Two rows (Title + Toolbar) -->
     <template v-if="isLargeScreen">
       <div class="app-header__wrapper">
@@ -15,10 +15,10 @@
           <ThemeSelector />
         </div>
 
-        <!-- Bottom Row: Toolbar -->
-        <div class="app-header__toolbar">
-          <ThemedButton @click="newFileDialog" variant="secondary">New Game</ThemedButton>
-          <ThemedButton @click="openFileDialog" variant="secondary">Load Game</ThemedButton>
+        <!-- Bottom Row: Toolbar (only when game loaded) -->
+        <div v-if="showToolbar" class="app-header__toolbar">
+          <ThemedButton @click="$emit('new-game')" variant="secondary">New Game</ThemedButton>
+          <ThemedButton @click="$emit('load-game')" variant="secondary">Load Game</ThemedButton>
           <ThemedButton @click="save" variant="secondary">
             Save Game<span v-if="hasUnsavedChanges" class="unsaved-indicator">*</span>
           </ThemedButton>
@@ -28,51 +28,46 @@
 
     <!-- Small Screen: Just toolbar row -->
     <template v-else>
-      <ThemedButton @click="newFileDialog" variant="secondary">New Game</ThemedButton>
-      <ThemedButton @click="openFileDialog" variant="secondary">Load Game</ThemedButton>
-      <ThemedButton @click="save" variant="secondary">
-        Save Game<span v-if="hasUnsavedChanges" class="unsaved-indicator">*</span>
-      </ThemedButton>
+      <template v-if="showToolbar">
+        <ThemedButton @click="$emit('new-game')" variant="secondary">New Game</ThemedButton>
+        <ThemedButton @click="$emit('load-game')" variant="secondary">Load Game</ThemedButton>
+        <ThemedButton @click="save" variant="secondary">
+          Save Game<span v-if="hasUnsavedChanges" class="unsaved-indicator">*</span>
+        </ThemedButton>
+      </template>
       <v-spacer></v-spacer>
       <ThemeSelector />
     </template>
-
-    <!-- Dialogs -->
-    <GameSelectDialog v-model:dialog="gameSelectDialog" />
-    <GameNewDialog v-model:dialog="gameNewDialog" />
-    <EncounterNewDialog v-model="encounterNewDialog" />
   </v-app-bar>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import GameNewDialog from './GameNewDialog.vue';
-import GameSelectDialog from './GameSelectDialog.vue';
-import EncounterNewDialog from './EncounterNewDialog.vue';
 import ThemedButton from './ThemedButton.vue';
 import ThemeSelector from './ThemeSelector.vue';
 
 export default {
   name: 'ApplicationHeader',
   components: {
-    GameSelectDialog,
-    GameNewDialog,
-    EncounterNewDialog,
     ThemedButton,
     ThemeSelector,
   },
-  data() {
-    return {
-      gameSelectDialog: false,
-      gameNewDialog: false,
-      encounterNewDialog: false,
-    };
+  emits: ['new-game', 'load-game'],
+  props: {
+    showToolbar: {
+      type: Boolean,
+      default: true,
+    },
   },
   computed: {
     ...mapGetters('game', ['hasUnsavedChanges']),
 
     isLargeScreen() {
       return this.$vuetify.display.mdAndUp;
+    },
+    headerHeight() {
+      if (!this.isLargeScreen) return 48;
+      return this.showToolbar ? 128 : 72;
     },
   },
   methods: {
@@ -81,17 +76,8 @@ export default {
     goHome() {
       this.$router.push('/');
     },
-    newFileDialog() {
-      this.gameNewDialog = true;
-    },
-    openFileDialog() {
-      this.gameSelectDialog = true;
-    },
     save() {
       this.saveGame();
-    },
-    newEncounterDialog() {
-      this.encounterNewDialog = true;
     },
   },
 };

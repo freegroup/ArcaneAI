@@ -45,7 +45,7 @@ export default {
   computed: {
     ...mapGetters('games', ['games']),
     maps() {
-      return this.games;
+      return this.games.filter(g => g !== 'template');
     },
   },
   methods: {

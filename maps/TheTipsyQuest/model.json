@@ -38,7 +38,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "19f715ed-716d-0f9a-5f0a-20f942d38091",
+          "id": "b576c24d-537b-a7c9-aa1f-33e97c2a8a13",
           "name": "untersuche_den_raum",
           "description": "Du kannst den Raum untersuchen und durchsuchen und vielleicht findest Du Dinge die Du gebrauchen kannst.  Du siehst ein paar Dinge",
           "sound_effect": "laufen_teppich.wav",
@@ -52,7 +52,7 @@
           ]
         },
         {
-          "id": "4cd20136-4ba8-2f66-4124-ad7548c51a68",
+          "id": "55667a9b-7026-c385-0240-94958dd4d012",
           "name": "nehme_das_packet",
           "description": "Du nimmst das weisse Packet mit den seltsamen Röllchen, welches unter der langen Tafel liegt, an dich.",
           "sound_effect": "effect_retrogame.wav",
@@ -68,7 +68,7 @@
           ]
         },
         {
-          "id": "4bed92a5-815e-68b6-8396-9f634f77a25c",
+          "id": "98291746-b758-eb14-80cc-f899d691d4d6",
           "name": "gebe_packet_dem_waechter",
           "description": "Du gibst den Wächter das seltsame Packet",
           "sound_effect": "effect_mann_streckt_sich.wav",
@@ -85,7 +85,7 @@
           ]
         },
         {
-          "id": "c85738dc-7b4b-eb07-7061-f9911e69cd63",
+          "id": "d1d89fe1-2ea3-b1c0-d1db-fc34a74f48cf",
           "name": "rede_mit_waechter",
           "description": "Di sprichts den Wächter an und fragt mal was er so treibt...egal...du redets einfach mit ihm",
           "sound_effect": "effect_gaehnen.wav",
@@ -98,7 +98,7 @@
           "actions": []
         },
         {
-          "id": "f278f030-1648-1bb6-1078-31777b151575",
+          "id": "1d0ab125-25c3-3976-c723-871984136efe",
           "name": "werfe_muenze_ein",
           "description": "Du hast eine Münze und kannst diese Münze in den spielautomaten einwerfen.",
           "sound_effect": "song_traurig_01.mp3",
@@ -113,7 +113,7 @@
           ]
         },
         {
-          "id": "6fd93192-affa-8b3d-103f-67eaaf81fdd9",
+          "id": "2f9523eb-f294-dfd7-3175-fcd1a0a4192e",
           "name": "oeffne_tuer_mit_gewalt",
           "description": "Du öffnest die Tür zu \"Gelben Höhle\" mit Gewalt. Entweder eintreten, rennen, dagegen schlagen. Jede art von Gewalt öffnet die Tür.",
           "sound_effect": "aktion_etwas_im_raum_umwerfen_dose.mp3",
@@ -210,7 +210,7 @@
       "stateType": "START",
       "trigger": [
         {
-          "id": "17e1b5c3-93d2-20b5-6dc6-ff63898ebe83",
+          "id": "2cef10a0-c8c5-676a-407a-d7a96dc951f2",
           "name": "untersuche_das_fenster",
           "description": "Du kannst das Fenster untersuchen und beschreibst, dass man es öffnen könnte. Es fällt dir ein Türschild auf was in der nähe angebracht ist.",
           "sound_effect": "mixkit-air-woosh-1489.wav",
@@ -223,7 +223,7 @@
           ]
         },
         {
-          "id": "bcf8275f-0251-e4b9-0bc4-35e6c1698803",
+          "id": "8883ead3-45a9-12e2-18ef-d0c4ead843cf",
           "name": "oeffne_das_fenster",
           "description": "Du öffnest das Fenster indem du es nach oben schiebst.",
           "sound_effect": "effect_schiebetuer_oeffnen.wav",
@@ -238,7 +238,7 @@
           ]
         },
         {
-          "id": "e017b25e-561a-67f5-fb24-b4ad2f45cd79",
+          "id": "8f4b90dc-d80d-7a81-3a3f-eec8cb26e988",
           "name": "untersuche_das_haus",
           "description": "Man kann das Haus hier nach seinem Zustand untersuchen oder mal nachsehen ob es Türen, Fenster hat in die man in das Haus gelingen könnte. Es fällt dir aber ein Türschild  auf",
           "sound_effect": "",
@@ -249,7 +249,7 @@
           "actions": []
         },
         {
-          "id": "ca945f34-3698-5c23-c405-68e6cece4667",
+          "id": "7530a055-4bb5-646c-bb28-ac4bbb941ffe",
           "name": "untersuche_die_tuer",
           "description": "Die kannst die Tür untersuchen und festellen, dass diese unüberwindbar ist. Kein reinkommen auf irgendeine Weise. Es fällt die aber ein Türschild auf",
           "sound_effect": "",
@@ -260,7 +260,7 @@
           "actions": []
         },
         {
-          "id": "85f83148-fa35-b3c0-8f40-4e1d103cda1d",
+          "id": "b69b4f83-f320-2a7e-15df-3db3188329c9",
           "name": "nehme_stock",
           "description": "Ein Stock, der in der nähe liegt kann genommen werden",
           "sound_effect": "effect_retrogame.wav",
@@ -288,7 +288,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "a020eded-09ee-081f-6c48-cd1361ad6f3d",
+          "id": "2a4d9c32-3843-7655-5887-9c162d6e83de",
           "name": "nehme_den_brief",
           "description": "Nehme den Brief der aus dem Briefkasten herausschaut.",
           "sound_effect": "effect_retrogame.wav",
@@ -301,7 +301,7 @@
           ]
         },
         {
-          "id": "189ee217-96dc-bdb2-1f52-ee7e46bd95b3",
+          "id": "404fb883-4e11-a3fe-c612-d9b66833af29",
           "name": "lese_den_brief_vor",
           "description": "Lese den Brief Wortgetreu vor, nahdem du ihn genommen hast",
           "sound_effect": "",
@@ -314,7 +314,7 @@
           "actions": []
         },
         {
-          "id": "eb3c2650-70d4-d3f7-02ec-8d8d84e303f9",
+          "id": "f54899dc-7a53-39db-e8d4-fc6a2bb308f3",
           "name": "nehme_ratte",
           "description": "Du steckst unter Ekel die Ratte in deine Tasche",
           "sound_effect": "effect_retrogame.wav",
@@ -329,7 +329,7 @@
           ]
         },
         {
-          "id": "b55713cb-8dcb-db8f-e8e1-8bdc417bdfdc",
+          "id": "b0ccaa24-90b0-37e4-924a-1367703ca87e",
           "name": "nehme_muenze",
           "description": "Auf dem Boden liegt eine Münze die du nehmen kannst",
           "sound_effect": "effect_retrogame.wav",
@@ -358,7 +358,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "3ade46e6-61c6-8663-6528-0d68cc780ade",
+          "id": "269a6aaf-b626-03b5-f3c2-920fbc252571",
           "name": "faelle_den_baum",
           "description": "Das Fällen des Baumes, oder umsägen, ist keine gute Idee. Du wirst es versuchen, aber es funktioniert niemals. Du wolltest doch tatsächlich diesen wunderschönen Baum für dein Spielvergnügen fällen. Alter – und das in diesen Zeiten! Schon mal was von Nachhaltigkeit gehört?",
           "sound_effect": "effect_erstaunte_frau.wav",
@@ -382,7 +382,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "5f1a842b-d2a2-6451-dc38-62dec0337777",
+          "id": "f45163c1-3a2b-089d-b3e8-5a20ba641818",
           "name": "untersuche_den_ort",
           "description": "Du kannst den Ort untersuchen und versuchen ob hier interessante Dinge zu finden sind-",
           "sound_effect": "",
@@ -395,7 +395,7 @@
           ]
         },
         {
-          "id": "0440a613-a917-db12-91b6-16baaa691547",
+          "id": "889cd0a0-b278-4d7c-8e3c-268c473a66bf",
           "name": "nehme_das_ei",
           "description": "Du kannst das Goldene Ei aufnemen",
           "sound_effect": "effect_retrogame.wav",
@@ -499,15 +499,17 @@
     "1d3009ee-f6ad-5244-329b-2ff2248e69b5": {
       "type": "StateShape",
       "id": "1d3009ee-f6ad-5244-329b-2ff2248e69b5",
+      "x": 3434,
+      "y": 1386,
       "userData": {
         "system_prompt": "Ein Raum, dessen Zweck sich nur schwer ergründen lässt – eine Kammer der vergessenen Geheimnisse, die einst vielleicht von großer Bedeutung war. Die Luft ist schwer, durchzogen von einem bitteren, undefinierbaren Hauch, als ob die Geschichte des Ortes in jeder Faser der Atmosphäre steckt. Entlang der Wände befinden sich kleine Kammern, jede für sich abgeschirmt, mit engen, niedrigen Eingängen, die ein Gefühl von Einsamkeit und Isolation vermitteln. Ein goldener Schein strahlt von den Becken innerhalb dieser Kammern aus – große, mit einer schillernden Flüssigkeit gefüllte Becken, die in einem endlosen Kreislauf vor sich hin plätschern.\n\n{% if discovered_beer_bottle and not has_beer_bottle%}\nIn einer der Kammern steht eine lerre Flasche und strahl dich ganz offensichtlich an. Aber was soll ich nur mit einer leeren Flasche? eine volle Flasche, kühl und freundlich, das wäre ene Sache.\n{% endif %}\n\n{% if has_full_bottle %}\nDu stehst hier in diesem \"Goldenen Raum\" mit einer warm dampfenden \"Goldenen Flasche\" in deiner rechten Hand. Du hast diese eben gefüllt...gold hast du dir anders vorgetellt. Nun gut.\n{% endif %}\n\nDie Becken sind seltsam verziert, ihr Gold überzogen von einem schmierigen Glanz, der den Anschein von Eleganz durch etwas Grobes und Zerstörerisches überlagert. In der Flüssigkeit glitzern kleine Steine, als wären sie Überreste eines alten Rituals oder eine Art Tribut, deren wahre Natur längst verloren gegangen ist. Die Flüssigkeit scheint sich ewig im Kreis zu bewegen, ohne dass ein Ursprung oder ein Ende erkennbar wäre.\n\nDie Wände des Raumes sind mit abblätternder Tapete bedeckt, darunter ein verblasstes, einst prächtiges Muster, das von vergangenen Zeiten zeugt. Zeiten, in denen dieser Ort vielleicht ein anderer war – vielleicht ein Ort des Vergnügens und der Freude, ein Raum für geheime Begegnungen, für Lachen und Frivolitäten. Ein Ort, der einst von Leben und Leidenschaft erfüllt war, jetzt aber verlassen und von der Zeit gezeichnet ist. Das Licht flackert, Lampen hängen locker von der Decke, als wollten sie sich jeden Moment verabschieden.\n\nEin zerbrochener Spiegel hängt an einer der Wände, seine Oberfläche in viele Scherben zersplittert. Wer hineinblickt, sieht nicht nur sich selbst, sondern auch flüchtige, verzerrte Schatten – Erinnerungen an Bewegungen und Gestalten aus einer anderen Zeit. Man könnte schwören, für einen Moment das Echo von Stimmen zu hören, gedämpftes Lachen, das Flüstern von heimlichen Liebenden, die die Einsamkeit der kleinen Kammern gesucht haben. Oder vielleicht ist es nur das Spiel der Reflexionen, ein Trick des zerbrochenen Spiegels, der mit den Gedanken spielt.\n\nDie Kälte des Raumes ist unverkennbar. Ein unnatürliches Frösteln zieht durch die Luft, das nicht so recht zum Rest des Raumes passen will – eine Kälte, die zu den goldenen Becken gehört, als wollten sie ihren unheimlichen Glanz bewahren. Die kleinen Kammern wirken wie Relikte einer vergangenen Welt, ein Ort, an dem etwas zurückgelassen wurde, das besser nie entdeckt worden wäre. Das sanfte Plätschern der Flüssigkeit und das Flackern des Lichts verleihen dem Raum eine melancholische und leicht beklemmende Atmosphäre – ein Ort, der zwar einst schöner gewesen sein mag, aber nun nur noch von Erinnerungen an eine verlorene Zeit zeugt.",
         "ambient_sound_volume": 100
       },
-      "name": "GelbeHoehle",
+      "name": "GelbeHoelle",
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "fd03b6f5-79df-3366-6610-b060f6cb5a60",
+          "id": "25666da1-8f97-1e1d-2d81-5b8d3d12d806",
           "name": "durchsuche_die_kammern",
           "description": "Du durchsuchst die Kammern nach etwas brauchbaren.",
           "sound_effect": "",
@@ -520,7 +522,7 @@
           ]
         },
         {
-          "id": "758967f4-5728-4d40-103c-c485bc08ea14",
+          "id": "a89f5407-848c-32d2-a12a-d9b0a09f0c85",
           "name": "nehme_die_flasche",
           "description": "Du nimmst eine Flasche aus einer der Kammern.",
           "sound_effect": "effect_retrogame.wav",
@@ -536,7 +538,7 @@
           ]
         },
         {
-          "id": "f396c7c2-98b6-c7cd-034e-4a79c9c9cc5e",
+          "id": "c917d21d-04db-f4d1-47e7-2b2d71c8e02b",
           "name": "pinkel_in_die_flasche",
           "description": "Du pinkelst in die Flasche und machst die fast voll.",
           "sound_effect": "effect-sink-with-water.wav",
@@ -896,19 +898,9 @@
       "name": "springe_auf_haus"
     },
     "6a094983-14b3-e9bb-0d08-efe98b2300c3": {
-      "type": "TriggerConnection",
       "id": "6a094983-14b3-e9bb-0d08-efe98b2300c3",
-      "userData": {
-        "sound_effect_volume": 100,
-        "sound_effect": "laufen_strasse_stadt.wav",
-        "sound_effect_duration": 3,
-        "conditions": [
-          "door_closed_gelbe_hoehle == false"
-        ],
-        "description": "Du gehst durch die mit gewalt geöffnete Tür in die \"Gelbe Hölle\" hinein",
-        "system_prompt": "Du stehst nun in der sogenannten \"Gelben Hölle\"...super...(ironisch)"
-      },
-      "dasharray": "- ",
+      "name": "gehe_in_die_gelbe_hoelle",
+      "type": "TriggerConnection",
       "source": {
         "node": "3253ff2a-a920-09d5-f033-ca759a778e19",
         "port": "output0",
@@ -920,7 +912,16 @@
         "decoration": "draw2d.decoration.connection.ArrowDecorator",
         "name": "GelbeHoehle"
       },
-      "name": "gehe_in_die_gelbe_hoehle"
+      "userData": {
+        "sound_effect_volume": 100,
+        "sound_effect": "laufen_strasse_stadt.wav",
+        "sound_effect_duration": 3,
+        "conditions": [
+          "door_closed_gelbe_hoehle == false"
+        ],
+        "description": "Du gehst durch die mit gewalt geöffnete Tür in die \"Gelbe Hölle\" hinein",
+        "system_prompt": "Du stehst nun in der sogenannten \"Gelben Hölle\"...super...(ironisch)"
+      }
     },
     "4e4bdaaa-07eb-986e-80f4-8a7deed9560d": {
       "type": "TriggerConnection",
@@ -1041,9 +1042,15 @@
       "name": "gehe_zum_briefkasten"
     },
     "9e4689aa-e289-58e2-d84a-56c8ae74e61c": {
-      "id": "9e4689aa-e289-58e2-d84a-56c8ae74e61c",
-      "name": "gehe_zum_baum",
       "type": "TriggerConnection",
+      "id": "9e4689aa-e289-58e2-d84a-56c8ae74e61c",
+      "userData": {
+        "sound_effect": "laufen_waldweg.wav",
+        "description": "Du gehst vom Haus zum Briefkasten gehen, laufen, springen oder wenn es jemand möchte sogar fliegen (auf die Nase) :-)",
+        "system_prompt": "Du bist nun bei dem Baum angekommen",
+        "sound_effect_volume": 70,
+        "sound_effect_duration": 7
+      },
       "source": {
         "node": "eb5b6e6b-5ae0-772a-12d3-670e58816128",
         "port": "output0",
@@ -1055,13 +1062,7 @@
         "decoration": "draw2d.decoration.connection.ArrowDecorator",
         "name": "Tree"
       },
-      "userData": {
-        "sound_effect": "laufen_waldweg.wav",
-        "description": "Du gehst vom Haus zum Briefkasten gehen, laufen, springen oder wenn es jemand möchte sogar fliegen (auf die Nase) :-)",
-        "system_prompt": "Du bist nun bei dem Baum angekommen",
-        "sound_effect_volume": 70,
-        "sound_effect_duration": 7
-      }
+      "name": "gehe_zum_baum"
     },
     "61638c84-04dd-d795-1424-5f4faa5d44f0": {
       "type": "TriggerConnection",

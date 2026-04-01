@@ -1,6 +1,10 @@
 <template>
   <v-app id="app">
-    <application-header />
+    <application-header
+      :show-toolbar="!!currentGameName"
+      @new-game="gameNewDialog = true"
+      @load-game="gameSelectDialog = true"
+    />
 
     <!-- Navigation Drawer - Only show if a game is loaded -->
     <v-navigation-drawer
@@ -124,7 +128,11 @@
 
     <v-main class="content-area">
       <!-- Show welcome/empty state if no game is loaded -->
-      <ArcaneAIEmptyState v-if="!currentGameName" />
+      <ArcaneAIEmptyState
+        v-if="!currentGameName"
+        @new-game="gameNewDialog = true"
+        @load-game="gameSelectDialog = true"
+      />
       
       <!-- Otherwise show the actual content -->
       <router-view v-else :key="$route.fullPath"></router-view>
@@ -140,6 +148,10 @@
     
     <!-- Add Encounter Dialog - available globally when game is loaded -->
     <EncounterNewDialog v-model="showEncounterDialog" />
+
+    <!-- Game Dialogs - available from header and empty state -->
+    <GameSelectDialog v-model:dialog="gameSelectDialog" />
+    <GameNewDialog v-model:dialog="gameNewDialog" />
   </v-app>
 </template>
 
@@ -147,6 +159,8 @@
 import ApplicationHeader from './components/ApplicationHeader.vue';
 import ConfirmEncounterDeleteDialog from './components/ConfirmEncounterDeleteDialog.vue';
 import EncounterNewDialog from './components/EncounterNewDialog.vue';
+import GameNewDialog from './components/GameNewDialog.vue';
+import GameSelectDialog from './components/GameSelectDialog.vue';
 import ThemedActionButton from './components/ThemedActionButton.vue';
 import ArcaneAIEmptyState from './components/ArcaneAIEmptyState.vue';
 import { mapActions } from 'vuex';
@@ -156,6 +170,8 @@ export default {
     ApplicationHeader,
     ConfirmEncounterDeleteDialog,
     EncounterNewDialog,
+    GameNewDialog,
+    GameSelectDialog,
     ThemedActionButton,
     ArcaneAIEmptyState,
   },
@@ -172,24 +188,26 @@ export default {
       deletingEncounterId: '',
       deletingEncounterName: '',
       showEncounterDialog: false,
+      gameSelectDialog: false,
+      gameNewDialog: false,
     };
   },
   computed: {
     drawerWidth() {
-      // Laptop screens (< 1440px): narrower width (180px)
-      // Larger screens (≥ 1440px): 300px
-      if (this.$vuetify.display.width < 1440) {
-        return 180;
+      const width = this.$vuetify.display.width;
+      if (width < 1500) {
+        return Math.round(width / 4);
       }
       return 300;
     },
     currentGameName() {
       const storeName = this.$store.getters['game/gameName'];
       const routeName = this.$route.params.gameName;
-      
-      // Prefer store name if valid, but fallback to route param to avoid flicker
-      if (storeName && storeName !== 'unknown') return storeName;
-      return routeName || null;
+
+      return storeName || routeName || null;
+    },
+    recentGames() {
+      return this.$store.getters['games/recentGames'] || [];
     },
     encountersList() {
       return this.$store.getters['encounters/encounterNames'] || [];
@@ -223,6 +241,7 @@ export default {
         
         // Load the game
         await this.loadGame(newGameName);
+        this.$store.dispatch('games/addRecentGame', newGameName);
       }
     }
   },
@@ -280,6 +299,10 @@ export default {
     },
     openAddEncounterDialog() {
       this.showEncounterDialog = true;
+    },
+    async handleSelectRecentGame(gameName) {
+      await this.$store.dispatch('games/selectGame', gameName);
+      this.$router.push({ name: 'world', params: { gameName } });
     },
     async handleEncounterDelete(encounterId) {
       console.log('[App] handleEncounterDelete START', encounterId);
@@ -342,17 +365,8 @@ export default {
 
 <style scoped>
 .content-area {
-  /* Use viewport relative height but respect the header height */
-  /* header is 128px on large, 48px on small */
-  --header-height: 128px;
   height: calc(100vh - var(--header-height));
   overflow: auto;
-}
-
-@media (max-width: 959px) { /* Vuetify sm breakpoint */
-  .content-area {
-    --header-height: 48px;
-  }
 }
 
 .content-area :deep(.v-main__wrap) {

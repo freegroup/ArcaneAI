@@ -1,0 +1,199 @@
+/*
+ * Common Canvas Styles
+ * Theme variables are loaded from theme-dark.css, theme-tavern.css, theme-elegant.css
+ */
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    overflow: hidden;
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+    background-color: var(--canvas-bg);
+    color: var(--color-text-1);
+    -webkit-text-size-adjust: 100%;
+}
+
+#container {
+    overflow: scroll;
+}
+
+#canvas {
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+#canvas_toolbar {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    background-color: var(--canvas-toolbar-bg);
+    border-bottom: var(--canvas-toolbar-border-width) solid var(--button-outline-color);
+    box-shadow: var(--canvas-toolbar-shadow);
+    padding: var(--canvas-toolbar-padding);
+    z-index: 1000;
+}
+
+.toolbar_delimiter {
+    margin-right: 12px;
+    height: var(--canvas-delimiter-height);
+    width: var(--canvas-delimiter-width);
+    background-color: var(--button-outline-color);
+}
+
+/* Canvas Button */
+.glassy-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--canvas-btn-padding);
+    margin-right: 6px;
+    font-family: var(--global-font-family, 'Ithaca', monospace);
+    font-size: var(--canvas-btn-font-size);
+    letter-spacing: var(--canvas-btn-letter-spacing);
+    color: var(--button-text-color);
+    background-color: var(--color-accent-1);
+    border: var(--canvas-btn-border-width) solid var(--button-outline-color);
+    border-radius: var(--canvas-btn-radius);
+    box-shadow: var(--canvas-btn-shadow);
+    cursor: pointer;
+    text-align: center;
+    transition: transform 0.1s, background-color 0.2s;
+    user-select: none;
+}
+
+.glassy-button:hover {
+    background-color: var(--button-danger-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--canvas-btn-hover-shadow);
+}
+
+.glassy-button:active {
+    transform: translateY(2px);
+    box-shadow: inset 3px 3px 0px 0px rgba(0, 0, 0, 0.4);
+}
+
+.glassy-button:disabled {
+    background-color: var(--button-disabled-bg);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: inset -3px -3px 0px 0px rgba(0, 0, 0, 0.2);
+    opacity: 0.7;
+}
+
+.glassy-button.secondary {
+    background-color: var(--color-bg-3);
+}
+
+/* Zoom Controls */
+#canvas_zoom {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    gap: 4px;
+    background-color: var(--button-outline-color);
+    padding: var(--canvas-zoom-padding);
+    z-index: 1001;
+    border: var(--canvas-zoom-border-width) solid var(--color-accent-2);
+}
+
+#canvas_zoom>button {
+    background-color: var(--canvas-toolbar-bg);
+    color: var(--color-accent-2);
+    font-family: var(--global-font-family, 'Ithaca', monospace);
+    font-size: var(--canvas-zoom-btn-font-size);
+    border: var(--canvas-zoom-border-width) solid var(--button-outline-color);
+    border-radius: var(--canvas-zoom-btn-radius);
+    padding: var(--canvas-zoom-btn-padding);
+    min-width: 40px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s;
+}
+
+#canvas_zoom>button:hover {
+    background-color: var(--color-accent-2);
+    color: var(--button-outline-color);
+}
+
+/* Fullscreen Controls */
+#canvas_fullscreen {
+    position: fixed;
+    top: 72px;
+    right: 24px;
+    z-index: 1001;
+    background-color: var(--button-outline-color);
+    padding: var(--canvas-zoom-padding);
+    border: var(--canvas-zoom-border-width) solid var(--color-accent-2);
+}
+
+#canvas_fullscreen_toggle {
+    background-color: var(--canvas-toolbar-bg);
+    color: var(--color-accent-2);
+    border: var(--canvas-zoom-border-width) solid var(--button-outline-color);
+    border-radius: var(--canvas-zoom-btn-radius);
+    padding: var(--canvas-zoom-btn-padding);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+#canvas_fullscreen_toggle:hover {
+    background-color: var(--color-accent-2);
+    color: var(--button-outline-color);
+}
+
+#canvas_fullscreen_toggle svg {
+    display: block;
+}
+
+#pseudoCheckbox {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.cursor-move {
+    cursor: move;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: var(--canvas-scrollbar-width);
+    height: var(--canvas-scrollbar-width);
+}
+
+::-webkit-scrollbar-track {
+    background: var(--button-outline-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border: var(--canvas-scrollbar-border-width) solid var(--button-outline-color);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-2);
+}

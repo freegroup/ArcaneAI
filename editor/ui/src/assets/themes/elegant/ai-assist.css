@@ -41,6 +41,10 @@
   letter-spacing: 2px;
 }
 
+[data-theme="elegant"] .ai-assist-label__icon {
+  color: var(--color-accent-1) !important;
+}
+
 /* ===== AIAssistLoading ===== */
 
 [data-theme="elegant"] .ai-assist-loading {
@@ -105,38 +109,19 @@
 }
 
 [data-theme="elegant"] .empty-state__container {
-  max-width: 700px;
-  width: 100%;
-  background: rgba(var(--color-accent-1-rgb), 0.05);
-  border: 1px solid var(--color-accent-1);
-  border-radius: 12px;
-  padding: 32px;
-  margin: auto 0;
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+  gap: 8px;
 }
 
 [data-theme="elegant"] .empty-state__icon {
   width: 80px;
   height: 80px;
   background: var(--color-accent-1);
-  margin: 0 auto 24px;
+  margin-bottom: 16px;
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(var(--color-accent-1-rgb), 0.3);
 }
 
-[data-theme="elegant"] .empty-state__icon::before {
-  width: 0;
-  height: 0;
-  border: none;
-}
-
-[data-theme="elegant"] .empty-state__icon::after {
-  width: 0;
-  height: 0;
-  border: none;
-}
-
-[data-theme="elegant"] .pixel-scroller {
+[data-theme="elegant"] .empty-state__icon-glyph {
   font-size: 36px;
   color: white;
 }
@@ -145,80 +130,46 @@
   font-size: 28px;
   font-weight: 300;
   color: var(--color-accent-2);
-  margin-bottom: 24px;
   letter-spacing: 2px;
 }
 
-[data-theme="elegant"] .empty-state__content {
+[data-theme="elegant"] .empty-state__subtitle {
   font-size: 15px;
-  line-height: 1.8;
-  color: var(--color-text-1);
-}
-
-[data-theme="elegant"] .empty-state__text {
-  margin-bottom: 16px;
-}
-
-[data-theme="elegant"] .empty-state__text.highlight {
-  color: var(--color-accent-2);
-  font-size: 17px;
-  font-weight: 400;
-  margin-bottom: 24px;
-}
-
-[data-theme="elegant"] .empty-state__description {
-  background: rgba(0, 0, 0, 0.2);
-  padding: 16px;
-  border-left: 3px solid var(--color-accent-2);
-  border-radius: 4px;
-  margin-bottom: 24px;
-}
-
-[data-theme="elegant"] .accent-text {
-  color: var(--color-accent-1);
-}
-
-[data-theme="elegant"] .empty-state__list {
-  padding: 0;
-  margin: 16px 0;
-}
-
-[data-theme="elegant"] .empty-state__list li {
-  margin-bottom: 8px;
-  padding-left: 24px;
-  font-size: 14px;
-}
-
-[data-theme="elegant"] .empty-state__list li::before {
-  color: var(--color-accent-2);
-}
-
-[data-theme="elegant"] .empty-state__call-to-action {
-  gap: 8px;
-  margin-top: 24px;
-  padding: 12px;
-  border: 1px dashed var(--color-border);
-  border-radius: 8px;
   color: var(--color-text-2);
+  margin-bottom: 24px;
 }
 
-[data-theme="elegant"] .empty-state__call-to-action .v-icon {
-  color: var(--color-accent-2);
-  font-size: 28px;
+[data-theme="elegant"] .empty-state__actions {
+  gap: 16px;
 }
 
-[data-theme="elegant"] .empty-state__footer {
-  margin-top: 16px;
-  opacity: 0.5;
-  font-size: 12px;
+/* ===== Recent Games List ===== */
+
+[data-theme="elegant"] .empty-state__recent {
+  border-top: 1px solid var(--color-border);
+  padding-top: 24px;
 }
 
-[data-theme="elegant"] .pixel-art-cat {
-  color: var(--color-text-muted);
+[data-theme="elegant"] .empty-state__recent-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--color-text-2);
+  font-weight: 300;
 }
 
-[data-theme="elegant"] .status-msg {
-  color: var(--color-text-muted);
+[data-theme="elegant"] .empty-state__recent-item {
+  padding: 8px 16px;
+  font-size: 15px;
+  letter-spacing: 1px;
+  color: var(--color-text-1);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+[data-theme="elegant"] .empty-state__recent-item:hover {
+  color: var(--color-accent-1);
+  background: rgba(var(--color-accent-1-rgb), 0.08);
 }
 
 /* ===== AI Result/Comment ===== */

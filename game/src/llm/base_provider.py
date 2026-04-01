@@ -140,7 +140,13 @@ WICHTIG:
 - Keine Erklärungen außerhalb des JSON
 - Keine Markdown-Formatierung
 - NIEMALS den Function-Namen im "response"-Text verwenden!
-- Der "response"-Text ist für den Spieler, der "function"-Name ist internes System-Metadata"""
+- Der "response"-Text ist für den Spieler, der "function"-Name ist internes System-Metadata
+- KEINE Aktionsbeschreibungen in Sternchen (*er ging los*, *nimmt den Stock*) oder Klammern
+- KEINE Erzähler-Perspektive oder dritte Person — bleibe IMMER in deiner Rolle und sprich den Spieler direkt an
+- Du BESCHREIBST was der Spieler sieht/hört/fühlt, du ERZÄHLST NICHT was der Spieler tut
+
+FALSCH: "Ich nehme den Stock *greift nach dem Stock* und gehe weiter."
+RICHTIG: "Ha, der Stock! Den nehm ich mit. Jetzt mal rüber zur Bank schauen...\""""
 
     @abstractmethod
     def call_chat(
@@ -309,13 +315,13 @@ WICHTIG:
             text = text.replace('{{{', '{').replace('}}}', '}')
         text = text.replace('{{', '{').replace('}}', '}')
 
-        # Try to extract from markdown code block
-        json_match = re.search(r'```json\s*(\{.*?\})\s*```', text, re.DOTALL)
+        # Try to extract from markdown code block (greedy to capture full JSON)
+        json_match = re.search(r'```json\s*(\{.*\})\s*```', text, re.DOTALL)
         if json_match:
             return json_match.group(1)
 
         # Try to extract from code block without language
-        json_match = re.search(r'```\s*(\{.*?\})\s*```', text, re.DOTALL)
+        json_match = re.search(r'```\s*(\{.*\})\s*```', text, re.DOTALL)
         if json_match:
             return json_match.group(1)
 

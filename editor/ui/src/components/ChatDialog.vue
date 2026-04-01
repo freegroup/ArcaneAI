@@ -9,12 +9,12 @@
       <v-card-text class="chat-container">
         <!-- Inventory Panel (Left) -->
         <div class="inventory-panel">
-          <div class="inventory-header">📦 Inventory</div>
+          <div class="inventory-header">Inventory</div>
           <div class="inventory-list" ref="inventoryList">
             <div v-for="item in inventoryItems" :key="item.key" class="inventory-item">
               <span class="item-key">{{ item.key }}</span>
               <!-- Boolean: Checkbox -->
-              <input 
+              <input
                 v-if="item.type === 'boolean'"
                 type="checkbox"
                 :checked="item.value"
@@ -22,7 +22,7 @@
                 class="item-checkbox"
               />
               <!-- Integer: Number input -->
-              <input 
+              <input
                 v-else-if="item.type === 'integer'"
                 type="number"
                 :value="item.value"
@@ -30,7 +30,7 @@
                 class="item-number"
               />
               <!-- String: Text input -->
-              <input 
+              <input
                 v-else
                 type="text"
                 :value="item.value"
@@ -43,64 +43,64 @@
             </div>
           </div>
         </div>
-        
-        <!-- Chat messages area (Right) -->
-        <div class="messages-area" ref="messagesArea">
-          <!-- Error message -->
-          <div v-if="error" class="message system-message error-message">
-            <div class="message-content">⚠ {{ error }}</div>
-          </div>
-          
-          <!-- Typing indicator while connecting -->
-          <div v-if="connecting" class="message ai-message">
-            <div class="message-content">
-              <span class="typing-indicator">
-                <span class="dot"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-              </span>
+
+        <!-- Chat area (Right) - messages + input -->
+        <div class="chat-area">
+          <div class="messages-area" ref="messagesArea">
+            <!-- Error message -->
+            <div v-if="error" class="message system-message error-message">
+              <div class="message-content">⚠ {{ error }}</div>
+            </div>
+
+            <!-- Typing indicator while connecting -->
+            <div v-if="connecting" class="message ai-message">
+              <div class="message-content">
+                <span class="typing-indicator">
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Chat messages -->
+            <div v-for="(msg, index) in messages" :key="index"
+                 :class="['message', msg.role === 'user' ? 'user-message' : (msg.role === 'system' ? 'system-message' : 'ai-message')]">
+              <div class="message-content">{{ msg.content }}</div>
+            </div>
+
+            <!-- Typing indicator while waiting for response -->
+            <div v-if="sending" class="message ai-message">
+              <div class="message-content">
+                <span class="typing-indicator">
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                </span>
+              </div>
             </div>
           </div>
-          
-          <!-- Chat messages -->
-          <div v-for="(msg, index) in messages" :key="index" 
-               :class="['message', msg.role === 'user' ? 'user-message' : (msg.role === 'system' ? 'system-message' : 'ai-message')]">
-            <div class="message-content">{{ msg.content }}</div>
-          </div>
-          
-          <!-- Typing indicator while waiting for response -->
-          <div v-if="sending" class="message ai-message">
-            <div class="message-content">
-              <span class="typing-indicator">
-                <span class="dot"></span>
-                <span class="dot"></span>
-                <span class="dot"></span>
-              </span>
-            </div>
+
+          <div class="chat-input-bar">
+            <input
+              ref="chatInput"
+              type="text"
+              v-model="inputMessage"
+              placeholder="Type your message..."
+              :disabled="sending || connecting"
+              @keyup.enter="sendMessage"
+              class="chat-input"
+            />
+            <ThemedButton
+              variant="proceed"
+              :disabled="!inputMessage.trim() || connecting || sending"
+              @click="sendMessage"
+            >
+              Send
+            </ThemedButton>
           </div>
         </div>
       </v-card-text>
-      
-      <v-card-actions class="chat-actions">
-        <div class="input-wrapper">
-          <input
-            ref="chatInput"
-            type="text"
-            v-model="inputMessage"
-            placeholder="Type your message..."
-            :disabled="sending || connecting"
-            @keyup.enter="sendMessage"
-            class="chat-input"
-          />
-          <ThemedButton 
-            variant="proceed"
-            :disabled="!inputMessage.trim() || connecting || sending"
-            @click="sendMessage"
-          >
-            Send
-          </ThemedButton>
-        </div>
-      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
@@ -377,6 +377,17 @@ export default {
 
 .item-number {
   text-align: right;
+  width: 60px;
+  max-width: 60px;
+  min-width: 60px;
+  flex: 0 0 60px;
+}
+
+.item-text {
+  width: 60px;
+  max-width: 60px;
+  min-width: 60px;
+  flex: 0 0 60px;
 }
 
 .inventory-empty {
@@ -392,6 +403,19 @@ export default {
   display: flex;
   flex-direction: column;
   scroll-behavior: smooth;
+}
+
+/* Chat Area (messages + input) */
+.chat-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chat-input-bar {
+  display: flex;
+  width: 100%;
 }
 
 /* Message Styles */

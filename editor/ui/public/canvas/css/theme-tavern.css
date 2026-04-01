@@ -1,0 +1,61 @@
+/*
+ * Fantasy Tavern Theme — Canvas Variables
+ */
+[data-theme="tavern"] {
+  /* Palette */
+  --color-bg-1: #1c1410;
+  --color-bg-2: #2c2218;
+  --color-bg-3: #3d2e1e;
+  --color-accent-1: #e8a849;
+  --color-accent-2: #7ec88b;
+  --color-text-1: #f5e6d0;
+  --color-text-2: #c4a882;
+  --color-border: #5a4332;
+  --color-text-muted: #8a7560;
+
+  /* Button colors */
+  --button-outline-color: #1c1410;
+  --button-text-color: #f5e6d0;
+  --button-danger-hover: #f0b85a;
+  --button-disabled-bg: #3d2e1e;
+
+  /* Canvas */
+  --canvas-bg: var(--color-bg-1);
+  --canvas-toolbar-bg: var(--color-bg-2);
+
+  /* Context Menu */
+  --contextmenu-bg: #1c1410;
+  --contextmenu-border-color: #5a4332;
+  --contextmenu-text-color: #f5e6d0;
+
+  /* State shapes */
+  --state-normal-font: #e8a849;
+  --state-normal-bg: #3d2e1e;
+  --state-normal-border: #5a4332;
+  --state-start-font: #7ec88b;
+  --state-start-bg: #2a1f15;
+  --state-start-border: #5a4332;
+  --state-end-font: #3f3f3f;
+  --state-end-bg: #ffcccb;
+  --state-end-border: #c0392b;
+  --connection-color: #7ec88b;
+  --connection-label-font: #1c1410;
+  --connection-label-bg: #e8a849;
+  --selection-color: #e8a849;
+
+  /* Stroke widths (read by JS via getVar()) */
+  --connection-stroke: 5;
+  --label-stroke: 2;
+  --selection-stroke: 6;
+  --state-stroke: 4;
+
+  /* Global font */
+  --global-font-family: Ithaca, monospace;
+  --global-font-size: 24;
+
+  /* Raft */
+  --raft-bg: #f5e6d0;
+  --raft-border: #5a4332;
+  --raft-bg-light: #faf3e8;
+  --raft-border-light: #d4c0a0;
+}

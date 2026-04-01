@@ -32,3 +32,24 @@
   border-color: var(--color-accent-1);
   box-shadow: 0 0 0 3px rgba(108, 138, 255, 0.15);
 }
+
+/* Vuetify v-text-field — fix label overlap & alignment */
+[data-theme="elegant"] .v-field .v-label {
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+[data-theme="elegant"] .v-field .v-label--floating {
+  transform: translateY(-8px) scale(0.75);
+  color: var(--color-accent-2);
+}
+
+[data-theme="elegant"] .v-field .v-field__input {
+  padding-top: 20px;
+  padding-inline-start: 16px;
+  font-size: 14px;
+}
+
+[data-theme="elegant"] .v-text-field__suffix {
+  padding-inline-start: 8px;
+}

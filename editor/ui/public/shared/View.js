@@ -8,7 +8,7 @@ View = draw2d.Canvas.extend({
         this.zoomingFactor = 1.2
 
         // 8-bit Retro style - phosphor green dots on dark background (like old CRT monitors)
-        this.installEditPolicy(new draw2d.policy.canvas.ShowDotEditPolicy(20, 1, "#33ff33", "#1a1a2e"));
+        this.installEditPolicy(new draw2d.policy.canvas.ShowDotEditPolicy(20, 1, "#1f51a9", "#1a1a2e"));
         this.installEditPolicy(new EditPolicy())
         this.installEditPolicy(new draw2d.policy.connection.DragConnectionCreatePolicy({
             createConnection: () => {

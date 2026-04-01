@@ -1,0 +1,95 @@
+/*
+ * Dark Fantasy Theme — Canvas Variables
+ * Default theme (applied via :root)
+ */
+:root {
+  /* Palette */
+  --color-bg-1: #1a1a2e;
+  --color-bg-2: #16213e;
+  --color-bg-3: #0f3460;
+  --color-accent-1: #e94560;
+  --color-accent-2: #f39c12;
+  --color-text-1: #e0e0e0;
+  --color-text-2: #a0a0a0;
+  --color-border: #2c3e50;
+  --color-text-muted: #6b6b6b;
+
+  /* Button colors */
+  --button-outline-color: #000000;
+  --button-text-color: #ffffff;
+  --button-danger-hover: #ff5e78;
+  --button-disabled-bg: #444444;
+
+  /* Canvas */
+  --canvas-bg: var(--color-bg-1);
+  --canvas-toolbar-bg: var(--color-bg-2);
+  --canvas-toolbar-padding: 12px;
+  --canvas-toolbar-border-width: 4px;
+  --canvas-toolbar-shadow: 0 4px 0 rgba(0, 0, 0, 0.3);
+
+  /* Canvas Buttons */
+  --canvas-btn-padding: 6px 12px;
+  --canvas-btn-border-width: 3px;
+  --canvas-btn-radius: 0;
+  --canvas-btn-shadow: inset -3px -3px 0px 0px rgba(0, 0, 0, 0.4), inset 3px 3px 0px 0px rgba(255, 255, 255, 0.2);
+  --canvas-btn-hover-shadow: inset -3px -3px 0px 0px rgba(0, 0, 0, 0.4), inset 3px 3px 0px 0px rgba(255, 255, 255, 0.3), 0 4px 0 rgba(0, 0, 0, 0.3);
+  --canvas-btn-font-size: 19px;
+  --canvas-btn-letter-spacing: 2px;
+
+  /* Toolbar Delimiter */
+  --canvas-delimiter-width: 4px;
+  --canvas-delimiter-height: 24px;
+
+  /* Zoom Controls */
+  --canvas-zoom-padding: 4px;
+  --canvas-zoom-btn-padding: 8px;
+  --canvas-zoom-border-width: 2px;
+  --canvas-zoom-btn-radius: 0;
+  --canvas-zoom-btn-font-size: 12px;
+
+  /* Scrollbar */
+  --canvas-scrollbar-width: 12px;
+  --canvas-scrollbar-border-width: 3px;
+
+  /* Font */
+  --global-font-family: Ithaca, monospace;
+  --global-font-size: 24;
+
+  /* Context Menu */
+  --contextmenu-padding: 4px;
+  --contextmenu-item-padding: 8px 12px;
+  --contextmenu-border-width: 3px;
+  --contextmenu-separator-width: 2px;
+  --contextmenu-shadow: 6px 6px 0px rgba(0, 0, 0, 0.5);
+  --contextmenu-label-font-size: 24px;
+  --contextmenu-bg: #1a1a2e;
+  --contextmenu-border-color: #000000;
+  --contextmenu-text-color: #e0e0e0;
+
+  /* State shapes (read by JS via getVar()) */
+  --state-normal-font: #f39c12;
+  --state-normal-bg: #0f3460;
+  --state-normal-border: #349be8;
+  --state-start-font: #03c524;
+  --state-start-bg: #281b58;
+  --state-start-border: #c6bee1;
+  --state-end-font: #3f3f3f;
+  --state-end-bg: #ffcccb;
+  --state-end-border: #d9534f;
+  --connection-color: #27ae60;
+  --connection-label-font: #0a0a14;
+  --connection-label-bg: #f39c12;
+  --selection-color: #e94560;
+
+  /* Stroke widths (read by JS via getVar()) */
+  --connection-stroke: 5;
+  --label-stroke: 2;
+  --selection-stroke: 6;
+  --state-stroke: 4;
+
+  /* Raft */
+  --raft-bg: #c3eae4;
+  --raft-border: #000000;
+  --raft-bg-light: #f3f6fc;
+  --raft-border-light: #d3e2fe;
+}

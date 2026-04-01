@@ -18,7 +18,7 @@
   padding: 16px 24px;
   gap: 16px;
   background: linear-gradient(135deg, var(--color-bg-3) 0%, var(--color-bg-1) 100%);
-  border-bottom: 1px solid;
+  border-bottom: 1px solid transparent;
   border-image: linear-gradient(
     90deg,
     rgba(108, 138, 255, 0.8) 0%,
@@ -33,11 +33,32 @@
   color: var(--color-accent-1);
 }
 
+[data-theme="elegant"] .dialog-header__close {
+  background: rgba(var(--color-accent-1-rgb), 0.22) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(var(--color-accent-1-rgb), 0.5) !important;
+  color: var(--color-accent-1) !important;
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.25),
+    0 0 10px rgba(var(--color-accent-1-rgb), 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="elegant"] .dialog-header__close:hover {
+  background: rgba(var(--color-accent-1-rgb), 0.35) !important;
+  border-color: rgba(var(--color-accent-1-rgb), 0.7) !important;
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(var(--color-accent-1-rgb), 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+}
+
 [data-theme="elegant"] .dialog-header__title {
   font-size: 18px;
   font-weight: 300;
   letter-spacing: 3px;
-  color: var(--color-accent-2);
+  color: var(--color-accent-1);
 }
 
 [data-theme="elegant"] .dialog-content {
@@ -107,6 +128,7 @@
 [data-theme="elegant"] .encounter-new-dialog > .v-card-text,
 [data-theme="elegant"] .todo-edit-dialog > .v-card-text,
 [data-theme="elegant"] .sound-picker-dialog > .v-card-text,
+[data-theme="elegant"] .sound-picker-dialog > .search-bar,
 [data-theme="elegant"] .import-state-dialog > .v-card-text,
 [data-theme="elegant"] .jinja-editor-dialog > .v-card-text,
 [data-theme="elegant"] .chat-dialog > .v-card-text,
@@ -293,4 +315,50 @@
   border-top: 1px solid var(--color-border);
   border-radius: 0 0 12px 12px !important;
   overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════
+   Editor Toolbar (Undo/Redo)
+   ═══════════════════════════════════════════ */
+
+[data-theme="elegant"] .editor-toolbar {
+  gap: 4px;
+  padding: 8px 12px;
+  background: var(--color-bg-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+[data-theme="elegant"] .toolbar-btn {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  padding: 4px 8px;
+  opacity: 0.4;
+  border-radius: 6px;
+  color: var(--color-text-2);
+  font-size: 10px;
+  transition: all 0.15s ease;
+  box-shadow: none;
+}
+
+[data-theme="elegant"] .toolbar-btn:not(:disabled) {
+  opacity: 1;
+  color: var(--color-text-1);
+  background: var(--color-bg-2);
+  border-color: var(--color-border-highlight);
+}
+
+[data-theme="elegant"] .toolbar-btn:not(:disabled):hover {
+  background: rgba(var(--color-accent-1-rgb), 0.15);
+  border-color: var(--color-accent-1);
+  color: var(--color-accent-1);
+}
+
+[data-theme="elegant"] .toolbar-btn:not(:disabled):active {
+  background: rgba(var(--color-accent-1-rgb), 0.25);
+}
+
+[data-theme="elegant"] .undo-icon,
+[data-theme="elegant"] .redo-icon {
+  font-size: 18px;
+  line-height: 1;
 }

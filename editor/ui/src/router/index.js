@@ -9,50 +9,47 @@ import Inventory from '../views/Inventory.vue';
 const routes = [
   {
     path: '/',
-    redirect: '/game'
+    name: 'home',
+    component: { render: () => null }
   },
   {
-    path: '/game',
-    name: 'game-selection',
-    component: Personality,
-    props: true
+    path: '/game/:gameName([^/]+)',
+    redirect: to => `/game/${to.params.gameName}/world`
   },
   {
-    path: '/game/:gameName',
-    redirect: to => {
-      // Redirect to world view
-      return `/game/${to.params.gameName}/world`;
-    }
-  },
-  {
-    path: '/game/:gameName/personality',
+    path: '/game/:gameName([^/]+)/personality',
     name: 'personality',
     component: Personality,
     props: true
   },
   {
-    path: '/game/:gameName/welcome',
+    path: '/game/:gameName([^/]+)/welcome',
     name: 'welcome-prompt',
     component: WelcomePrompt,
     props: true
   },
   {
-    path: '/game/:gameName/world',
+    path: '/game/:gameName([^/]+)/world',
     name: 'world',
     component: CanvasGame,
     props: true
   },
   {
-    path: '/game/:gameName/encounter/:encounterName',
+    path: '/game/:gameName([^/]+)/encounter/:encounterName',
     name: 'encounter',
     component: CanvasEncounter,
     props: true
   },
   {
-    path: '/game/:gameName/inventory',
+    path: '/game/:gameName([^/]+)/inventory',
     name: 'inventory',
     component: Inventory,
     props: true
+  },
+  {
+    // Catch /game, /game/, and anything else unmatched
+    path: '/:pathMatch(.*)*',
+    redirect: '/'
   }
 ];
 

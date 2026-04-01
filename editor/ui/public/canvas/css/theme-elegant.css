@@ -1,0 +1,160 @@
+/*
+ * Elegant Theme — Canvas Variables
+ */
+[data-theme="elegant"] {
+  /* Palette */
+  --color-bg-1: #0f1117;
+  --color-bg-2: #171b24;
+  --color-bg-3: #1e2330;
+  --color-accent-1: #6c8aff;
+  --color-accent-2: #50d890;
+  --color-text-1: #e8eaf0;
+  --color-text-2: #9ca3b0;
+  --color-border: #2a3040;
+  --color-text-muted: #5c6370;
+
+  /* Button colors */
+  --button-outline-color: #2a3040;
+  --button-text-color: #e8eaf0;
+  --button-danger-hover: #8aa4ff;
+  --button-disabled-bg: #1e2330;
+
+  /* Canvas */
+  --canvas-bg: var(--color-bg-1);
+  --canvas-toolbar-bg: var(--color-bg-2);
+  --canvas-toolbar-padding: 10px;
+  --canvas-toolbar-border-width: 1px;
+  --canvas-toolbar-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+
+  /* Canvas Buttons */
+  --canvas-btn-padding: 6px 14px;
+  --canvas-btn-border-width: 1px;
+  --canvas-btn-radius: 6px;
+  --canvas-btn-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --canvas-btn-hover-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  --canvas-btn-font-size: 13px;
+  --canvas-btn-letter-spacing: 1px;
+
+  /* Toolbar Delimiter */
+  --canvas-delimiter-width: 1px;
+  --canvas-delimiter-height: 20px;
+
+  /* Zoom Controls */
+  --canvas-zoom-border-width: 1px;
+  --canvas-zoom-btn-radius: 4px;
+
+  /* Scrollbar */
+  --canvas-scrollbar-width: 8px;
+  --canvas-scrollbar-border-width: 0px;
+
+  /* Font */
+  --global-font-family: Verdana, 'Noto Sans', 'Helvetica Neue', Arial, sans-serif;
+  --global-font-size: 16;
+
+  /* Context Menu */
+  --contextmenu-border-width: 1px;
+  --contextmenu-separator-width: 1px;
+  --contextmenu-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --contextmenu-label-font-size: 13px;
+  --contextmenu-bg: #0f1117;
+  --contextmenu-border-color: #2a3040;
+  --contextmenu-text-color: #e8eaf0;
+
+  /* State shapes */
+  --state-normal-font: #6c8aff;
+  --state-normal-bg: #1e2330;
+  --state-normal-border: #6c8aff;
+  
+  --state-start-font: #331413;
+  --state-start-bg: #50d890;
+  --state-start-border: #5663d2;
+
+  --state-end-font: #5c6370;
+  --state-end-bg: #3d1f2a;
+  --state-end-border: #f06292;
+  --connection-color: #50d890;
+  --connection-label-font: #0f1117;
+  --connection-label-bg: #6c8aff;
+  --selection-color: #6c8aff;
+
+  /* Stroke widths (read by JS via getVar()) */
+  --connection-stroke: 1;
+  --label-stroke: 1;
+  --selection-stroke: 3;
+  --state-stroke: 2;
+
+  /* Raft */
+  --raft-bg: #e8f0f8;
+  --raft-border: #2a3040;
+  --raft-bg-light: #f0f4fa;
+  --raft-border-light: #3a4255;
+}
+
+/* Elegant scoped overrides — acrylic panels & buttons */
+
+[data-theme="elegant"] #canvas_toolbar {
+  background: rgba(15, 17, 23, 0.5);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(108, 138, 255, 0.2);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+}
+
+[data-theme="elegant"] .glassy-button {
+  background: rgba(108, 138, 255, 0.18);
+  border: 1px solid rgba(108, 138, 255, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2),
+              inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="elegant"] .glassy-button:hover {
+  background: rgba(108, 138, 255, 0.3);
+  border-color: rgba(108, 138, 255, 0.5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3),
+              0 0 10px rgba(108, 138, 255, 0.15);
+  transform: none;
+}
+
+[data-theme="elegant"] .glassy-button:active {
+  background: rgba(108, 138, 255, 0.35);
+  transform: none;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="elegant"] #canvas_zoom {
+  background: rgba(15, 17, 23, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(80, 216, 144, 0.25);
+  border-radius: 5px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="elegant"] #canvas_zoom > button {
+  background: rgba(30, 35, 48, 0.4);
+  border: 1px solid rgba(80, 216, 144, 0.15);
+}
+
+[data-theme="elegant"] #canvas_zoom > button:hover {
+  background: rgba(80, 216, 144, 0.2);
+  border-color: rgba(80, 216, 144, 0.35);
+}
+
+[data-theme="elegant"] #canvas_fullscreen {
+  background: rgba(15, 17, 23, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(80, 216, 144, 0.25);
+  border-radius: 5px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="elegant"] #canvas_fullscreen_toggle {
+  background: rgba(30, 35, 48, 0.4);
+  border: 1px solid rgba(80, 216, 144, 0.15);
+}
+
+[data-theme="elegant"] #canvas_fullscreen_toggle:hover {
+  background: rgba(80, 216, 144, 0.2);
+  border-color: rgba(80, 216, 144, 0.35);
+}

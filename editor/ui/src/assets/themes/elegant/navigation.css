@@ -4,7 +4,9 @@
 
 [data-theme="elegant"] .nav-drawer {
   background: var(--color-bg-2) !important;
-  border-right: 1px solid var(--color-border) !important;
+  border-right: 2px solid var(--color-accent-1) !important;
+  border-inline-end-width: 2px !important;
+  border-inline-end-color: var(--color-accent-1) !important;
   border-radius: 0 !important;
 }
 
@@ -13,7 +15,7 @@
 }
 
 [data-theme="elegant"] .nav-drawer__toggle .v-icon {
-  color: var(--color-accent-2) !important;
+  color: var(--color-accent-1) !important;
   font-size: 24px !important;
   transition: all 0.15s ease !important;
 }
@@ -21,7 +23,7 @@
 [data-theme="elegant"] .nav-drawer__game-name {
   padding: 8px 16px;
   margin: 0 8px 8px 8px;
-  background: rgba(var(--color-accent-2-rgb), 0.06);
+  background: rgba(var(--color-accent-1-rgb), 0.06);
   border-radius: 6px;
 }
 
@@ -29,7 +31,7 @@
   font-size: 16px;
   font-weight: 500;
   letter-spacing: 1px;
-  color: var(--color-accent-2);
+  color: var(--color-accent-1);
 }
 
 [data-theme="elegant"] .nav-drawer__list {
@@ -59,16 +61,16 @@
   padding-left: 4px !important;
   border-radius: 4px 0 0 4px !important;
   overflow: visible;
-  border-left: 1px solid rgba(var(--color-accent-2-rgb), 0.8) !important;
-  box-shadow: inset 3px 0 8px rgba(var(--color-accent-2-rgb), 0.12) !important;
+  border-left: 1px solid rgba(var(--color-accent-1-rgb), 0.8) !important;
+  box-shadow: inset 3px 0 8px rgba(var(--color-accent-1-rgb), 0.12) !important;
   background:
     radial-gradient(
       circle 20px at 2px 50%,
-      rgba(var(--color-accent-2-rgb), 0.22) 0%,
+      rgba(var(--color-accent-1-rgb), 0.22) 0%,
       transparent 100%
     ),
     linear-gradient(90deg,
-      rgba(var(--color-accent-2-rgb), 0.18) 0%,
+      rgba(var(--color-accent-1-rgb), 0.18) 0%,
       transparent 33%
     ) !important;
 }
@@ -83,13 +85,13 @@
   bottom: 20%;
   width: 4px;
   border-radius: 0 4px 4px 0;
-  background: #6eeaa8;
+  background: var(--color-accent-1);
   filter: brightness(1.15);
   box-shadow:
-    0 0 3px #6eeaa8,
-    0 0 8px rgba(var(--color-accent-2-rgb), 1),
-    0 0 18px rgba(var(--color-accent-2-rgb), 0.6),
-    0 0 36px rgba(var(--color-accent-2-rgb), 0.25);
+    0 0 3px var(--color-accent-1),
+    0 0 8px rgba(var(--color-accent-1-rgb), 1),
+    0 0 18px rgba(var(--color-accent-1-rgb), 0.6),
+    0 0 36px rgba(var(--color-accent-1-rgb), 0.25);
 }
 
 /* Light cone — soft glow cast from bar onto the item */
@@ -103,14 +105,14 @@
   width: 50px;
   background: radial-gradient(
     ellipse at left center,
-    rgba(var(--color-accent-2-rgb), 0.08) 0%,
+    rgba(var(--color-accent-1-rgb), 0.08) 0%,
     transparent 70%
   );
   pointer-events: none;
 }
 
 [data-theme="elegant"] .nav-drawer__item.v-list-item--active .v-list-item-title {
-  color: var(--color-accent-2) !important;
+  color: var(--color-accent-1) !important;
   font-weight: 500 !important;
 }
 
@@ -133,7 +135,7 @@
 }
 
 [data-theme="elegant"] .nav-drawer__subitem.v-list-item--active .v-list-item-title {
-  color: var(--color-accent-2) !important;
+  color: var(--color-accent-1) !important;
 }
 
 [data-theme="elegant"] .nav-drawer__header {
@@ -152,7 +154,7 @@
 
 [data-theme="elegant"] .nav-drawer__bullet {
   font-size: 16px;
-  color: var(--color-accent-2);
+  color: var(--color-accent-1);
   width: 24px;
   margin-right: 8px;
 }
@@ -163,25 +165,25 @@
 
 /* Add-encounter button — acrylic / glassmorphism */
 [data-theme="elegant"] .nav-drawer__add-btn {
-  background: rgba(var(--color-accent-2-rgb), 0.22) !important;
+  background: rgba(var(--color-accent-1-rgb), 0.22) !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(var(--color-accent-2-rgb), 0.5) !important;
-  color: var(--color-accent-2) !important;
+  border: 1px solid rgba(var(--color-accent-1-rgb), 0.5) !important;
+  color: var(--color-accent-1) !important;
   transform: none !important;
   box-shadow:
     0 2px 10px rgba(0, 0, 0, 0.25),
-    0 0 10px rgba(var(--color-accent-2-rgb), 0.15),
+    0 0 10px rgba(var(--color-accent-1-rgb), 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
 }
 
 [data-theme="elegant"] .nav-drawer__add-btn:hover {
-  background: rgba(var(--color-accent-2-rgb), 0.35) !important;
-  border-color: rgba(var(--color-accent-2-rgb), 0.7) !important;
+  background: rgba(var(--color-accent-1-rgb), 0.35) !important;
+  border-color: rgba(var(--color-accent-1-rgb), 0.7) !important;
   transform: none !important;
   box-shadow:
     0 2px 10px rgba(0, 0, 0, 0.3),
-    0 0 20px rgba(var(--color-accent-2-rgb), 0.3),
+    0 0 20px rgba(var(--color-accent-1-rgb), 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
 }
 
