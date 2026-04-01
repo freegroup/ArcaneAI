@@ -12,9 +12,13 @@
 
 /* Full-height editors (Personality, Welcome Prompt) — more breathing room */
 [data-theme="elegant"] .config-view .full-height-editor {
-  margin: 0 12px;
+  margin: 8px 0;
 }
 
 [data-theme="elegant"] .config-view .full-height-editor .CodeMirror {
   padding: 12px 8px;
+}
+
+[data-theme="elegant"] .config-view .full-height-editor .CodeMirror-lines {
+  padding: 12px 0;
 }

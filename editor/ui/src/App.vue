@@ -365,13 +365,15 @@ export default {
 
 <style scoped>
 .content-area {
-  height: calc(100vh - var(--header-height));
-  overflow: auto;
+  height: calc(100vh - var(--v-layout-top));
+  overflow: hidden;
 }
 
 .content-area :deep(.v-main__wrap) {
   display: flex;
   flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
 }
 </style>
 
