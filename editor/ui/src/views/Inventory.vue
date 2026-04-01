@@ -246,6 +246,7 @@ export default {
 .inventory-container {
   display: flex;
   flex-direction: column;
+  flex: 1;
   overflow: hidden;
   box-sizing: border-box;
 }

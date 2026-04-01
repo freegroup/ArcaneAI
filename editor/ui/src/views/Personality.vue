@@ -233,6 +233,7 @@ export default {
 .personality-wrapper {
   display: flex;
   flex-direction: column;
+  flex: 1;
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -258,7 +259,8 @@ export default {
 }
 
 .full-height-editor {
-  flex: 1;
+  flex: 1 1 auto;
+  position: relative;
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -269,6 +271,17 @@ export default {
 
 .full-height-editor >>> .CodeMirror-gutters {
   display: none !important;
+}
+
+.full-height-editor >>> .codemirror-container {
+  position: absolute;
+  top: 0; bottom: 0; left: 0; right: 0;
+}
+
+.full-height-editor >>> .CodeMirror {
+  position: absolute;
+  top: 0; bottom: 0; left: 0; right: 0;
+  height: 100%;
 }
 
 /* AI Assist Panel */
