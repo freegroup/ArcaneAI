@@ -86,6 +86,10 @@
   --label-stroke: 2;
   --selection-stroke: 6;
   --state-stroke: 4;
+  --state-normal-radius: 1;
+  --state-start-radius: 1;
+  --state-end-radius: 1;
+  --state-label-radius: 1;
 
   /* Raft */
   --raft-bg: #c3eae4;

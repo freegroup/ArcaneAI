@@ -13,6 +13,7 @@ from .gemini_provider import GeminiProvider
 from .openai_provider import OpenAIProvider
 from .deepseek_provider import DeepSeekProvider
 from .ollama_provider import OllamaProvider
+from .gemma_provider import GemmaProvider
 from .llm_factory import LLMFactory
 
 __all__ = [
@@ -25,5 +26,6 @@ __all__ = [
     'OpenAIProvider',
     'DeepSeekProvider',
     'OllamaProvider',
+    'GemmaProvider',
     'LLMFactory'
 ]

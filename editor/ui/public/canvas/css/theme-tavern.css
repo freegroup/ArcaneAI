@@ -48,6 +48,10 @@
   --label-stroke: 2;
   --selection-stroke: 6;
   --state-stroke: 4;
+  --state-normal-radius: 4;
+  --state-start-radius: 4;
+  --state-end-radius: 4;
+  --state-label-radius: 3;
 
   /* Global font */
   --global-font-family: Ithaca, monospace;

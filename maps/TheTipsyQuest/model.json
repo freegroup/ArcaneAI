@@ -384,11 +384,11 @@
         {
           "id": "f45163c1-3a2b-089d-b3e8-5a20ba641818",
           "name": "untersuche_den_ort",
-          "description": "Du kannst den Ort untersuchen und versuchen ob hier interessante Dinge zu finden sind-",
+          "description": "Du kannst den Ort untersuchen und versuchen ob hier interessante Dinge zu finden sind",
           "sound_effect": "",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
-          "system_prompt": "Die siehst hier auf dem Boden ein goldenes Ei in einem goldene Wasser liegen...bua.",
+          "system_prompt": "Die siehst hier auf dem Boden ein goldenes Ei in einem goldene Wasser liegen...uaää.",
           "conditions": [],
           "actions": [
             "discovered_north=true"

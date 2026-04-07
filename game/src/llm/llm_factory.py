@@ -11,6 +11,7 @@ from .gemini_provider import GeminiProvider
 from .openai_provider import OpenAIProvider
 from .deepseek_provider import DeepSeekProvider
 from .ollama_provider import OllamaProvider
+from .gemma_provider import GemmaProvider
 from .litellm_provider import LiteLLMProvider
 
 
@@ -26,6 +27,7 @@ class LLMFactory:
         "openai": OpenAIProvider,
         "deepseek": DeepSeekProvider,
         "ollama": OllamaProvider,
+        "gemma": GemmaProvider,
         "litellm": LiteLLMProvider
     }
     
@@ -121,7 +123,20 @@ class LLMFactory:
         if provider == "ollama":
             base_url: Optional[str] = llm_config.get('base_url')
             provider_instance: BaseLLMProvider = OllamaProvider(
-                api_key="ollama",  # Dummy key
+                api_key="ollama",
+                model=model,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                base_url=base_url
+            )
+            provider_instance.debug_mode = debug_mode
+            return provider_instance
+
+        # Special handling for Gemma (via Ollama, native tool calling)
+        if provider == "gemma":
+            base_url: Optional[str] = llm_config.get('base_url', GemmaProvider.DEFAULT_BASE_URL)
+            provider_instance: BaseLLMProvider = GemmaProvider(
+                api_key="ollama",
                 model=model,
                 temperature=temperature,
                 max_tokens=max_tokens,
