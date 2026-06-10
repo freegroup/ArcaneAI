@@ -91,7 +91,7 @@
               ref="promptInput"
               v-model="aiPrompt"
               :loading="aiLoading"
-              placeholder="z.B. 'Verbessere die Grammatik' oder 'Übersetze ins Englische'"
+              placeholder="e.g. 'Improve the grammar' or 'Translate to English'"
               @send="improveText"
             />
           </div>
