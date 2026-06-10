@@ -15,7 +15,7 @@
       :class="{ 'editor-collapsed': aiAssistExpanded }"
       v-model:value="personalityPrompt"
       :options="cmOptions"
-      placeholder="Du bist ein Haudegen im 1700 Jahrhundert..."
+      placeholder="You are a swashbuckler from the 1700s..."
     />
 
     <!-- AI Assist Expandable Panel -->
@@ -36,14 +36,14 @@
               <AIAssistHelpText />
             </div>
 
-            <AIAssistLoading v-if="aiLoading">AI arbeitet...</AIAssistLoading>
+            <AIAssistLoading v-if="aiLoading">AI is working...</AIAssistLoading>
 
             <div v-if="aiResponse" class="ai-result">
               <div class="ai-result-header">
-                <strong>Verbesserter Text:</strong>
+                <strong>Improved Text:</strong>
                 <ThemedButton 
                   @click="applyAiResult" 
-                  title="Text in Editor übernehmen"
+                  title="Apply text to editor"
                 >
                   <v-icon size="small">mdi-check</v-icon>
                   Apply to Editor
@@ -64,7 +64,7 @@
             ref="promptInput"
             v-model="aiPrompt"
             :loading="aiLoading"
-            placeholder="z.B. 'Verbessere die Grammatik' oder 'Übersetze ins Englische'"
+            placeholder="e.g. 'Improve the grammar' or 'Translate to English'"
             @send="improveText"
           />
         </div>
@@ -202,14 +202,14 @@ export default {
         
         // Count words after improvement and create info
         const wordsAfter = this.countWords(data.improved_text);
-        this.wordCountInfo = `Wörter: ${wordsBefore} → ${wordsAfter}`;
+        this.wordCountInfo = `Words: ${wordsBefore} → ${wordsAfter}`;
         
         // Clear prompt after successful response
         this.aiPrompt = '';
       } catch (error) {
         console.error('AI Improve Text Error:', error);
         this.aiResponse = '';
-        this.aiComment = 'Fehler bei der Textverbesserung. Bitte versuche es erneut.';
+        this.aiComment = 'Error improving text. Please try again.';
       } finally {
         this.aiLoading = false;
       }
