@@ -386,14 +386,14 @@ export default {
         
         // Count words after improvement and create info
         const wordsAfter = this.countWords(data.improved_text);
-        this.wordCountInfo = `Wörter: ${wordsBefore} → ${wordsAfter}`;
+        this.wordCountInfo = `Words: ${wordsBefore} → ${wordsAfter}`;
         
         // Clear prompt after successful response
         this.aiPrompt = '';
       } catch (error) {
         console.error('AI Improve Text Error:', error);
         this.aiResponse = '';
-        this.aiComment = 'Fehler bei der Textverbesserung. Bitte versuche es erneut.';
+        this.aiComment = 'Error improving text. Please try again.';
       } finally {
         this.aiLoading = false;
       }
