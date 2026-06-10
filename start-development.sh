@@ -8,7 +8,7 @@ REQUIRED_TOOLS=("npm" "node" "python3")
 
 # Services - each array: (name, command, directory, info)
 declare -a svc_editor_server=("editor-server" "source venv/bin/activate && python src/main.py" "editor/server" "Editor API: http://localhost:8000")
-declare -a svc_developer=("developer-server" "source ../venv/bin/activate && python developer.py" "game/src" "Developer API: http://localhost:9000")
+declare -a svc_developer=("developer-server" "source ../venv/bin/activate && python main.py developer" "game/src" "Developer API: http://localhost:9000")
 declare -a svc_editor_ui=("editor-ui" "npm run serve" "editor/ui" "Editor UI: http://localhost:8080")
 declare -a SERVICES=("svc_editor_server" "svc_developer" "svc_editor_ui")
 

@@ -1,0 +1,28 @@
+# Deployment variables — adjust before running
+# Copy secrets to deployment_secrets.yaml (gitignored) for sensitive values
+
+# Git repo
+git_repo: "https://github.com/YOUR_USERNAME/dungeon.git"
+git_branch: "main"
+
+# Game
+game_name: "TheTipsyQuest"
+
+# LLM provider: gemma | openai | gemini | deepseek | litellm
+llm_provider: "gemma"
+llm_model: "gemma4:26b"
+llm_temperature: "0.5"
+llm_max_tokens: "2000"
+
+# Ollama — only used when llm_provider == "gemma"
+ollama_model: "gemma4:26b"
+
+# TTS provider: google | openai | console
+tts_provider: "google"
+tts_language: "de-DE"
+tts_voice: "de-DE-Chirp3-HD-Schedar"
+
+# STT provider: faster-whisper | console
+stt_provider: "faster-whisper"
+stt_model: "base"
+stt_language: "de"

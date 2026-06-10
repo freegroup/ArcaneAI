@@ -47,4 +47,4 @@ echo ""
 # Run the console game (foreground, interactive)
 cd "$SCRIPT_DIR/game/src"
 source ../venv/bin/activate
-exec python main.py
+exec python main.py console

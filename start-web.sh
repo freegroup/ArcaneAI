@@ -7,7 +7,7 @@ TITLE="Dungeon Web Server"
 REQUIRED_TOOLS=("python3")
 
 # Services - each array: (name, command, directory, info)
-declare -a svc_web_server=("web-server" "source ../venv/bin/activate && python server.py" "game/src" "Web Game: http://localhost:9000/ui")
+declare -a svc_web_server=("web-server" "source ../venv/bin/activate && python main.py web" "game/src" "Web Game: http://localhost:9000/ui")
 declare -a SERVICES=("svc_web_server")
 
 # Colors

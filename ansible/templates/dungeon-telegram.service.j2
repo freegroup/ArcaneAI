@@ -1,0 +1,16 @@
+[Unit]
+Description=Dungeon Telegram Bot
+After=network.target ollama.service
+
+[Service]
+Type=simple
+User=dungeon
+WorkingDirectory=/home/dungeon/app
+ExecStart=/home/dungeon/app/game/venv/bin/python game/src/main.py --runner telegram
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

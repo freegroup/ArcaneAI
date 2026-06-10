@@ -24,3 +24,9 @@ google-cloud-texttospeech>=2.14.0
 # Audio output
 pyaudio>=0.2.11
 pygame>=2.5.0
+
+# STT (Speech-to-Text)
+faster-whisper>=1.0.0
+
+# Telegram Bot
+python-telegram-bot>=21.0

@@ -89,12 +89,12 @@ HINWEIS FÜR KONTEXT: Du kannst alle Informationen aus deinem Kontext (Raumbesch
                 "model": self.model,
                 "messages": formatted_messages,
                 "temperature": self.temperature,
-                "max_tokens": self.max_tokens
+                "max_tokens": self.max_tokens,
             }
             
             if tools:
                 api_params["tools"] = tools
-                api_params["tool_choice"] = "auto"
+                api_params["tool_choice"] = "required"
             
             response = self.client.chat.completions.create(**api_params)
             

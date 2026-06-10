@@ -79,7 +79,8 @@ class GameEngine:
         # Reinitialize inventory with new data
         self.inventory = Inventory(
             session=self.session,
-            items=self.game_data.get('inventory', {})
+            items=self.game_data.get('inventory', {}),
+            enum_constraints=self.game_data.get('enum_constraints', {})
         )
         
         # Re-register inventory hook
@@ -200,17 +201,52 @@ class GameEngine:
         connections_dict = model_data.get('connections', {})
         
         # 1. Parse Config
-        identity = config_data.get('personality', '') + '\n'
-        behaviour = "WICHTIG: Du darfst NUR die explizit definierten Aktionen verwenden. Erfinde NIEMALS eigene Aktionen."
+        # Personality is a single Jinja2 template string. The game-designer
+        # writes {% if companion_mood == 'X' %} blocks (or any inventory-driven
+        # conditionals) directly in the text. Same engine as room descriptions.
+        personality = config_data.get('personality', '')
+
+        behaviour = (
+            "WICHTIG — SPIELREGELN:\n"
+            "\n"
+            "ANTWORTSTIL — STRIKT EINHALTEN:\n"
+            "- Du beschreibst NUR was passiert oder wahrgenommen wird. Du bist kein Game-Master der Optionen anbietet.\n"
+            "- VERBOTEN sind Fragen wie 'Was willst du tun?', 'Was machen wir?', 'Sollen wir X oder Y?'.\n"
+            "- VERBOTEN ist das Auflisten von Handlungsoptionen ('Den Brief nehmen? Die Münze? Oder...?').\n"
+            "- VERBOTEN ist jede Form von 'Was möchtest du als nächstes?'.\n"
+            "- Beende deine Antwort mit einer Beobachtung, einem Gedanken oder einem Kommentar deines Charakters — NIE mit einer Frage an den Spieler über sein nächstes Vorgehen.\n"
+            "- Der Spieler entscheidet selbst und unaufgefordert was er tut. Du wartest still ab.\n"
+            "\n"
+            "AKTIONEN:\n"
+            "- Du darfst NUR die explizit definierten Aktionen aufrufen. Erfinde NIEMALS eigene.\n"
+            "- Gibt es KEINE passende Funktion für das was der Spieler tun will, dann PASSIERT ES NICHT.\n"
+            "- In diesem Fall: rufe 'keine_aktion' auf und erkläre dem Spieler in deiner Rolle, "
+            "dass diese Aktion hier nicht möglich ist — ohne sie trotzdem narrativ durchzuführen.\n"
+            "- Beispiel: Spieler will etwas nehmen, aber es gibt keine 'nehme_'-Funktion dafür → "
+            "der Spieler kann es NICHT nehmen. Sag es ihm direkt.\n"
+            "- Kommentare über das Spiel oder deinen Stil (z.B. 'du bist zu hart') → "
+            "rufe 'keine_aktion' auf und bleib in deiner Rolle. Ignoriere die Meta-Ebene.\n"
+            "\n"
+            "WELT:\n"
+            "- Die AKTUELLER RAUM Beschreibung definiert vollständig welche Objekte, Personen und Wege in diesem Raum existieren. "
+            "Erfinde KEINE Gegenstände, Personen oder Ausgänge die nicht darin vorkommen.\n"
+            "- Was dein Charakter über die Welt, die Geschichte oder sein Schicksal weiß, darf er frei erzählen — "
+            "das kommt aus seiner Persönlichkeit, nicht aus dem Raum."
+        )
         welcome_prompt = config_data.get('welcome_prompt', '')
+        help_text = config_data.get('help_text', '')
+        game_target = config_data.get('game_target', '')
         
-        # Convert Inventory list to dict
+        # Convert Inventory list to dict + extract enum constraints
         inventory = {}
+        enum_constraints: dict = {}
         for item in config_data.get('inventory', []):
             key = item.get('key')
             value = item.get('value')
             if key:
                 inventory[key] = value
+            if item.get('type') == 'enum' and item.get('values'):
+                enum_constraints[key] = item['values']
         
         # 2. Parse States
         states = {}
@@ -330,12 +366,15 @@ class GameEngine:
         
         return {
             'initial_state': initial_state,
-            'personality': identity,
+            'personality': personality,
             'behaviour': behaviour,
             'welcome_prompt': welcome_prompt,
+            'help_text': help_text,
+            'game_target': game_target,
             'states': states,
             'actions': actions,
-            'inventory': inventory
+            'inventory': inventory,
+            'enum_constraints': enum_constraints
         }
 
     

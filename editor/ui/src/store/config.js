@@ -1,6 +1,6 @@
 /**
  * Config Store - Game-Konfiguration (Prompts, Inventory)
- * 
+ *
  * Enthält die Konfiguration eines Spiels, die unabhängig vom Model ist.
  */
 import axios from 'axios'
@@ -8,10 +8,12 @@ const API_BASE_URL = process.env.VUE_APP_API_BASE_URL
 
 export default {
   namespaced: true,
-  
+
   state: {
     personality: '',
     welcomePrompt: '',
+    gameTarget: '',
+    helpText: '',
     finalPrompt: '',
     inventory: [],
     loading: false,
@@ -24,6 +26,8 @@ export default {
     SET_CONFIG(state, config) {
       state.personality = config.personality || ''
       state.welcomePrompt = config.welcome_prompt || ''
+      state.gameTarget = config.game_target || ''
+      state.helpText = config.help_text || ''
       state.inventory = config.inventory || []
       state.hasUnsavedChanges = false
     },
@@ -33,6 +37,14 @@ export default {
     },
     SET_WELCOME_PROMPT(state, prompt) {
       state.welcomePrompt = prompt
+      state.hasUnsavedChanges = true
+    },
+    SET_GAME_TARGET(state, text) {
+      state.gameTarget = text
+      state.hasUnsavedChanges = true
+    },
+    SET_HELP_TEXT(state, text) {
+      state.helpText = text
       state.hasUnsavedChanges = true
     },
     SET_INVENTORY(state, inventory) {
@@ -75,7 +87,7 @@ export default {
       commit('SET_LOADING', true)
       commit('SET_ERROR', null)
       commit('SET_GAME_NAME', gameName)
-      
+
       try {
         // RESTful: GET /games/{name}/config
         const response = await axios.get(`${API_BASE_URL}/games/${gameName}/config`)
@@ -85,6 +97,9 @@ export default {
           // Config existiert noch nicht - leere Config
           commit('SET_CONFIG', {
             personality: '',
+            welcome_prompt: '',
+            game_target: '',
+            help_text: '',
             inventory: []
           })
         } else {
@@ -97,19 +112,25 @@ export default {
     },
 
     /**
-     * Speichert die Config zum Server
+     * Speichert die Config zum Server.
+     *
+     * Note: `personalities` (the legacy mood-dict) is intentionally NOT written here.
+     * The backend migrates old maps to a single `personality` Jinja2 template on load,
+     * and this save replaces the old structure on disk.
      */
     async saveConfig({ state, commit }) {
       if (!state.gameName) {
         throw new Error('No game name set')
       }
-      
+
       const configData = {
         personality: state.personality,
         welcome_prompt: state.welcomePrompt,
+        game_target: state.gameTarget,
+        help_text: state.helpText,
         inventory: state.inventory
       }
-      
+
       // RESTful: PUT /games/{name}/config with JSON body
       await axios.put(`${API_BASE_URL}/games/${state.gameName}/config`, configData)
       commit('SET_UNSAVED_CHANGES', false)
@@ -122,44 +143,34 @@ export default {
       commit('SET_CONFIG', config)
     },
 
-    /**
-     * Aktualisiert die Personality
-     */
     setPersonality({ commit }, prompt) {
       commit('SET_PERSONALITY', prompt)
     },
 
-    /**
-     * Aktualisiert den Welcome Prompt
-     */
     setWelcomePrompt({ commit }, prompt) {
       commit('SET_WELCOME_PROMPT', prompt)
     },
 
-    /**
-     * Aktualisiert das Inventory
-     */
+    setGameTarget({ commit }, text) {
+      commit('SET_GAME_TARGET', text)
+    },
+
+    setHelpText({ commit }, text) {
+      commit('SET_HELP_TEXT', text)
+    },
+
     setInventory({ commit }, inventory) {
       commit('SET_INVENTORY', inventory)
     },
 
-    /**
-     * Fügt ein Item zum Inventory hinzu
-     */
     addInventoryItem({ commit }, item) {
       commit('ADD_INVENTORY_ITEM', item)
     },
 
-    /**
-     * Entfernt ein Item aus dem Inventory
-     */
     removeInventoryItem({ commit }, index) {
       commit('REMOVE_INVENTORY_ITEM', index)
     },
 
-    /**
-     * Aktualisiert ein Inventory Item
-     */
     updateInventoryItem({ commit }, { index, item }) {
       commit('UPDATE_INVENTORY_ITEM', { index, item })
     }
@@ -168,19 +179,23 @@ export default {
   getters: {
     personality: (state) => state.personality,
     welcomePrompt: (state) => state.welcomePrompt,
+    gameTarget: (state) => state.gameTarget,
+    helpText: (state) => state.helpText,
     finalPrompt: (state) => state.finalPrompt,
     inventory: (state) => state.inventory,
     inventoryCount: (state) => state.inventory.length,
     isLoading: (state) => state.loading,
     hasError: (state) => !!state.error,
-    
+
     // Für Rückwärtskompatibilität
     gameConfig: (state) => ({
       personality: state.personality,
       welcome_prompt: state.welcomePrompt,
+      game_target: state.gameTarget,
+      help_text: state.helpText,
       inventory: state.inventory
     }),
-    
+
     // Unsaved changes tracking
     hasUnsavedChanges: (state) => state.hasUnsavedChanges
   }

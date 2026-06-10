@@ -31,9 +31,13 @@ class GemmaProvider(BaseLLMProvider):
         """
         system_prompt = f"""{base_prompt}
 
-Antworte immer auf Deutsch, kurz und in deiner Rolle. Sprich den Spieler direkt an.
-Wähle die passende Funktion basierend auf der Absicht des Spielers.
-Nutze 'keine_aktion' nur wenn wirklich keine Funktion passt.
+WICHTIG — FUNKTIONSAUFRUF-REGELN:
+- Du MUSST bei jeder Antwort genau eine Funktion aufrufen. Kein reiner Text.
+- Wähle die Funktion die am besten zur Absicht des Spielers passt.
+- Stimmt der Spieler inhaltlich mit einer Funktion überein, ruf diese auf — auch bei indirekter Formulierung (z.B. "schau mal das Fenster an" → untersuche_das_fenster).
+- Nur wenn KEINE Funktion auch nur annähernd passt: keine_aktion aufrufen.
+- Ausnahme: Fragt der Spieler nach etwas das bereits im AKTUELLEN RAUM sichtbar ist (z.B. einen Text vorlesen, etwas beschreiben), antworte mit dem gewünschten Inhalt via keine_aktion.
+- Die narrative Antwort gehört in das "response"-Argument der aufgerufenen Funktion.
 """
         return [LLMMessage(role="system", content=system_prompt), *messages]
 
@@ -76,6 +80,7 @@ Nutze 'keine_aktion' nur wenn wirklich keine Funktion passt.
                 "messages": formatted_messages,
                 "temperature": self.temperature,
                 "max_tokens": self.max_tokens,
+                "extra_body": {"think": False},
             }
             if tools:
                 kwargs["tools"] = tools
@@ -84,7 +89,7 @@ Nutze 'keine_aktion' nur wenn wirklich keine Funktion passt.
             response = self.client.chat.completions.create(**kwargs)
 
             message = response.choices[0].message
-            content = message.content or ""
+            content = self._strip_thinking_tags(message.content or "")
 
             # Extract native tool call if present
             function_call = None
@@ -97,6 +102,13 @@ Nutze 'keine_aktion' nur wenn wirklich keine Funktion passt.
                 function_call = LLMFunctionCall(
                     name=tool_call.function.name,
                     arguments=arguments
+                )
+            elif content:
+                # Model ignored tool_choice="required" and replied narratively.
+                # Fall back to keine_aktion so the narrative still reaches the player.
+                function_call = LLMFunctionCall(
+                    name="keine_aktion",
+                    arguments={"response": content}
                 )
 
             usage = None
@@ -124,6 +136,15 @@ Nutze 'keine_aktion' nur wenn wirklich keine Funktion passt.
         Tries standard JSON parsing.
         """
         return self._parse_function_call(llm_response)
+
+    def _strip_thinking_tags(self, text: str) -> str:
+        """Remove model-internal thinking/reasoning tags from response content."""
+        import re
+        cleaned = re.sub(r'<(thought|thinking|reason|internal)[^>]*>.*?</\1>', '', text, flags=re.DOTALL | re.IGNORECASE)
+        cleaned = re.sub(r'<(thought|thinking|reason|internal)[^>]*>', '', cleaned, flags=re.IGNORECASE)
+        cleaned = cleaned.strip()
+        # If stripping removed everything, keep the original — better than returning empty
+        return cleaned if cleaned else text.strip()
 
     def _validate_config(self) -> None:
         if not self.model:

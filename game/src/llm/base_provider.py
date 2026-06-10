@@ -231,12 +231,18 @@ RICHTIG: "Ha, der Stock! Den nehm ich mit. Jetzt mal rüber zur Bank schauen...\
         if self.debug_mode:
             try:
                 from debug_utils import print_llm_debug
-                print_llm_debug(complete_messages, functions, title="LLM REQUEST")
+                print_llm_debug(complete_messages, functions, title="LLM REQUEST", session=getattr(self, '_session', None))
             except ImportError:
                 print("[DEBUG] Could not import debug_utils")
 
         # STEP 2: Call LLM API (pass functions for native function calling support)
+        import time
+        _t0 = time.monotonic()
+        _prompt_chars = sum(len(m.content) for m in complete_messages)
+        _func_chars = sum(len(f.name) + len(f.description) for f in (functions or []))
+        print(f"[LLM] input: {_prompt_chars + _func_chars} chars ({len(complete_messages)} messages, {len(functions or [])} functions)")
         response: LLMResponse = self.call_chat(complete_messages, functions)
+        _elapsed = time.monotonic() - _t0
 
         # STEP 3: Parse response (only if function_call not already set by native function calling)
         if not response.function_call:
@@ -250,6 +256,7 @@ RICHTIG: "Ha, der Stock! Den nehm ich mit. Jetzt mal rüber zur Bank schauen...\
                 # Parsing failed, return response as-is
                 if self.debug_mode:
                     print(f"[DEBUG] Function parsing failed: {e}")
+                    print(f"[DEBUG] Raw response body: {repr(response.content)}")
         else:
             # Native function calling was used - extract narrative response from arguments if present
             if response.function_call and "response" in response.function_call.arguments:
@@ -266,6 +273,9 @@ RICHTIG: "Ha, der Stock! Den nehm ich mit. Jetzt mal rüber zur Bank schauen...\
                 print_llm_response(response.content, function_call=function_name)
             except ImportError:
                 print("[DEBUG] Could not import debug_utils")
+
+        _fn = response.function_call.name if response.function_call else 'keine_aktion'
+        print(f"[LLM] {self.__class__.__name__} · {getattr(self, 'model', '?')} · {_elapsed:.2f}s · output: {len(response.content or '')} chars · fn: {_fn}")
 
         return response
 

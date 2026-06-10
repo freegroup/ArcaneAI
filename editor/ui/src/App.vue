@@ -14,10 +14,9 @@
       :width="drawerWidth"
       class="nav-drawer"
     >
-      <!-- ... existing drawer content ... -->
       <!-- Toggle button -->
-      <v-list-item 
-        @click="toggleDrawerCompact" 
+      <v-list-item
+        @click="toggleDrawerCompact"
         class="nav-drawer__toggle"
       >
         <template v-slot:prepend>
@@ -32,41 +31,95 @@
 
       <v-divider v-if="!isCompact"></v-divider>
 
-      <v-list density="compact" class="nav-drawer__list">
-        <!-- Regular navigation items -->
-        <v-list-item
-          v-for="item in navigationItems.filter(i => i.title !== 'Game Map')"
-          :key="item.title"
-          :to="item.route($route.params.gameName)"
-          :title="isCompact ? undefined : item.title"
-          class="nav-drawer__item"
-        >
-          <template v-slot:prepend>
-            <span class="nav-drawer__bullet">-</span>
+      <v-list
+        density="compact"
+        class="nav-drawer__list"
+        :opened="openSections"
+        open-strategy="single"
+      >
+        <!-- ============ GAME SETUP ============ -->
+        <v-list-group value="setup">
+          <template v-slot:activator="{ props }">
+            <v-list-item
+              v-bind="props"
+              :title="isCompact ? undefined : 'Game Setup'"
+              class="nav-drawer__item nav-drawer__header"
+            />
           </template>
-        </v-list-item>
 
-        <!-- Game Map Header -->
-        <template v-if="!isCompact && currentGameName">
           <v-list-item
-            class="nav-drawer__item nav-drawer__header nav-drawer__header--clickable"
+            v-if="!isCompact"
+            :to="`/game/${currentGameName}/personality`"
+            title="Personality"
+            class="nav-drawer__subitem"
           >
             <template v-slot:prepend>
               <span class="nav-drawer__bullet">-</span>
             </template>
-            <v-list-item-title class="nav-drawer__header-title">Game Map</v-list-item-title>
-            <template v-slot:append>
-              <ThemedActionButton
-                @click.stop="openAddEncounterDialog"
-                variant="success"
-                class="nav-drawer__add-btn"
-                title="Add new encounter"
-              >+</ThemedActionButton>
+          </v-list-item>
+          <v-list-item
+            v-if="!isCompact"
+            :to="`/game/${currentGameName}/welcome`"
+            title="Welcome"
+            class="nav-drawer__subitem"
+          >
+            <template v-slot:prepend>
+              <span class="nav-drawer__bullet">-</span>
             </template>
           </v-list-item>
-
-          <!-- World Item -->
           <v-list-item
+            v-if="!isCompact"
+            :to="`/game/${currentGameName}/game-target`"
+            title="Game Target"
+            class="nav-drawer__subitem"
+          >
+            <template v-slot:prepend>
+              <span class="nav-drawer__bullet">-</span>
+            </template>
+          </v-list-item>
+          <v-list-item
+            v-if="!isCompact"
+            :to="`/game/${currentGameName}/help-text`"
+            title="Help Text"
+            class="nav-drawer__subitem"
+          >
+            <template v-slot:prepend>
+              <span class="nav-drawer__bullet">-</span>
+            </template>
+          </v-list-item>
+          <v-list-item
+            v-if="!isCompact"
+            :to="`/game/${currentGameName}/inventory`"
+            title="Inventory"
+            class="nav-drawer__subitem"
+          >
+            <template v-slot:prepend>
+              <span class="nav-drawer__bullet">-</span>
+            </template>
+          </v-list-item>
+        </v-list-group>
+
+        <!-- ============ MAPS ============ -->
+        <v-list-group value="maps">
+          <template v-slot:activator="{ props }">
+            <v-list-item
+              v-bind="props"
+              :title="isCompact ? undefined : 'Maps'"
+              class="nav-drawer__item nav-drawer__header"
+            >
+              <template v-slot:append v-if="!isCompact">
+                <ThemedActionButton
+                  @click.stop="openAddEncounterDialog"
+                  variant="success"
+                  class="nav-drawer__add-btn"
+                  title="Add new encounter"
+                >+</ThemedActionButton>
+              </template>
+            </v-list-item>
+          </template>
+
+          <v-list-item
+            v-if="!isCompact"
             :to="`/game/${currentGameName}/world`"
             title="World"
             class="nav-drawer__subitem"
@@ -85,9 +138,9 @@
             </template>
           </v-list-item>
 
-          <!-- Encounters -->
           <v-list-item
             v-for="encounter in encountersList"
+            v-show="!isCompact"
             :key="encounter"
             :to="`/game/${currentGameName}/encounter/${encounter}`"
             :title="getEncounterDisplayName(encounter)"
@@ -111,18 +164,38 @@
               >-</ThemedActionButton>
             </template>
           </v-list-item>
-        </template>
+        </v-list-group>
 
-        <!-- Compact mode alternative -->
-        <v-list-item
-          v-else-if="isCompact && currentGameName"
-          :to="`/game/${currentGameName}/world`"
-          class="nav-drawer__item"
-        >
-          <template v-slot:prepend>
-            <span class="nav-drawer__bullet">-</span>
+        <!-- ============ ROOMS ============ -->
+        <v-list-group value="rooms">
+          <template v-slot:activator="{ props }">
+            <v-list-item
+              v-bind="props"
+              :title="isCompact ? undefined : 'Rooms'"
+              class="nav-drawer__item nav-drawer__header"
+            />
           </template>
-        </v-list-item>
+
+          <v-list-item
+            v-for="room in roomsList"
+            v-show="!isCompact"
+            :key="room.id"
+            :to="`/game/${currentGameName}/rooms/${room.name}`"
+            :title="room.name"
+            class="nav-drawer__subitem"
+          >
+            <template v-slot:prepend>
+              <span class="nav-drawer__bullet">-</span>
+            </template>
+          </v-list-item>
+        </v-list-group>
+
+        <!-- ============ HELP (disabled placeholder) ============ -->
+        <v-list-item
+          :title="isCompact ? undefined : 'Help'"
+          class="nav-drawer__item nav-drawer__help-disabled"
+          disabled
+        />
       </v-list>
     </v-navigation-drawer>
 
@@ -133,7 +206,7 @@
         @new-game="gameNewDialog = true"
         @load-game="gameSelectDialog = true"
       />
-      
+
       <!-- Otherwise show the actual content -->
       <router-view v-else :key="$route.fullPath"></router-view>
     </v-main>
@@ -145,7 +218,7 @@
       :encounter-name="deletingEncounterName"
       @confirm="handleEncounterDelete"
     />
-    
+
     <!-- Add Encounter Dialog - available globally when game is loaded -->
     <EncounterNewDialog v-model="showEncounterDialog" />
 
@@ -177,12 +250,6 @@ export default {
   },
   data() {
     return {
-      navigationItems: [
-        { title: 'Personality',    route: (gameName) => gameName ? `/game/${gameName}/personality` : '#' },
-        { title: 'Welcome Prompt', route: (gameName) => gameName ? `/game/${gameName}/welcome` : '#' },
-        { title: 'Inventory',      route: (gameName) => gameName ? `/game/${gameName}/inventory` : '#' },
-        { title: 'Game Map',       route: (gameName) => gameName ? `/game/${gameName}/world` : '#' },
-      ],
       isCompact: false,
       deleteDialogVisible: false,
       deletingEncounterId: '',
@@ -212,6 +279,25 @@ export default {
     encountersList() {
       return this.$store.getters['encounters/encounterNames'] || [];
     },
+    roomsList() {
+      const all = this.$store.getters['model/allStates'] || [];
+      return [...all]
+        .filter(s => s && s.name)
+        .sort((a, b) => a.name.localeCompare(b.name));
+    },
+    /**
+     * Determines which sidebar group is expanded based on the current route.
+     * Single-open: only one section is expanded at a time so the hierarchy stays clear.
+     * Routes containing /personality|/welcome|/inventory open Game Setup;
+     * /world|/encounter open Maps; /rooms opens Rooms.
+     */
+    openSections() {
+      const path = this.$route.path || '';
+      if (/\/(personality|welcome|game-target|help-text|inventory)(\/|$)/.test(path)) return ['setup'];
+      if (/\/rooms(\/|$)/.test(path)) return ['rooms'];
+      // Default: Maps for /world, /encounter, or anything else
+      return ['maps'];
+    },
   },
   created() {
     const storedState = localStorage.getItem('drawerCompactState');
@@ -234,11 +320,11 @@ export default {
       async handler(newGameName, oldGameName) {
         // Skip if same game or no game name
         if (!newGameName || newGameName === oldGameName) return;
-        
+
         // Skip if game is already loaded in store
         const currentStoreGame = this.$store.getters['game/gameName'];
         if (currentStoreGame === newGameName) return;
-        
+
         // Load the game
         await this.loadGame(newGameName);
         this.$store.dispatch('games/addRecentGame', newGameName);
@@ -256,19 +342,19 @@ export default {
     ...mapActions('sounds', {
       initializeSounds: 'initialize',
     }),
-    
+
     async initializeAll() {
       await Promise.all([
         this.initializeGame(),
         this.initializeGames(),
         this.initializeSounds()
       ]);
-      
+
       if (this.$route.params.gameName) {
         await this.loadGame(this.$route.params.gameName);
       }
     },
-    
+
     toggleDrawerCompact() {
       this.isCompact = !this.isCompact;
       localStorage.setItem('drawerCompactState', JSON.stringify(this.isCompact));
@@ -293,8 +379,8 @@ export default {
       const hasUnsavedChanges = this.$store.getters['game/hasUnsavedChanges'];
       if (hasUnsavedChanges) {
         event.preventDefault();
-        event.returnValue = ''; 
-        return ''; 
+        event.returnValue = '';
+        return '';
       }
     },
     openAddEncounterDialog() {
@@ -309,16 +395,16 @@ export default {
       try {
         const gameName = this.currentGameName;
         const viewId = `encounter_${encounterId}`;
-        
+
         console.log('[App] Calling views/deleteView', { gameName, viewId });
         await this.$store.dispatch('views/deleteView', {
           gameName,
           viewId
         });
-        
+
         console.log('[App] Calling encounters/fetchEncounters', gameName);
         await this.$store.dispatch('encounters/fetchEncounters', gameName);
-        
+
         if (this.$route.params.encounterId === encounterId) {
           console.log('[App] Current route is deleted encounter, redirecting to world');
           this.$router.replace(`/game/${gameName}/world`);
@@ -361,6 +447,43 @@ export default {
 .nav-drawer__delete-spacer {
   display: inline-block;
 }
+
+.nav-drawer__help-disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Section headers (Game Setup / Maps / Rooms) should not look "active" or "selected"
+   even when a child is the current route. Only sub-items show the active indicator. */
+.nav-drawer__list :deep(.v-list-group > .v-list-item.v-list-item--active),
+.nav-drawer__list :deep(.v-list-group__header.v-list-item--active) {
+  background: transparent !important;
+  color: inherit !important;
+}
+.nav-drawer__list :deep(.v-list-group > .v-list-item.v-list-item--active .v-list-item__overlay),
+.nav-drawer__list :deep(.v-list-group__header .v-list-item__overlay) {
+  opacity: 0 !important;
+}
+.nav-drawer__list :deep(.v-list-group > .v-list-item.v-list-item--active::before),
+.nav-drawer__list :deep(.v-list-group__header.v-list-item--active::before),
+.nav-drawer__list :deep(.v-list-group > .v-list-item.v-list-item--active::after),
+.nav-drawer__list :deep(.v-list-group__header.v-list-item--active::after) {
+  opacity: 0 !important;
+}
+.nav-drawer__list :deep(.v-list-group > .v-list-item .v-list-item-title) {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Sub-items: indented and visually subordinate to the section header */
+.nav-drawer__list :deep(.v-list-group__items .v-list-item) {
+  padding-inline-start: 32px !important;
+  font-size: 0.9rem;
+}
+.nav-drawer__list :deep(.v-list-group__items .v-list-item-title) {
+  font-size: 0.9rem;
+  font-weight: 400;
+}
 </style>
 
 <style scoped>
@@ -376,4 +499,3 @@ export default {
   overflow-y: auto;
 }
 </style>
-

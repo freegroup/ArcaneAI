@@ -1,0 +1,65 @@
+- name: Setup Dungeon server
+  hosts: dungeon
+
+  tasks:
+
+  - name: Create system group
+    group:
+      name: dungeon
+      state: present
+
+  - name: Create system user dungeon
+    user:
+      name: dungeon
+      group: dungeon
+      shell: /bin/bash
+      home: /home/dungeon
+      create_home: yes
+
+  - name: Install system packages
+    apt:
+      name:
+        - git
+        - python3
+        - python3-pip
+        - python3-venv
+        - python3-dev
+        - build-essential
+        - portaudio19-dev   # required by pyaudio
+        - libsdl2-dev        # required by pygame
+        - libsdl2-mixer-dev  # required by pygame
+        - curl
+        - ca-certificates
+        - ffmpeg             # required by faster-whisper
+      state: latest
+      update_cache: yes
+
+  - name: Install Ollama
+    shell: curl -fsSL https://ollama.com/install.sh | sh
+    args:
+      creates: /usr/local/bin/ollama
+
+  - name: Enable and start Ollama service
+    systemd:
+      name: ollama
+      state: started
+      enabled: yes
+      daemon_reload: yes
+
+  - name: Forward port 80 to 9000 (web runner)
+    ansible.builtin.iptables:
+      table: nat
+      chain: PREROUTING
+      in_interface: eth0
+      protocol: tcp
+      match: tcp
+      destination_port: 80
+      jump: REDIRECT
+      to_ports: 9000
+      comment: Redirect web traffic to dungeon port 9000
+    become: yes
+
+  - name: Persist iptables rules
+    apt:
+      name: iptables-persistent
+      state: present

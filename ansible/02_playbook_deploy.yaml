@@ -1,0 +1,65 @@
+- name: Deploy Dungeon game
+  hosts: dungeon
+
+  vars_files:
+    - deployment_vars.yaml
+    - deployment_secrets.yaml
+
+  tasks:
+
+  - name: Remove old deployment
+    file:
+      state: absent
+      path: /home/dungeon/app
+
+  - name: Git checkout dungeon
+    become: true
+    become_user: dungeon
+    ansible.builtin.git:
+      repo: "{{ git_repo }}"
+      dest: /home/dungeon/app
+      version: "{{ git_branch }}"
+      force: true
+      update: true
+
+  - name: Create Python virtual environment
+    become: true
+    become_user: dungeon
+    command: python3 -m venv /home/dungeon/app/game/venv
+    args:
+      creates: /home/dungeon/app/game/venv/bin/activate
+
+  - name: Install Python dependencies
+    become: true
+    become_user: dungeon
+    pip:
+      requirements: /home/dungeon/app/game/requirements.txt
+      virtualenv: /home/dungeon/app/game/venv
+
+  - name: Deploy config.yaml
+    become: true
+    become_user: dungeon
+    ansible.builtin.template:
+      src: templates/config.yaml.j2
+      dest: /home/dungeon/app/config.yaml
+      mode: '0600'
+
+  - name: Pull Ollama model
+    become: true
+    command: ollama pull {{ ollama_model }}
+    when: llm_provider == "gemma"
+    async: 3600   # model download can take a while
+    poll: 30
+
+  - name: Deploy systemd service for Telegram bot
+    ansible.builtin.template:
+      src: templates/dungeon-telegram.service.j2
+      dest: /etc/systemd/system/dungeon-telegram.service
+      mode: '0644'
+
+  - name: Reload systemd and (re)start Telegram bot
+    systemd:
+      name: dungeon-telegram
+      state: restarted
+      enabled: yes
+      daemon_reload: yes

@@ -28,9 +28,11 @@ class LuaSandbox(BaseSandbox):
         """
         try:
             if isinstance(value, bool):
-                # Lua uses `true` and `false` for booleans
                 lua_value: str = 'true' if value else 'false'
                 self.lua.execute(f"{name} = {lua_value}")
+            elif isinstance(value, str):
+                escaped = value.replace('\\', '\\\\').replace('"', '\\"')
+                self.lua.execute(f'{name} = "{escaped}"')
             else:
                 self.lua.execute(f"{name} = {value}")
         except Exception as e:

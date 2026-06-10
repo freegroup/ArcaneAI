@@ -55,7 +55,17 @@
           <tr v-for="(item, index) in inventorySorted" :key="item.key">
             <td>{{ item.key }}</td>
             <td>
+              <v-select
+                v-if="item.type === 'enum'"
+                v-model="item.value"
+                :items="item.values || []"
+                @update:modelValue="updateItem(item, index)"
+                outlined
+                density="compact"
+                hide-details
+              ></v-select>
               <v-text-field
+                v-else
                 v-model="item.value"
                 :type="item.type === 'integer' ? 'number' : 'text'"
                 @change="updateItem(item, index)"
@@ -67,7 +77,8 @@
             <td>
               <v-select
                 v-model="item.type"
-                :items="['string', 'boolean', 'integer']"
+                :items="item.locked ? [item.type] : ['string', 'boolean', 'integer']"
+                :disabled="!!item.locked"
                 @change="updateItem(item, index)"
                 outlined
                 density="compact"
@@ -75,9 +86,10 @@
               ></v-select>
             </td>
             <td>
-              <ThemedActionButton @click="removeItem(item.key)" variant="danger">
+              <ThemedActionButton v-if="!item.locked" @click="removeItem(item.key)" variant="danger">
                 X
               </ThemedActionButton>
+              <span v-else style="padding: 0 8px; opacity: 0.3;">🔒</span>
             </td>
           </tr>
         </tbody>

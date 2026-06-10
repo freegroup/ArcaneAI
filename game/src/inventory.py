@@ -18,50 +18,31 @@ class Inventory:
     Uses Lua scripting for flexible action execution.
     """
     
-    def __init__(self, session: GameSession, items: Optional[Dict[str, Any]] = None) -> None:
-        """
-        Initialize inventory with session and optional items.
-        
-        Args:
-            session: GameSession for sending messages (REQUIRED)
-            items: Dictionary of inventory items from game definition
-        """
+    def __init__(self, session: GameSession, items: Optional[Dict[str, Any]] = None, enum_constraints: Optional[Dict[str, List]] = None) -> None:
         self.session: GameSession = session
         self.lua: LuaSandbox = LuaSandbox()
-        
-        # Store items from game definition (used as base for to_dict)
         self.items: Dict[str, Any] = items or {}
-        
-        # Set values in Lua environment
+        self._enum_constraints: Dict[str, List] = enum_constraints or {}
+
         if items:
             for key, value in items.items():
                 self.lua.set_var(key, value)
     
     def get(self, key: str, default: Any = None) -> Any:
-        """
-        Get an inventory value.
-        
-        Args:
-            key: Inventory key
-            default: Default value if key doesn't exist
-            
-        Returns:
-            Value or default
-        """
         try:
-            return self.lua.get_var(key)
+            value = self.lua.get_var(key)
+            return value if value is not None else default
         except:
             return default
     
     def set(self, key: str, value: Any) -> None:
-        """
-        Set an inventory value.
-        
-        Args:
-            key: Inventory key
-            value: Value to set
-        """
+        if key in self._enum_constraints:
+            allowed = self._enum_constraints[key]
+            if value not in allowed:
+                print(f"[WARNING] Invalid enum value '{value}' for '{key}'. Allowed: {allowed}. Ignoring.")
+                return
         self.lua.set_var(key, value)
+        self.items[key] = value
     
     def execute(self, actions: List[str]) -> None:
         """
@@ -90,13 +71,14 @@ class Inventory:
         self._sync_from_lua()
     
     def _sync_from_lua(self) -> None:
-        """
-        Sync Lua variables back to inventory.
-        Inventory is master - all Lua variables are synced to items.
-        """
         all_vars: Dict[str, Any] = self.lua.get_all_vars()
-        # Update ALL items (existing + new)
         for key, value in all_vars.items():
+            if key in self._enum_constraints:
+                allowed = self._enum_constraints[key]
+                if value not in allowed:
+                    print(f"[WARNING] Lua set invalid enum value '{value}' for '{key}'. Allowed: {allowed}. Reverting.")
+                    self.lua.set_var(key, self.items.get(key))
+                    continue
             self.items[key] = value
     
     def eval(self, condition: str) -> bool:
@@ -125,13 +107,25 @@ class Inventory:
         Get all inventory items with their current values.
         Inventory is master - returns all items.
         Since items can be created dynamically by scripts, we return all Lua variables.
-        
+
         Returns:
             Dictionary of all inventory items
         """
         # Inventory is master - return all variables
         # Items are created dynamically by scripts, so we need all Lua vars
         return self.items.copy()
+
+    def get_enum_values(self, key: str) -> Optional[List]:
+        """
+        Get the allowed enum values for a key, if it has an enum constraint.
+
+        Args:
+            key: Inventory key
+
+        Returns:
+            List of allowed values, or None if the key is not an enum
+        """
+        return self._enum_constraints.get(key)
     
     def get_all_vars(self) -> Dict[str, Any]:
         """

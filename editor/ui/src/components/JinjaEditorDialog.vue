@@ -57,20 +57,20 @@
                 <template #footer>
                   <p class="jinja-note">
                     <v-icon size="x-small">mdi-shield-check</v-icon>
-                    Alle Jinja-Tags bleiben erhalten!
+                    All Jinja tags are preserved!
                   </p>
                 </template>
               </AIAssistHelpText>
             </div>
 
-                <AIAssistLoading v-if="aiLoading">AI arbeitet...</AIAssistLoading>
+                <AIAssistLoading v-if="aiLoading">AI is working...</AIAssistLoading>
 
               <div v-if="aiResponse" class="ai-result">
                 <div class="ai-result-header">
-                  <strong>Verbesserter Text:</strong>
+                  <strong>Improved Text:</strong>
                 <ThemedButton 
                   @click="applyAiResult" 
-                  title="Text in Editor übernehmen"
+                  title="Apply text to editor"
                 >
                   <v-icon size="small">mdi-check</v-icon>
                   Apply to Editor

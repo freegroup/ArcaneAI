@@ -17,7 +17,8 @@
       "WebSearch",
       "Bash(for f:*)",
       "Bash(do sed:*)",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(ollama pull *)"
     ]
   }
 }

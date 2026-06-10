@@ -111,6 +111,7 @@
 [data-theme="elegant"] .sound-picker-dialog,
 [data-theme="elegant"] .import-state-dialog,
 [data-theme="elegant"] .jinja-editor-dialog,
+[data-theme="elegant"] .room-action-editor-dialog,
 [data-theme="elegant"] .chat-dialog {
   position: relative !important;
   background: var(--color-bg-2) !important;
@@ -131,6 +132,7 @@
 [data-theme="elegant"] .sound-picker-dialog > .search-bar,
 [data-theme="elegant"] .import-state-dialog > .v-card-text,
 [data-theme="elegant"] .jinja-editor-dialog > .v-card-text,
+[data-theme="elegant"] .room-action-editor-dialog > .v-card-text,
 [data-theme="elegant"] .chat-dialog > .v-card-text,
 [data-theme="elegant"] .help-dialog > .dialog-content,
 [data-theme="elegant"] .delete-encounter-dialog > .dialog-content,
@@ -141,6 +143,7 @@
 [data-theme="elegant"] .sound-picker-dialog > .dialog-content,
 [data-theme="elegant"] .import-state-dialog > .dialog-content,
 [data-theme="elegant"] .jinja-editor-dialog > .dialog-content,
+[data-theme="elegant"] .room-action-editor-dialog > .dialog-content,
 [data-theme="elegant"] .chat-dialog > .dialog-content {
   background: var(--color-bg-2);
 }
@@ -155,6 +158,7 @@
 [data-theme="elegant"] .sound-picker-dialog > .dialog-header,
 [data-theme="elegant"] .import-state-dialog > .dialog-header,
 [data-theme="elegant"] .jinja-editor-dialog > .dialog-header,
+[data-theme="elegant"] .room-action-editor-dialog > .dialog-header,
 [data-theme="elegant"] .chat-dialog > .dialog-header {
   border-radius: 12px 12px 0 0;
   overflow: hidden;
@@ -169,6 +173,7 @@
 [data-theme="elegant"] .sound-picker-dialog > :last-child,
 [data-theme="elegant"] .import-state-dialog > :last-child,
 [data-theme="elegant"] .jinja-editor-dialog > :last-child,
+[data-theme="elegant"] .room-action-editor-dialog > :last-child,
 [data-theme="elegant"] .chat-dialog > :last-child {
   border-radius: 0 0 12px 12px;
   overflow: hidden;
@@ -184,6 +189,7 @@
 [data-theme="elegant"] .sound-picker-dialog::before,
 [data-theme="elegant"] .import-state-dialog::before,
 [data-theme="elegant"] .jinja-editor-dialog::before,
+[data-theme="elegant"] .room-action-editor-dialog::before,
 [data-theme="elegant"] .chat-dialog::before {
   content: '';
   position: absolute;
@@ -214,6 +220,7 @@
 [data-theme="elegant"] .sound-picker-dialog::after,
 [data-theme="elegant"] .import-state-dialog::after,
 [data-theme="elegant"] .jinja-editor-dialog::after,
+[data-theme="elegant"] .room-action-editor-dialog::after,
 [data-theme="elegant"] .chat-dialog::after {
   content: '';
   position: absolute;

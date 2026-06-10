@@ -62,16 +62,52 @@ class GameSession:
         self.last_activity = datetime.now()
     
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Serialize session to dictionary (for future save/load).
-        
-        Returns:
-            Dictionary representation of session
-        """
+        history = [
+            {"user": e.user_input, "assistant": e.llm_response}
+            for e in self.game_engine.controller.history.entries
+        ]
         return {
             "session_id": self.session_id,
             "current_state": self.game_engine.state_engine.get_current_state().name,
             "inventory": self.game_engine.inventory.to_dict(),
+            "history": history,
             "created_at": self.created_at.isoformat(),
             "last_activity": self.last_activity.isoformat()
         }
+
+    def restore_from_dict(self, data: Dict[str, Any]) -> None:
+        """Restore session state from a previously saved dict."""
+        # Restore state
+        state_name = data.get("current_state")
+        if state_name and state_name in self.game_engine.state_engine.states:
+            self.game_engine.state_engine.current_state = state_name
+
+        # Restore inventory
+        for key, value in data.get("inventory", {}).items():
+            try:
+                self.game_engine.inventory.set(key, value)
+            except Exception:
+                pass
+
+        # Restore conversation history (user/assistant pairs)
+        history = self.game_engine.controller.history
+        history.clear()
+        for entry in data.get("history", []):
+            history.turn_counter += 1
+            from game_history import HistoryEntry
+            history.entries.append(HistoryEntry(
+                turn_number=history.turn_counter,
+                timestamp=0,
+                user_input=entry["user"],
+                base_prompt="",
+                available_functions=[],
+                llm_response=entry["assistant"],
+            ))
+
+        # Restore timestamps
+        try:
+            self.created_at = datetime.fromisoformat(data["created_at"])
+            self.last_activity = datetime.fromisoformat(data["last_activity"])
+        except (KeyError, ValueError):
+            pass
+

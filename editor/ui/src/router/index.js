@@ -4,7 +4,11 @@ import CanvasGame from '../views/CanvasGame.vue';
 import CanvasEncounter from '../views/CanvasEncounter.vue';
 import Personality from '../views/Personality.vue';
 import WelcomePrompt from '../views/WelcomePrompt.vue';
+import GameTarget from '../views/GameTarget.vue';
+import HelpText from '../views/HelpText.vue';
 import Inventory from '../views/Inventory.vue';
+import RoomsEmptyState from '../views/RoomsEmptyState.vue';
+import RoomDetail from '../views/RoomDetail.vue';
 
 const routes = [
   {
@@ -29,6 +33,18 @@ const routes = [
     props: true
   },
   {
+    path: '/game/:gameName([^/]+)/game-target',
+    name: 'game-target',
+    component: GameTarget,
+    props: true
+  },
+  {
+    path: '/game/:gameName([^/]+)/help-text',
+    name: 'help-text',
+    component: HelpText,
+    props: true
+  },
+  {
     path: '/game/:gameName([^/]+)/world',
     name: 'world',
     component: CanvasGame,
@@ -44,6 +60,18 @@ const routes = [
     path: '/game/:gameName([^/]+)/inventory',
     name: 'inventory',
     component: Inventory,
+    props: true
+  },
+  {
+    path: '/game/:gameName([^/]+)/rooms',
+    name: 'rooms-empty',
+    component: RoomsEmptyState,
+    props: true
+  },
+  {
+    path: '/game/:gameName([^/]+)/rooms/:roomName',
+    name: 'room-detail',
+    component: RoomDetail,
     props: true
   },
   {

@@ -95,7 +95,8 @@
   border-radius: 4px;
 }
 
-[data-theme="tavern"] .jinja-editor-dialog {
+[data-theme="tavern"] .jinja-editor-dialog,
+[data-theme="tavern"] .room-action-editor-dialog {
   background: var(--color-bg-2);
   color: var(--color-text-1);
   border: 2px solid var(--color-border-highlight);
@@ -103,7 +104,8 @@
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
 }
 
-[data-theme="tavern"] .jinja-editor-dialog :deep(.v-card) {
+[data-theme="tavern"] .jinja-editor-dialog :deep(.v-card),
+[data-theme="tavern"] .room-action-editor-dialog :deep(.v-card) {
   background: var(--color-bg-2) !important;
   color: var(--color-text-1) !important;
 }
@@ -596,11 +598,13 @@
    JinjaEditorDialog
    ═══════════════════════════════════════════ */
 
-[data-theme="tavern"] .jinja-editor-dialog .dialog-content {
+[data-theme="tavern"] .jinja-editor-dialog .dialog-content,
+[data-theme="tavern"] .room-action-editor-dialog .dialog-content {
   background: var(--color-bg-2);
 }
 
-[data-theme="tavern"] .jinja-editor-dialog .dialog-actions {
+[data-theme="tavern"] .jinja-editor-dialog .dialog-actions,
+[data-theme="tavern"] .room-action-editor-dialog .dialog-actions {
   border-top: 1px solid var(--color-border);
   background: var(--color-bg-3);
 }

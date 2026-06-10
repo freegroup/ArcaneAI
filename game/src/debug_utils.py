@@ -65,7 +65,8 @@ def format_function(func: LLMFunction, indent: str = "  ") -> str:
 def print_llm_debug(
     messages: List[LLMMessage],
     functions: List[LLMFunction],
-    title: str = "LLM REQUEST"
+    title: str = "LLM REQUEST",
+    session=None
 ) -> None:
     """
     Print LLM request in human-readable format.
@@ -115,7 +116,9 @@ def print_llm_debug(
         
         for i, msg in enumerate(conversation_messages, 1):
             role_label = "USER" if msg.role == "user" else "ASSISTANT"
-            print(f"\n[{role_label} #{i}]")
+            mood = session.game_engine.inventory.get('companion_mood') if session else None
+            mood_tag = f" ({mood})" if mood and msg.role == "assistant" else ""
+            print(f"\n[{role_label} #{i}{mood_tag}]")
             print(wrap_text(msg.content, width=width, indent="  "))
     
     print("\n" + divider + "\n")

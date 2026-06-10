@@ -53,8 +53,7 @@
 }
 
 /* The selection — offset from left edge, looks "illuminated" */
-[data-theme="elegant"] .nav-drawer__item.v-list-item--active,
-[data-theme="elegant"] .nav-drawer__subitem.v-list-item--active {
+[data-theme="elegant"] .nav-drawer__item.v-list-item--active {
   position: relative;
   margin-left: 18px;
   margin-right: 8px;
@@ -75,9 +74,29 @@
     ) !important;
 }
 
+.v-list-item--variant-text .v-list-item__overlay {
+    background: rgba(172, 94, 128,0.4);
+}
+
+
+/* The selection — offset from left edge, looks "illuminated" */
+[data-theme="elegant"] .nav-drawer__subitem.v-list-item--active {
+  position: relative;
+  margin-left: 18px;
+  margin-right: 8px;
+  padding-left: 4px !important;
+  border-radius: 4px 0 0 4px !important;
+  box-shadow: inset 3px 0 8px rgba(var(--color-accent-1-rgb), 0.12) !important;
+  overflow: visible;
+  background:
+    linear-gradient(90deg,
+      rgba(var(--color-accent-1-rgb), 0.18) 0%,
+      transparent 13%
+    ) !important;
+}
+
 /* The light source — glowing bar at the drawer edge, separate from item */
-[data-theme="elegant"] .nav-drawer__item.v-list-item--active::before,
-[data-theme="elegant"] .nav-drawer__subitem.v-list-item--active::before {
+[data-theme="elegant"] .nav-drawer__item.v-list-item--active::before {
   content: '';
   position: absolute;
   left: -18px;

@@ -1,0 +1,71 @@
+maps_directory: "maps"
+game_name: "{{ game_name }}"
+
+llm:
+  provider: "{{ llm_provider }}"
+  max_history_length: 20
+{% if llm_provider == "gemma" %}
+  base_url: "http://localhost:11434/v1"
+  model: "{{ llm_model }}"
+  temperature: {{ llm_temperature }}
+  max_tokens: {{ llm_max_tokens }}
+{% elif llm_provider == "openai" %}
+  api_key: "{{ openai_api_key }}"
+  base_url: "https://api.openai.com/v1"
+  model: "{{ llm_model }}"
+  temperature: {{ llm_temperature }}
+  max_tokens: {{ llm_max_tokens }}
+{% elif llm_provider == "gemini" %}
+  api_key: "{{ google_api_key }}"
+  base_url: "https://generativelanguage.googleapis.com/v1beta/openai/"
+  model: "{{ llm_model }}"
+  temperature: {{ llm_temperature }}
+  max_tokens: {{ llm_max_tokens }}
+{% elif llm_provider == "deepseek" %}
+  api_key: "{{ deepseek_api_key }}"
+  base_url: "https://api.deepseek.com/v1"
+  model: "{{ llm_model }}"
+  temperature: {{ llm_temperature }}
+  max_tokens: {{ llm_max_tokens }}
+{% endif %}
+
+sound:
+  soundfx_dir: "game/soundfx"
+
+debug:
+  llm: false
+
+voice:
+  enabled: true
+{% if tts_provider == "google" %}
+  provider: "google"
+  api_key: "{{ google_api_key }}"
+  language_code: "{{ tts_language }}"
+  voice_name: "{{ tts_voice }}"
+  pitch: 0
+  speaking_rate: 1.0
+  sample_rate: 24000
+{% elif tts_provider == "openai" %}
+  provider: "openai"
+  api_key: "{{ openai_api_key }}"
+  voice: "onyx"
+  speed: 0.9
+  model: "tts-1-hd"
+{% else %}
+  provider: "console"
+{% endif %}
+
+stt:
+  enabled: true
+{% if stt_provider == "faster-whisper" %}
+  provider: "faster-whisper"
+  model: "{{ stt_model }}"
+  language: "{{ stt_language }}"
+  device: "auto"
+  compute_type: "default"
+{% else %}
+  provider: "console"
+{% endif %}
+
+telegram:
+  bot_token: "{{ telegram_bot_token }}"

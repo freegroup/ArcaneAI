@@ -78,6 +78,11 @@ class GoogleTTSProvider(BaseTTSProvider):
 
         # Clean text
         text = text.replace("\n", " ")
+
+        # Google TTS limit is 5000 bytes — truncate at last sentence boundary before limit
+        if len(text.encode("utf-8")) > 4800:
+            text = text[:4800].rsplit(".", 1)[0] + "."
+
         self.stop_event.clear()
 
         # Split text into first sentence and rest for faster initial response
