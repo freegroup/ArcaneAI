@@ -2,10 +2,7 @@
     <div class="property-view"  v-if="jsonData.type === 'TriggerConnection'">
 
         <div class="field-group">
-          <div class="label-with-help">
-            <label>Action Name</label>
-            <HelpButton @click="openHelp('triggerName')" />
-          </div>
+          <PropertyLabel :helpTitle="helpTexts.triggerName.title" :helpText="helpTexts.triggerName.text">Action Name</PropertyLabel>
           <input
               id="triggerName"
               type="text"
@@ -17,10 +14,7 @@
 
         <!-- Sound Effect Selection with Finder Dialog -->
         <div class="field-group">
-          <div class="label-with-help">
-            <label>Sound Effect</label>
-            <HelpButton @click="openHelp('soundEffect')" />
-          </div>
+          <PropertyLabel :helpTitle="helpTexts.soundEffect.title" :helpText="helpTexts.soundEffect.text">Sound Effect</PropertyLabel>
           <div class="sound-selection">
           <div class="sound-display" @click="showSoundPicker = true">
             <span class="sound-name">{{ jsonData.userData.sound_effect || 'No sound selected' }}</span>
@@ -69,10 +63,7 @@
         </div>
         
         <div class="property-view__section">
-          <div class="label-with-help" v-if="jsonData.userData">
-            <label for="triggerDescription">Action Description</label>
-            <HelpButton @click="openHelp('actionDescription')" />
-          </div>
+          <PropertyLabel v-if="jsonData.userData" :helpTitle="helpTexts.actionDescription.title" :helpText="helpTexts.actionDescription.text">Action Description</PropertyLabel>
           <div class="editor-container" v-if="jsonData.userData">
             <textarea
                 id="triggerDescription"
@@ -86,10 +77,7 @@
         </div>
 
         <div class="property-view__section">
-          <div class="label-with-help" v-if="jsonData.userData">
-            <label for="systemPrompt">On Success</label>
-            <HelpButton @click="openHelp('onSuccess')" />
-          </div>
+          <PropertyLabel v-if="jsonData.userData" :helpTitle="helpTexts.onSuccess.title" :helpText="helpTexts.onSuccess.text">On Success</PropertyLabel>
           <div class="editor-container" v-if="jsonData.userData">
             <textarea
                 v-if="jsonData.userData" 
@@ -104,10 +92,7 @@
 
         <!-- Textarea for Conditions -->
         <div class="field-group">
-          <div class="label-with-help">
-            <label for="conditions">Conditions</label>
-            <HelpButton @click="openHelp('conditions')" />
-          </div>
+          <PropertyLabel :helpTitle="helpTexts.conditions.title" :helpText="helpTexts.conditions.text">Conditions</PropertyLabel>
           <textarea
             id="conditions"
             v-model="conditionsText"
@@ -117,10 +102,7 @@
         </div>
 
         <div class="field-group">
-          <div class="label-with-help">
-            <label for="actions">Actions</label>
-            <HelpButton @click="openHelp('actions')" />
-          </div>
+          <PropertyLabel :helpTitle="helpTexts.actions.title" :helpText="helpTexts.actions.text">Actions</PropertyLabel>
           <textarea
             id="actions"
             v-model="actionsText"
@@ -128,13 +110,6 @@
             placeholder="Enter each action on a new line"
           ></textarea>
         </div>
-
-        <!-- Help Dialog -->
-        <ExtendedHelpDialog
-          v-model="showHelpDialog"
-          :title="helpTitle"
-          :helpText="helpText"
-        />
 
         <!-- Jinja Editor Dialogs -->
         <JinjaEditorDialog
@@ -155,16 +130,15 @@
   import SoundManager from '@/utils/SoundManager'
   import { mapGetters } from 'vuex';
   import { MessageTypes, ShapeTypes } from '../../public/shared/SharedConstants.js';
-  import ExtendedHelpDialog from '@/components/ExtendedHelpDialog.vue';
   import JinjaEditorDialog from '@/components/JinjaEditorDialog.vue';
   import SoundSelectDialog from '@/components/SoundSelectDialog.vue';
-  import HelpButton from '@/components/HelpButton.vue';
+  import PropertyLabel from '@/components/PropertyLabel.vue';
   import ExpandButton from '@/components/ExpandButton.vue';
   import "codemirror/theme/material-darker.css";
 
   export default {
     name: 'PropertyView',
-    components: { ExtendedHelpDialog, JinjaEditorDialog, SoundSelectDialog, HelpButton, ExpandButton },
+    components: { JinjaEditorDialog, SoundSelectDialog, PropertyLabel, ExpandButton },
     props: {
         draw2dFrame: {
             type: Object,
@@ -190,14 +164,11 @@
         actionsText: '',
         isPlaying: false,
         // Help Dialog
-        showHelpDialog: false,
         // Jinja Editor Dialogs
         showActionEditor: false,
         showSuccessEditor: false,
         // Sound Picker Dialog
         showSoundPicker: false,
-        helpTitle: '',
-        helpText: '',
         helpTexts: {
           triggerName: {
             title: 'Action Name',
@@ -392,15 +363,6 @@
         }
       },
 
-      openHelp(fieldKey) {
-        const help = this.helpTexts[fieldKey];
-        if (help) {
-          this.helpTitle = help.title;
-          this.helpText = help.text;
-          this.showHelpDialog = true;
-        }
-      },
-
       updateActionDescription(newText) {
         this.jsonData.userData.description = newText;
         this.onDataChange();
@@ -548,11 +510,6 @@
     flex-direction: column;
   }
 
-  /* Override for labels inside label-with-help */
-  .label-with-help label {
-    display: inline-block !important;
-  }
-
   /* Sections that can grow but have a minimum height to prevent squashing */
   .property-view__section {
     flex: 1;
@@ -635,15 +592,5 @@
   .field-group {
     display: flex;
     flex-direction: column;
-  }
-
-  /* Label with Help Icon */
-  .label-with-help {
-    display: inline-flex;
-    align-items: center;
-  }
-
-  .label-with-help label {
-    display: inline-block;
   }
 </style>

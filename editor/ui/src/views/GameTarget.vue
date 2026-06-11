@@ -236,7 +236,7 @@ export default {
 }
 
 .full-height-editor.editor-collapsed {
-  flex: 0.6;
+  /* No height shrinking — see Personality.vue for rationale. */
 }
 
 .full-height-editor >>> .CodeMirror-gutters {

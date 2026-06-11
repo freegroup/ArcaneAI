@@ -17,8 +17,13 @@ class State:
     name: str
     description: str
     session: GameSession
+    state_type: str = "NORMAL"  # NORMAL | START | END
     ambient_sound: Optional[str] = None  # Ambient sound file (looping)
     ambient_sound_volume: int = 100
+
+    @property
+    def is_end(self) -> bool:
+        return self.state_type == "END"
     
     def get_raw_description(self) -> str:
         """Get the raw description without template rendering."""

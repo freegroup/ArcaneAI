@@ -38,7 +38,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "b576c24d-537b-a7c9-aa1f-33e97c2a8a13",
+          "id": "dfc6b644-4c32-66e3-2ee0-3d9652206cdd",
           "name": "untersuche_den_raum",
           "description": "Du kannst den Raum untersuchen und durchsuchen und vielleicht findest Du Dinge die Du gebrauchen kannst.  Du siehst ein paar Dinge",
           "sound_effect": "laufen_teppich.wav",
@@ -52,7 +52,7 @@
           ]
         },
         {
-          "id": "55667a9b-7026-c385-0240-94958dd4d012",
+          "id": "e5909b50-bf14-207e-6e6a-1504a7253bab",
           "name": "nehme_das_packet",
           "description": "Du nimmst das weisse Packet mit den seltsamen Röllchen, welches unter der langen Tafel liegt, an dich.",
           "sound_effect": "effect_retrogame.wav",
@@ -68,7 +68,7 @@
           ]
         },
         {
-          "id": "98291746-b758-eb14-80cc-f899d691d4d6",
+          "id": "4ed5a4b6-2582-58b0-5b48-73cc6f1dbd43",
           "name": "gebe_packet_dem_waechter",
           "description": "Du gibst den Wächter das seltsame Packet",
           "sound_effect": "effect_mann_streckt_sich.wav",
@@ -85,7 +85,7 @@
           ]
         },
         {
-          "id": "d1d89fe1-2ea3-b1c0-d1db-fc34a74f48cf",
+          "id": "8cd09d38-abcf-87c6-b012-2386298fb9a6",
           "name": "rede_mit_waechter",
           "description": "Di sprichts den Wächter an und fragt mal was er so treibt...egal...du redets einfach mit ihm",
           "sound_effect": "effect_gaehnen.wav",
@@ -98,7 +98,7 @@
           "actions": []
         },
         {
-          "id": "1d0ab125-25c3-3976-c723-871984136efe",
+          "id": "8419c71a-d88c-c143-0cdc-5239e515f274",
           "name": "werfe_muenze_ein",
           "description": "Du hast eine Münze und kannst diese Münze in den spielautomaten einwerfen.",
           "sound_effect": "song_traurig_01.mp3",
@@ -113,7 +113,7 @@
           ]
         },
         {
-          "id": "2f9523eb-f294-dfd7-3175-fcd1a0a4192e",
+          "id": "f207e3ee-c5a1-7429-6864-e3ac469fc1cf",
           "name": "oeffne_tuer_mit_gewalt",
           "description": "Du öffnest die Tür zu \"Gelben Höhle\" mit Gewalt. Entweder eintreten, rennen, dagegen schlagen. Jede art von Gewalt öffnet die Tür.",
           "sound_effect": "aktion_etwas_im_raum_umwerfen_dose.mp3",
@@ -201,16 +201,18 @@
     "eb5b6e6b-5ae0-772a-12d3-670e58816128": {
       "type": "StateShape",
       "id": "eb5b6e6b-5ae0-772a-12d3-670e58816128",
+      "x": 1599,
+      "y": 1993,
       "userData": {
         "system_prompt": "Du stehst vor einem alten, verwitterten Haus, dessen weiße Fassade von Wind und Zeit gezeichnet ist. Einsam und verborgen thront es im Herzen des Waldes, umgeben von hohen Bäumen, die die Außenwelt in schwere Schatten hüllen. Die massiven Holztüren wirken wie Wächter, verschlossen seit Ewigkeiten; kein Laut dringt durch ihre Ritzen. Ein leises Flüstern scheint in der Stille zu schweben, als hütete das Haus Geheimnisse, die es nur dem geduldigsten Suchenden offenbart.\n\n{% if window_is_open %}\nNeben der Tür starrt ein Fenster still in die Leere. Die Scheiben sind kalt, doch da es offen steht, gewährt es erstmals einen Blick auf das, was sich dahinter verbirgt. Es ist weit geöffnet und lädt beinahe dazu ein, ins Innere zu klettern.\n{% else %}\nNeben der Tür starrt ein Fenster still in die Leere. Die Scheiben sind kalt und undurchdringlich; nichts verrät, was dahinter liegt. Das Fenster ist fest verschlossen und müsste erst untersucht werden, ob es sich öffnen lässt.\n{% if discovered_window %}\nDoch vielleicht lässt sich das Fenster ohne Gewalt öffnen und gibt eine verborgene Passage zu jenen Geheimnissen frei, die das Haus so beharrlich hütet.\n{% endif%}\n\n{% endif %}\n\n{% if not has_wood %}\nNeben dem Treppenabsatz liegt ein Stock, fast schon ein massiver Knüppel – ideal, sollte mir jemand in die Quere kommen. Oder man sich durch den Djungel kämpfen muß. Egal - ein Prügel dient einem immer gute Dienste.\n{% endif %}\n\nEin Stück weiter wölbt ein mächtiger Baum seine knorrigen Äste wie schützende Arme über den Boden. Seine Wurzeln greifen tief in die Erde, als hüteten auch sie die Geheimnisse dieses Ortes. Doch er birgt nichts als Stille und weist keine weiteren Wege.\n\nAm Pfadrand knarrt ein alter, rostiger Briefkasten einsam im Wind. Vielleicht birgt er den ersten Hinweis auf das Rätsel dieses Hauses.\n\nErste wenn du die Tür oder das Fenster genauer untersuchst, fällt dir ein Schild an der Wand auf – offenbar ein Türschild:\n\n\"Zum Trügerischen Licht\"\n„Wo Seelen flackern und Schatten wandern. Ein Ort, an dem die Gesichter vergessener Geschichten erscheinen, wo jeder ein Held sein kann, bis der Morgen graut. Hier findest du Kameradschaft – oder zumindest jemanden, der deinen letzten Groschen nimmt. Das Licht mag trügerisch sein, doch es leuchtet denen, die im Dunkeln tappen. Wo Versprechen gemacht werden, um wieder zu verblassen, und Träume auf ein Glas passen, ehe sie in der Dämmerung ertrinken. Willkommen, Wanderer, im Sammelsurium gebrochener Wünsche und lauter Lügen. Ein Friedhof der Träume, wo du deine Sorgen begraben, aber niemals wirklich fliehen kannst.“",
         "ambient_sound": "wald_mit_voegel.mp3",
-        "ambient_sound_volume": 13
+        "ambient_sound_volume": 9
       },
       "name": "WestOfHouse",
       "stateType": "START",
       "trigger": [
         {
-          "id": "2cef10a0-c8c5-676a-407a-d7a96dc951f2",
+          "id": "f580b939-8a09-7539-fcc1-2c42cef6be01",
           "name": "untersuche_das_fenster",
           "description": "Du kannst das Fenster untersuchen und beschreibst, dass man es öffnen könnte. Es fällt dir ein Türschild auf was in der nähe angebracht ist.",
           "sound_effect": "mixkit-air-woosh-1489.wav",
@@ -223,7 +225,7 @@
           ]
         },
         {
-          "id": "8883ead3-45a9-12e2-18ef-d0c4ead843cf",
+          "id": "bf7ac988-7e70-081f-3dc9-8376da861835",
           "name": "oeffne_das_fenster",
           "description": "Du öffnest das Fenster indem du es nach oben schiebst.",
           "sound_effect": "effect_schiebetuer_oeffnen.wav",
@@ -238,7 +240,7 @@
           ]
         },
         {
-          "id": "8f4b90dc-d80d-7a81-3a3f-eec8cb26e988",
+          "id": "dedac0d3-7cc4-b2bf-b761-2d83e4e646ac",
           "name": "untersuche_das_haus",
           "description": "Man kann das Haus hier nach seinem Zustand untersuchen oder mal nachsehen ob es Türen, Fenster hat in die man in das Haus gelingen könnte. Es fällt dir aber ein Türschild  auf",
           "sound_effect": "",
@@ -249,7 +251,7 @@
           "actions": []
         },
         {
-          "id": "7530a055-4bb5-646c-bb28-ac4bbb941ffe",
+          "id": "b2e8c3ca-c106-a3ac-3ef0-e631fa2e3fc8",
           "name": "untersuche_die_tuer",
           "description": "Die kannst die Tür untersuchen und festellen, dass diese unüberwindbar ist. Kein reinkommen auf irgendeine Weise. Es fällt die aber ein Türschild auf",
           "sound_effect": "",
@@ -260,7 +262,7 @@
           "actions": []
         },
         {
-          "id": "b69b4f83-f320-2a7e-15df-3db3188329c9",
+          "id": "a5710b97-051e-4eb5-0001-98a287451161",
           "name": "nehme_stock",
           "description": "Ein Stock, der in der nähe liegt kann genommen werden",
           "sound_effect": "effect_retrogame.wav",
@@ -288,7 +290,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "2a4d9c32-3843-7655-5887-9c162d6e83de",
+          "id": "a7814810-48de-92a2-25d5-8c2f72493b1a",
           "name": "nehme_den_brief",
           "description": "Nehme den Brief der aus dem Briefkasten herausschaut.",
           "sound_effect": "effect_retrogame.wav",
@@ -301,7 +303,7 @@
           ]
         },
         {
-          "id": "404fb883-4e11-a3fe-c612-d9b66833af29",
+          "id": "87fcd903-ffd2-3523-4406-65f76e68bbc2",
           "name": "lese_den_brief_vor",
           "description": "Lese den Brief Wortgetreu vor, nahdem du ihn genommen hast",
           "sound_effect": "",
@@ -314,7 +316,7 @@
           "actions": []
         },
         {
-          "id": "f54899dc-7a53-39db-e8d4-fc6a2bb308f3",
+          "id": "f6ce5622-1fbe-a453-361d-4a7bac917ccc",
           "name": "nehme_ratte",
           "description": "Du steckst unter Ekel die Ratte in deine Tasche",
           "sound_effect": "effect_retrogame.wav",
@@ -329,7 +331,7 @@
           ]
         },
         {
-          "id": "b0ccaa24-90b0-37e4-924a-1367703ca87e",
+          "id": "4a804e24-fb4d-34cc-946b-26be6ff4424b",
           "name": "nehme_muenze",
           "description": "Auf dem Boden liegt eine Münze die du nehmen kannst",
           "sound_effect": "effect_retrogame.wav",
@@ -358,7 +360,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "269a6aaf-b626-03b5-f3c2-920fbc252571",
+          "id": "4ff42a7c-a071-cdb4-cab6-f05378e2b289",
           "name": "faelle_den_baum",
           "description": "Das Fällen des Baumes, oder umsägen, ist keine gute Idee. Du wirst es versuchen, aber es funktioniert niemals. Du wolltest doch tatsächlich diesen wunderschönen Baum für dein Spielvergnügen fällen. Alter – und das in diesen Zeiten! Schon mal was von Nachhaltigkeit gehört?",
           "sound_effect": "effect_erstaunte_frau.wav",
@@ -382,7 +384,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "f45163c1-3a2b-089d-b3e8-5a20ba641818",
+          "id": "99f4c3d4-51f8-24ce-0b67-69ea9373d41c",
           "name": "untersuche_den_ort",
           "description": "Du kannst den Ort untersuchen und versuchen ob hier interessante Dinge zu finden sind",
           "sound_effect": "",
@@ -395,7 +397,7 @@
           ]
         },
         {
-          "id": "889cd0a0-b278-4d7c-8e3c-268c473a66bf",
+          "id": "6deaad33-5b95-7ab0-5886-80aa4f7277b0",
           "name": "nehme_das_ei",
           "description": "Du kannst das Goldene Ei aufnemen",
           "sound_effect": "effect_retrogame.wav",
@@ -450,7 +452,7 @@
       "type": "StateShape",
       "id": "a90fbdc1-baf9-c77c-2b28-515845099561",
       "userData": {
-        "system_prompt": "Du befindest dich auf einer verlassenen Lichtung, einst prachtvoll, heute wild und verwildert. Hohe Gräser und Dornensträucher formen eine dichte Barriere rundherum, die keinen Durchgang zulässt. Nur ein schmaler, niedergetretener Pfad führt nach Osten und wirkt eigenartig zielgerichtet, als würde er einem unbekannten Zweck dienen.\n\n**Hinweise:**\n- Von diesem Punkt kannst du nur zur Nord- oder Südseite des Hauses oder weiter nach Osten.\n- Andere Wege bleiben verschlossen.\n- Bewegungen und Interaktionen sind ausschließlich über die Dungeon-Funktionen möglich.",
+        "system_prompt": "Du befindest dich auf einer verlassenen Lichtung, einst prachtvoll, heute wild und verwildert. Hohe Gräser und Dornensträucher formen eine dichte Barriere rundherum, die keinen Durchgang zulässt. Nur ein schmaler, niedergetretener Pfad führt nach Osten und wirkt eigenartig zielgerichtet, als würde er einem unbekannten Zweck dienen.\n\nHinweise:\n- Von diesem Punkt kannst du nur zur Nord- oder Südseite des Hauses oder weiter nach Osten.\n- Andere Wege bleiben verschlossen.\n- Bewegungen und Interaktionen sind ausschließlich über die Dungeon-Funktionen möglich.",
         "ambient_sound_volume": 25,
         "ambient_sound": "ambient_wind_horror.wav"
       },
@@ -462,7 +464,7 @@
       "type": "StateShape",
       "id": "7992bf21-a3ee-c240-83f4-bdab4a721e88",
       "userData": {
-        "system_prompt": "Vor dir klafft eine finstere Schlucht, etwa 100 Meter tief und von unheimlicher Kälte erfüllt. Die Wände sind rau und steil, wie von Natur und Zeit gnadenlos zerfurcht. Ein kalter Wind zieht aus der Tiefe herauf, und mit ihm kommen leise, klagende Geräusche – fast wie geflüsterte Schreie, die kaum menschlich klingen, und doch einen Anflug verzweifelter Stimmen haben.\n\nEin Abstieg wäre ohnehin unmöglich; die steilen Felsen bieten keinen Halt. Und selbst wenn man es könnte – wer würde freiwillig hinabsteigen, nur um dem endlosen Gejammer näher zu kommen? Der einzige Weg ist zurück zur verlassenen Lichtung.\n\n**Hinweise:**\n- Von diesem Punkt kannst du nur zurück zur Lichtung.\n- Andere Wege bleiben verschlossen.\n- Bewegungen und Interaktionen sind ausschließlich über die Dungeon-Funktionen möglich.",
+        "system_prompt": "Vor dir klafft eine finstere Schlucht, etwa 100 Meter tief und von unheimlicher Kälte erfüllt. Die Wände sind rau und steil, wie von Natur und Zeit gnadenlos zerfurcht. Ein kalter Wind zieht aus der Tiefe herauf, und mit ihm kommen leise, klagende Geräusche – fast wie geflüsterte Schreie, die kaum menschlich klingen, und doch einen Anflug verzweifelter Stimmen haben.\n\nEin Abstieg wäre ohnehin unmöglich; die steilen Felsen bieten keinen Halt. Und selbst wenn man es könnte – wer würde freiwillig hinabsteigen, nur um dem endlosen Gejammer näher zu kommen? Der einzige Weg ist zurück zur verlassenen Lichtung.\n\nHinweise:\n- Von diesem Punkt kannst du nur zurück zur Lichtung.\n- Andere Wege bleiben verschlossen.\n",
         "ambient_sound_volume": 88,
         "ambient_sound": "ambient_wind_auf_dem_berg.wav"
       },
@@ -919,8 +921,9 @@
         "conditions": [
           "door_closed_gelbe_hoehle == false"
         ],
-        "description": "Du gehst durch die mit gewalt geöffnete Tür in die \"Gelbe Hölle\" hinein",
-        "system_prompt": "Du stehst nun in der sogenannten \"Gelben Hölle\"...super...(ironisch)"
+        "description": "Du gehst durch die mit Gewalt geöffnete Tür in die \"Gelbe Hölle\" hinein",
+        "system_prompt": "Du stehst nun in der sogenannten \"Gelben Hölle\"...super...(ironisch)",
+        "actions": []
       }
     },
     "4e4bdaaa-07eb-986e-80f4-8a7deed9560d": {

@@ -2,10 +2,7 @@
     <div class="property-view" v-if="jsonData.type === 'StateShape'">
 
         <div class="field-group">
-          <div class="label-with-help">
-            <label>State Name</label>
-            <HelpButton @click="openHelp('stateName')" />
-          </div>
+          <PropertyLabel :helpTitle="helpTexts.stateName.title" :helpText="helpTexts.stateName.text">Room Name</PropertyLabel>
           <input
               ref="nameInput"
               id="stateName"
@@ -17,10 +14,7 @@
 
         <!-- Ambient Sound Selection with Finder Dialog -->
         <div class="field-group">
-          <div class="label-with-help">
-            <label>Ambient Sound</label>
-            <HelpButton @click="openHelp('ambientSound')" />
-          </div>
+          <PropertyLabel :helpTitle="helpTexts.ambientSound.title" :helpText="helpTexts.ambientSound.text">Ambient Sound</PropertyLabel>
           <div class="sound-selection">
           <div class="sound-display" @click="showSoundPicker = true">
             <v-icon size="small" class="sound-icon">mdi-music-note</v-icon>
@@ -53,10 +47,7 @@
         </div>
         
         <div class="property-view__section">
-          <div class="label-with-help" v-if="jsonData.userData">
-            <label for="systemPrompt">Scene Description</label>
-            <HelpButton @click="openHelp('sceneDescription')" />
-          </div>
+          <PropertyLabel v-if="jsonData.userData" :helpTitle="helpTexts.sceneDescription.title" :helpText="helpTexts.sceneDescription.text">Scene Description</PropertyLabel>
           <div class="editor-container" v-if="jsonData.userData">
             <Codemirror
                 class="code-editor"
@@ -68,13 +59,6 @@
             <ExpandButton @click="showJinjaEditor = true" />
           </div>
         </div>
-
-        <!-- Help Dialog -->
-        <ExtendedHelpDialog
-          v-model="showHelpDialog"
-          :title="helpTitle"
-          :helpText="helpText"
-        />
 
         <!-- Jinja Editor Dialog -->
         <JinjaEditorDialog
@@ -90,10 +74,9 @@
   import SoundManager from '@/utils/SoundManager'
   import { mapGetters, mapActions } from 'vuex';
   import { MessageTypes, ShapeTypes } from '../../public/shared/SharedConstants.js';
-  import ExtendedHelpDialog from '@/components/ExtendedHelpDialog.vue';
   import JinjaEditorDialog from '@/components/JinjaEditorDialog.vue';
   import SoundSelectDialog from '@/components/SoundSelectDialog.vue';
-  import HelpButton from '@/components/HelpButton.vue';
+  import PropertyLabel from '@/components/PropertyLabel.vue';
   import ExpandButton from '@/components/ExpandButton.vue';
 
   import Codemirror from "codemirror-editor-vue3";
@@ -105,7 +88,7 @@
 
   export default {
     name: 'PropertyView',
-    components: { Codemirror, ExtendedHelpDialog, JinjaEditorDialog, SoundSelectDialog, HelpButton, ExpandButton },
+    components: { Codemirror, JinjaEditorDialog, SoundSelectDialog, PropertyLabel, ExpandButton },
     props: {
         draw2dFrame: {
             type: Object,
@@ -131,15 +114,12 @@
           styleActiveLine: false,
         },
         isPlaying: false,
-        showHelpDialog: false,
         showJinjaEditor: false,
         showSoundPicker: false,
-        helpTitle: '',
-        helpText: '',
         helpTexts: {
           stateName: {
-            title: 'State Name',
-            text: `<p>A label to identify this state in your diagram.</p>
+            title: 'Room Name',
+            text: `<p>A label to identify this room in your diagram.</p>
 
 <p><strong>Good to know:</strong></p>
 <ul>
@@ -254,15 +234,6 @@
         }
       },
 
-      openHelp(fieldKey) {
-        const help = this.helpTexts[fieldKey];
-        if (help) {
-          this.helpTitle = help.title;
-          this.helpText = help.text;
-          this.showHelpDialog = true;
-        }
-      },
-
       updateSystemPrompt(newText) {
         this.jsonData.userData.system_prompt = newText;
         this.onDataChange();
@@ -340,7 +311,6 @@
     display: flex;
     flex-direction: column;
   }
-  .label-with-help label { display: inline-block !important; }
   .property-view textarea {
     resize: vertical;
     flex: 1;
@@ -368,5 +338,4 @@
   }
   .code-editor { flex: 1; display: flex; flex-direction: column; }
   .field-group { display: flex; flex-direction: column; }
-  .label-with-help { display: inline-flex; align-items: center; }
 </style>

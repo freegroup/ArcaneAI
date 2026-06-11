@@ -263,9 +263,10 @@ class GameEngine:
             if state_obj.get('stateType') == 'START':
                 initial_state = name
                 # Don't skip - this is a real state, just marked as start!
-            
+
             state_data = {
                 'description': user_data.get('system_prompt', ''),
+                'state_type': state_obj.get('stateType', 'NORMAL'),
             }
             
             ambient_sound = user_data.get('ambient_sound')

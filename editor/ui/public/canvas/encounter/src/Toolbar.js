@@ -76,8 +76,8 @@ Toolbar = Class.extend({
 			}, 0);
 		});
 
-		// Import State Button
-		this.importButton = this.createButton('Import State');
+		// Import Room Button
+		this.importButton = this.createButton('Import Room');
 		this.html.appendChild(this.importButton);
 		this.importButton.addEventListener('click', () => {
 			window.parent.postMessage({

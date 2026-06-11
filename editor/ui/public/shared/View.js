@@ -311,10 +311,10 @@ View = draw2d.Canvas.extend({
     },
 
 
-    centerDocument: function () 
+    centerDocument: function ()
     {
         this.setZoom(1.0)
-    
+
         let c = $("#container")
         if (this.getFigures().getSize() > 0) {
           // get the bounding box of the document and translate the complete document
@@ -329,6 +329,26 @@ View = draw2d.Canvas.extend({
           }
           this.scrollTo(bb.y - c.height() / 2, bb.x - c.width() / 2)
         }
+    },
+
+    /**
+     * Scroll the canvas so the figure with the given id is centered in the viewport,
+     * and select it so the property panel reflects its data.
+     * Mirrors centerDocument() but targets one figure rather than the whole document.
+     * No-op if the id is not found in this view (e.g. center targets a state outside
+     * the current encounter view).
+     */
+    centerFigure: function (id)
+    {
+        let figure = this.getFigure(id)
+        if (!figure) return
+
+        let c = $("#container")
+        let cx = figure.getX() + figure.getWidth() / 2
+        let cy = figure.getY() + figure.getHeight() / 2
+        this.scrollTo(cy - c.height() / 2, cx - c.width() / 2)
+
+        this.setCurrentSelection(figure)
     },
 
 });

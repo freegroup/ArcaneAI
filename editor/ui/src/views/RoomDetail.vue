@@ -7,7 +7,22 @@
           <div class="room-header__title">
             <span>{{ room.name }}</span>
             <span v-if="isStart" class="room-header__badge">START</span>
+            <span v-if="isEnd" class="room-header__badge room-header__badge--end">END</span>
             <HelpButton @click="showHelp = true" />
+            <span class="room-header__map-links" v-if="containingViews.length > 0">
+              <router-link
+                v-for="v in containingViews"
+                :key="v.viewId"
+                :to="v.routePath"
+                class="room-header__map-link"
+                :title="`Show in ${v.label}`"
+              >
+                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                  <path fill="currentColor" d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM10 5.47l4 1.4v11.66l-4-1.4V5.47zm-5 .99l3-1.01v11.7l-3 1.16V6.46zm14 11.08l-3 1.01V6.86l3-1.16v11.84z"/>
+                </svg>
+                <span class="room-header__map-link-label">{{ v.label }}</span>
+              </router-link>
+            </span>
           </div>
         </div>
 
@@ -86,6 +101,7 @@
         :ambient-volume="ambientVolume"
         :triggers="triggers"
         :exits="exits"
+        :entries="entries"
         @update:ambient-sound="onAmbientSoundChange"
         @update:ambient-volume="onAmbientVolumeChange"
       />
@@ -170,11 +186,52 @@ export default {
   },
   computed: {
     ...mapGetters('model', ['allStates', 'allConnections']),
+    ...mapGetters('views', ['allViews']),
     room() {
       return this.allStates.find(s => s.name === this.roomName) || null
     },
     isStart() {
       return this.room?.stateType === 'START'
+    },
+    isEnd() {
+      return this.room?.stateType === 'END'
+    },
+    /**
+     * All map-views (world + encounters) that contain this room.
+     * A view contains the state if it has a layout entry for that state's UUID.
+     * Each entry exposes a route path with the room name as a hash, so navigation
+     * lands on the right map and the deep-link logic centers the room.
+     */
+    containingViews() {
+      if (!this.room) return []
+      const stateId = this.room.id
+      const encountersById = this.$store.state.encounters?.encounters || {}
+      const hash = encodeURIComponent(this.room.name)
+      return this.allViews
+        .filter(v => v && v.stateLayouts && v.stateLayouts[stateId])
+        .map(v => {
+          if (v.viewId === 'world') {
+            return {
+              viewId: v.viewId,
+              label: 'World',
+              routePath: `/game/${this.gameName}/world#${hash}`
+            }
+          }
+          // viewId is `encounter_<encounterId>`; route uses the encounter id segment.
+          const encounterId = v.viewId.replace(/^encounter_/, '')
+          const encounter = encountersById[encounterId]
+          return {
+            viewId: v.viewId,
+            label: encounter?.name || encounterId,
+            routePath: `/game/${this.gameName}/encounter/${encounterId}#${hash}`
+          }
+        })
+        // World first, encounters alphabetically after.
+        .sort((a, b) => {
+          if (a.viewId === 'world') return -1
+          if (b.viewId === 'world') return 1
+          return a.label.localeCompare(b.label)
+        })
     },
     storeText() {
       return this.room?.userData?.system_prompt || ''
@@ -203,6 +260,24 @@ export default {
             conditions: c.userData?.conditions || [],
             targetId,
             targetName: targetState?.name
+          }
+        })
+    },
+    entries() {
+      if (!this.room) return []
+      const targetId = this.room.id
+      return this.allConnections
+        .filter(c => c.target?.node === targetId)
+        .map(c => {
+          const sourceId = c.source?.node
+          const sourceState = this.allStates.find(s => s.id === sourceId)
+          return {
+            id: c.id,
+            name: c.name,
+            description: c.userData?.description,
+            conditions: c.userData?.conditions || [],
+            sourceId,
+            sourceName: sourceState?.name
           }
         })
     }
@@ -352,6 +427,44 @@ export default {
   color: #1a1a1a;
 }
 
+.room-header__badge--end {
+  background: #d9534f;
+  color: #fff;
+}
+
+.room-header__map-links {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 8px;
+}
+.room-header__map-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  color: inherit;
+  opacity: 0.7;
+  border: 1px solid rgba(127, 127, 127, 0.3);
+  border-radius: 4px;
+  transition: opacity 0.15s, background 0.15s, border-color 0.15s;
+}
+.room-header__map-link:hover {
+  opacity: 1;
+  background: rgba(127, 127, 127, 0.1);
+}
+.room-header__map-link svg {
+  flex-shrink: 0;
+}
+.room-header__map-link-label {
+  white-space: nowrap;
+}
+
 /* Editor — same pattern as full-height-editor */
 .full-height-editor {
   flex: 1 1 auto;
@@ -361,7 +474,7 @@ export default {
 }
 
 .full-height-editor.editor-collapsed {
-  flex: 0.6;
+  /* No height shrinking — see Personality.vue for rationale. */
 }
 
 .full-height-editor >>> .CodeMirror-gutters {

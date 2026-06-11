@@ -6,15 +6,15 @@
   >
     <v-card v-if="trigger" class="room-action-editor-dialog">
       <DialogHeader
-        title="Edit Action"
+        title="Action Editor"
         icon="mdi-pencil"
         @close="close"
       />
 
-      <v-card-text class="action-editor__body dialog-content">
+      <v-card-text class="action-editor__body dialog-content property-view">
 
         <div class="field-group">
-          <label>Name</label>
+          <PropertyLabel>Name</PropertyLabel>
           <input
             type="text"
             v-model="local.name"
@@ -23,7 +23,7 @@
         </div>
 
         <div class="field-group">
-          <label>Sound Effect</label>
+          <PropertyLabel>Sound Effect</PropertyLabel>
           <div class="sound-selection">
             <div class="sound-display" @click="showSoundPicker = true">
               <span class="sound-name">{{ local.sound_effect || 'No sound selected' }}</span>
@@ -71,7 +71,7 @@
         </div>
 
         <div class="field-group">
-          <label>Description</label>
+          <PropertyLabel>Description</PropertyLabel>
           <textarea
             v-model="local.description"
             placeholder="What can the player do here?"
@@ -81,7 +81,7 @@
         </div>
 
         <div class="field-group">
-          <label>On Success</label>
+          <PropertyLabel>On Success</PropertyLabel>
           <textarea
             v-model="local.system_prompt"
             placeholder="What happens when the action succeeds?"
@@ -91,7 +91,7 @@
         </div>
 
         <div class="field-group">
-          <label>Conditions</label>
+          <PropertyLabel>Conditions</PropertyLabel>
           <textarea
             v-model="conditionsText"
             placeholder="e.g. has_key == true (one per line)"
@@ -101,7 +101,7 @@
         </div>
 
         <div class="field-group">
-          <label>Actions (Effects)</label>
+          <PropertyLabel>Actions (Effects)</PropertyLabel>
           <textarea
             v-model="actionsText"
             placeholder="e.g. coins = coins + 1 (one per line)"
@@ -128,10 +128,11 @@ import SoundManager from '@/utils/SoundManager'
 import SoundSelectDialog from '@/components/SoundSelectDialog.vue'
 import DialogHeader from '@/components/DialogHeader.vue'
 import ThemedButton from '@/components/ThemedButton.vue'
+import PropertyLabel from '@/components/PropertyLabel.vue'
 
 export default {
   name: 'RoomActionEditor',
-  components: { SoundSelectDialog, DialogHeader, ThemedButton },
+  components: { SoundSelectDialog, DialogHeader, ThemedButton, PropertyLabel },
   props: {
     modelValue: { type: Boolean, default: false },
     trigger: { type: Object, default: null }

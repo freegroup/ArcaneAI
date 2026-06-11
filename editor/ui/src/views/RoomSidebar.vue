@@ -13,11 +13,11 @@
       {{ collapsed ? '◀' : '▶' }}
     </button>
 
-    <div class="room-sidebar__content" v-show="!collapsed">
+    <div class="room-sidebar__content property-view" v-show="!collapsed">
 
       <!-- Ambient Sound (same pattern as StateProperty.vue) -->
       <section class="room-sidebar__section">
-        <h4 class="room-sidebar__title">Ambient Sound</h4>
+        <PropertyLabel>Ambient Sound</PropertyLabel>
         <div class="sound-selection">
           <div class="sound-display" @click="showSoundPicker = true">
             <v-icon size="small" class="sound-icon">mdi-music-note</v-icon>
@@ -51,41 +51,40 @@
       </section>
 
       <section class="room-sidebar__section">
-        <h4 class="room-sidebar__title">Actions</h4>
+        <PropertyLabel>Actions</PropertyLabel>
         <p v-if="!triggers || triggers.length === 0" class="room-sidebar__muted">No actions.</p>
         <ul class="room-sidebar__list" v-else>
           <li v-for="t in triggers" :key="t.id || t.name" class="room-sidebar__item room-sidebar__item--action">
-            <span class="room-sidebar__item-name">{{ t.name }}</span>
-            <button
-              class="room-sidebar__edit-btn"
-              @click="editTrigger(t)"
-              title="Edit action"
-            >…</button>
+            <span class="room-sidebar__item-name">{{ t.name }}<span v-if="t.conditions?.length" class="room-sidebar__lock">🔒</span></span>
+            <button class="room-sidebar__edit-btn" @click="editTrigger(t)" title="Edit action">…</button>
           </li>
         </ul>
       </section>
 
       <section class="room-sidebar__section">
-        <h4 class="room-sidebar__title">Exits</h4>
+        <PropertyLabel>Entries</PropertyLabel>
+        <p v-if="!entries || entries.length === 0" class="room-sidebar__muted">No entries.</p>
+        <ul class="room-sidebar__list" v-else>
+          <li v-for="c in entries" :key="c.id" class="room-sidebar__item room-sidebar__item--action">
+            <span class="room-sidebar__item-body">
+              <span class="room-sidebar__item-hint">{{ c.sourceName || '?' }}</span>
+              <span class="room-sidebar__item-name">{{ c.name || '(unnamed)' }}<span v-if="c.conditions?.length" class="room-sidebar__lock">🔒</span></span>
+            </span>
+            <button class="room-sidebar__edit-btn" @click="editConnection(c)" title="Edit connection">…</button>
+          </li>
+        </ul>
+      </section>
+
+      <section class="room-sidebar__section">
+        <PropertyLabel>Exits</PropertyLabel>
         <p v-if="!exits || exits.length === 0" class="room-sidebar__muted">No exits.</p>
         <ul class="room-sidebar__list" v-else>
           <li v-for="c in exits" :key="c.id" class="room-sidebar__item room-sidebar__item--action">
-            <span class="room-sidebar__item-name">
-              {{ c.name || '(unbenannt)' }}
-              <span class="room-sidebar__arrow">→</span>
-              <router-link
-                v-if="c.targetName && gameName"
-                :to="`/game/${gameName}/rooms/${c.targetName}`"
-                class="room-sidebar__link"
-                @click.stop
-              >{{ c.targetName }}</router-link>
-              <span v-else class="room-sidebar__muted">{{ c.targetId }}</span>
+            <span class="room-sidebar__item-body">
+              <span class="room-sidebar__item-name">{{ c.name || '(unnamed)' }}<span v-if="c.conditions?.length" class="room-sidebar__lock">🔒</span></span>
+              <span class="room-sidebar__item-hint">{{ c.targetName || '?' }}</span>
             </span>
-            <button
-              class="room-sidebar__edit-btn"
-              @click="editExit(c)"
-              title="Edit exit"
-            >…</button>
+            <button class="room-sidebar__edit-btn" @click="editConnection(c)" title="Edit exit">…</button>
           </li>
         </ul>
       </section>
@@ -96,9 +95,9 @@
       v-model="editorOpen"
       :trigger="editingTrigger"
     />
-    <RoomExitEditor
-      v-model="exitEditorOpen"
-      :exit="editingExit"
+    <ConnectionEditor
+      v-model="connectionEditorOpen"
+      :exit="editingConnection"
       :source-id="sourceId"
     />
   </v-navigation-drawer>
@@ -108,19 +107,21 @@
 import { mapGetters } from 'vuex'
 import SoundManager from '@/utils/SoundManager'
 import SoundSelectDialog from '@/components/SoundSelectDialog.vue'
+import PropertyLabel from '@/components/PropertyLabel.vue'
 import RoomActionEditor from './RoomActionEditor.vue'
-import RoomExitEditor from './RoomExitEditor.vue'
+import ConnectionEditor from './ConnectionEditor.vue'
 
 export default {
   name: 'RoomSidebar',
-  components: { SoundSelectDialog, RoomActionEditor, RoomExitEditor },
+  components: { SoundSelectDialog, PropertyLabel, RoomActionEditor, ConnectionEditor },
   props: {
     gameName: { type: String, default: '' },
     sourceId: { type: String, default: null },
     ambientSound: { type: String, default: null },
     ambientVolume: { type: Number, default: null },
     triggers: { type: Array, default: () => [] },
-    exits: { type: Array, default: () => [] }
+    exits: { type: Array, default: () => [] },
+    entries: { type: Array, default: () => [] }
   },
   emits: ['update:ambient-sound', 'update:ambient-volume'],
   data() {
@@ -131,8 +132,8 @@ export default {
       removeSoundListener: null,
       editorOpen: false,
       editingTrigger: null,
-      exitEditorOpen: false,
-      editingExit: null
+      connectionEditorOpen: false,
+      editingConnection: null,
     }
   },
   computed: {
@@ -177,9 +178,9 @@ export default {
       this.editingTrigger = t
       this.editorOpen = true
     },
-    editExit(c) {
-      this.editingExit = c
-      this.exitEditorOpen = true
+    editConnection(c) {
+      this.editingConnection = c
+      this.connectionEditorOpen = true
     }
   }
 }
@@ -283,8 +284,27 @@ export default {
   justify-content: space-between;
   padding: 6px 10px;
 }
-.room-sidebar__item--action .room-sidebar__item-name {
-  margin-bottom: 0;
+.room-sidebar__item-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+.room-sidebar__item-name {
+  font-weight: 600;
+  font-size: 0.88rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.room-sidebar__item-hint {
+  font-size: 0.72rem;
+  opacity: 0.45;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .room-sidebar__edit-btn {
   background: none;
@@ -311,6 +331,11 @@ export default {
   color: inherit;
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+.room-sidebar__lock {
+  margin-left: 5px;
+  font-size: 0.75em;
+  opacity: 0.7;
 }
 .room-sidebar__item-desc {
   font-size: 0.82rem;

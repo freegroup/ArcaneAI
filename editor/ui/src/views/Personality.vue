@@ -266,7 +266,9 @@ export default {
 }
 
 .full-height-editor.editor-collapsed {
-  flex: 0.6;
+  /* No height shrinking — `flex: 1 1 auto` already lets the AI Assist panel
+     take whatever vertical space it needs. Setting flex: 0.6 here caused the
+     editor to detach from the panel above and leave a gap. */
 }
 
 .full-height-editor >>> .CodeMirror-gutters {

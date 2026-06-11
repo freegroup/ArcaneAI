@@ -48,6 +48,7 @@ class StateEngine:
                 name=state_name,
                 description=state_data['description'],
                 session=session,
+                state_type=state_data.get('state_type', 'NORMAL'),
                 ambient_sound=state_data.get('ambient_sound'),
                 ambient_sound_volume=state_data.get('ambient_sound_volume', 100)
             )

@@ -115,8 +115,19 @@ StateShape = draw2d.shape.box.VBox.extend({
                     }},
                     "sep2": {},
                     "start": { name: "Set as Start", callback: () => {
-                        this.setStateType(StateType.START);
-                        window.parent.postMessage({ type: MessageTypes.C2V_MODEL_CHANGED }, '*');
+                        this.getCanvas().getCommandStack().execute(
+                            new draw2d.command.CommandAttr(this, { stateType: StateType.START })
+                        );
+                    }},
+                    "end": { name: "Set as End", callback: () => {
+                        this.getCanvas().getCommandStack().execute(
+                            new draw2d.command.CommandAttr(this, { stateType: StateType.END })
+                        );
+                    }},
+                    "normal": { name: "Set as Normal", callback: () => {
+                        this.getCanvas().getCommandStack().execute(
+                            new draw2d.command.CommandAttr(this, { stateType: StateType.NORMAL })
+                        );
                     }},
                     "delete": { name: "Delete", callback: () => {
                         this.getCanvas().getCommandStack().execute(new draw2d.command.CommandDelete(this));

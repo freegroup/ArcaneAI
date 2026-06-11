@@ -6,15 +6,23 @@
   >
     <v-card v-if="exit" class="room-action-editor-dialog">
       <DialogHeader
-        title="Edit Exit"
         icon="mdi-pencil"
         @close="close"
-      />
+      >
+        <span class="conn-header">
+          <span class="conn-header__title">Transition Editor</span>
+          <span class="conn-header__route">
+            <span class="conn-header__room">{{ sourceRoomName }}</span>
+            <span class="conn-header__arrow">────▶</span>
+            <span class="conn-header__room">{{ targetRoomName }}</span>
+          </span>
+        </span>
+      </DialogHeader>
 
-      <v-card-text class="action-editor__body dialog-content">
+      <v-card-text class="action-editor__body dialog-content property-view">
 
         <div class="field-group">
-          <label>Name</label>
+          <PropertyLabel>Name</PropertyLabel>
           <input
             type="text"
             v-model="local.name"
@@ -23,20 +31,7 @@
         </div>
 
         <div class="field-group">
-          <label>Target Room</label>
-          <v-select
-            v-model="local.targetId"
-            :items="targetOptions"
-            item-title="name"
-            item-value="id"
-            density="compact"
-            hide-details
-            @update:model-value="onChange"
-          />
-        </div>
-
-        <div class="field-group">
-          <label>Sound Effect</label>
+          <PropertyLabel>Sound Effect</PropertyLabel>
           <div class="sound-selection">
             <div class="sound-display" @click="showSoundPicker = true">
               <span class="sound-name">{{ local.sound_effect || 'No sound selected' }}</span>
@@ -84,7 +79,7 @@
         </div>
 
         <div class="field-group">
-          <label>Description</label>
+          <PropertyLabel>Description</PropertyLabel>
           <textarea
             v-model="local.description"
             placeholder="What does the player see at this exit?"
@@ -94,7 +89,7 @@
         </div>
 
         <div class="field-group">
-          <label>On Success</label>
+          <PropertyLabel>On Success</PropertyLabel>
           <textarea
             v-model="local.system_prompt"
             placeholder="What happens when the player takes this exit?"
@@ -104,7 +99,7 @@
         </div>
 
         <div class="field-group">
-          <label>Conditions</label>
+          <PropertyLabel>Conditions</PropertyLabel>
           <textarea
             v-model="conditionsText"
             placeholder="e.g. has_key == true (one per line)"
@@ -114,7 +109,7 @@
         </div>
 
         <div class="field-group">
-          <label>Actions (Effects)</label>
+          <PropertyLabel>Actions (Effects)</PropertyLabel>
           <textarea
             v-model="actionsText"
             placeholder="e.g. coins = coins + 1 (one per line)"
@@ -141,16 +136,13 @@ import SoundManager from '@/utils/SoundManager'
 import SoundSelectDialog from '@/components/SoundSelectDialog.vue'
 import DialogHeader from '@/components/DialogHeader.vue'
 import ThemedButton from '@/components/ThemedButton.vue'
+import PropertyLabel from '@/components/PropertyLabel.vue'
 
 export default {
-  name: 'RoomExitEditor',
-  components: { SoundSelectDialog, DialogHeader, ThemedButton },
+  name: 'ConnectionEditor',
+  components: { SoundSelectDialog, DialogHeader, ThemedButton, PropertyLabel },
   props: {
     modelValue: { type: Boolean, default: false },
-    /**
-     * Exit object as exposed by RoomDetail.vue: { id, name, description, conditions, targetId, targetName }
-     * The id is the connection id in the model store.
-     */
     exit: { type: Object, default: null },
     /**
      * Source state ID — the room this exit leaves from. Required to keep the
@@ -178,6 +170,24 @@ export default {
       get() { return this.modelValue },
       set(v) { this.$emit('update:modelValue', v) }
     },
+    resolvedRoomName() {
+      const id = this.local?.targetId
+      if (!id) return '—'
+      const s = this.allStates.find(s => s.id === id)
+      return s?.name || id
+    },
+    sourceRoomName() {
+      const id = this.local?.sourceId
+      if (!id) return '?'
+      const s = this.allStates.find(s => s.id === id)
+      return s?.name || '?'
+    },
+    targetRoomName() {
+      const id = this.local?.targetId
+      if (!id) return '?'
+      const s = this.allStates.find(s => s.id === id)
+      return s?.name || '?'
+    },
     targetOptions() {
       // Sorted list of all rooms — user picks one as the new target.
       // Exclude the current source room: an exit pointing back to itself
@@ -200,6 +210,7 @@ export default {
           this.local = {
             id: e.id,
             name: e.name || conn.name || '',
+            sourceId: e.sourceId || conn.source?.node || null,
             targetId: e.targetId || conn.target?.node || null,
             description: ud.description || '',
             system_prompt: ud.system_prompt || '',
@@ -229,7 +240,7 @@ export default {
     ...mapActions('model', ['updateConnection']),
     makeEmpty() {
       return {
-        id: null, name: '', targetId: null,
+        id: null, name: '', sourceId: null, targetId: null,
         description: '', system_prompt: '',
         sound_effect: '', sound_effect_volume: 100, sound_effect_duration: 2,
         conditions: [], actions: []
@@ -355,4 +366,43 @@ export default {
 .sound-controls { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
 .sound-control-row { display: flex; align-items: center; gap: 8px; }
 .sound-control-icon { flex-shrink: 0; }
+.readonly-field {
+  padding: 6px 10px;
+  border: 1px solid rgba(127,127,127,0.3);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  opacity: 0.75;
+  font-style: italic;
+}
+.conn-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.conn-header__title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+.conn-header__route {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  opacity: 0.65;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 0.02em;
+  overflow: hidden;
+}
+.conn-header__room {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 140px;
+}
+.conn-header__arrow {
+  flex-shrink: 0;
+  opacity: 0.5;
+}
 </style>

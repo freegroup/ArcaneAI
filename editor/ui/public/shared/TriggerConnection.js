@@ -35,26 +35,50 @@ var TriggerConnection= draw2d.Connection.extend({
                 name: this.getName
             , ...getter});
     
-      // Create any Draw2D figure as decoration for the connection
-      //
-      this.label = new draw2d.shape.basic.Label({
-          text:"trigger_name_to_fire",
-          padding:{left:10, top:5, right:10, bottom:5},
-          radius: 5,
-          fontColor: getVar('--connection-label-font', '#3f3f34'),
-          fontSize: parseInt(getVar('--global-font-size', '18')),
-          stroke: parseInt(getVar('--label-stroke', '2')),
+      const fontSize   = parseInt(getVar('--global-font-size', '18'));
+      const fontFamily = getVar('--global-font-family', 'Ithaca, monospace');
+      const fontColor  = getVar('--connection-label-font', '#3f3f34');
+
+      // HBox container — replaces the single label
+      this.label = new draw2d.shape.box.HBox({
+          stroke:  parseInt(getVar('--label-stroke', '2')),
+          radius:  5,
           bgColor: getVar('--connection-label-bg', '#cce5bc'),
-          fontFamily: getVar('--global-font-family', 'Ithaca, monospace'),
-          color : this.defaultColor
+          color:   this.defaultColor,
+          padding:    {left: 10, top: 10, right: 10, bottom: 5},
+          gap:     0,
       });
-      
+
+      this.lockIcon = new draw2d.shape.icon.Lock({
+          width:      20,
+          height:     20,
+          color:      getVar('--connection-label-font', '#3f3f34'),
+          bgColor:    "none",
+          stroke:     0,
+          resizeable: false,
+          visible:    false,
+      });
+
+      this.textLabel = new draw2d.shape.basic.Label({
+          text:       "trigger_name_to_fire",
+          stroke:     0,
+          bgColor:    "none",
+          color:      "none",
+          padding:    {left: 10,top:0, right: 10},
+          fontColor:  fontColor,
+          fontSize:   fontSize,
+          fontFamily: fontFamily,
+          selectable: false,
+          draggable:  false,
+      });
+
+      this.label.add(this.lockIcon);
+      this.label.add(this.textLabel);
+
       // add the new decoration to the connection with a position locator.
       //
       this.add(this.label, new draw2d.layout.locator.ManhattanMidpointLocator());
-      this.label.setSelectionAdapter( null) 
-
-      //this.label.installEditor(new draw2d.ui.LabelInplaceEditor());
+      this.label.setSelectionAdapter( null)
 
       this.on("change:userData", (emitter, event) => {
         this.updateStyle()
@@ -62,26 +86,26 @@ var TriggerConnection= draw2d.Connection.extend({
     },
 
     updateStyle: function(){
-        this.attr("dasharray", this.attr("userData")?.conditions?.length >0?"- ":null)
+        const hasConditions = this.attr("userData")?.conditions?.length > 0;
+        this.attr("dasharray", hasConditions ? "- " : null);
+        this.lockIcon.setVisible(hasConditions);
     },
 
     /**
      * @method
      * Set the name of the DB table. Visually it is the header of the shape
-     * 
-     * @param name
      */
     setName: function(name)
     {
-        this.label.setText(name);
+        this.textLabel.setText(name);
         return this;
     },
-        
+
     getName: function()
     {
-        return this.label.getText();
+        return this.textLabel.getText();
     },
-      
+
     setAlpha: function(alpha){
         this._super(alpha)
         this.label.setAlpha(alpha)

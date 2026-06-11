@@ -112,9 +112,13 @@ class GameController:
             target=self.voice.speak, args=(self.session, narrative), daemon=True
         ).start()
 
+        current_state = self.session.game_engine.state_engine.get_current_state()
+        game_over = current_state.is_end
+
         return {
             'response': narrative,
             'executed_action': chosen_name if chosen_name != 'keine_aktion' else None,
+            'game_over': game_over,
         }
 
     # kept for external callers (e.g. runners that check goal drift)

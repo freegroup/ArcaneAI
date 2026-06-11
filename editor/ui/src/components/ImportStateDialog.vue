@@ -2,7 +2,7 @@
   <v-dialog v-model="dialogVisible" max-width="600" @update:model-value="onDialogChange">
     <v-card class="import-state-dialog">
       <DialogHeader
-        title="Import State"
+        title="Import Room"
         @close="close"
       />
 
@@ -11,7 +11,7 @@
         <v-text-field
           v-model="searchQuery"
           prepend-inner-icon="mdi-magnify"
-          placeholder="Search states..."
+          placeholder="Search rooms..."
           density="compact"
           hide-details
           clearable
@@ -24,14 +24,14 @@
         <!-- Loading State -->
         <div v-if="loading" class="loading-state">
           <v-progress-circular indeterminate color="primary"></v-progress-circular>
-          <span>Loading states...</span>
+          <span>Loading rooms...</span>
         </div>
 
         <!-- Empty State -->
         <div v-else-if="filteredStates.length === 0" class="empty-state">
           <v-icon size="48" class="mb-2">mdi-file-document-outline</v-icon>
-          <span v-if="searchQuery">No states found for "{{ searchQuery }}"</span>
-          <span v-else>No states available to import</span>
+          <span v-if="searchQuery">No rooms found for "{{ searchQuery }}"</span>
+          <span v-else>No rooms available to import</span>
         </div>
 
         <!-- State List -->

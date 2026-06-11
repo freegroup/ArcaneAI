@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <!-- Import State Dialog -->
+    <!-- Import Room Dialog -->
     <ImportStateDialog v-model="showImportStateDialog" />
     
     <!-- Chat Dialog -->
@@ -65,6 +65,7 @@ export default {
     ...mapGetters('game', ['encounters', 'gameName']),
     ...mapGetters('views', ['currentView']),
     ...mapGetters('settings', ['currentTheme']),
+    ...mapGetters('model', ['allStates']),
     
     encounterId() {
       // Router param is :encounterName (not :encounterId)
@@ -87,6 +88,21 @@ export default {
       };
       const view = this.currentView;
       return ViewComposer.compose(model, view);
+    },
+
+    /**
+     * Resolve URL hash (e.g. `#FriedhofDerTraeume`) to a state UUID for deep-linking.
+     * Returns null if the hash is empty or the name doesn't match a state in this view.
+     * The canvas's centerFigure handles the case where the resolved state is not
+     * present in the current encounter (no-op).
+     */
+    centerStateId() {
+      const raw = this.$route.hash || '';
+      if (!raw) return null;
+      const name = decodeURIComponent(raw.slice(1));
+      if (!name) return null;
+      const state = this.allStates.find(s => s && s.name === name);
+      return state ? state.id : null;
     }
   },
   watch: {
@@ -95,11 +111,18 @@ export default {
         if (newDiagram && this.canvasReady) {
           if (this.isCanvasUpdate) return;
           if (this.$store.state.model.isPropertyUpdate) return;
-          this.sendDocumentToCanvas(newDiagram);
+          this.sendDocumentToCanvas(newDiagram, this.centerStateId);
         }
       },
       deep: true,
       immediate: false
+    },
+
+    // Re-center when the deep-link hash changes without a full diagram reload.
+    '$route.hash'() {
+      if (this.canvasReady && this.composedDiagram) {
+        this.sendDocumentToCanvas(this.composedDiagram, this.centerStateId);
+      }
     },
     
     encounterId: {
@@ -206,10 +229,11 @@ export default {
       }
     },
     
-    sendDocumentToCanvas(document) {
+    sendDocumentToCanvas(document, centerId = null) {
       window.postMessage({
         type: MessageTypes.V2C_SET_DOCUMENT,
         data: JSON.parse(JSON.stringify(document)),
+        center: centerId || undefined,
         source: `vue:encounter:${this.viewId}`
       }, '*');
     },
@@ -245,7 +269,7 @@ export default {
           this.canvasReady = true;
           this.sendThemeToCanvas(this.currentTheme);
           if (this.composedDiagram && this.composedDiagram.length > 0) {
-            this.sendDocumentToCanvas(this.composedDiagram);
+            this.sendDocumentToCanvas(this.composedDiagram, this.centerStateId);
           }
           break;
 

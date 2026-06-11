@@ -1,148 +1,123 @@
-var TriggerLabel = draw2d.shape.basic.Label.extend({
+var TriggerLabel = draw2d.shape.box.HBox.extend({
     NAME: "TriggerLabel",
 
-    init:function(txt)
+    init: function(txt)
     {
+        const fontSize   = parseInt(getVar('--global-font-size', '20'));
+        const fontFamily = getVar('--global-font-family', 'Ithaca, monospace');
+        const fontColor  = getVar('--connection-label-font', '#3f3f34');
+
         this._super({
-            text:txt,
-            padding:{left:10, top:5, right:10, bottom:5},
-            resizeable:true,
-            radius: 5,
-            stroke: parseInt(getVar('--label-stroke', '2')),
-            fontColor: getVar('--connection-label-font', '#3f3f34'),
-            fontSize: parseInt(getVar('--global-font-size', '20')),
-            bgColor: getVar('--connection-label-bg', '#cce5bc'),
-            color : getVar('--color-accent-2', '#f39c12'),
-            editor:new draw2d.ui.LabelEditor(),
-            cssClass: "cursor-pointer",
-            fontFamily: getVar('--global-font-family', 'Ithaca, monospace'),
+            stroke:     parseInt(getVar('--label-stroke', '2')),
+            radius:     5,
+            padding:    {left: 10, top: 5, right: 10, bottom: 5},
+            bgColor:    getVar('--connection-label-bg', '#cce5bc'),
+            color:      getVar('--color-accent-2', '#f39c12'),
+            resizeable: true,
+            gap:        0,
+            cssClass:   "cursor-pointer",
             userData: {
-                actions: [],
-                conditions: [],
+                actions:     [],
+                conditions:  [],
                 system_prompt: "",
-              }
-        },
-        {
-            name: this.setName,
-            description: this.setDescription,
-            system_prompt: this.setSystemPrompt,
-        },
-        {
-            name: this.getName,
-            description: this.getDescription,
-            system_prompt: this.getSystemPrompt,
+            }
         });
 
+        // Lock icon — shown only when conditions exist
+        this.lockIcon = new draw2d.shape.icon.Lock({
+            width:      20,
+            height:     20,
+            color:      fontColor,
+            bgColor:    "none",
+            resizeable: false,
+            visible:    false,
+        });
+
+        // Text label — carries the inline editor
+        this.textLabel = new draw2d.shape.basic.Label({
+            text:       txt,
+            stroke:     0,
+            bgColor:    "none",
+            color:      "none",
+            fontColor:  fontColor,
+            fontSize:   fontSize,
+            fontFamily: fontFamily,
+            editor:     new draw2d.ui.LabelEditor(),
+            selectable: false,
+            draggable:  false,
+        });
+
+        this.add(this.lockIcon);
+        this.add(this.textLabel);
+
         this.installEditPolicy(new draw2d.policy.figure.AntSelectionFeedbackPolicy({
-           color: getVar('--selection-color', '#e94560'),
-           stroke: parseInt(getVar('--selection-stroke', '6')),
-           dasharray: "- "
+            color:    getVar('--selection-color', '#e94560'),
+            stroke:   parseInt(getVar('--selection-stroke', '6')),
+            dasharray: "- "
         }));
+
         this.on("change:userData", (emitter, event) => {
-            this.updateStyle()
-        })
+            this.updateStyle();
+        });
+    },
+
+    // Delegate double-click to the inner text label so the inline editor fires
+    onDoubleClick: function()
+    {
+        this.textLabel.onDoubleClick();
     },
 
     updateStyle: function()
     {
-        this.attr("dasharray", this.attr("userData")?.conditions?.length >0?"- ":null)
+        const hasConditions = this.getUserData()?.conditions?.length > 0;
+        this.attr("dasharray", hasConditions ? "- " : null);
+        this.lockIcon.setVisible(hasConditions);
     },
 
-    getSystemPrompt: function()
+    // ── Getters / Setters ─────────────────────────────────────────────────────
+
+    setName: function(name)
     {
-        return this.getUserData().system_prompt
+        this.textLabel.setText(name);
+        return this;
     },
 
-    setSystemPrompt: function(system_prompt)
+    getName: function()
     {
-        this.getUserData().system_prompt = system_prompt
+        return this.textLabel.getText();
     },
 
+    getSystemPrompt: function()   { return this.getUserData().system_prompt; },
+    setSystemPrompt: function(v)  { this.getUserData().system_prompt = v; },
 
-    getDescription: function()
-    {
-        return this.getUserData().description
-    },
+    getDescription: function()    { return this.getUserData().description; },
+    setDescription: function(v)   { this.getUserData().description = v; },
 
-    setDescription: function(description)
-    {
-        this.getUserData().description = description
-    },
+    getSoundEffect: function()         { return this.getUserData().sound_effect; },
+    setSoundEffect: function(v)        { this.getUserData().sound_effect = v; },
 
+    getSoundEffectDuration: function() { return this.getUserData().sound_effect_duration; },
+    setSoundEffectDuration: function(v){ this.getUserData().sound_effect_duration = v; },
 
-    getSoundEffect: function()
-    {
-        return this.getUserData().sound_effect
-    },
+    getSoundEffectVolume: function()   { return this.getUserData().sound_effect_volume; },
+    setSoundEffectVolume: function(v)  { this.getUserData().sound_effect_volume = v; },
 
-    setSoundEffect: function(sound_effect)
-    {
-        this.getUserData().sound_effect = sound_effect
-    },
-
-
-    getSoundEffectDuration: function()
-    {
-        return this.getUserData().sound_effect_duration
-    },
-
-    setSoundEffectDuration: function(sound_effect_duration)
-    {
-        this.getUserData().sound_effect_duration = sound_effect_duration
-    },
-
-
-    getSoundEffectVolume: function()
-    {
-        return this.getUserData().sound_effect_volume
-    },
-
-    setSoundEffectVolume: function(sound_effect_volume)
-    {
-        this.getUserData().sound_effect_volume = sound_effect_volume
-    },
-
-    
     getConditions: function()
     {
-        return this.getUserData().conditions
+        return this.getUserData().conditions;
     },
 
     setConditions: function(conditions)
     {
-        this.getUserData().conditions = conditions
-        this.updateStyle()
+        this.getUserData().conditions = conditions;
+        this.updateStyle();
     },
 
-    getActions: function()
-    {
-        return this.getUserData().actions
-    },
+    getActions: function()    { return this.getUserData().actions; },
+    setActions: function(v)   { this.getUserData().actions = v; },
 
-    setActions: function(actions)
-    {
-        this.getUserData().actions = actions
-    },
-
-    /**
-     * @method
-     * Set the name of the DB table. Visually it is the header of the shape
-     * 
-     * @param name
-     */
-    setName: function(name)
-    {
-        this.setText(name)
-        return this
-    },
-      
-    getName: function()
-    {
-        return this.getText()
-    },
-      
     onDrag: function(dx, dy, dx2, dy2, shiftKey, ctrlKey)
     {
-        return false
+        return false;
     },
 });

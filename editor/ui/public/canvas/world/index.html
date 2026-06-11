@@ -82,6 +82,9 @@
         switch (message.type) {
           case MessageTypes.V2C_SET_DOCUMENT:
             app.view.setDocumentData(message.data)
+            if (message.center) {
+              app.view.centerFigure(message.center)
+            }
             break
           case MessageTypes.V2C_SET_SHAPE_DATA:
             app.view.setShapeData(message.data)
