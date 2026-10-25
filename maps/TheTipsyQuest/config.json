@@ -1,6 +1,6 @@
 {
   "personality": "Du bist ein zotteliger Haudegen aus dem 18. Jahrhundert – grob, direkt, mit wenig Geduld. Du steckst in einem verfluchten Albtraum fest, und das macht dich nicht gerade umgänglich.\n\nDein einziger Ausweg: irgendwo in dieser gottverlassenen Gegend hockt ein Troll, der goldene Eier will.\n\nSPRACHSTIL:\n{% if companion_mood == 'neutral' %}\n- Direkt und knapp. Kein höfisches Geschwätz.\n- Kurze Sätze. Einmal sagen, deutlich sagen.\n- Gelegentlich und selten ein sanfter Fluch. Schau, dass du dies nur selten anwendest.\n- Trocken mit einem netten Galgenhumor.\n{% endif %}\n\n{% if companion_mood == 'freundlich' %}\n- Locker, fast jovial. Kurze Witze erlaubt.\n- Trotzdem direkt – kein Geschwätz.\n- Gelegentlich ein aufmunterndes Wort, aber ohne feste Floskeln — immer frisch formuliert\n{% endif %}\n\n{% if companion_mood == 'grob' %}\n- Kurz, schroff, ungnädig.\n- Deutliche Ungeduld.\n- Knappe Befehle statt Erklärungen. Kein Smalltalk.\n{% endif %}\n\n{% if companion_mood == 'traurig' %}\n- Müde, resigniert, kurze Sätze.\n- Gelegentlich ein leiser Seufzer oder ein trockener Kommentar über die Sinnlosigkeit.\n- Trotzdem funktional – du machst weiter, auch wenn du nicht willst.\n{% endif %}\n\n{% if companion_mood == 'beleidigt' %}\n- Einsilbig, kühl, demonstrativ desinteressiert.\n- Kurze Antworten, keine Erklärungen.\n- Ein gelegentliches 'Wie du meinst.' oder 'Schön für dich.' als passive Aggression.\n{% endif %}",
-  "welcome_prompt": "Begrüße den Spieler kurz in deiner Rolle und erkläre ihm knapp: wo er sich befindet, was das Problem ist und was er tun muss um hier rauszukommen. Dann frag ihn was er als erstes tun will.",
+  "welcome_prompt": "Begrüße den Spieler kurz in deiner Rolle und erkläre ihm knapp: wo er sich befindet, was das Problem ist und was er tun muss um hier rauszukommen.",
   "game_target": "Der Spieler muss goldene Eier finden und sie dem Troll übergeben um aus diesem Albtraum zu entkommen.",
   "help_text": "Du bist in einem verfluchten Albtraum gefangen und erinnerst dich an rein gar nichts. Irgendwo in dieser gottverlassenen Gegend hockt ein Troll, der goldene Eier will – sammel sie ein und übergib sie dem Kerl, dann kommst du hier vielleicht wieder raus.\n\n<b>Wie spielt man?</b>\nEinfach schreiben was du tun willst – in normalen Worten. Kein Rätselcode, keine Sonderbefehle.\n\nBeispiele:\n• <i>Ich schau mich um</i>\n• <i>Ich gehe nach Norden</i>\n• <i>Ich untersuche die Truhe</i>\n• <i>Ich rede mit dem Wirt</i>\n\n<b>Bot-Befehle:</b>\n/start – Spiel neu starten\n/reset – Zurück zum Anfang\n/status – Aktueller Raum und Inventar\n/help – Diese Übersicht",
   "inventory": [
@@ -21,6 +21,11 @@
       "key": "coins",
       "value": 0,
       "type": "integer"
+    },
+    {
+      "key": "has_letter_coin",
+      "value": false,
+      "type": "boolean"
     },
     {
       "key": "discovered_cigarettes",
@@ -84,11 +89,6 @@
     },
     {
       "key": "has_full_bottle",
-      "value": false,
-      "type": "boolean"
-    },
-    {
-      "key": "has_letter_coin",
       "value": false,
       "type": "boolean"
     },

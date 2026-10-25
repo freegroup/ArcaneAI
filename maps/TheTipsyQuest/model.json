@@ -14,7 +14,7 @@
         {
           "id": "2c42c4d3-7b70-332d-fbb2-b2c17cffd117",
           "name": "untersuche_den_raum",
-          "description": "Du kannst den Raum untersuchen und ihn mal beschreiben.",
+          "description": "Den Raum untersuchen: Du schaust dich in dem kalten Raum genau um und beschreibst, wie es hier aussieht. Passt, wenn der Spieler sich umsehen oder den Raum durchsuchen will (z. B. \"untersuche den Raum\", \"schau dich um\", \"was gibt es hier?\").",
           "sound_effect": "effect_tuer_aufschliessen.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
@@ -22,7 +22,8 @@
           "conditions": [],
           "actions": [
             "discovered_kalter_raum = true"
-          ]
+          ],
+          "once": false
         }
       ]
     },
@@ -40,7 +41,7 @@
         {
           "id": "8de72eca-159c-1fb5-c1e0-e8e94fab7fd4",
           "name": "untersuche_den_raum",
-          "description": "Du kannst den Raum untersuchen und durchsuchen und vielleicht findest Du Dinge die Du gebrauchen kannst. Du siehst ein paar Dinge",
+          "description": "Den Raum untersuchen: Du durchsuchst den Raum gründlich nach Dingen, die du gebrauchen kannst, und entdeckst dabei einiges. Passt, wenn der Spieler sich umsehen oder den Raum durchsuchen will (z. B. \"untersuche den Raum\", \"schau dich um\", \"was gibt es hier?\").",
           "sound_effect": "laufen_teppich.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
@@ -49,28 +50,29 @@
           "actions": [
             "discovered_friedhof_der_traeume = true",
             "discovered_cigarettes = true"
-          ]
+          ],
+          "once": false
         },
         {
           "id": "8b3014ad-74d8-a48f-ffba-4e8427997a4e",
           "name": "nimm_das_paket",
-          "description": "Du nimmst das weiße Paket mit den seltsamen Röllchen, welches unter der langen Tafel liegt, an dich.",
+          "description": "Das Paket nehmen: Du nimmst das weiße Paket mit den seltsamen Röllchen, das unter der langen Tafel liegt. Passt, wenn der Spieler das Paket oder die Röllchen haben will (z. B. \"nimm das Paket\", \"hol das Päckchen unter dem Tisch\").",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
           "system_prompt": "Du hast das seltsam anmutende Paket genommen und bist nun bereit, es dem Wächter zu geben. Eventuell gibt er ja dann die Tür frei.",
           "conditions": [
-            "has_cigaretts==false",
             "waechter_away == false"
           ],
           "actions": [
             "has_cigaretts = true"
-          ]
+          ],
+          "once": true
         },
         {
           "id": "b2d7b6ea-0730-2d08-d618-d0a45eec1f7f",
           "name": "gib_das_paket_dem_waechter",
-          "description": "Du gibst dem Wächter das seltsame Paket",
+          "description": "Dem Wächter das Paket geben: Du gibst dem Wächter das seltsame Paket. Passt, wenn der Spieler dem Wächter das Paket geben oder anbieten will (z. B. \"gib dem Wächter das Paket\", \"biete ihm das Päckchen an\").",
           "sound_effect": "effect_mann_streckt_sich.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
@@ -82,12 +84,13 @@
           "actions": [
             "waechter_away=true",
             "has_cigaretts=false"
-          ]
+          ],
+          "once": true
         },
         {
           "id": "8c708d17-4665-0496-46fe-5417b0292a7e",
           "name": "rede_mit_waechter",
-          "description": "Du sprichst den Wächter an und fragst mal was er so treibt...egal...du redest einfach mit ihm",
+          "description": "Mit dem Wächter reden: Du sprichst den Wächter an und fragst, was er hier treibt. Passt, wenn der Spieler mit dem Wächter sprechen oder ihn etwas fragen will (z. B. \"rede mit dem Wächter\", \"frag ihn, was er will\", \"was macht der Wächter da?\").",
           "sound_effect": "effect_gaehnen.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
@@ -95,12 +98,13 @@
           "conditions": [
             "waechter_away==false"
           ],
-          "actions": []
+          "actions": [],
+          "once": false
         },
         {
           "id": "43d289d9-64ba-75d2-c9f4-56d6e711309f",
           "name": "wirf_die_muenze_ein",
-          "description": "Du hast eine Münze und kannst diese Münze in den Spielautomaten einwerfen.",
+          "description": "Eine Münze einwerfen: Du wirfst eine Münze in den Spielautomaten. Passt, wenn der Spieler den Automaten benutzen oder eine Münze einwerfen will (z. B. \"wirf eine Münze ein\", \"spiel am Automaten\", \"probier mal den Automaten\").",
           "sound_effect": "song_traurig_01.mp3",
           "sound_effect_duration": 0,
           "sound_effect_volume": 100,
@@ -110,22 +114,22 @@
           ],
           "actions": [
             "coins = coins - 1"
-          ]
+          ],
+          "once": false
         },
         {
           "id": "04d1a9b7-bad5-169f-4a4e-73d8f355d4ee",
           "name": "oeffne_tuer_mit_gewalt",
-          "description": "Du öffnest die Tür zur \"Gelben Höhle\" mit Gewalt. Entweder eintreten, rennen, dagegen schlagen. Jede Art von Gewalt öffnet die Tür.",
+          "description": "Die Tür zur Gelben Hölle aufbrechen: Du öffnest die Tür zur „Gelben Hölle“ mit Gewalt — eintreten, dagegenrennen oder dagegenschlagen, jede Art von Gewalt öffnet sie. Passt, wenn der Spieler diese Tür mit Gewalt öffnen will (z. B. \"tritt die Tür ein\", \"brich die Tür auf\", \"renn dagegen\").",
           "sound_effect": "aktion_etwas_im_raum_umwerfen_dose.mp3",
           "sound_effect_duration": 0,
           "sound_effect_volume": 100,
           "system_prompt": "Die Tür hat sich ergeben und hängt nun wie ein Boxer schräge in der Ecke...tat mal gut. Der Weg in die \"Gelbe Höhle\" ist nun frei.",
-          "conditions": [
-            "door_closed_gelbe_hoehle==true"
-          ],
+          "conditions": [],
           "actions": [
             "door_closed_gelbe_hoehle = false"
-          ]
+          ],
+          "once": true
         }
       ]
     },
@@ -143,18 +147,19 @@
         {
           "id": "193fcaef-de85-156b-5a3b-d85e3a6a79a6",
           "name": "schau_aus_dem_fenster",
-          "description": "Du kannst aus dem Fenster sehen und siehst....tata.....den Briefkasten und ein wenig Wald. Es ist die Stelle an der du vorher draußen da standst.",
+          "description": "Aus dem Fenster schauen: Du schaust aus dem Fenster und siehst den Briefkasten und ein wenig Wald — die Stelle, an der du vorher draußen gestanden hast. Passt, wenn der Spieler aus dem Fenster sehen will (z. B. \"schau aus dem Fenster\", \"was sieht man draußen?\").",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
           "system_prompt": "Du siehst aus dem Fenster und konntest den Briefkasten sehen. Welch Überraschung. Ansonsten ist nichts zu erkennen was Dir irgendwie helfen kann. Nur der verdammte Briefkasten. Warum sehe ich denn immer nur wieder.....",
           "conditions": [],
-          "actions": []
+          "actions": [],
+          "once": false
         },
         {
           "id": "58046a24-2f1a-cdab-7b5a-9e3472b204f1",
           "name": "untersuche_den_raum",
-          "description": "Du kannst den Raum genauer untersuchen und mitteilen wie dieser aussieht",
+          "description": "Den Raum untersuchen: Du schaust dich in der Hexenküche genau um und beschreibst, wie es hier aussieht. Passt, wenn der Spieler sich umsehen oder den Raum durchsuchen will (z. B. \"untersuche den Raum\", \"schau dich um\", \"was gibt es hier?\").",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
@@ -162,12 +167,13 @@
           "conditions": [],
           "actions": [
             "discovered_hexenkueche = true"
-          ]
+          ],
+          "once": false
         },
         {
           "id": "f308de68-78d0-42d3-071f-eb7a6897ee99",
           "name": "nimm_die_karotten",
-          "description": "Du nimmst die angesabberten Karotten.",
+          "description": "Die Karotten nehmen: Du nimmst die angesabberten Karotten. Passt, wenn der Spieler die Karotten oder das Gemüse haben will (z. B. \"nimm die Karotten\", \"hol die Möhren\").",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": "",
           "sound_effect_volume": 100,
@@ -177,12 +183,13 @@
           ],
           "actions": [
             "has_carrot = true"
-          ]
+          ],
+          "once": true
         },
         {
           "id": "06b06c56-bb8f-b3f9-f81c-cd8909ff3e42",
           "name": "gib_die_karotten",
-          "description": "Du wirfst die Karotten dem \"Wesen\" oder dem Hund \"Kerberos\" vor die Schnauze die er dann isst.",
+          "description": "Kerberos die Karotten geben: Du wirfst dem Wesen, dem Hund Kerberos, die Karotten vor die Schnauze, und er frisst sie. Passt, wenn der Spieler dem Hund die Karotten geben oder ihn füttern will (z. B. \"gib dem Hund die Karotten\", \"füttere Kerberos\", \"wirf ihm die Möhren hin\").",
           "sound_effect": "eating-crispy-cookies.wav",
           "sound_effect_duration": 5,
           "sound_effect_volume": 100,
@@ -194,7 +201,8 @@
           "actions": [
             "has_carrot=false",
             "dog_away = true"
-          ]
+          ],
+          "once": true
         }
       ]
     },
@@ -212,7 +220,7 @@
         {
           "id": "cb50272f-5ecc-1216-2c75-8c21d4e649e8",
           "name": "untersuche_das_fenster",
-          "description": "Du kannst das Fenster untersuchen und beschreibst, dass man es öffnen könnte. Es fällt dir ein Türschild auf was in der Nähe angebracht ist.",
+          "description": "Das Fenster untersuchen: Du schaust dir das Fenster genau an und stellst fest, dass man es öffnen könnte. Dabei fällt dir ein Türschild in der Nähe auf. Passt, wenn der Spieler das Fenster ansehen oder prüfen will (z. B. \"schau dir das Fenster an\", \"untersuche das Fenster\", \"was ist mit dem Fenster?\").",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
@@ -220,59 +228,60 @@
           "conditions": [],
           "actions": [
             "discovered_window=true"
-          ]
+          ],
+          "once": false
         },
         {
           "id": "2ab14be5-3373-122b-9b83-4d6885a8296d",
           "name": "oeffne_das_fenster",
-          "description": "Du öffnest das Fenster indem du es nach oben schiebst.",
+          "description": "Das Fenster öffnen: Du schiebst das Fenster nach oben, bis es offen ist. Passt, wenn der Spieler das Fenster aufmachen will (z. B. \"öffne das Fenster\", \"mach es auf\", \"kannst du das Fenster aufschieben?\").",
           "sound_effect": "effect_schiebetuer_oeffnen.wav",
           "sound_effect_duration": 4,
           "sound_effect_volume": 100,
           "system_prompt": "Das Fenster ist nun geöffnet.",
-          "conditions": [
-            "window_is_open == false"
-          ],
+          "conditions": [],
           "actions": [
             "window_is_open = true"
-          ]
+          ],
+          "once": true
         },
         {
           "id": "3c4d258f-5091-3ba3-cfa8-de13f1e49e26",
           "name": "untersuche_das_haus",
-          "description": "Man kann das Haus hier nach seinem Zustand untersuchen oder mal nachsehen ob es Türen, Fenster hat in die man in das Haus gelangen könnte. Es fällt dir aber ein Türschild auf",
+          "description": "Das Haus untersuchen: Du schaust dir das Haus und seinen Zustand an und suchst nach Türen und Fenstern, durch die man hineinkommen könnte. Dabei fällt dir ein Türschild auf. Passt, wenn der Spieler sich das Haus oder die Umgebung ansehen will (z. B. \"untersuche das Haus\", \"schau dich mal um\", \"wie sieht das Haus aus?\").",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
           "system_prompt": "Du hast Dir das Haus angesehen und die Tür und das Fenster sind dir aufgefallen. Ob man irgendwie in das Haus kommt? Auch ist am Haus irgendwie ein Türschild. Mal lesen?",
           "conditions": [],
-          "actions": []
+          "actions": [],
+          "once": false
         },
         {
           "id": "2a6f72a2-cce4-6ce3-a2c3-0b3003a191db",
           "name": "untersuche_die_tuer",
-          "description": "Du kannst die Tür untersuchen und feststellen, dass diese unüberwindbar ist. Kein Reinkommen auf irgendeine Weise. Es fällt dir aber ein Türschild auf",
+          "description": "Die Tür untersuchen: Du schaust dir die Haustür an und stellst fest, dass sie unüberwindbar ist — durch sie kommt man auf keine Weise hinein. Dabei fällt dir ein Türschild auf. Passt, wenn der Spieler die Tür ansehen oder durch die Tür will (z. B. \"untersuche die Tür\", \"mach die Tür auf\", \"kommen wir durch die Tür?\").",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
           "system_prompt": "",
           "conditions": [],
-          "actions": []
+          "actions": [],
+          "once": false
         },
         {
           "id": "6a601c22-09a9-9192-108f-372b352bdd75",
           "name": "nimm_den_stock",
-          "description": "Ein Stock, der in der Nähe liegt kann genommen werden",
+          "description": "Den Stock nehmen: Du hebst den Stock auf, der am Treppenabsatz liegt, und steckst ihn ein. Passt, wenn der Spieler den Stock oder Knüppel haben will (z. B. \"nimm den Stock\", \"heb den Knüppel auf\", \"kannst du den Stock mitnehmen?\").",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
           "system_prompt": "Du hast den Stock in deine Tasche gepackt. Mal sehen für was der gut ist",
-          "conditions": [
-            "has_wood==false"
-          ],
+          "conditions": [],
           "actions": [
             "has_wood = true"
-          ]
+          ],
+          "once": true
         }
       ]
     },
@@ -290,7 +299,7 @@
         {
           "id": "a4b0c2b6-55e0-9a7a-9377-75d2284ddf2a",
           "name": "nimm_den_brief",
-          "description": "Nehme den Brief der aus dem Briefkasten herausschaut.",
+          "description": "Den Brief nehmen: Du ziehst den angeknabberten Brief aus dem Briefkasten und steckst ihn ein. Passt, wenn der Spieler den Brief haben oder den Briefkasten öffnen will (z. B. \"nimm den Brief\", \"öffne den Briefkasten\", \"was ist im Briefkasten?\").",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
@@ -298,12 +307,13 @@
           "conditions": [],
           "actions": [
             "has_letter = true"
-          ]
+          ],
+          "once": true
         },
         {
           "id": "ee3a1e1e-c71c-d6a6-b85b-3b8f990b04b2",
           "name": "lies_den_brief_vor",
-          "description": "Lese den Brief wortgetreu vor, nachdem du ihn genommen hast",
+          "description": "Den Brief vorlesen: Du liest den Brief, den du genommen hast, wortgetreu vor. Passt, wenn der Spieler wissen will, was im Brief steht (z. B. \"lies den Brief vor\", \"was steht drin?\", \"lies mal\").",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
@@ -311,38 +321,37 @@
           "conditions": [
             "has_letter== true"
           ],
-          "actions": []
+          "actions": [],
+          "once": true
         },
         {
           "id": "730460b0-42e4-ce84-7573-99558550c38e",
           "name": "nimm_die_ratte",
-          "description": "Du steckst unter Ekel die Ratte in deine Tasche",
+          "description": "Die tote Ratte nehmen: Du steckst die tote Ratte voller Ekel in deine Tasche. Passt, wenn der Spieler die Ratte haben will (z. B. \"nimm die Ratte\", \"steck die Ratte ein\").",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
           "system_prompt": "",
-          "conditions": [
-            "has_rat==false"
-          ],
+          "conditions": [],
           "actions": [
             "has_rat=true"
-          ]
+          ],
+          "once": true
         },
         {
           "id": "483c7cba-02ad-4064-5cfc-344c4a398db0",
           "name": "nimm_die_muenze",
-          "description": "Auf dem Boden liegt eine Münze die du nehmen kannst",
+          "description": "Die Münze nehmen: Du hebst die Münze auf, die unter der toten Ratte liegt, und steckst sie ein. Passt, wenn der Spieler die Münze oder das Glänzende am Boden haben will (z. B. \"nimm die Münze\", \"heb das Geld auf\", \"was glänzt da unter der Ratte?\").",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
           "system_prompt": "du hast eine Münze mehr in deiner Tasche",
-          "conditions": [
-            "has_letter_coin==false"
-          ],
+          "conditions": [],
           "actions": [
-            "coins = coins +1",
+            "coins = coins + 1",
             "has_letter_coin = true"
-          ]
+          ],
+          "once": true
         }
       ]
     },
@@ -360,13 +369,14 @@
         {
           "id": "870e0ee5-ef45-e9fc-ad67-a38ec3cdd012",
           "name": "faelle_den_baum",
-          "description": "Das Fällen des Baumes, oder umsägen, ist keine gute Idee. Du wirst es versuchen, aber es funktioniert niemals. Du wolltest doch tatsächlich diesen wunderschönen Baum für dein Spielvergnügen fällen. Alter – und das in diesen Zeiten! Schon mal was von Nachhaltigkeit gehört?",
+          "description": "Den Baum fällen: Du versuchst, den Baum zu fällen oder umzusägen — das gelingt niemals. Passt, wenn der Spieler den Baum fällen, umhauen oder absägen will (z. B. \"fäll den Baum\", \"hau den Baum um\", \"können wir den Baum umsägen?\").",
           "sound_effect": "effect_erstaunte_frau.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
           "system_prompt": "Du wolltest doch tatsächlich diesen wunderschönen Baum für dein Spielvergnügen fällen. Alter – und das in diesen Zeiten! Schon mal was von Nachhaltigkeit gehört? Was denkst du, was passiert, wenn jeder Spieler hier einfach Bäume fällt? Dann haben wir bald keine mehr. Also, Hirn an!\n",
           "conditions": [],
-          "actions": []
+          "actions": [],
+          "once": false
         }
       ]
     },
@@ -384,7 +394,7 @@
         {
           "id": "44ff281d-3133-bede-0527-cb2c22b854d0",
           "name": "untersuche_den_ort",
-          "description": "Du kannst den Ort untersuchen und versuchen ob hier interessante Dinge zu finden sind",
+          "description": "Die Gasse untersuchen: Du suchst die enge, feuchte Gasse an der Nordseite nach etwas Brauchbarem ab. Passt, wenn der Spieler sich hier umsehen oder etwas suchen will (z. B. \"schau dich um\", \"untersuche den Ort\", \"ist hier was?\").",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
@@ -392,12 +402,13 @@
           "conditions": [],
           "actions": [
             "discovered_north=true"
-          ]
+          ],
+          "once": false
         },
         {
           "id": "c101bc60-6163-b95d-ef7b-73bc9b2ba0f5",
           "name": "nimm_das_ei",
-          "description": "Du kannst das Goldene Ei aufnehmen",
+          "description": "Das goldene Ei nehmen: Du hebst das goldene Ei auf, das hier am Boden in der goldenen Pfütze liegt. Passt, wenn der Spieler das Ei haben will (z. B. \"nimm das Ei\", \"heb das Ei auf\", \"kannst du das Ei mitnehmen?\").",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
@@ -407,7 +418,8 @@
           ],
           "actions": [
             "eggs = eggs + 1"
-          ]
+          ],
+          "once": true
         }
       ]
     },
@@ -436,13 +448,14 @@
         {
           "id": "74689a1e-ca58-6ffb-f6b6-8f9cb80b61d8",
           "name": "untersuche_die_hosen",
-          "description": "Die Unterhosen auf der Wäscheleine untersuchen. Das Untersuchen der Hosen wird allerdings keine neuen Erkenntnisse oder Informationen bringen. Außer, dass diese Hosen so ihre \"Spuren\" haben",
+          "description": "Die Unterhosen untersuchen: Du untersuchst die Unterhosen auf der Wäscheleine. Das bringt keine neuen Erkenntnisse, außer dass die Hosen so ihre „Spuren“ haben. Passt, wenn der Spieler die Hosen oder die Wäscheleine ansehen will (z. B. \"untersuche die Hosen\", \"schau dir die Wäsche an\").",
           "sound_effect": "reaktion_bouaaaa.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
           "system_prompt": "Du hast die Wäscheleine mit den Unterhosen untersucht. Welche Freude, als Diener die Ehre zu haben, diese Schätze zu betrachten! Wie zu vermuten war, hat das keine neuen Erkenntnisse gebracht – außer vielleicht der interessanten Feststellung, dass du offensichtlich eine Vorliebe für antike Unterhosen hast. ",
           "conditions": [],
-          "actions": []
+          "actions": [],
+          "once": false
         }
       ]
     },
@@ -484,7 +497,7 @@
         {
           "id": "4a58de54-b809-7039-76e3-b26ce0dd3d5e",
           "name": "nimm_das_ei",
-          "description": "Du kannst das Goldene Ei, welches in einem Nest liegt, nehmen.",
+          "description": "Das goldene Ei nehmen: Du nimmst das goldene Ei aus dem Nest im Baum. Passt, wenn der Spieler das Ei oder das Nest haben will (z. B. \"nimm das Ei\", \"hol das Ei aus dem Nest\", \"kannst du das Ei greifen?\").",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
@@ -492,7 +505,8 @@
           "conditions": [],
           "actions": [
             "eggs = eggs + 1"
-          ]
+          ],
+          "once": false
         }
       ]
     },
@@ -509,7 +523,7 @@
         {
           "id": "ed28677f-60f9-dcb7-c930-a8eb70ac1c2d",
           "name": "durchsuche_die_kammern",
-          "description": "Du durchsuchst die Kammern nach etwas Brauchbarem.",
+          "description": "Die Kammern durchsuchen: Du durchsuchst die Kammern nach etwas Brauchbarem. Passt, wenn der Spieler sich umsehen oder etwas suchen will (z. B. \"durchsuche die Kammern\", \"schau dich um\", \"ist hier was?\").",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
@@ -517,38 +531,40 @@
           "conditions": [],
           "actions": [
             "discovered_beer_bottle = true"
-          ]
+          ],
+          "once": false
         },
         {
           "id": "97e5ae88-6bc8-cb0b-a5ce-336b345818b3",
           "name": "nimm_die_flasche",
-          "description": "Du nimmst eine Flasche aus einer der Kammern.",
+          "description": "Die Flasche nehmen: Du nimmst die leere Flasche aus einer der Kammern. Passt, wenn der Spieler die Flasche haben will (z. B. \"nimm die Flasche\", \"steck die Flasche ein\").",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 3,
           "sound_effect_volume": 100,
           "system_prompt": "Du hast die Flasche, die du zuvor in einer der Kammern gesehen hast, genommen. Aber he - was soll ich mit einer leeren Flasche. Ein volles Bier. Das wäre mal ein Ding",
           "conditions": [
-            "has_beer_bottle==false",
             "discovered_beer_bottle==true"
           ],
           "actions": [
             "has_beer_bottle=true"
-          ]
+          ],
+          "once": true
         },
         {
           "id": "ee77f5ab-0eb5-6e85-8960-3cecc40b9915",
           "name": "pinkel_in_die_flasche",
-          "description": "Du pinkelst in die Flasche und machst sie fast voll.",
+          "description": "In die Flasche pinkeln: Du pinkelst in die Flasche und machst sie fast voll. Passt, wenn der Spieler in die Flasche pinkeln oder sie füllen will (z. B. \"pinkel in die Flasche\", \"mach die Flasche voll\", \"füll die Flasche auf\").",
           "sound_effect": "effect-sink-with-water.wav",
           "sound_effect_duration": 0,
           "sound_effect_volume": 52,
           "system_prompt": "Nachdem du in die Flasche gepinkelt hast hältst du nun eine warme goldene Flasche in der Hand. Na lecker. Wie wäre es mit einer kalten Flasche?",
           "conditions": [
-            "has_full_bottle==false"
+            "has_beer_bottle==true"
           ],
           "actions": [
             "has_full_bottle=true"
-          ]
+          ],
+          "once": true
         }
       ]
     },
@@ -570,7 +586,7 @@
       "id": "0681715b-72c3-3f3f-76d5-7a09ca61634b",
       "userData": {
         "sound_effect": "effect_tuer_aufschliessen.wav",
-        "description": "Du kannst hier in den nächsten Raum gehen. Die Tür scheint weit offen zu sein und du kannst einfach durchgehen.",
+        "description": "In den kalten Raum gehen: Du gehst durch die weit offene Tür in den nächsten Raum. Passt, wenn der Spieler durch die offene Tür oder in den nächsten Raum will (z. B. \"geh durch die Tür\", \"gehen wir weiter?\", \"ab in den nächsten Raum\").",
         "system_prompt": "Da stehst Du nun. In einem Raum voller Alchemie. mmmh nun gut.",
         "sound_effect_volume": 100,
         "conditions": [
@@ -598,7 +614,7 @@
       "userData": {
         "system_prompt": "Du bist nun wieder in der Hexenküche angelangt. Mann bist du froh da wieder draußen zu sein. Bevor man noch selber an so einem Haken endet.",
         "conditions": [],
-        "description": "Man geht zurück in die Hexenküche",
+        "description": "In die Hexenküche zurückgehen: Du gehst zurück in die Hexenküche. Passt, wenn der Spieler zurück oder in die Küche will (z. B. \"geh zurück\", \"zurück in die Küche\", \"raus hier\").",
         "sound_effect": "laufen_teppich.wav",
         "actions": [
           ""
@@ -624,7 +640,7 @@
       "id": "12f3a85f-bc79-8e2d-9005-111a3883aac3",
       "userData": {
         "sound_effect_volume": 100,
-        "description": "Du kannst vom Baum runter klettern und beschwerst Dich über den Ekel und dass es nicht nett von mir war dich da klettern zu lassen",
+        "description": "Vom Baum herunterklettern: Du kletterst vom Baum wieder nach unten und beschwerst dich über den ekligen, klebrigen Stamm. Passt, wenn der Spieler runter will (z. B. \"kletter runter\", \"geh wieder runter\", \"kommst du runter?\").",
         "system_prompt": "Du stehst wieder unten am Baum und du musst sagen, dass es ohne mich Dir besser ging. Jedenfalls geruchstechnisch. Nun gut. Freundschaft hat seinen Preis....",
         "sound_effect": "global/nature/tree/branch_texture_1.wav",
         "sound_effect_duration": 2
@@ -648,7 +664,7 @@
       "userData": {
         "sound_effect_volume": 100,
         "sound_effect": "laufen_kiesweg.wav",
-        "description": "Du kannst nach Osten laufen und erreichst den hinteren Teil des Hauses",
+        "description": "Hinter das Haus zur Lichtung gehen: Du gehst nach Osten und erreichst die Lichtung hinter dem Haus. Passt, wenn der Spieler nach Osten oder hinter das Haus will (z. B. \"geh nach Osten\", \"geh hinters Haus\", \"gehen wir nach hinten?\").",
         "system_prompt": "Du bist nun am hinteren Teil des Hauses und bist auf einer Lichtung.",
         "sound_effect_duration": 2
       },
@@ -670,7 +686,7 @@
       "id": "49746b59-bfd9-2e77-0b4e-340a190cc2af",
       "userData": {
         "sound_effect_volume": 43,
-        "description": "Du gehst wieder zur Lichtung zurück",
+        "description": "Zur Lichtung zurückgehen: Du gehst den Pfad zurück zur Lichtung. Passt, wenn der Spieler zurück oder zur Lichtung will (z. B. \"geh zurück\", \"zurück zur Lichtung\", \"weg vom Abgrund\").",
         "system_prompt": "Du stehst wieder an der Lichtung",
         "sound_effect": "laufen_stroh_hoch.wav",
         "sound_effect_duration": 2
@@ -694,7 +710,7 @@
       "userData": {
         "sound_effect_volume": 31,
         "sound_effect": "laufen_stroh_hoch.wav",
-        "description": "Du kannst in Richtung Osten auf dem Trampelpfad gehen",
+        "description": "Zur Schlucht gehen: Du folgst dem Trampelpfad nach Osten bis zu einer Schlucht. Passt, wenn der Spieler nach Osten, dem Pfad folgen oder zur Schlucht will (z. B. \"geh nach Osten\", \"folge dem Pfad\", \"gehen wir den Pfad entlang?\").",
         "system_prompt": "Du hast nun eine Schlucht erreicht und stehst an einem steilen Abhang.",
         "sound_effect_duration": 2
       },
@@ -716,7 +732,7 @@
       "id": "76f41d6a-946a-3200-c3d2-e5b1eef9b407",
       "userData": {
         "system_prompt": "Du stehst nun wieder vor dem Haus",
-        "description": "Man geht zurück zu dem Haus.",
+        "description": "Zum Haus gehen: Du gehst zurück zur Vorderseite des Hauses. Passt, wenn der Spieler zum Haus oder zurück will (z. B. \"geh zum Haus\", \"zurück zum Haus\", \"gehen wir wieder zum Haus?\").",
         "sound_effect": "laufen_hofweg.wav",
         "sound_effect_volume": 100,
         "sound_effect_duration": 2
@@ -743,7 +759,7 @@
           "sit_on_tree = false"
         ],
         "sound_effect_volume": 100,
-        "description": "Du gehst zurück zu dem Haus",
+        "description": "Zum Haus gehen: Du gehst zurück zur Vorderseite des Hauses. Passt, wenn der Spieler zum Haus oder zurück will (z. B. \"geh zum Haus\", \"zurück zum Haus\", \"gehen wir wieder zum Haus?\").",
         "system_prompt": "Du stehst nun wieder vor dem Haus.",
         "sound_effect_duration": 2
       },
@@ -765,7 +781,7 @@
       "id": "24ecb27c-3dc9-0a1f-748e-5007d1dc9483",
       "userData": {
         "sound_effect_volume": 100,
-        "description": "Du kletterst auf den Baum",
+        "description": "Auf den Baum klettern: Du kletterst den klebrigen Stamm hinauf auf einen großen Ast. Passt, wenn der Spieler auf den Baum oder nach oben will (z. B. \"kletter auf den Baum\", \"klettere hoch\", \"kommst du da rauf?\").",
         "sound_effect": "global/nature/tree/branch_texture_1.wav",
         "sound_effect_duration": 2
       },
@@ -787,7 +803,7 @@
       "id": "4a6d99d1-7f2a-45f1-8cb6-08361b91f524",
       "userData": {
         "sound_effect": "laufen_waldweg.wav",
-        "description": "Du kannst vom Briefkasten zum Baum gehen. Auf dem direkten Weg.",
+        "description": "Zum Baum gehen: Du gehst auf dem direkten Weg vom Briefkasten zu dem großen alten Baum. Passt, wenn der Spieler zum Baum will (z. B. \"geh zum Baum\", \"gehen wir zum Baum?\", \"lauf mal rüber zum Baum\").",
         "system_prompt": "Es ist ein kurzer Weg vom Briefkasten zum Baum...der nächste mögliche Weg ist nur noch zum Haus.",
         "sound_effect_volume": 100,
         "sound_effect_duration": 2
@@ -809,7 +825,7 @@
       "type": "TriggerConnection",
       "id": "875305f0-234e-8b9a-974e-011ac3557b6d",
       "userData": {
-        "description": "Du gehst zum Briefkasten. Aber nur hingehen. Du musst erst den Briefkasten explizit öffnen.\n",
+        "description": "Zum Briefkasten gehen: Du gehst zum alten Briefkasten am Pfadrand — nur hingehen, sonst nichts. Passt, wenn der Spieler zum Briefkasten will (z. B. \"geh zum Briefkasten\", \"lass uns zum Briefkasten gehen\", \"gehen wir mal zum Briefkasten?\").",
         "system_prompt": "Du gehst zum Briefkasten und hast die Möglichkeit ihn zu untersuchen\n",
         "sound_effect_volume": 50,
         "sound_effect": "laufen_waldweg.wav",
@@ -833,7 +849,7 @@
       "id": "3e0e41f4-b25f-5856-12e9-6bb64e938ac1",
       "userData": {
         "sound_effect": "effect_falling_stuff.wav",
-        "description": "Du kannst aus dem Fenster wieder raus vor das Haus gehen. Du wärst dann wieder außerhalb des Hauses.",
+        "description": "Aus dem Haus hinausgehen: Du kletterst durch das Fenster wieder hinaus vor das Haus. Passt, wenn der Spieler raus, das Haus verlassen oder durchs Fenster zurück will (z. B. \"klettere raus\", \"gehen wir wieder raus?\", \"zurück nach draußen\").",
         "system_prompt": "Du stehst nun wieder vor dem Haus und überlegst Dir was als Nächstes passieren soll. Briefkasten, Baum? Das sind deine Optionen....Mann, hab ich einen Durst :-)",
         "sound_effect_volume": 100,
         "sound_effect_duration": 2
@@ -857,7 +873,8 @@
       "userData": {
         "sound_effect_volume": 100,
         "sound_effect_duration": 2,
-        "sound_effect": "map/ambient_creepy_sound.wav"
+        "sound_effect": "map/ambient_creepy_sound.wav",
+        "description": "Zurück in den ersten Raum gehen: Du gehst aus der Gelben Hölle zurück in den Raum, der wie ein Friedhof der Träume wirkt. Passt, wenn der Spieler zurück oder hinaus will (z. B. \"geh zurück\", \"raus hier\", \"zurück in den anderen Raum\")."
       },
       "source": {
         "node": "1d3009ee-f6ad-5244-329b-2ff2248e69b5",
@@ -877,7 +894,7 @@
       "id": "bb5319e2-7819-a8c2-883d-13361af0200c",
       "userData": {
         "sound_effect_volume": 100,
-        "description": "Du springst auf das Dach des Hauses",
+        "description": "Aufs Dach des Hauses springen: Du springst vom Ast hinüber auf das Dach des Hauses. Passt, wenn der Spieler aufs Dach oder hinüber zum Haus springen will (z. B. \"spring aufs Dach\", \"spring rüber zum Haus\", \"kommst du aufs Dach?\").",
         "system_prompt": "Du bist nun auf dem Speicher des Hauses gelandet und plötzlich eingebrochen. Du bist nun auf dem staubigen Dachboden gelandet und musst dich erstmal orientieren wie es hier so aussieht...verrückte Sachen passieren hier. Ich werde sportlich. Echt verrückt",
         "conditions": [],
         "sound_effect": "map/ambient_sehr_leichter_wind.wav",
@@ -906,7 +923,7 @@
         "conditions": [
           "door_closed_gelbe_hoehle == false"
         ],
-        "description": "Du gehst durch die mit Gewalt geöffnete Tür in die \"Gelbe Hölle\" hinein",
+        "description": "In die Gelbe Hölle gehen: Du gehst durch die aufgebrochene Tür in die „Gelbe Hölle“. Passt, wenn der Spieler durch die aufgebrochene Tür oder in die Gelbe Hölle will (z. B. \"geh durch die kaputte Tür\", \"geh in die Gelbe Hölle\").",
         "system_prompt": "Du stehst nun in der sogenannten \"Gelben Hölle\"...super...(ironisch)",
         "actions": []
       },
@@ -930,7 +947,7 @@
       "userData": {
         "sound_effect_volume": 100,
         "sound_effect": "laufen_kiesweg.wav",
-        "description": "Du kannst wieder zurück zu dem Haus gehen.\nDu gehst zum Haus.\nGehe zurück.\nzum Haus.",
+        "description": "Zum Haus gehen: Du gehst zurück zur Vorderseite des Hauses. Passt, wenn der Spieler zum Haus oder zurück will (z. B. \"geh zum Haus\", \"zurück zum Haus\", \"gehen wir wieder zum Haus?\").",
         "system_prompt": "Du bist wieder an der Vorderseite des Hauses angelangt.",
         "sound_effect_duration": 2
       },
@@ -953,7 +970,7 @@
       "userData": {
         "sound_effect_volume": 100,
         "sound_effect": "laufen_kiesweg.wav",
-        "description": "Du gehst nach Süden und bist an dem südlichen Teil des Hauses",
+        "description": "Zur Südseite des Hauses gehen: Du gehst nach Süden an die Südseite des Hauses. Passt, wenn der Spieler nach Süden oder auf die Südseite will (z. B. \"geh nach Süden\", \"geh auf die Südseite\", \"gehen wir nach Süden?\").",
         "sound_effect_duration": 2
       },
       "source": {
@@ -978,7 +995,7 @@
         ],
         "system_prompt": "Du bist durch das Fenster geklettert und befindest Dich nun in dem ersten Raum. Es scheint eine Art von...nun ja...frag mich,... zu sein. Du rüttelst und schüttelst Dich damit der Staub von der Kleidung fällt.\n",
         "sound_effect": "effect_falling_stuff.wav",
-        "description": "Du kletterst durch das Fenster in das Haus hinein und kommst somit von außen in das Haus hinein. Es ist der Weg von außen in das Haus zu kommen und kann dann ausgeführt werden wenn jemand in das Haus kommen will.",
+        "description": "Ins Haus hineinkommen: Du kletterst durch das offene Fenster in das Haus. Das ist der Weg hinein. Passt, wenn der Spieler ins Haus, rein oder durchs Fenster will (z. B. \"kommst du rein?\", \"klettere rein\", \"rein da\", \"gehen wir ins Haus?\").",
         "sound_effect_volume": 59,
         "sound_effect_duration": 3
       },
@@ -1000,7 +1017,7 @@
       "type": "TriggerConnection",
       "id": "82879efc-9d51-2cfd-bdf4-2f5464e74f5e",
       "userData": {
-        "description": "Du kannst wieder zurück zu dem Haus gehen.\nDu gehst zum Haus.\nGehe zurück.\nzum Haus.",
+        "description": "Zum Haus gehen: Du gehst zurück zur Vorderseite des Hauses. Passt, wenn der Spieler zum Haus oder zurück will (z. B. \"geh zum Haus\", \"zurück zum Haus\", \"gehen wir wieder zum Haus?\").",
         "system_prompt": "Gott sei Dank. Wenigstens trockene Füße und wieder an der Vorderseite des Hauses.",
         "sound_effect_volume": 100,
         "sound_effect": "laufen_matschiger_weg.wav",
@@ -1024,7 +1041,7 @@
       "id": "b68949af-1072-9888-69d9-01aed8be6517",
       "userData": {
         "system_prompt": "Du bist am Briefkasten und hast die Möglichkeit diesen weiter zu untersuchen\n",
-        "description": "Du hast die Möglichkeit zum Briefkasten zu gehen. Aber nur hingehen. Du musst erst den Briefkasten explizit öffnen.",
+        "description": "Zum Briefkasten gehen: Du gehst zum alten Briefkasten am Pfadrand — nur hingehen, sonst nichts. Passt, wenn der Spieler zum Briefkasten will (z. B. \"geh zum Briefkasten\", \"lass uns zum Briefkasten gehen\", \"gehen wir mal zum Briefkasten?\").",
         "sound_effect": "laufen_hofweg.wav",
         "sound_effect_volume": 100,
         "sound_effect_duration": 2
@@ -1047,7 +1064,7 @@
       "id": "9e4689aa-e289-58e2-d84a-56c8ae74e61c",
       "userData": {
         "sound_effect": "laufen_waldweg.wav",
-        "description": "Du gehst vom Haus zum Briefkasten gehen, laufen, springen oder wenn es jemand möchte sogar fliegen (auf die Nase) :-)",
+        "description": "Zum Baum gehen: Du gehst vom Haus zu dem großen alten Baum. Passt, wenn der Spieler zum Baum will (z. B. \"geh zum Baum\", \"gehen wir zum Baum?\", \"lauf mal rüber zum Baum\").",
         "system_prompt": "Du bist nun bei dem Baum angekommen",
         "sound_effect_volume": 70,
         "sound_effect_duration": 7
@@ -1069,7 +1086,7 @@
       "type": "TriggerConnection",
       "id": "61638c84-04dd-d795-1424-5f4faa5d44f0",
       "userData": {
-        "description": "Du kannst nach Süden gehen.",
+        "description": "Zur Südseite des Hauses gehen: Du gehst nach Süden an die Südseite des Hauses. Passt, wenn der Spieler nach Süden oder auf die Südseite will (z. B. \"geh nach Süden\", \"geh auf die Südseite\", \"gehen wir nach Süden?\").",
         "system_prompt": "Du bist nun im Süden vom Haus...es ist trocken aber windig hier.",
         "sound_effect_volume": 100,
         "sound_effect": "laufen_kiesweg.wav",
@@ -1092,7 +1109,7 @@
       "type": "TriggerConnection",
       "id": "55365bdf-2879-ecbb-c521-66caa64ec8ad",
       "userData": {
-        "description": "Du gehst an die nördliche Seite des Hauses. Es ist eine Art um das Haus herum zu gehen. Ein wenig jedenfalls.",
+        "description": "Zur Nordseite des Hauses gehen: Du gehst nach Norden an die Nordseite des Hauses. Passt, wenn der Spieler nach Norden oder auf die Nordseite will (z. B. \"geh nach Norden\", \"geh auf die Nordseite\", \"gehen wir nach Norden?\").",
         "system_prompt": "Du stehst nun an der nördlichen Seite des Hauses. Super (Ironie). Hier ist außer Moos nix los. Nass und feucht ist der Boden. äääh. Darf ich wieder in das Trockene...bitte bitte",
         "sound_effect_volume": 100,
         "sound_effect": "laufen_matschiger_weg.wav",
@@ -1117,7 +1134,7 @@
       "userData": {
         "sound_effect_volume": 29,
         "sound_effect": "laufen_matschiger_weg.wav",
-        "description": "Du kannst nach Osten laufen und erreichst den hinteren Teil des Hauses. \nGehe nach hinten vom Haus.",
+        "description": "Hinter das Haus zur Lichtung gehen: Du gehst nach Osten und erreichst die Lichtung hinter dem Haus. Passt, wenn der Spieler nach Osten oder hinter das Haus will (z. B. \"geh nach Osten\", \"geh hinters Haus\", \"gehen wir nach hinten?\").",
         "system_prompt": "Du bist nun hinter dem Haus auf einer Lichtung.",
         "sound_effect_duration": 2
       },
@@ -1140,7 +1157,7 @@
       "userData": {
         "sound_effect_volume": 100,
         "sound_effect": "laufen_matschiger_weg.wav",
-        "description": "Du gehst nach Norden und bist dann am Nordteil des Hauses",
+        "description": "Zur Nordseite des Hauses gehen: Du gehst nach Norden an die Nordseite des Hauses. Passt, wenn der Spieler nach Norden oder auf die Nordseite will (z. B. \"geh nach Norden\", \"geh auf die Nordseite\", \"gehen wir nach Norden?\").",
         "sound_effect_duration": 2
       },
       "source": {
@@ -1162,7 +1179,7 @@
       "userData": {
         "sound_effect": "laufen_teppich.wav",
         "sound_effect_volume": 100,
-        "description": "Du kannst in den oberen Stock die Treppe hoch gehen.",
+        "description": "Die Treppe hinaufgehen: Du gehst die Treppe hoch in den oberen Stock. Passt, wenn der Spieler nach oben oder die Treppe hoch will (z. B. \"geh die Treppe hoch\", \"geh nach oben\", \"gehen wir rauf?\").",
         "system_prompt": "Du bist nun auf dem Dachboden",
         "sound_effect_duration": 2
       },
@@ -1184,7 +1201,7 @@
       "id": "5ac0136d-7bdb-1076-7770-c9dc55f75537",
       "userData": {
         "sound_effect": "laufen_teppich.wav",
-        "description": "Du kannst von der Halle wieder in die Bibliothek laufen",
+        "description": "Zurück in die Bibliothek gehen: Du gehst zurück in den ersten Raum, die Bibliothek, die wie ein Friedhof der Träume wirkt. Passt, wenn der Spieler zurück will (z. B. \"geh zurück\", \"zurück in die Bibliothek\", \"zurück in den ersten Raum\").",
         "system_prompt": "Du bist nun wieder in der Bibliothek. Hurra....aber halt. Da war ich doch schon. egal. Untersuche den Raum doch nochmal gründlicher....z. B. auf dem Boden unter dem Teppich! Es scheint, dass es hier eine Bodenklappe geben könnte. Einfach mal einen Blick von einem anderen Winkel hat geholfen.",
         "actions": [
           "bodenklappe_gefunden = true"
@@ -1213,7 +1230,7 @@
           "waechter_away == true"
         ],
         "system_prompt": "Du bist von dem ersten Raum in den nächsten Raum gegangen und stehst nun in der \"Hexenküche\"",
-        "description": "Du gehst durch die Tür und kommst dann in die Hexenküche",
+        "description": "In die Hexenküche gehen: Du gehst durch die Tür, die der Wächter freigegeben hat, in die Hexenküche. Passt, wenn der Spieler durch die Tür beim Wächter oder in die Hexenküche will (z. B. \"geh durch die Tür\", \"geh in die Hexenküche\", \"gehen wir weiter?\").",
         "sound_effect": null,
         "sound_effect_volume": 100,
         "sound_effect_duration": 2
@@ -1237,7 +1254,7 @@
       "id": "f5138464-199b-eadf-8630-1dc314be30d0",
       "userData": {
         "sound_effect": "laufen_teppich.wav",
-        "description": "Du kannst in den unteren Stock gelangen indem du die Treppe runter gehst.",
+        "description": "Die Treppe hinuntergehen: Du gehst die Treppe hinunter in die Hexenküche. Passt, wenn der Spieler nach unten oder die Treppe runter will (z. B. \"geh die Treppe runter\", \"geh nach unten\").",
         "system_prompt": "Da stehst Du nun. In einem Raum voller Alchemie oder Hexenküche. mmmh nun gut.",
         "sound_effect_volume": 100,
         "sound_effect_duration": 2
