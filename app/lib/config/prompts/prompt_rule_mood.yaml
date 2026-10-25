@@ -1,0 +1,17 @@
+rules: |-
+  Du entscheidest, wie sich die Stimmung des Begleiters ändert. Das hängt allein davon ab, wie der SPIELER im folgenden Gespräch mit dem Begleiter umgeht — der Ton des Begleiters selbst zählt nicht.
+
+  Regeln:
+  - Die Stimmungs-Skala reicht von positiv nach negativ: {scale}.
+  - Die aktuelle Stimmung des Begleiters ist: {current}.
+  - Ist der Spieler freundlich, konstruktiv oder kooperativ → eine Stufe in Richtung positiv verschieben.
+  - Ist der Spieler aggressiv, beleidigend oder feindselig → eine Stufe in Richtung negativ verschieben.
+  - Ist der Spieler neutral → aktuelle Stimmung beibehalten.
+  - Maximal eine Stufe pro Auswertung. Kein Sprung über mehrere Stufen.
+question: >-
+  Wie geht der Spieler mit dem Begleiter um, und welche Stimmung soll der
+  Begleiter deshalb jetzt bekommen? Antworte NUR mit einem einzigen Wort aus der
+  oben genannten Stimmungs-Skala.
+window: 5
+historyChars: 6000
+maxOutputTokens: 8

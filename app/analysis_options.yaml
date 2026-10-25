@@ -1,0 +1,18 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+
+linter:
+  rules:
+    prefer_final_locals: true
+    prefer_single_quotes: true
+    always_declare_return_types: true
+    avoid_dynamic_calls: true
+    unawaited_futures: true
+    sort_constructors_first: true
+    # Off: we keep readable named constructor params even when a field is private.
+    prefer_initializing_formals: false

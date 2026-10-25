@@ -1,0 +1,25 @@
+{
+  "id": "DramaLlama",
+  "title": "Drama Llama",
+  "version": 1,
+  "model": {
+    "path": "model.json",
+    "size": 2890,
+    "sha256": "c4fe6e8d493f19f47da30df7c61c65fa9deeb8020d54f935e4937722728d4c07",
+    "bundled": true
+  },
+  "config": {
+    "path": "config.json",
+    "size": 815,
+    "sha256": "315777cd0d8df1dc2931150f4368504facd3ebe9142929a03f7d963bf3892fc4",
+    "bundled": true
+  },
+  "sounds": {
+    "map/effect_soundeffect_melodie.wav": {
+      "path": "sounds/map__effect_soundeffect_melodie.m4a",
+      "size": 118956,
+      "sha256": "a97f673a75ff8ec4fc43d6eb2d8892af6d4466886fa4a595d57502e1152047d0",
+      "bundled": true
+    }
+  }
+}

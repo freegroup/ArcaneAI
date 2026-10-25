@@ -1,0 +1,181 @@
+{
+  "id": "TheTipsyQuest",
+  "title": "The Tipsy Quest",
+  "version": 1,
+  "model": {
+    "path": "model.json",
+    "size": 76850,
+    "sha256": "445b7670089cab08ba29e836ae72fb3731d4552884c67614bdc11130a50d2701",
+    "bundled": true
+  },
+  "config": {
+    "path": "config.json",
+    "size": 4490,
+    "sha256": "b3e3b6771d95eb4cdaa6fe5d350857932ea3a4c9430d89088b61bacd7d0c3a2f",
+    "bundled": true
+  },
+  "sounds": {
+    "aktion_etwas_im_raum_umwerfen_dose.mp3": {
+      "path": "sounds/aktion_etwas_im_raum_umwerfen_dose.mp3",
+      "size": 322873,
+      "sha256": "20ba08264457c2293563c7964f5e46a11bae8fa45066294fd672697c422925a5",
+      "bundled": true
+    },
+    "ambient_sehr_leichter_wind.wav": {
+      "path": "sounds/ambient_sehr_leichter_wind.m4a",
+      "size": 973077,
+      "sha256": "e6f35bd7070d823e0e627211fb7ed7255a62e37370ad421c465201c1cf80e212",
+      "bundled": true
+    },
+    "ambient_wind_auf_dem_berg.wav": {
+      "path": "sounds/ambient_wind_auf_dem_berg.m4a",
+      "size": 366099,
+      "sha256": "10a674bc6c8bee015285f863326937532c9befcd0cdd46cea9db52bb0015a555",
+      "bundled": true
+    },
+    "ambient_wind_horror.wav": {
+      "path": "sounds/ambient_wind_horror.m4a",
+      "size": 1024054,
+      "sha256": "96fca7269aa28598d74b2d90742a282b3b4f1582fbca7781626b8c8a3f6a94c4",
+      "bundled": true
+    },
+    "eating-crispy-cookies.wav": {
+      "path": "sounds/eating-crispy-cookies.m4a",
+      "size": 252698,
+      "sha256": "eff7dd47d1369084f7eb7b49771d0bba9bf01f14e4a0d235d82e5413928d9453",
+      "bundled": true
+    },
+    "effect-sink-with-water.wav": {
+      "path": "sounds/effect-sink-with-water.m4a",
+      "size": 176184,
+      "sha256": "58a964ee1313a88137958f8b5c5926140439546353f1ac5023859a57e6ebf061",
+      "bundled": true
+    },
+    "effect_erstaunte_frau.wav": {
+      "path": "sounds/effect_erstaunte_frau.m4a",
+      "size": 19443,
+      "sha256": "00c205ee7e2ab193f53857e69ff9185bbe8ea062e6cf0a86870d11bbae000c01",
+      "bundled": true
+    },
+    "effect_falling_stuff.wav": {
+      "path": "sounds/effect_falling_stuff.m4a",
+      "size": 30580,
+      "sha256": "c6fb622a716ebc31b27a1db91ac17221f971f37e40c440c060c87692193f00ce",
+      "bundled": true
+    },
+    "effect_gaehnen.wav": {
+      "path": "sounds/effect_gaehnen.m4a",
+      "size": 33719,
+      "sha256": "42a47ec546e4c1155a72948bab913e0aa0af5b5877a0159e1080ce93b2727a71",
+      "bundled": true
+    },
+    "effect_mann_streckt_sich.wav": {
+      "path": "sounds/effect_mann_streckt_sich.m4a",
+      "size": 89633,
+      "sha256": "ec589afbb3176eb428938787196d60859138ceebbfe71a173d0a2968cbb5f644",
+      "bundled": true
+    },
+    "effect_retrogame.wav": {
+      "path": "sounds/effect_retrogame.m4a",
+      "size": 12295,
+      "sha256": "c359b95720d268bddeefdc731d892c76ba5d4af330438ee90f008df24c477ec7",
+      "bundled": true
+    },
+    "effect_schiebetuer_oeffnen.wav": {
+      "path": "sounds/effect_schiebetuer_oeffnen.m4a",
+      "size": 53179,
+      "sha256": "3a61a17c41db36dd45ecd0167f9a24146bc43e933ba67f62f92dec5f0971320f",
+      "bundled": true
+    },
+    "effect_tuer_aufschliessen.wav": {
+      "path": "sounds/effect_tuer_aufschliessen.m4a",
+      "size": 31737,
+      "sha256": "65cf0aa77907128b5fc4f6b189264858ca1ec6f4bf57c12eca9f0603aa467005",
+      "bundled": true
+    },
+    "global/ambient/forest/spring_noon_coal_tit_wind.wav": {
+      "path": "sounds/global__ambient__forest__spring_noon_coal_tit_wind.m4a",
+      "size": 1497669,
+      "sha256": "c73d32c112f52698217d85897f0de61b5adf4414720354bfdc1706462d45c298",
+      "bundled": true
+    },
+    "global/movement/footsteps/frozen_field.wav": {
+      "path": "sounds/global__movement__footsteps__frozen_field.m4a",
+      "size": 14740,
+      "sha256": "d99746116b3628d700a0fba5466f70199603a548c3b923d83fd003554f0ae22c",
+      "bundled": true
+    },
+    "global/nature/tree/branch_texture_1.wav": {
+      "path": "sounds/global__nature__tree__branch_texture_1.m4a",
+      "size": 41516,
+      "sha256": "13df82ccd451029ba7fc2d5f30a1733381bd7bdadef247e757863dc903be2314",
+      "bundled": true
+    },
+    "laufen_hofweg.wav": {
+      "path": "sounds/laufen_hofweg.m4a",
+      "size": 389656,
+      "sha256": "fd5651a90ac0165386b3881bf43045eceb934c659ca38e8a4cbe8ffc0899c75a",
+      "bundled": true
+    },
+    "laufen_kiesweg.wav": {
+      "path": "sounds/laufen_kiesweg.m4a",
+      "size": 153515,
+      "sha256": "524385c42bfab0341e9b99a19e691108085cf171323fa3e7059db82ef9b4b135",
+      "bundled": true
+    },
+    "laufen_matschiger_weg.wav": {
+      "path": "sounds/laufen_matschiger_weg.m4a",
+      "size": 503838,
+      "sha256": "1fc6510702936943fe0c2f369138fdd9a37a0ff5722175c695ab04ef4b9c9e8a",
+      "bundled": true
+    },
+    "laufen_stroh_hoch.wav": {
+      "path": "sounds/laufen_stroh_hoch.m4a",
+      "size": 359734,
+      "sha256": "a324d7870a4aa604c8baf2646006f0a1525adb5f6c64d87af3b291668ed521f8",
+      "bundled": true
+    },
+    "laufen_teppich.wav": {
+      "path": "sounds/laufen_teppich.m4a",
+      "size": 433952,
+      "sha256": "11a3bc9057ae5ee0d7a658f3a4d48578668ce1e44e0fb0bebfe4a0cc3aeaf9b9",
+      "bundled": true
+    },
+    "laufen_waldweg.wav": {
+      "path": "sounds/laufen_waldweg.m4a",
+      "size": 549885,
+      "sha256": "ccd3acf98e116bd3c6e1d1ee42057e4dfeb1a6e0b4f90f866d0ecfc4c6bdcd5e",
+      "bundled": true
+    },
+    "map/ambient_creepy_sound.wav": {
+      "path": "sounds/map__ambient_creepy_sound.m4a",
+      "size": 548043,
+      "sha256": "5cf46b4d0d7d6ae57ba5a26d1eebc6bf89cd5061523302db78b30a54fe1d815e",
+      "bundled": true
+    },
+    "map/ambient_sehr_leichter_wind.wav": {
+      "path": "sounds/map__ambient_sehr_leichter_wind.m4a",
+      "size": 973077,
+      "sha256": "ab9bdaf109743582e043b75c27c9cfd09b8dc7490a3b0b4c88cb05303183fb9f",
+      "bundled": true
+    },
+    "reaktion_bouaaaa.wav": {
+      "path": "sounds/reaktion_bouaaaa.m4a",
+      "size": 26211,
+      "sha256": "f534ca0a270ee5358ee5db1866031b85b2419c4d44d6e4567ed21bbbfa004a93",
+      "bundled": true
+    },
+    "song_traurig_01.mp3": {
+      "path": "sounds/song_traurig_01.mp3",
+      "size": 5265261,
+      "sha256": "f655d2dc920282edf6330828de8a9c70b36e4ed030c9d1b8fa6cbc05cffa7055",
+      "bundled": true
+    },
+    "wald_mit_voegel.mp3": {
+      "path": "sounds/wald_mit_voegel.mp3",
+      "size": 3007680,
+      "sha256": "2f15cfb5ff488ae8452f78d9bdec5a9ffbc01f5f361fde41a5984adaa6e7c4be",
+      "bundled": true
+    }
+  }
+}
