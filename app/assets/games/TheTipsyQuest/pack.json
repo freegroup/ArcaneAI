@@ -10,8 +10,8 @@
   },
   "config": {
     "path": "config.json",
-    "size": 4490,
-    "sha256": "b3e3b6771d95eb4cdaa6fe5d350857932ea3a4c9430d89088b61bacd7d0c3a2f",
+    "size": 4448,
+    "sha256": "107f1efc1c86757b8d44cdd751288e2b6a5aa8039f9c37973bbd820ee4176a06",
     "bundled": true
   },
   "sounds": {

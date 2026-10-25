@@ -13,7 +13,8 @@ final class ActionHelfeDemSpieler extends BuiltinFunction {
       'Hilfe: Der Spieler fragt, was er tun kann oder soll, wie es '
       'weitergeht, oder bittet um Hilfe oder einen Tipp — z. B. '
       '"was kann ich tun?", "was soll ich machen?", "hilf mir", '
-      '"wie geht es weiter?", "hast du einen Tipp?". Dann IMMER diese '
+      '"wie geht es weiter?", "hast du einen Tipp?", '
+      '"wohin kann ich gehen?", "welche Wege gibt es?". Dann IMMER diese '
       'Funktion aufrufen, auch wenn es eine Frage ist — nicht keine_aktion.';
 
   @override

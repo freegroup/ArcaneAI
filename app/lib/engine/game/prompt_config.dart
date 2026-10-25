@@ -61,6 +61,7 @@ final class NarrationConfig {
     required this.historyLength,
     required this.historyChars,
     required this.maxOutputTokens,
+    this.possibleActions,
   });
 
   factory NarrationConfig.fromMap(Map<String, Object?> json) => NarrationConfig(
@@ -69,6 +70,7 @@ final class NarrationConfig {
     historyLength: (json['historyLength']! as num).toInt(),
     historyChars: (json['historyChars']! as num).toInt(),
     maxOutputTokens: (json['maxOutputTokens']! as num).toInt(),
+    possibleActions: json['possibleActions'] as String?,
   );
 
   /// The companion when the personality is switched off (same idea as
@@ -86,6 +88,15 @@ final class NarrationConfig {
 
   /// How long the answer may be.
   final int maxOutputTokens;
+
+  /// What the player could do here, as background knowledge for hints;
+  /// `{actions}` stands for the descriptions of the available actions.
+  /// `null`: stage 2 gets no such list.
+  final String? possibleActions;
+
+  /// [possibleActions] with the [descriptions] filled in, one line each.
+  String possibleActionsFor(Iterable<String> descriptions) => possibleActions!
+      .replaceAll('{actions}', descriptions.map((d) => '- $d').join('\n'));
 }
 
 /// Prompt and context-length settings of the companion mood step (the mood

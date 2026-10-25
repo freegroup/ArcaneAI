@@ -82,8 +82,9 @@ final class NarrationStage {
     return _tidy(response.content);
   }
 
-  /// The system prompt: who speaks, the goal, the current room and — last,
-  /// next to the conversation — how to answer (from [config]).
+  /// The system prompt: who speaks, the goal, the current room, what the
+  /// player could do here (if [config] asks for it) and — last, next to the
+  /// conversation — how to answer (from [config]).
   String systemPrompt(
     GameState state,
     NarrationConfig config, {
@@ -99,9 +100,15 @@ final class NarrationStage {
     if (_game.gameTarget.isNotEmpty) {
       prompt.write('SPIELZIEL:\n${_game.gameTarget}\n\n');
     }
-    prompt
-      ..write('AKTUELLER RAUM:\n${machine.describeRoom(state)}\n\n')
-      ..write(config.rules);
+    prompt.write('AKTUELLER RAUM:\n${machine.describeRoom(state)}\n\n');
+    final actions = machine.availableActions(state);
+    if (config.possibleActions != null && actions.isNotEmpty) {
+      // Only the descriptions: the function names mean nothing to the player.
+      prompt.write(
+        '${config.possibleActionsFor(actions.map((a) => a.description.trim()))}\n\n',
+      );
+    }
+    prompt.write(config.rules);
     return prompt.toString();
   }
 
