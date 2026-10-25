@@ -63,7 +63,8 @@ class GameSession:
     
     def to_dict(self) -> Dict[str, Any]:
         history = [
-            {"user": e.user_input, "assistant": e.llm_response}
+            {"user": e.user_input, "assistant": e.llm_response,
+             "function": e.chosen_function, "welcome": e.is_welcome}
             for e in self.game_engine.controller.history.entries
         ]
         return {
@@ -89,20 +90,16 @@ class GameSession:
             except Exception:
                 pass
 
-        # Restore conversation history (user/assistant pairs)
+        # Restore conversation history
         history = self.game_engine.controller.history
         history.clear()
         for entry in data.get("history", []):
-            history.turn_counter += 1
-            from game_history import HistoryEntry
-            history.entries.append(HistoryEntry(
-                turn_number=history.turn_counter,
-                timestamp=0,
+            history.add_entry(
                 user_input=entry["user"],
-                base_prompt="",
-                available_functions=[],
                 llm_response=entry["assistant"],
-            ))
+                chosen_function=entry.get("function"),
+                metadata={"type": "welcome"} if entry.get("welcome") else None,
+            )
 
         # Restore timestamps
         try:

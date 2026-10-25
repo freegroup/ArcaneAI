@@ -66,93 +66,59 @@ def print_llm_debug(
     messages: List[LLMMessage],
     functions: List[LLMFunction],
     title: str = "LLM REQUEST",
-    session=None
 ) -> None:
     """
-    Print LLM request in human-readable format.
-    
-    Args:
-        messages: List of LLM messages (including system prompt)
-        functions: Available functions
-        title: Title for the debug output
+    Print exactly what the model gets: system prompt, functions (native
+    tools) and the conversation, including the functions called earlier.
     """
     width = 80
     divider = "=" * width
     section_divider = "-" * width
-    
-    print("\n" + divider)
-    print(f" {title}".center(width))
-    print(divider)
-    
-    # Separate system prompt from conversation
-    system_messages = [m for m in messages if m.role == "system"]
-    conversation_messages = [m for m in messages if m.role != "system"]
-    
-    # Print system prompt
-    if system_messages:
-        print("\n" + section_divider)
-        print("SYSTEM PROMPT")
-        print(section_divider)
-        for msg in system_messages:
-            print(wrap_text(msg.content, width=width))
-    
-    # Print available functions (always show, with indicator for delivery method)
-    if functions:
-        # Check if functions are embedded in system prompt (JSON-based approach)
-        functions_in_prompt = any("VERFÜGBARE FUNKTIONEN:" in msg.content for msg in system_messages)
-        delivery_method = "JSON parsing" if functions_in_prompt else "native function API"
 
+    print("\n" + divider)
+    print(f" ▶ {title}".center(width))
+    print(divider)
+
+    for msg in messages:
+        if msg.role == "system":
+            print("\n" + section_divider)
+            print("SYSTEM PROMPT")
+            print(section_divider)
+            print(wrap_text(msg.content, width=width))
+
+    if functions:
         print("\n" + section_divider)
-        print(f"AVAILABLE FUNCTIONS ({delivery_method}) — {len(functions)}")
+        print(f"FUNCTIONS (native tools) — {len(functions)}")
         print(section_divider)
         for func in functions:
             print(format_function(func))
-    
-    # Print conversation history
-    if conversation_messages:
+
+    conversation = [m for m in messages if m.role != "system"]
+    if conversation:
         print("\n" + section_divider)
-        print("CONVERSATION HISTORY")
+        print("CONVERSATION")
         print(section_divider)
-        
-        for i, msg in enumerate(conversation_messages, 1):
-            role_label = "USER" if msg.role == "user" else "ASSISTANT"
-            mood = session.game_engine.inventory.get('companion_mood') if session else None
-            mood_tag = f" ({mood})" if mood and msg.role == "assistant" else ""
-            print(f"\n[{role_label} #{i}{mood_tag}]")
+        for i, msg in enumerate(conversation, 1):
+            if msg.function_call:
+                print(f"\n[ASSISTANT #{i} → Funktionsaufruf: {msg.function_call}]")
+            else:
+                print(f"\n[{msg.role.upper()} #{i}]")
             print(wrap_text(msg.content, width=width, indent="  "))
-    
+
     print("\n" + divider + "\n")
 
 
-def print_llm_response(
-    response_text: str,
-    function_call: str = None,
-    function_success: bool = True
-) -> None:
-    """
-    Print LLM response in human-readable format.
-    
-    Args:
-        response_text: The response text from LLM
-        function_call: Name of function called (if any)
-        function_success: Whether function execution succeeded
-    """
+def print_llm_response(response_text: str, function_call: str = None) -> None:
+    """Print exactly what the model answered."""
     width = 80
     divider = "=" * width
-    
+
     print("\n" + divider)
-    print(" LLM RESPONSE".center(width))
+    print(" ◀ LLM RESPONSE".center(width))
     print(divider)
-    
-    print("\n[NARRATIVE RESPONSE]")
+    print(f"\n[FUNCTION CALL: {function_call or '-'}]")
+    print("\n[TEXT]")
     print(wrap_text(response_text, width=width, indent="  "))
-    
-    if function_call:
-        status = "✓ SUCCESS" if function_success else "✗ FAILED"
-        print(f"\n[FUNCTION CALL: {function_call}] {status}")
-    else:
-        print("\n[FUNCTION CALL: None]")
-    
     print("\n" + divider + "\n")
 
 

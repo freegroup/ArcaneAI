@@ -12,6 +12,10 @@ class GameApp {
         this.chatContainer = document.getElementById('chatContainer');
         this.questionInput = document.getElementById('question');
         this.gameStatus = document.getElementById('game-status-value');
+        this.functionList = document.getElementById('function-list');
+        this.welcomeText = document.getElementById('welcomeText');
+        this.continueButton = document.getElementById('continueButton');
+        this.startButton = document.getElementById('startButton');
         
         // Controllers
         this.inventory = new Inventory('inventory-list');
@@ -114,36 +118,59 @@ class GameApp {
     }
 
     /**
-     * Start the game
+     * On page load: show the game's intro and offer to continue a running game
+     */
+    async loadGame() {
+        try {
+            const response = await fetch(`${this.baseUri}/api/game`, { credentials: 'include' });
+            if (!response.ok) throw new Error(`Server error: ${response.status}`);
+            this.game = await response.json();
+            this.welcomeText.innerHTML = this.formatIntro(this.game.intro);
+            this.continueButton.hidden = !this.game.running;
+            this.startButton.textContent = this.game.running ? 'Neu starten' : 'Spiel starten';
+        } catch (error) {
+            console.error('Error loading game:', error);
+            this.welcomeText.textContent = 'Der Server ist nicht erreichbar.';
+        }
+    }
+
+    /**
+     * Continue the running game: show what was said so far
+     */
+    async continueGame() {
+        await this.connectWebSocket();
+        this.toggleUI(true);
+        this.chatContainer.innerHTML = '';
+        for (const turn of this.game.history) {
+            if (turn.user) this.addMessage(turn.user, 'user');
+            this.addMessage(turn.assistant, 'bot');
+        }
+        this.showGameState(this.game);
+    }
+
+    /**
+     * Start the game from the beginning (welcome screen)
      */
     async startGame() {
-        try {
-            // 1. Connect WebSocket first
-            await this.connectWebSocket();
+        await this.connectWebSocket();
+        this.toggleUI(true);
+        await this.newGame();
+    }
 
-            // 2. Show game UI
-            this.toggleUI(true);
-            this.showTypingIndicator();
+    /**
+     * Start over from inside the game
+     */
+    async restartGame() {
+        if (!confirm('Spiel wirklich neu starten? Der bisherige Spielstand geht verloren.')) return;
+        this.speechHandler.handleStop();
+        this.jukeboxHandler.stopAll();
+        await this.newGame();
+    }
 
-            // 3. Send start command
-            const response = await fetch(`${this.baseUri}/api/chat`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify({ text: 'start' })
-            });
-
-            const data = await response.json();
-            this.removeTypingIndicator();
-            this.addMessage(data.response, 'bot');
-            this.updateGameStatus(data.state);
-
-            this.questionInput.focus();
-        } catch (error) {
-            console.error('Error starting game:', error);
-            this.removeTypingIndicator();
-            this.addMessage('Error starting game.', 'bot');
-        }
+    async newGame() {
+        this.chatContainer.innerHTML = '';
+        this.typingIndicator = null;
+        await this.request(`${this.baseUri}/api/restart`, {});
     }
 
     /**
@@ -151,35 +178,93 @@ class GameApp {
      */
     async sendMessage() {
         const userMessage = this.questionInput.value.trim();
+        if (!userMessage || this.questionInput.disabled) return;
         this.questionInput.value = '';
-
-        if (!userMessage) return;
 
         // Stop any ongoing speech
         this.speechHandler.handleStop();
 
         this.addMessage(userMessage, 'user');
-        this.showTypingIndicator();
+        await this.request(`${this.baseUri}/api/chat`, { text: userMessage });
+    }
 
+    /**
+     * POST to the game and show its answer. The input stays locked meanwhile,
+     * so turns never overlap.
+     */
+    async request(url, body) {
+        this.setWaiting(true);
         try {
-            const response = await fetch(`${this.baseUri}/api/chat`, {
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
-                body: JSON.stringify({ text: userMessage })
+                body: JSON.stringify(body)
             });
-
             if (!response.ok) throw new Error(`Server error: ${response.status}`);
 
             const data = await response.json();
-            this.removeTypingIndicator();
+            this.setWaiting(false);
             this.addMessage(data.response, 'bot');
-            this.updateGameStatus(data.state);
+            this.showGameState(data);
         } catch (error) {
             console.error('Error:', error);
-            this.removeTypingIndicator();
-            this.addMessage('Error connecting to server.', 'bot');
+            this.setWaiting(false);
+            this.addMessage('Keine Verbindung zum Server. Versuch es gleich nochmal.', 'bot');
         }
+    }
+
+    /**
+     * Room, inventory and — at the end — the game-over notice
+     */
+    showGameState(data) {
+        this.updateGameStatus(data.state);
+        this.inventory.update(data.inventory);
+        this.showFunctions(data.functions);
+        if (data.game_over) {
+            this.addMessage('— Spielende — Mit „Neu starten" beginnst du von vorn.', 'bot');
+            this.questionInput.disabled = true;
+            this.questionInput.placeholder = 'Das Spiel ist vorbei.';
+        }
+    }
+
+    /**
+     * For debugging: the functions stage 1 is offered right now
+     * (game actions whose conditions hold, then the built-in ones)
+     */
+    showFunctions(functions) {
+        if (!functions) return;
+        this.functionList.innerHTML = '';
+        document.getElementById('function-count').textContent = `(${functions.length})`;
+        for (const fn of functions) {
+            const item = document.createElement('div');
+            item.classList.add('inventory-item', fn.builtin ? 'function-builtin' : 'function-action');
+            item.textContent = fn.name;
+            this.functionList.appendChild(item);
+        }
+    }
+
+    setWaiting(waiting) {
+        this.questionInput.disabled = waiting;
+        if (waiting) {
+            this.showTypingIndicator();
+        } else {
+            this.removeTypingIndicator();
+            this.questionInput.placeholder = 'Was willst du tun?';
+            this.questionInput.focus();
+        }
+    }
+
+    /**
+     * The intro text may use <b> and <i> (it is shared with the Telegram bot);
+     * everything else is shown as plain text.
+     */
+    formatIntro(text) {
+        const escaped = (text || '')
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return escaped
+            .replace(/&lt;(\/?)(b|i)&gt;/g, '<$1$2>')
+            .replace(/\n/g, '<br>');
     }
 
     /**

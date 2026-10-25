@@ -2,10 +2,15 @@ from __future__ import annotations
 import threading
 from typing import TYPE_CHECKING, Optional
 
-from llm import LLMFactory, LLMMessage, BaseLLMProvider
+from llm import LLMFactory, BaseLLMProvider
 from game_history import GameHistory
 from voice import VoiceFactory, BaseTTSProvider
+from prompt_config import DecisionConfig, GoalConfig, MoodConfig, NarrationConfig
+from builtin_functions import BuiltinRegistry
 from prompt_builder import PromptBuilder
+from stage_1_decision import DecisionStage
+from function_executor import FunctionExecutor
+from stage_2_narration import NarrationStage
 from companion_director import CompanionDirector
 
 if TYPE_CHECKING:
@@ -14,28 +19,54 @@ if TYPE_CHECKING:
 
 class GameController:
     """
-    Thin orchestrator: wires LLM, state engine, history, voice, and companion logic.
+    Runs one turn of the game loop:
+
+    1. Stage 1 (DecisionStage): the model picks the function the player's
+       input asks for — a game action or a built-in one.
+    2. Run it (FunctionExecutor): a game action changes the world; a
+       built-in function only says how to answer.
+    3. Stage 2 (NarrationStage): the model tells the player, in the game's
+       personality.
+
+    Each stage runs on its own LLM (llm.stage1 / llm.stage2 / llm.mood in
+    config.yaml) and reads its prompts from game/prompts/ — or from
+    game/prompts/<provider>/ if that provider brings its own.
     """
 
     def __init__(self, session: GameSession) -> None:
         self.session = session
 
-        llm_factory = LLMFactory()
-        self.llm: BaseLLMProvider = llm_factory.create_provider()
-        self.llm._session = session
+        factory = LLMFactory()
+        self.decision_llm: BaseLLMProvider = factory.create_provider(stage='stage1')
+        self.narration_llm: BaseLLMProvider = factory.create_provider(stage='stage2')
+        self.mood_llm: BaseLLMProvider = factory.create_provider(stage='mood')
 
-        max_length: int = llm_factory.config.get('llm', {}).get('max_history_length', 20)
+        max_length: int = factory.config.get('llm', {}).get('max_history_length', 20)
         self.history: GameHistory = GameHistory(max_length=max_length)
 
+        builtins = BuiltinRegistry(self.decision_llm.name)
+        with_action = NarrationConfig.load('prompt_rule_stage2_with_function', self.narration_llm.name)
+        no_action = NarrationConfig.load('prompt_rule_stage2_without_function', self.narration_llm.name)
+        self.decision = DecisionStage(
+            self.decision_llm,
+            PromptBuilder(builtins, DecisionConfig.load(self.decision_llm.name)),
+            builtins,
+        )
+        self.executor = FunctionExecutor(builtins, with_action.extra['actionNote'])
+        self.narration = NarrationStage(self.narration_llm, with_action, no_action)
+
         self.voice: BaseTTSProvider = VoiceFactory().create_provider(session.audio_sink)
-        self.prompt_builder = PromptBuilder()
         self._companion: Optional[CompanionDirector] = None
 
     @property
     def companion(self) -> CompanionDirector:
+        # Lazy: the inventory exists only once GameEngine is fully built.
         if self._companion is None:
             engine = self.session.game_engine
-            self._companion = CompanionDirector(self.llm, engine.inventory, engine.game_data)
+            self._companion = CompanionDirector(
+                self.mood_llm, engine.inventory, engine.game_data,
+                MoodConfig.load(self.mood_llm.name), GoalConfig.load(self.mood_llm.name),
+            )
         return self._companion
 
     # ------------------------------------------------------------------
@@ -43,83 +74,77 @@ class GameController:
     # ------------------------------------------------------------------
 
     def start_game(self) -> str:
+        """The opening narration. Nothing is decided; starts the room ambience."""
         self.history.clear()
-
-        prompt, functions = self._build_prompt_and_functions()
-        game_data = self.session.game_engine.game_data
-        welcome_prompt = game_data.get('welcome_prompt', 'Das Spiel beginnt!')
-
-        messages = [
-            LLMMessage(role='system', content=prompt),
-            LLMMessage(role='user', content=welcome_prompt),
-        ]
+        engine = self.session.game_engine
 
         try:
-            response = self.llm.chat_with_functions(messages, functions, prompt)
-            welcome_text = response.content
-        except Exception:
-            return self.session.game_engine.state_engine.get_current_state().get_description()
+            welcome_text = self.narration.welcome(engine) or self.narration.fallback_answer
+        except Exception as e:
+            print(f'[CONTROLLER] Begrüßung fehlgeschlagen: {e}')
+            return engine.state_engine.get_current_state().get_description()
 
         self.history.add_entry(
-            user_input=welcome_prompt,
-            base_prompt=prompt,
-            available_functions=functions,
+            user_input=self.narration.welcome_input(engine),
             llm_response=welcome_text,
-            chosen_function='keine_aktion',
             metadata={'type': 'welcome'},
         )
 
-        self._send_initial_ambient()
+        self.send_ambient()
         self.voice.speak(self.session, welcome_text)
         return welcome_text
 
     def process_input(self, user_input: str) -> dict:
-        prompt, functions = self._build_prompt_and_functions()
-        messages = self.history.to_llm_messages(prompt)
-        messages.append(LLMMessage(role='user', content=user_input))
+        engine = self.session.game_engine
 
+        # The player interrupted: the previous answer must not keep talking.
+        self.stop_speaking()
+
+        # Stage 1: which function.
+        chosen = self.decision.decide(engine, self.history, user_input)
+
+        # Run it.
+        outcome = self.executor.run(engine, chosen)
+
+        # Stage 2: what the player is told.
         try:
-            response = self.llm.chat_with_functions(messages, functions, prompt)
+            narrative = self.narration.tell(
+                engine, self.history, user_input, outcome.note,
+                action_executed=outcome.fired_action is not None,
+            )
         except Exception as e:
-            return {'response': f'Fehler beim LLM-Aufruf: {e}', 'executed_action': None}
-
-        narrative: str = response.content
-        function_call = response.function_call
-        chosen_name: Optional[str] = function_call.name if function_call else None
-
-        if not narrative and not chosen_name:
-            narrative = 'Hm? Ich versteh nicht was du meinst. Versuch\'s nochmal.'
-
-        success = True
-        if chosen_name and chosen_name != 'keine_aktion':
-            success, message = self.session.game_engine.state_engine.execute_action(chosen_name)
-            if not success:
-                narrative = f'{narrative}\n\n(Action konnte nicht ausgeführt werden: {message})'
+            print(f'[CONTROLLER] Stufe 2 fehlgeschlagen: {e}')
+            narrative = ''
+        narrative = narrative or self.narration.fallback_answer
 
         self.history.add_entry(
             user_input=user_input,
-            base_prompt=prompt,
-            available_functions=functions,
             llm_response=narrative,
-            chosen_function=chosen_name,
-            function_success=success,
+            chosen_function=outcome.function,
+            function_success=outcome.function != self.executor.builtins.on_error.name,
         )
 
         self.companion.update_async(self.history)
 
-        self.voice.stop(self.session)
         threading.Thread(
             target=self.voice.speak, args=(self.session, narrative), daemon=True
         ).start()
 
-        current_state = self.session.game_engine.state_engine.get_current_state()
-        game_over = current_state.is_end
-
         return {
             'response': narrative,
-            'executed_action': chosen_name if chosen_name != 'keine_aktion' else None,
-            'game_over': game_over,
+            'executed_action': outcome.fired_action,
+            'game_over': engine.state_engine.get_current_state().is_end,
         }
+
+    def stop_speaking(self) -> None:
+        """
+        Stop the current speech on the server (no more audio is sent) and tell
+        the client to drop what it has already received. Blocks until the
+        speech thread has ended.
+        """
+        self.voice.stop(self.session)
+        if self.session.message_queue:
+            self.session.message_queue.send('speak_stop', {})
 
     # kept for external callers (e.g. runners that check goal drift)
     def get_game_target_reminder(self) -> str:
@@ -129,15 +154,8 @@ class GameController:
     # Internal helpers
     # ------------------------------------------------------------------
 
-    def _build_prompt_and_functions(self):
-        engine = self.session.game_engine
-        state = engine.state_engine.get_current_state()
-        actions = engine.state_engine.get_available_actions()
-        prompt = self.prompt_builder.build_system_prompt(state, engine.inventory, engine.game_data)
-        functions = self.prompt_builder.build_functions(actions)
-        return prompt, functions
-
-    def _send_initial_ambient(self) -> None:
+    def send_ambient(self) -> None:
+        """Start the current room's ambient sound (game start, client reconnect)."""
         jukebox = self.session.jukebox
         if not jukebox:
             return

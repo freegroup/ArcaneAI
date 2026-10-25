@@ -15,3 +15,6 @@ game/soundfx_zip
 game/soundfx/
 
 editor/ui/dist/
+
+# Spielstände (Web, Telegram)
+sessions/

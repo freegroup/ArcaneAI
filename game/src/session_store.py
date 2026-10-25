@@ -1,5 +1,6 @@
 """
-Session store — persists game sessions per Telegram chat_id to JSON.
+Session store — persists game sessions to JSON, one file per key
+(Telegram chat_id, web session id).
 """
 from __future__ import annotations
 import json
@@ -9,8 +10,8 @@ from typing import Any, Dict, Optional
 
 class SessionStore:
     """
-    Persists session state (current_state, inventory, history) per chat_id.
-    Each chat_id gets its own JSON file in the sessions directory.
+    Persists session state (current_state, inventory, history) per key.
+    Each key (chat_id or web session id) gets its own JSON file in the sessions directory.
     """
 
     def __init__(self, sessions_dir: Optional[Path] = None) -> None:
@@ -19,15 +20,15 @@ class SessionStore:
         self.sessions_dir = Path(sessions_dir)
         self.sessions_dir.mkdir(parents=True, exist_ok=True)
 
-    def _path(self, chat_id: int) -> Path:
+    def _path(self, chat_id: int | str) -> Path:
         return self.sessions_dir / f"{chat_id}.json"
 
-    def save(self, chat_id: int, session_data: Dict[str, Any]) -> None:
+    def save(self, chat_id: int | str, session_data: Dict[str, Any]) -> None:
         """Persist session state for a chat_id."""
         with open(self._path(chat_id), "w", encoding="utf-8") as f:
             json.dump(session_data, f, ensure_ascii=False, indent=2)
 
-    def load(self, chat_id: int) -> Optional[Dict[str, Any]]:
+    def load(self, chat_id: int | str) -> Optional[Dict[str, Any]]:
         """Load persisted session state for a chat_id. Returns None if not found."""
         path = self._path(chat_id)
         if not path.exists():
@@ -38,18 +39,18 @@ class SessionStore:
         except (json.JSONDecodeError, OSError):
             return None
 
-    def delete(self, chat_id: int) -> None:
+    def delete(self, chat_id: int | str) -> None:
         """Delete persisted session state for a chat_id (e.g. on /reset)."""
         path = self._path(chat_id)
         if path.exists():
             path.unlink()
 
-    def save_pending(self, chat_id: int, text: str) -> None:
+    def save_pending(self, chat_id: int | str, text: str) -> None:
         """Save a pending (unanswered) user input for a chat_id."""
         path = self.sessions_dir / f"{chat_id}_pending.txt"
         path.write_text(text, encoding="utf-8")
 
-    def load_pending(self, chat_id: int) -> Optional[str]:
+    def load_pending(self, chat_id: int | str) -> Optional[str]:
         """Return the pending user input if one exists, else None."""
         path = self.sessions_dir / f"{chat_id}_pending.txt"
         if not path.exists():
@@ -57,11 +58,11 @@ class SessionStore:
         text = path.read_text(encoding="utf-8").strip()
         return text if text else None
 
-    def clear_pending(self, chat_id: int) -> None:
+    def clear_pending(self, chat_id: int | str) -> None:
         """Clear the pending user input after a successful response."""
         path = self.sessions_dir / f"{chat_id}_pending.txt"
         if path.exists():
             path.unlink()
 
-    def exists(self, chat_id: int) -> bool:
+    def exists(self, chat_id: int | str) -> bool:
         return self._path(chat_id).exists()

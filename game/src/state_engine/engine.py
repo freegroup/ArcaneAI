@@ -83,6 +83,7 @@ class StateEngine:
                     sound_effect=action_data.get('sound_effect'),
                     sound_effect_volume=action_data.get('sound_effect_volume', 100),
                     sound_effect_duration=action_data.get('sound_effect_duration'),
+                    once=action_data.get('once', False),
                     state=state_before  # Trigger has single 'state' field
                 ))
             else:
@@ -95,6 +96,7 @@ class StateEngine:
                     sound_effect=action_data.get('sound_effect'),
                     sound_effect_volume=action_data.get('sound_effect_volume', 100),
                     sound_effect_duration=action_data.get('sound_effect_duration'),
+                    once=action_data.get('once', False),
                     state_before=state_before,
                     state_after=state_after
                 ))
@@ -182,6 +184,10 @@ class StateEngine:
         
         # Fire the action (Trigger or Transition handles state change internally)
         success, message = action.fire(self)
+
+        # Remember a one-time action in the inventory (saved with the game)
+        if success and action.once:
+            self.session.game_engine.inventory.mark_done(action.once_key)
         
         # DEBUG: Show available actions in new state
         if success:

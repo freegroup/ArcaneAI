@@ -30,9 +30,9 @@ class ConsoleRunner(BaseRunner):
                 jukebox=LocalJukebox(config=config)
             )
 
-            llm = session.game_engine.controller.llm
-            provider_name = llm.__class__.__name__.replace("Provider", "")
-            print(f"LLM: {provider_name} - {llm.model}")
+            controller = session.game_engine.controller
+            print(f"LLM Stufe 1: {controller.decision_llm.name} - {controller.decision_llm.model}")
+            print(f"LLM Stufe 2: {controller.narration_llm.name} - {controller.narration_llm.model}")
             print("Spiel bereit!")
             print()
 

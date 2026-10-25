@@ -45,11 +45,9 @@ class GameEngine:
         
         self.inventory: Inventory = Inventory(
             session=session,
-            items=self.game_data.get('inventory', {})
+            items=self.game_data.get('inventory', {}),
+            enum_constraints=self.game_data.get('enum_constraints', {})
         )
-        
-        # Register inventory directly with state engine
-        self.state_engine.add_action_hook(self.inventory.on_action)
         
         # Create GameController (decides its own LLM implementation)
         self.controller: GameController = GameController(session=session)
@@ -82,9 +80,6 @@ class GameEngine:
             items=self.game_data.get('inventory', {}),
             enum_constraints=self.game_data.get('enum_constraints', {})
         )
-        
-        # Re-register inventory hook
-        self.state_engine.add_action_hook(self.inventory.on_action)
         
         # Recreate controller (it references state_engine/inventory via session)
         self.controller = GameController(session=self.session)
@@ -206,33 +201,6 @@ class GameEngine:
         # conditionals) directly in the text. Same engine as room descriptions.
         personality = config_data.get('personality', '')
 
-        behaviour = (
-            "WICHTIG — SPIELREGELN:\n"
-            "\n"
-            "ANTWORTSTIL — STRIKT EINHALTEN:\n"
-            "- Du beschreibst NUR was passiert oder wahrgenommen wird. Du bist kein Game-Master der Optionen anbietet.\n"
-            "- VERBOTEN sind Fragen wie 'Was willst du tun?', 'Was machen wir?', 'Sollen wir X oder Y?'.\n"
-            "- VERBOTEN ist das Auflisten von Handlungsoptionen ('Den Brief nehmen? Die Münze? Oder...?').\n"
-            "- VERBOTEN ist jede Form von 'Was möchtest du als nächstes?'.\n"
-            "- Beende deine Antwort mit einer Beobachtung, einem Gedanken oder einem Kommentar deines Charakters — NIE mit einer Frage an den Spieler über sein nächstes Vorgehen.\n"
-            "- Der Spieler entscheidet selbst und unaufgefordert was er tut. Du wartest still ab.\n"
-            "\n"
-            "AKTIONEN:\n"
-            "- Du darfst NUR die explizit definierten Aktionen aufrufen. Erfinde NIEMALS eigene.\n"
-            "- Gibt es KEINE passende Funktion für das was der Spieler tun will, dann PASSIERT ES NICHT.\n"
-            "- In diesem Fall: rufe 'keine_aktion' auf und erkläre dem Spieler in deiner Rolle, "
-            "dass diese Aktion hier nicht möglich ist — ohne sie trotzdem narrativ durchzuführen.\n"
-            "- Beispiel: Spieler will etwas nehmen, aber es gibt keine 'nehme_'-Funktion dafür → "
-            "der Spieler kann es NICHT nehmen. Sag es ihm direkt.\n"
-            "- Kommentare über das Spiel oder deinen Stil (z.B. 'du bist zu hart') → "
-            "rufe 'keine_aktion' auf und bleib in deiner Rolle. Ignoriere die Meta-Ebene.\n"
-            "\n"
-            "WELT:\n"
-            "- Die AKTUELLER RAUM Beschreibung definiert vollständig welche Objekte, Personen und Wege in diesem Raum existieren. "
-            "Erfinde KEINE Gegenstände, Personen oder Ausgänge die nicht darin vorkommen.\n"
-            "- Was dein Charakter über die Welt, die Geschichte oder sein Schicksal weiß, darf er frei erzählen — "
-            "das kommt aus seiner Persönlichkeit, nicht aus dem Raum."
-        )
         welcome_prompt = config_data.get('welcome_prompt', '')
         help_text = config_data.get('help_text', '')
         game_target = config_data.get('game_target', '')
@@ -317,6 +285,8 @@ class GameEngine:
                 action['conditions'] = user_data.get('conditions')
             if user_data.get('actions'):
                 action['scripts'] = user_data.get('actions')
+            if user_data.get('once'):
+                action['once'] = True
             
             actions.append(action)
         
@@ -349,6 +319,8 @@ class GameEngine:
                     action['conditions'] = trigger.get('conditions')
                 if trigger.get('actions'):
                     action['scripts'] = trigger.get('actions')
+                if trigger.get('once'):
+                    action['once'] = True
                 
                 actions.append(action)
         
@@ -368,7 +340,6 @@ class GameEngine:
         return {
             'initial_state': initial_state,
             'personality': personality,
-            'behaviour': behaviour,
             'welcome_prompt': welcome_prompt,
             'help_text': help_text,
             'game_target': game_target,

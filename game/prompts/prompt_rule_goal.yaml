@@ -1,0 +1,12 @@
+# Spielziel-Erinnerung (nur Telegram): alle `interval` Züge wird geprüft, ob der
+# Spieler das Spielziel aus den Augen verloren hat. Läuft auf dem Modell der Stufe "mood".
+interval: 6
+# {goal}: Spielziel aus config.json, {history}: die letzten `interval` Züge
+question: |-
+  Spielziel: {goal}
+
+  Letzte Konversation:
+  {history}
+
+  Hat der Spieler in dieser Konversation das Spielziel aktiv verfolgt oder zumindest erwähnt? Antworte nur mit 'ja' oder 'nein'.
+maxOutputTokens: 8

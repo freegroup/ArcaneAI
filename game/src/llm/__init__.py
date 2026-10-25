@@ -7,13 +7,13 @@ from .base_provider import (
     LLMMessage,
     LLMResponse,
     LLMFunction,
-    LLMFunctionCall
 )
 from .gemini_provider import GeminiProvider
 from .openai_provider import OpenAIProvider
 from .deepseek_provider import DeepSeekProvider
 from .ollama_provider import OllamaProvider
 from .gemma_provider import GemmaProvider
+from .qwen_provider import QwenProvider
 from .llm_factory import LLMFactory
 
 __all__ = [
@@ -21,11 +21,11 @@ __all__ = [
     'LLMMessage',
     'LLMResponse',
     'LLMFunction',
-    'LLMFunctionCall',
     'GeminiProvider',
     'OpenAIProvider',
     'DeepSeekProvider',
     'OllamaProvider',
     'GemmaProvider',
+    'QwenProvider',
     'LLMFactory'
 ]

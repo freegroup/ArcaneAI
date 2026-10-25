@@ -16,7 +16,7 @@ class Trigger(Action):
     
     Examples:
     - untersuche_den_raum
-    - nehme_das_packet
+    - nimm_das_paket
     - rede_mit_waechter
     - oeffne_tuer_mit_gewalt
     """
@@ -48,6 +48,10 @@ class Trigger(Action):
         # Check Lua conditions via parent class
         return super().check_conditions(current_state, lua_sandbox)
     
+    @property
+    def room(self) -> str:
+        return self.state
+
     def __str__(self) -> str:
         """String representation for debugging."""
         return f"Trigger(name='{self.name}', state='{self.state}')"
@@ -62,11 +66,8 @@ class Trigger(Action):
         Returns:
             Tuple of (success: bool, message: str)
         """
-        # Get lua sandbox
-        lua_sandbox = state_engine.session.game_engine.inventory.lua
-        
         # Execute scripts/actions
-        if not self.execute_actions(lua_sandbox):
+        if not self.execute_actions(state_engine.session.game_engine.inventory):
             return False, f"Failed to execute scripts for trigger '{self.name}'"
         
         # Send sound events (but state stays the same)

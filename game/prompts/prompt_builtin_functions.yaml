@@ -1,0 +1,37 @@
+# Eingebaute Funktionen, die jedes Spiel neben seinen eigenen Aktionen anbietet.
+# description: woran Stufe 1 die Eingabe des Spielers misst.
+# note: was Stufe 2 erfährt, wenn die Funktion gewählt wurde.
+
+keine_aktion:
+  description: Keine der Aktionen passt zur Eingabe des Spielers
+  note: >-
+    Es wurde keine Aktion ausgeführt. Antworte dem Spieler im Rahmen deiner
+    Rolle und gib ihm Kontext aus dem AKTUELLEN RAUM.
+
+helfe_dem_spieler:
+  description: >-
+    Hilfe: Der Spieler fragt, was er tun kann oder soll, wie es weitergeht,
+    oder bittet um Hilfe oder einen Tipp — z. B. "was kann ich tun?", "was soll
+    ich machen?", "hilf mir", "wie geht es weiter?", "hast du einen Tipp?",
+    "wohin kann ich gehen?", "welche Wege gibt es?".
+    Dann IMMER diese Funktion aufrufen, auch wenn es eine Frage ist — nicht
+    keine_aktion.
+  # {actions}: die jetzt möglichen Aktionen, eine Zeile "- Beschreibung" je Aktion
+  note: |-
+    Der Spieler bittet um Hilfe. Gib ihm im Rahmen deiner Rolle einen hilfreichen, subtilen Hinweis auf eine der folgenden Möglichkeiten — verrate nicht alles, keine Liste:
+    {actions}
+  noteNothingToDo: >-
+    Der Spieler bittet um Hilfe, aber hier ist gerade nichts zu tun. Sag ihm
+    das im Rahmen deiner Rolle.
+
+# Wird nie Stufe 1 angeboten: die Engine wählt sie, wenn eine Aktion im Spiel
+# fehlschlägt (z. B. ein kaputtes Lua-Skript).
+on_system_error:
+  description: Im Spiel ist ein Fehler aufgetreten
+  # {wanted}: wantedKnown (mit {description} der versuchten Aktion) oder wantedUnknown
+  note: >-
+    {wanted}, aber dabei ist im Spiel ein Fehler aufgetreten — es ist nichts
+    passiert. Sag ihm das im Rahmen deiner Rolle, passend zu dem, was er
+    vorhatte, und dass er es noch einmal versuchen kann.
+  wantedKnown: Der Spieler wollte etwas tun ({description})
+  wantedUnknown: Der Spieler wollte etwas tun

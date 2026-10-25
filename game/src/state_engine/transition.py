@@ -16,7 +16,7 @@ class Transition(Action):
     
     Examples:
     - gehe_zum_baum
-    - klettere_fenster
+    - klettere_durch_das_fenster
     - gehe_nach_norden
     - gehe_in_die_gelbe_hoehle
     """
@@ -56,6 +56,10 @@ class Transition(Action):
         # Check Lua conditions via parent class
         return super().check_conditions(current_state, lua_sandbox)
     
+    @property
+    def room(self) -> str:
+        return self.state_before
+
     def __str__(self) -> str:
         """String representation for debugging."""
         return f"Transition(name='{self.name}', {self.state_before} → {self.state_after})"
@@ -70,11 +74,8 @@ class Transition(Action):
         Returns:
             Tuple of (success: bool, message: str)
         """
-        # Get lua sandbox
-        lua_sandbox = state_engine.session.game_engine.inventory.lua
-        
         # Execute scripts/actions
-        if not self.execute_actions(lua_sandbox):
+        if not self.execute_actions(state_engine.session.game_engine.inventory):
             return False, f"Failed to execute scripts for transition '{self.name}'"
         
         # Update state (this is what makes it a Transition!)

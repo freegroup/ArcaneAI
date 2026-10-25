@@ -4,6 +4,7 @@
 class Inventory {
     constructor(listElementId) {
         this.element = document.getElementById(listElementId);
+        this.countElement = document.getElementById('inventory-count');
         this.data = {};
     }
 
@@ -31,14 +32,16 @@ class Inventory {
     render() {
         if (!this.element) return;
 
-        // Filter: only show items that are true or > 0
+        // Only items that are set: true, > 0 or a non-empty text (e.g. companion_mood)
         const activeItems = Object.entries(this.data).filter(([key, value]) => {
             if (typeof value === 'boolean') return value === true;
             if (typeof value === 'number') return value > 0;
+            if (typeof value === 'string') return value !== '';
             return false;
         });
 
         this.element.innerHTML = '';
+        if (this.countElement) this.countElement.textContent = `(${activeItems.length})`;
 
         if (activeItems.length === 0) {
             this.element.innerHTML = '<div class="inventory-empty">Nichts im Inventar</div>';
@@ -48,7 +51,7 @@ class Inventory {
         activeItems.forEach(([key, value]) => {
             const item = document.createElement('div');
             item.classList.add('inventory-item');
-            item.innerHTML = `<span class="item-key">${key}:</span> <span class="item-value">${value}</span>`;
+            item.textContent = value === true ? key : `${key}: ${value}`;
             this.element.appendChild(item);
         });
     }

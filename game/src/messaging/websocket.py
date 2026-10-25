@@ -1,6 +1,7 @@
 """
 WebSocket message queue implementation.
 """
+import asyncio
 from typing import Dict, Any
 from .base import MessageQueue
 
@@ -17,10 +18,10 @@ class WebSocketMessageQueue(MessageQueue):
         
         Args:
             websocket: WebSocket connection object
-            loop: Event loop (optional, will get current loop if not provided)
+            loop: Event loop the WebSocket runs on (defaults to the running loop)
         """
         self.websocket = websocket
-        self.loop = loop
+        self.loop = loop or asyncio.get_running_loop()
     
     def send(self, message, data: Dict[str, Any] = None):
         """
@@ -30,8 +31,6 @@ class WebSocketMessageQueue(MessageQueue):
             message: Message object or legacy string type
             data: Message data (only used with legacy string type)
         """
-        import asyncio
-
         # Handle Message objects
         if hasattr(message, 'to_dict'):
             message_dict = message.to_dict()
@@ -42,13 +41,7 @@ class WebSocketMessageQueue(MessageQueue):
                 "data": data or {}
             }
 
-        # Get event loop
-        try:
-            loop = self.loop or asyncio.get_event_loop()
-            # Schedule coroutine as task
-            asyncio.ensure_future(self._send_async(message_dict), loop=loop)
-        except Exception as e:
-            print(f"[ERROR] Failed to schedule WebSocket send: {e}")
+        self._schedule(self._send_async(message_dict))
 
     def send_bytes(self, data: bytes):
         """
@@ -57,14 +50,19 @@ class WebSocketMessageQueue(MessageQueue):
         Args:
             data: Binary data to send
         """
-        import asyncio
+        self._schedule(self._send_bytes_async(data))
 
+    def _schedule(self, coro) -> None:
+        """
+        Run coro on the WebSocket's event loop. Thread-safe: game turns and
+        TTS run in worker threads, not on the loop itself.
+        """
         try:
-            loop = self.loop or asyncio.get_event_loop()
-            asyncio.ensure_future(self._send_bytes_async(data), loop=loop)
+            asyncio.run_coroutine_threadsafe(coro, self.loop)
         except Exception as e:
-            print(f"[ERROR] Failed to schedule WebSocket binary send: {e}")
-    
+            coro.close()
+            print(f"[ERROR] Failed to schedule WebSocket send: {e}")
+
     async def _send_async(self, message: Dict[str, Any]):
         """
         Actually send message over WebSocket.

@@ -7,7 +7,8 @@ Or: uvicorn server:app --host 0.0.0.0 --port 9000
 """
 from pathlib import Path
 from typing import Dict, Optional
-from uuid import uuid4
+from uuid import UUID, uuid4
+import asyncio
 import secrets
 import os
 
@@ -22,6 +23,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from session import GameSession
+from session_store import SessionStore
 from config_loader import load_config
 from audio import WebSocketSink
 from sound import WebJukebox
@@ -60,6 +62,10 @@ app.add_middleware(
 # Session store and token mapping
 session_store: Dict[str, GameSession] = {}
 token_to_session: Dict[str, str] = {}  # ws_token -> session_id
+auth_tokens: set[str] = set()  # random tokens handed out at login (cookie "auth")
+
+# Game progress survives a server restart: one JSON file per session id.
+saved_games = SessionStore(GAME_DIR.parent / "sessions" / "web")
 
 
 # Pydantic models
@@ -93,23 +99,59 @@ def get_session(session_id: Optional[str]) -> Optional[GameSession]:
     return None
 
 
+def valid_session_id(session_id: Optional[str]) -> bool:
+    """Session ids are UUIDs we handed out — they name the save file, so check them."""
+    try:
+        return session_id is not None and str(UUID(session_id)) == session_id
+    except ValueError:
+        return False
+
+
 def get_or_create_session(session_id: Optional[str]) -> tuple[GameSession, str]:
-    """Get existing session or create new one. Returns (session, session_id)."""
-    if session_id and session_id in session_store:
-        return session_store[session_id], session_id
-    
-    # Create new session
-    if not session_id:
+    """Get existing session (from memory or its save file) or create new one. Returns (session, session_id)."""
+    if not valid_session_id(session_id):
         session_id = str(uuid4())
-    
+    if session_id in session_store:
+        return session_store[session_id], session_id
+
     session = create_session(session_id)
+    saved = saved_games.load(session_id)
+    if saved:
+        session.restore_from_dict(saved)
+        print(f"[SESSION] Restored saved game {session_id}")
     session_store[session_id] = session
     return session, session_id
 
 
+def save_game(session: GameSession) -> None:
+    saved_games.save(session.session_id, session.to_dict())
+
+
+def game_state(session: GameSession) -> dict:
+    """What the client shows: room, inventory, possible functions, whether the game is over."""
+    engine = session.game_engine
+    state = engine.state_engine.get_current_state()
+    decision = engine.controller.decision
+    return {
+        "state": state.name,
+        "inventory": engine.inventory.to_dict(),
+        "game_over": state.is_end,
+        # For debugging: exactly the functions stage 1 is offered right now.
+        "functions": [
+            {"name": f.name, "builtin": decision.builtins.by_name(f.name) is not None}
+            for f in decision.prompts.functions(engine)
+        ],
+    }
+
+
+def is_authenticated(request: Request) -> bool:
+    """True if the request carries an auth token handed out at login."""
+    return request.cookies.get("auth") in auth_tokens
+
+
 def require_auth(request: Request) -> None:
     """Check if user is authenticated, raise HTTPException if not."""
-    if request.cookies.get("authenticated") != "yes":
+    if not is_authenticated(request):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
 
 
@@ -128,15 +170,17 @@ async def login(request: Request, data: LoginData):
             secrets.compare_digest(data.password, VALID_PASSWORD)):
         return JSONResponse({"error": "Invalid username or password"}, status_code=400)
     
+    token = secrets.token_urlsafe(32)
+    auth_tokens.add(token)
     response = RedirectResponse(url=request.url_for("ui"), status_code=status.HTTP_307_TEMPORARY_REDIRECT)
-    response.set_cookie("authenticated", "yes", httponly=True, samesite=SAME_SITE_VALUE)
+    response.set_cookie("auth", token, httponly=True, samesite=SAME_SITE_VALUE)
     return response
 
 
 @app.get("/ui", response_class=HTMLResponse, name="ui")
 async def ui(request: Request):
     """Show game UI."""
-    if request.cookies.get("authenticated") != "yes":
+    if not is_authenticated(request):
         return RedirectResponse(url=request.url_for("login_page"))
     return templates.TemplateResponse("index.html", {"request": request, "BASE_URI": BASE_URI})
 
@@ -159,45 +203,63 @@ async def websocket_connect(request: Request):
     return response
 
 
+@app.get("/api/game", name="game")
+async def game(request: Request):
+    """The running game (if any): history, room, inventory and the intro text."""
+    require_auth(request)
+
+    session, session_id = get_or_create_session(request.cookies.get("session_id"))
+    entries = session.game_engine.controller.history.entries
+    response = JSONResponse({
+        "running": len(entries) > 0,
+        # The welcome's input is the instruction to the model, not something the player said.
+        "history": [
+            {"user": None if e.is_welcome else e.user_input, "assistant": e.llm_response}
+            for e in entries
+        ],
+        "intro": session.game_engine.game_data.get("help_text", ""),
+        **game_state(session),
+    })
+    response.set_cookie("session_id", session_id, httponly=False, samesite=SAME_SITE_VALUE)
+    return response
+
+
+@app.post("/api/restart", name="restart")
+async def restart(request: Request):
+    """Start the game from the beginning."""
+    require_auth(request)
+
+    session_id = request.cookies.get("session_id")
+    old_session, session_id = get_or_create_session(session_id)
+    # The old game must stop talking (blocks until its speech thread ends)
+    await asyncio.to_thread(old_session.game_engine.controller.stop_speaking)
+    # Fresh game, but keep the WebSocket connection
+    session = create_session(session_id)
+    session.ws_token = old_session.ws_token
+    session.message_queue = old_session.message_queue
+    session_store[session_id] = session
+
+    # LLM calls block — run them in a worker thread so other players
+    # and the WebSocket keep being served meanwhile.
+    response_text = await asyncio.to_thread(session.game_engine.controller.start_game)
+    save_game(session)
+
+    response = JSONResponse({"response": response_text, **game_state(session)})
+    response.set_cookie("session_id", session_id, httponly=False, samesite=SAME_SITE_VALUE)
+    return response
+
+
 @app.post("/api/chat", name="chat")
 async def chat(request: Request, data: ChatMessage):
-    """Process chat message."""
+    """Process one player input."""
     require_auth(request)
-    
-    session_id = request.cookies.get("session_id")
-    session, session_id = get_or_create_session(session_id)
-    
-    text = data.text.strip()
-    
-    if text.lower() == "start":
-        # Restart game - preserve WebSocket state
-        old_ws_token = session.ws_token
-        old_message_queue = session.message_queue
-        session = create_session(session_id)
-        session_store[session_id] = session
-        session.ws_token = old_ws_token
-        session.message_queue = old_message_queue
-        response_text = session.game_engine.controller.start_game()
-    else:
-        session.update_activity()
-        response_text = session.game_engine.controller.process_input(text)
-    
-    # Flush WebSocket messages if connected
-    if hasattr(session.message_queue, 'flush'):
-        await session.message_queue.flush()
-    
-    # Get buffered messages (for REST fallback)
-    messages = []
-    if hasattr(session.message_queue, 'get_messages'):
-        messages = session.message_queue.get_messages()
-    
-    response = JSONResponse({
-        "response": response_text,
-        "state": session.game_engine.state_engine.get_current_state().name,
-        "inventory": session.game_engine.inventory.to_dict(),
-        "messages": messages,
-        "session_id": session_id
-    })
+
+    session, session_id = get_or_create_session(request.cookies.get("session_id"))
+    session.update_activity()
+    result = await asyncio.to_thread(session.game_engine.controller.process_input, data.text.strip())
+    save_game(session)
+
+    response = JSONResponse({"response": result["response"], **game_state(session)})
     response.set_cookie("session_id", session_id, httponly=False, samesite=SAME_SITE_VALUE)
     return response
 
@@ -205,8 +267,6 @@ async def chat(request: Request, data: ChatMessage):
 @app.websocket("/websocket/{token}")
 async def websocket_endpoint(websocket: WebSocket, token: str):
     """WebSocket endpoint for real-time game updates."""
-    import asyncio
-    
     await websocket.accept()
     
     # Find session by token (O(1) lookup)
@@ -221,7 +281,7 @@ async def websocket_endpoint(websocket: WebSocket, token: str):
     # Set up WebSocket message queue with event loop
     # This allows other threads (like audio playback) to send messages
     old_queue = session.message_queue
-    loop = asyncio.get_event_loop()
+    loop = asyncio.get_running_loop()
     session.message_queue = WebSocketMessageQueue(websocket, loop=loop)
     
     print(f"[WEBSOCKET] Client connected for session {session_id}")
@@ -235,6 +295,10 @@ async def websocket_endpoint(websocket: WebSocket, token: str):
                 "inventory": session.game_engine.inventory.to_dict()
             }
         })
+
+        # Reconnect to a running game: the room's ambience plays again
+        if session.game_engine.controller.history.entries:
+            session.game_engine.controller.send_ambient()
         
         # Keep connection alive
         while True:

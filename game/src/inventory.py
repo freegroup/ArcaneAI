@@ -136,30 +136,38 @@ class Inventory:
         """
         return self.lua.get_all_vars()
     
-    def on_action(self, action: Action) -> bool:
+    def mark_done(self, key: str) -> None:
+        """Set the marker of a one-time action (key = Action.once_key) and tell the client."""
+        self.set(key, True)
+        if self.session.message_queue:
+            from messaging.messages.inventory import InventoryMessage
+            self.session.message_queue.send(InventoryMessage(inventory=self.to_dict()))
+
+    def run_scripts(self, action_name: str, scripts: List[str]) -> bool:
         """
-        Callback method for StateEngine action hook.
-        Executes inventory actions when an action is performed.
-        
-        Args:
-            action: The action being executed
-            
+        Run an action's Lua scripts once, sync the inventory and tell the client.
+
         Returns:
-            True to allow action, False to veto
+            False if a script failed (the game itself is broken)
         """
-        if action.scripts:
-            print(f"[INVENTORY] Action '{action.name}' executing {len(action.scripts)} script(s)")
-            for script in action.scripts:
-                print(f"[INVENTORY]   → {script}")
-            self.execute(action.scripts)
-            
-            # Send inventory update via message queue
-            if self.session.message_queue:
-                from messaging.messages.inventory import InventoryMessage
-                message = InventoryMessage(inventory=self.to_dict())
-                self.session.message_queue.send(message)
-        
-        return True
-    
+        print(f"[INVENTORY] Action '{action_name}' executing {len(scripts)} script(s)")
+        success = True
+        for script in scripts:
+            if not script or not script.strip():
+                continue
+            print(f"[INVENTORY]   → {script}")
+            try:
+                self.lua.eval(script)
+            except Exception as e:
+                print(f"[WARNING] Failed to execute script '{script}' for action '{action_name}': {e}")
+                success = False
+                break
+        self._sync_from_lua()
+
+        if self.session.message_queue:
+            from messaging.messages.inventory import InventoryMessage
+            self.session.message_queue.send(InventoryMessage(inventory=self.to_dict()))
+        return success
+
     def __repr__(self) -> str:
         return f"Inventory({self.to_dict()})"

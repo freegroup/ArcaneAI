@@ -1,79 +1,55 @@
+"""
+Builds the prompts of stage 1 from prompt_rule_stage1.yaml and the game.
+Stage 1 only chooses the function, so it gets the rules about choosing —
+not the personality (that is stage 2's).
+"""
 from __future__ import annotations
 from typing import TYPE_CHECKING, List
-
-from jinja2 import Template
 
 from llm import LLMFunction
 
 if TYPE_CHECKING:
-    from state_engine import State, Action
-    from inventory import Inventory
+    from builtin_functions import BuiltinRegistry
+    from game_engine import GameEngine
+    from prompt_config import DecisionConfig
 
 
 class PromptBuilder:
-    """
-    Builds LLM prompts from game state. Pure/stateless — no session reference needed.
-    """
 
-    def build_system_prompt(self, state: State, inventory: Inventory, game_data: dict) -> str:
-        # Personality is a Jinja2 template — same engine as room descriptions.
-        # Game-designer authors {% if companion_mood == 'X' %}...{% endif %} blocks
-        # (or any inventory-driven conditionals) directly in the personality text.
-        identity: str = game_data.get('personality', '')
-        if identity:
-            try:
-                identity = Template(identity).render(inventory.to_dict())
-            except Exception as e:
-                print(f"[WARNING] Failed to render personality template: {e}")
-                # Fall through with raw identity text — better than empty prompt.
+    def __init__(self, builtins: BuiltinRegistry, config: DecisionConfig) -> None:
+        self.builtins = builtins
+        self.config = config
 
-        behaviour: str = game_data.get('behaviour', '')
-
-        prompt = ''
-        if identity:
-            prompt += identity + '\n\n'
-        if behaviour:
-            prompt += behaviour + '\n\n'
-
-        prompt += f'AKTUELLER RAUM:\n{state.get_description()}\n'
+    def system_prompt(self, engine: GameEngine) -> str:
+        """
+        The role, the goal, the current room and — last, next to the
+        conversation — how to decide. The functions are handed over as tools.
+        """
+        prompt = self.config.role + '\n\n'
+        game_target: str = engine.game_data.get('game_target', '')
+        if game_target:
+            prompt += f'SPIELZIEL:\n{game_target}\n\n'
+        prompt += f'AKTUELLER RAUM:\n{engine.state_engine.get_current_state().get_description()}\n\n'
+        prompt += self.config.decision_rules.replace('{fallback}', self.builtins.fallback.name)
         return prompt
 
-    def build_functions(self, actions: List[Action]) -> List[LLMFunction]:
-        functions: List[LLMFunction] = []
+    def functions(self, engine: GameEngine) -> List[LLMFunction]:
+        """
+        The game's actions possible right now, then the built-in ones (they
+        win a name clash). An action's after_fire hint is about the answer:
+        it goes to stage 2.
+        """
+        return [
+            *(LLMFunction(a.name, a.description)
+              for a in engine.state_engine.get_available_actions()
+              if self.builtins.by_name(a.name) is None),
+            *(LLMFunction(b.name, b.description) for b in self.builtins.functions),
+        ]
 
-        for action in actions:
-            description = action.description
-            if action.after_fire:
-                description += f'. Falls du diese Aktion auswählst, dann bitte dies in deiner Antwort berücksichtigen: {action.after_fire}'
-
-            functions.append(LLMFunction(
-                name=action.name,
-                description=description,
-                parameters={
-                    'type': 'object',
-                    'properties': {
-                        'response': {
-                            'type': 'string',
-                            'description': 'Deine narrative Antwort an den Spieler (kurz, in character)'
-                        }
-                    },
-                    'required': ['response']
-                }
-            ))
-
-        functions.append(LLMFunction(
-            name='keine_aktion',
-            description='Keine der Aktionen passt zur Eingabe des Spielers',
-            parameters={
-                'type': 'object',
-                'properties': {
-                    'response': {
-                        'type': 'string',
-                        'description': 'Erkläre dem Spieler, warum du seine Eingabe nicht verstehst'
-                    }
-                },
-                'required': ['response']
-            }
-        ))
-
-        return functions
+    def retry_input(self, user_input: str, reason: str, functions: List[LLMFunction]) -> str:
+        """The player's input once more, after an answer was discarded for reason."""
+        hint = (self.config.retry_hint
+                .replace('{reason}', reason)
+                .replace('{functions}', ', '.join(f.name for f in functions))
+                .replace('{fallback}', self.builtins.fallback.name))
+        return f'{user_input}\n\n{hint}'
