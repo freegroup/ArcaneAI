@@ -233,7 +233,7 @@ export default {
       // Update the specific trigger
       updatedState.trigger[triggerIndex] = {
         id: triggerData.id,
-        name: triggerData.text,  // TriggerLabel uses 'text' for name
+        name: triggerData.name,
         description: triggerData.userData?.description,
         sound_effect: triggerData.userData?.sound_effect,
         sound_effect_duration: triggerData.userData?.sound_effect_duration,

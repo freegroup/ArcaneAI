@@ -30,9 +30,16 @@
     </v-navigation-drawer>
 
 
+    <!-- Room Picker Dialog -->
+    <RoomPickerDialog
+      v-model="showRoomPickerDialog"
+      :preselectedRoom="pendingTestRoom"
+      @select="onRoomPicked"
+    />
+
     <!-- Chat Dialog -->
-    <ChatDialog 
-      v-model="showChatDialog" 
+    <ChatDialog
+      v-model="showChatDialog"
       :stateName="chatDialogStateName"
     />
 
@@ -52,6 +59,7 @@ import StateTriggerProperty from './StateTriggerProperty.vue';
 import ConnectionTriggerProperty from './ConnectionTriggerProperty.vue';
 import EncounterPropertyView from './EncounterPropertyView.vue';
 import ChatDialog from '../components/ChatDialog.vue';
+import RoomPickerDialog from '../components/RoomPickerDialog.vue';
 
 import EncounterNewDialog from '../components/EncounterNewDialog.vue';
 import { MessageTypes } from '../../public/shared/SharedConstants.js';
@@ -64,6 +72,7 @@ export default {
     ConnectionTriggerProperty,
     EncounterPropertyView,
     ChatDialog,
+    RoomPickerDialog,
    
     EncounterNewDialog
   },
@@ -72,6 +81,8 @@ export default {
       draw2dFrameContent: null,
       canvasReady: false,
       isCanvasUpdate: false,
+      showRoomPickerDialog: false,
+      pendingTestRoom: null,
       showChatDialog: false,
       chatDialogStateName: '',
       sidebarCollapsed: false,
@@ -155,6 +166,11 @@ export default {
       this.sidebarCollapsed = !this.sidebarCollapsed;
       localStorage.setItem('sidebarCollapsed', JSON.stringify(this.sidebarCollapsed));
     },
+
+    onRoomPicked(roomName) {
+      this.chatDialogStateName = roomName;
+      this.showChatDialog = true;
+    },
     
     async saveMap() {
       try {
@@ -212,11 +228,11 @@ export default {
       }
     },
     
-    sendDocumentToCanvas(document, centerId = null) {
+    sendDocumentToCanvas(document, centerId) {
       window.postMessage({
         type: MessageTypes.V2C_SET_DOCUMENT,
         data: JSON.parse(JSON.stringify(document)),
-        center: centerId || undefined,
+        center: centerId,
         source: 'vue:world'
       }, '*');
     },
@@ -231,8 +247,8 @@ export default {
     },
     
     /**
-     * Called when EncounterNewDialog creates a new encounter.
-     * If we have pending viewData from "View from Here...", we add the layouts.
+     * Called when EncounterNewDialog creates a new map.
+     * If we have pending viewData from "Create Map from here", we add the layouts.
      * 
      * @param {string} viewId - The created view ID (e.g., 'encounter_tavern')
      */
@@ -356,8 +372,8 @@ export default {
           break;
 
         case MessageTypes.C2V_CHAT_FROM_HERE:
-          this.chatDialogStateName = message.stateName;
-          this.showChatDialog = true;
+          this.pendingTestRoom = message.stateName || null;
+          this.showRoomPickerDialog = true;
           break;
 
         case MessageTypes.C2V_CREATE_VIEW_FROM_STATE:

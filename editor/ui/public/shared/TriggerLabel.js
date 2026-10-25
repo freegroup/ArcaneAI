@@ -19,8 +19,15 @@ var TriggerLabel = draw2d.shape.box.HBox.extend({
             userData: {
                 actions:     [],
                 conditions:  [],
+                description: "",
                 system_prompt: "",
             }
+        },
+        {
+            name: this.setName,
+        },
+        {
+            name: this.getName,
         });
 
         // Lock icon — shown only when conditions exist
@@ -59,12 +66,6 @@ var TriggerLabel = draw2d.shape.box.HBox.extend({
         this.on("change:userData", (emitter, event) => {
             this.updateStyle();
         });
-    },
-
-    // Delegate double-click to the inner text label so the inline editor fires
-    onDoubleClick: function()
-    {
-        this.textLabel.onDoubleClick();
     },
 
     updateStyle: function()
@@ -115,6 +116,36 @@ var TriggerLabel = draw2d.shape.box.HBox.extend({
 
     getActions: function()    { return this.getUserData().actions; },
     setActions: function(v)   { this.getUserData().actions = v; },
+
+    getPersistentAttributes: function()
+    {
+        const memento = this._super();
+        memento.name             = this.getName();
+        memento.sound_effect     = this.getSoundEffect();
+        memento.sound_effect_duration = this.getSoundEffectDuration();
+        memento.sound_effect_volume   = this.getSoundEffectVolume();
+        memento.description      = this.getDescription();
+        memento.system_prompt    = this.getSystemPrompt();
+        memento.conditions       = this.getConditions();
+        memento.actions          = this.getActions();
+        return memento;
+    },
+
+    setPersistentAttributes: function(memento)
+    {
+        this._super(memento);
+        const name = memento.name || '';
+        if (name) this.setName(name);
+        if (memento.sound_effect !== undefined)          this.setSoundEffect(memento.sound_effect);
+        if (memento.sound_effect_duration !== undefined) this.setSoundEffectDuration(memento.sound_effect_duration);
+        if (memento.sound_effect_volume !== undefined)   this.setSoundEffectVolume(memento.sound_effect_volume);
+        if (memento.description !== undefined)           this.setDescription(memento.description);
+        if (memento.system_prompt !== undefined)         this.setSystemPrompt(memento.system_prompt);
+        if (Array.isArray(memento.conditions))           this.setConditions(memento.conditions);
+        if (Array.isArray(memento.actions))              this.setActions(memento.actions);
+        this.updateStyle();
+        return this;
+    },
 
     onDrag: function(dx, dy, dx2, dy2, shiftKey, ctrlKey)
     {

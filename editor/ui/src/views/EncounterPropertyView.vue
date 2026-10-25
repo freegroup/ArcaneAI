@@ -1,8 +1,11 @@
 <template>
   <div v-if="showViewProperties" class="property-view">
-    <!-- View Name Section -->
+    <!-- Map Name Section -->
     <div class="field-group">
-      <label>{{ isWorldView ? 'View' : 'Encounter' }} Name</label>
+      <PropertyLabel
+        helpTitle="Map Name"
+        helpText="<p>The name of this map — only visible to you as the game designer. It is never shown to the player.</p><p>For the World map the name is fixed. For Encounters you can rename them freely.</p>"
+      >Map Name</PropertyLabel>
       <input
         id="encounterName"
         type="text"
@@ -10,21 +13,24 @@
         :readonly="isWorldView"
         :class="{ 'readonly-name': isWorldView }"
         @input="!isWorldView && debouncedSaveName()"
-        placeholder="Enter encounter name..."
+        placeholder="Enter map name..."
       />
     </div>
 
     <!-- Description Section -->
     <div class="field-group">
-      <label>Description</label>
+      <PropertyLabel
+        helpTitle="Map Description"
+        helpText="<p>A private note about this map — only for you, never shown to the player.</p><p>Use it to document the purpose of this map, which rooms it covers, or design decisions you want to remember.</p>"
+      >Description</PropertyLabel>
       <textarea
         v-model="localDescription"
-        placeholder="Describe what this view represents..."
+        placeholder="Designer notes about this map — purpose, scope, open questions..."
         rows="4"
         @input="saveDescription"
       />
     </div>
-    
+
     <!-- Todo List Section (Extracted to Component) -->
     <TodoManager />
   </div>
@@ -34,12 +40,14 @@
 import { mapGetters } from 'vuex';
 import { MessageTypes } from '../../public/shared/SharedConstants.js';
 import TodoManager from '../components/TodoManager.vue';
+import PropertyLabel from '@/components/PropertyLabel.vue';
 
 export default {
   name: 'EncounterPropertyView',
-  
+
   components: {
-    TodoManager
+    TodoManager,
+    PropertyLabel
   },
   
   props: {

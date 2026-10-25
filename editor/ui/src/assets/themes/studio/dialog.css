@@ -1,0 +1,371 @@
+/*
+ * Elegant Theme — Dialog (.dialog-header, .*-dialog)
+ */
+[data-theme="studio"] .dialog-overlay {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+[data-theme="studio"] .dialog-container {
+  background: var(--color-bg-2);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="studio"] .dialog-header {
+  min-height: 48px;
+  padding: 16px 24px;
+  gap: 16px;
+  background: linear-gradient(135deg, var(--color-bg-3) 0%, var(--color-bg-1) 100%);
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(
+    90deg,
+    rgba(108, 138, 255, 0.8) 0%,
+    rgba(108, 138, 255, 0.4) 40%,
+    rgba(108, 138, 255, 0.25) 100%
+  ) 1;
+  border-radius: 12px 12px 0 0;
+}
+
+[data-theme="studio"] .dialog-header__icon {
+  font-size: 28px;
+  color: var(--color-accent-1);
+}
+
+[data-theme="studio"] .dialog-header__close {
+  background: rgba(var(--color-accent-1-rgb), 0.22) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(var(--color-accent-1-rgb), 0.5) !important;
+  color: var(--color-accent-1) !important;
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.25),
+    0 0 10px rgba(var(--color-accent-1-rgb), 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="studio"] .dialog-header__close:hover {
+  background: rgba(var(--color-accent-1-rgb), 0.35) !important;
+  border-color: rgba(var(--color-accent-1-rgb), 0.7) !important;
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(var(--color-accent-1-rgb), 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+}
+
+[data-theme="studio"] .dialog-header__title {
+  font-size: 18px;
+  font-weight: 300;
+  letter-spacing: 3px;
+  color: var(--color-accent-1);
+}
+
+[data-theme="studio"] .dialog-content {
+  padding: 28px 32px;
+  color: var(--color-text-1);
+}
+
+[data-theme="studio"] .dialog-description {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--color-text-2);
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--color-border);
+  font-style: italic;
+}
+
+[data-theme="studio"] .dialog-description .desc-accent {
+  color: var(--color-accent-2);
+  font-weight: 500;
+  font-style: normal;
+}
+
+[data-theme="studio"] .dialog-actions {
+  padding: 20px 32px;
+  gap: 12px;
+  background: var(--color-bg-3);
+  border-top: 1px solid var(--color-border);
+  border-radius: 0 0 12px 12px !important;
+  overflow: hidden;
+}
+
+[data-theme="studio"] .dialog-list-item {
+  padding: 12px 16px;
+  letter-spacing: 1px;
+  border-radius: 6px;
+}
+
+/* ═══════════════════════════════════════════
+   Lamp Glow Effect — all dialogs
+   ═══════════════════════════════════════════ */
+
+/* Card wrapper — lamp glow effect */
+[data-theme="studio"] .help-dialog,
+[data-theme="studio"] .delete-encounter-dialog,
+[data-theme="studio"] .game-select-dialog,
+[data-theme="studio"] .game-new-dialog,
+[data-theme="studio"] .encounter-new-dialog,
+[data-theme="studio"] .todo-edit-dialog,
+[data-theme="studio"] .sound-picker-dialog,
+[data-theme="studio"] .import-state-dialog,
+[data-theme="studio"] .jinja-editor-dialog,
+[data-theme="studio"] .room-action-editor-dialog,
+[data-theme="studio"] .chat-dialog {
+  position: relative !important;
+  background: var(--color-bg-2) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  overflow: visible !important;
+  isolation: isolate;
+}
+
+/* Ensure all inner content has background (prevents transparency with overflow:visible) */
+[data-theme="studio"] .help-dialog > .v-card-text,
+[data-theme="studio"] .delete-encounter-dialog > .v-card-text,
+[data-theme="studio"] .game-select-dialog > .v-card-text,
+[data-theme="studio"] .game-new-dialog > .v-card-text,
+[data-theme="studio"] .encounter-new-dialog > .v-card-text,
+[data-theme="studio"] .todo-edit-dialog > .v-card-text,
+[data-theme="studio"] .sound-picker-dialog > .v-card-text,
+[data-theme="studio"] .sound-picker-dialog > .search-bar,
+[data-theme="studio"] .import-state-dialog > .v-card-text,
+[data-theme="studio"] .jinja-editor-dialog > .v-card-text,
+[data-theme="studio"] .room-action-editor-dialog > .v-card-text,
+[data-theme="studio"] .chat-dialog > .v-card-text,
+[data-theme="studio"] .help-dialog > .dialog-content,
+[data-theme="studio"] .delete-encounter-dialog > .dialog-content,
+[data-theme="studio"] .game-select-dialog > .dialog-content,
+[data-theme="studio"] .game-new-dialog > .dialog-content,
+[data-theme="studio"] .encounter-new-dialog > .dialog-content,
+[data-theme="studio"] .todo-edit-dialog > .dialog-content,
+[data-theme="studio"] .sound-picker-dialog > .dialog-content,
+[data-theme="studio"] .import-state-dialog > .dialog-content,
+[data-theme="studio"] .jinja-editor-dialog > .dialog-content,
+[data-theme="studio"] .room-action-editor-dialog > .dialog-content,
+[data-theme="studio"] .chat-dialog > .dialog-content {
+  background: var(--color-bg-2);
+}
+
+/* Clip inner content to card border-radius */
+[data-theme="studio"] .help-dialog > .dialog-header,
+[data-theme="studio"] .delete-encounter-dialog > .dialog-header,
+[data-theme="studio"] .game-select-dialog > .dialog-header,
+[data-theme="studio"] .game-new-dialog > .dialog-header,
+[data-theme="studio"] .encounter-new-dialog > .dialog-header,
+[data-theme="studio"] .todo-edit-dialog > .dialog-header,
+[data-theme="studio"] .sound-picker-dialog > .dialog-header,
+[data-theme="studio"] .import-state-dialog > .dialog-header,
+[data-theme="studio"] .jinja-editor-dialog > .dialog-header,
+[data-theme="studio"] .room-action-editor-dialog > .dialog-header,
+[data-theme="studio"] .chat-dialog > .dialog-header {
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+}
+
+[data-theme="studio"] .help-dialog > :last-child,
+[data-theme="studio"] .delete-encounter-dialog > :last-child,
+[data-theme="studio"] .game-select-dialog > :last-child,
+[data-theme="studio"] .game-new-dialog > :last-child,
+[data-theme="studio"] .encounter-new-dialog > :last-child,
+[data-theme="studio"] .todo-edit-dialog > :last-child,
+[data-theme="studio"] .sound-picker-dialog > :last-child,
+[data-theme="studio"] .import-state-dialog > :last-child,
+[data-theme="studio"] .jinja-editor-dialog > :last-child,
+[data-theme="studio"] .room-action-editor-dialog > :last-child,
+[data-theme="studio"] .chat-dialog > :last-child {
+  border-radius: 0 0 12px 12px;
+  overflow: hidden;
+}
+
+/* Gradient border — luminous frame, bright left fading right */
+[data-theme="studio"] .help-dialog::before,
+[data-theme="studio"] .delete-encounter-dialog::before,
+[data-theme="studio"] .game-select-dialog::before,
+[data-theme="studio"] .game-new-dialog::before,
+[data-theme="studio"] .encounter-new-dialog::before,
+[data-theme="studio"] .todo-edit-dialog::before,
+[data-theme="studio"] .sound-picker-dialog::before,
+[data-theme="studio"] .import-state-dialog::before,
+[data-theme="studio"] .jinja-editor-dialog::before,
+[data-theme="studio"] .room-action-editor-dialog::before,
+[data-theme="studio"] .chat-dialog::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 14px;
+  background: linear-gradient(
+    90deg,
+    #a0b4ff 0%,
+    rgba(108, 138, 255, 0.8) 10%,
+    rgba(108, 138, 255, 0.4) 30%,
+    rgba(108, 138, 255, 0.12) 55%,
+    rgba(15, 17, 23, 0.4) 80%,
+    rgba(15, 17, 23, 0.2) 100%
+  );
+  box-shadow:
+    0 0 8px rgba(108, 138, 255, 0.4),
+    0 0 20px rgba(108, 138, 255, 0.15);
+  z-index: -1;
+}
+
+/* The lamp — softer ambient glow behind card, upper-left */
+[data-theme="studio"] .help-dialog::after,
+[data-theme="studio"] .delete-encounter-dialog::after,
+[data-theme="studio"] .game-select-dialog::after,
+[data-theme="studio"] .game-new-dialog::after,
+[data-theme="studio"] .encounter-new-dialog::after,
+[data-theme="studio"] .todo-edit-dialog::after,
+[data-theme="studio"] .sound-picker-dialog::after,
+[data-theme="studio"] .import-state-dialog::after,
+[data-theme="studio"] .jinja-editor-dialog::after,
+[data-theme="studio"] .room-action-editor-dialog::after,
+[data-theme="studio"] .chat-dialog::after {
+  content: '';
+  position: absolute;
+  left: -30px;
+  top: -15px;
+  width: 60px;
+  height: 45%;
+  background: rgba(108, 138, 255, 0.3);
+  filter: blur(35px);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+/* ═══════════════════════════════════════════
+   Help Dialog Content (ExtendedHelpDialog)
+   ═══════════════════════════════════════════ */
+[data-theme="studio"] .help-dialog-content {
+  padding: 28px 32px !important;
+  font-size: 14px !important;
+  line-height: 1.8;
+  color: var(--color-text-2);
+  max-height: 450px;
+  background: var(--color-bg-2);
+}
+
+/* Intro paragraph — slightly larger, brighter */
+[data-theme="studio"] .help-dialog-content p:first-child {
+  font-size: 15px;
+  color: var(--color-text-1);
+  margin-bottom: 16px;
+}
+
+/* Section headers (strong in paragraphs) */
+[data-theme="studio"] .help-dialog-content strong {
+  color: var(--color-accent-2);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* Emphasis */
+[data-theme="studio"] .help-dialog-content em {
+  color: var(--color-accent-1);
+  font-style: italic;
+}
+
+/* Lists */
+[data-theme="studio"] .help-dialog-content ul {
+  margin: 8px 0 16px 0;
+  padding-left: 8px;
+  list-style: none;
+}
+
+[data-theme="studio"] .help-dialog-content li {
+  position: relative;
+  padding: 6px 12px 6px 24px;
+  margin: 4px 0;
+  color: var(--color-text-2);
+  border-radius: 4px;
+  transition: background 0.15s ease;
+}
+
+/* Custom bullet — small accent dash */
+[data-theme="studio"] .help-dialog-content li::before {
+  content: '—';
+  position: absolute;
+  left: 4px;
+  color: var(--color-accent-1);
+  opacity: 0.6;
+}
+
+/* Subtle hover on list items */
+[data-theme="studio"] .help-dialog-content li:hover {
+  background: rgba(var(--color-accent-1-rgb), 0.04);
+}
+
+/* Code inline */
+[data-theme="studio"] .help-dialog-content code {
+  background: rgba(var(--color-accent-1-rgb), 0.1);
+  color: var(--color-accent-2);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+  border: 1px solid rgba(var(--color-accent-1-rgb), 0.15);
+}
+
+/* Code blocks */
+[data-theme="studio"] .help-dialog-content pre {
+  background: var(--color-bg-1);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin: 12px 0;
+}
+
+/* Actions footer */
+[data-theme="studio"] .help-dialog-actions {
+  padding: 16px 32px !important;
+  background: var(--color-bg-3);
+  border-top: 1px solid var(--color-border);
+  border-radius: 0 0 12px 12px !important;
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════
+   Editor Toolbar (Undo/Redo)
+   ═══════════════════════════════════════════ */
+
+[data-theme="studio"] .editor-toolbar {
+  gap: 4px;
+  padding: 8px 12px;
+  background: var(--color-bg-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+[data-theme="studio"] .toolbar-btn {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  padding: 4px 8px;
+  opacity: 0.4;
+  border-radius: 6px;
+  color: var(--color-text-2);
+  font-size: 10px;
+  transition: all 0.15s ease;
+  box-shadow: none;
+}
+
+[data-theme="studio"] .toolbar-btn:not(:disabled) {
+  opacity: 1;
+  color: var(--color-text-1);
+  background: var(--color-bg-2);
+  border-color: var(--color-border-highlight);
+}
+
+[data-theme="studio"] .toolbar-btn:not(:disabled):hover {
+  background: rgba(var(--color-accent-1-rgb), 0.15);
+  border-color: var(--color-accent-1);
+  color: var(--color-accent-1);
+}
+
+[data-theme="studio"] .toolbar-btn:not(:disabled):active {
+  background: rgba(var(--color-accent-1-rgb), 0.25);
+}
+
+[data-theme="studio"] .undo-icon,
+[data-theme="studio"] .redo-icon {
+  font-size: 18px;
+  line-height: 1;
+}

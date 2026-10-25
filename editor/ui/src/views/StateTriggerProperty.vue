@@ -7,30 +7,19 @@
               id="stateName"
               type="text"
               lable="Name"
-              v-model="jsonData.text"
+              v-model="jsonData.name"
               @input="onDataChange"
           />
         </div>
 
-        <!-- Sound Effect Selection with Finder Dialog -->
+        <!-- Sound Effect Selection -->
         <div class="field-group">
           <PropertyLabel :helpTitle="helpTexts.soundEffect.title" :helpText="helpTexts.soundEffect.text">Sound Effect</PropertyLabel>
-          <div class="sound-selection">
-          <div class="sound-display" @click="showSoundPicker = true">
-            <span class="sound-name">{{ jsonData.userData.sound_effect || 'No sound selected' }}</span>
-            <v-icon size="small" class="browse-icon">mdi-folder-open</v-icon>
-          </div>
-            <v-btn icon size="small" @click="toggleSound" :disabled="!jsonData.userData.sound_effect">
-              <v-icon size="small">{{ isPlaying ? 'mdi-stop' : 'mdi-play' }}</v-icon>
-            </v-btn>
-          </div>
-
-          <!-- Sound Picker Dialog -->
-          <SoundSelectDialog
-            v-model="showSoundPicker"
-            :files="soundFiles"
-            :currentValue="jsonData.userData.sound_effect"
-            @select="onSoundSelected"
+          <SoundSelector
+            :modelValue="jsonData.userData?.sound_effect"
+            :volume="jsonData.userData?.sound_effect_volume"
+            @update:modelValue="val => { jsonData.userData = { ...jsonData.userData, sound_effect: val }; onDataChange() }"
+            @update:volume="val => { jsonData.userData = { ...jsonData.userData, sound_effect_volume: val }; onDataChange() }"
           />
 
           <div class="sound-controls" v-if="jsonData.userData.sound_effect">
@@ -48,16 +37,6 @@
                 hide-details
               />
               <v-icon class="sound-control-icon">mdi-clock</v-icon>
-            </div>
-            <div class="sound-control-row">
-              <v-slider
-                v-model="jsonData.userData.sound_effect_volume"
-                :min="1"
-                :max="100"
-                :step="1"
-                hide-details
-              />
-              <v-icon class="sound-control-icon">mdi-volume-high</v-icon>
             </div>
           </div>
         </div>
@@ -125,17 +104,17 @@
   
 <script>
   import SoundManager from '@/utils/SoundManager'
-  import { mapGetters, mapActions } from 'vuex';
+  import { mapActions } from 'vuex';
   import { MessageTypes, ShapeTypes } from '../../public/shared/SharedConstants.js';
   import JinjaEditorDialog from '@/components/JinjaEditorDialog.vue';
-  import SoundSelectDialog from '@/components/SoundSelectDialog.vue';
+  import SoundSelector from '@/components/SoundSelector.vue';
   import PropertyLabel from '@/components/PropertyLabel.vue';
   import ExpandButton from '@/components/ExpandButton.vue';
   import "codemirror/theme/material-darker.css";
 
   export default {
     name: 'PropertyView',
-    components: { JinjaEditorDialog, SoundSelectDialog, PropertyLabel, ExpandButton },
+    components: { JinjaEditorDialog, SoundSelector, PropertyLabel, ExpandButton },
     props: {
         draw2dFrame: {
             type: Object,
@@ -145,7 +124,7 @@
     data() {
       return {
         jsonData: {
-          text: "",
+          name: "",
           userData: {
             system_prompt: '',
             actions: [], 
@@ -159,13 +138,10 @@
         isInitializing: false, // Flag to prevent watchers from firing during initial data load
         conditionsText: '',
         actionsText: '',
-        isPlaying: false,
         // Help Dialog
         // Jinja Editor Dialogs
         showActionEditor: false,
         showSuccessEditor: false,
-        // Sound Picker Dialog
-        showSoundPicker: false,
         helpTexts: {
           triggerName: {
             title: 'Action Name',
@@ -260,20 +236,15 @@
       };
     },
     computed: {
-      ...mapGetters('sounds', ['files']),
-      soundFiles() {
-        return this.files;
-      },
     },
-    methods: {
-      ...mapActions('model', ['updateTrigger']),
+    methods: {      ...mapActions('model', ['updateTrigger']),
       
       /**
        * Called when data is loaded/synced (initial load or programmatic update).
        * Sends data to the canvas iframe.
        */
-      onDataLoad() { 
-        this.jsonData.text = this.jsonData?.text?.replace(/[^a-zA-Z0-9_-]/g, '');
+      onDataLoad() {
+        this.jsonData.name = this.jsonData?.name?.replace(/[^a-zA-Z0-9_-]/g, '');
         var data = JSON.parse(JSON.stringify( this.jsonData ));
         window.postMessage({ type: MessageTypes.V2C_SET_SHAPE_DATA, data: data }, '*');
       },
@@ -295,13 +266,6 @@
         this.updateTrigger(data);
       },
 
-      onVolumeChange() {
-        if(this.jsonData?.userData){
-          const volume = this.jsonData.userData.sound_effect_volume || 100;
-          SoundManager.setVolume(volume);
-          this.onDataLoad();
-        }
-      },
       updateConditions() {
         const trimmedText = this.conditionsText?.trim();
         if (trimmedText === "" || trimmedText.split('\n').every(line => line.trim() === "")) {
@@ -316,16 +280,6 @@
         this.jsonData.userData.actions = this.actionsText?.split('\n') ?? [];
         this.onDataChange();
       },
-      toggleSound() {
-        if (this.isPlaying) {
-          SoundManager.stopCurrentSound();
-        } else if (this.jsonData.userData.sound_effect) {
-          const volume = this.jsonData.userData.sound_effect_volume || 100;
-          const duration = this.jsonData.userData.sound_effect_duration || null;
-          SoundManager.playSound(this.jsonData.userData.sound_effect, volume, duration);
-        }
-      },
-
       updateActionDescription(newText) {
         this.jsonData.userData.description = newText;
         this.onDataChange();
@@ -333,11 +287,6 @@
 
       updateOnSuccess(newText) {
         this.jsonData.userData.system_prompt = newText;
-        this.onDataChange();
-      },
-
-      onSoundSelected(soundPath) {
-        this.jsonData.userData.sound_effect = soundPath;
         this.onDataChange();
       },
     },
@@ -355,24 +304,7 @@
         },
         immediate: true,
       },
-      "jsonData.userData.sound_effect"() {
-          this.onDataLoad(); // Always sync with canvas
-          if (!this.isInitializing) {
-            this.onDataChange();
-          }
-      },
-      "jsonData.userData.sound_effect_volume"() {
-        if (!this.isInitializing) {
-          this.onVolumeChange();
-        }
-      },
       "jsonData.userData.description"() {
-          this.onDataLoad(); // Always sync with canvas
-          if (!this.isInitializing) {
-            this.onDataChange();
-          }
-      },
-      "jsonData.userData.sound_effect_duration"() {
           this.onDataLoad(); // Always sync with canvas
           if (!this.isInitializing) {
             this.onDataChange();
@@ -380,11 +312,6 @@
       },
     },
     mounted() {
-        // Listen to SoundManager events
-        this.soundListener = SoundManager.addListener((isPlaying) => {
-          this.isPlaying = isPlaying;
-        });
-
         // Event listener for messages from the iframe
         this.messageHandler = (event) => {
             if (event.origin !== window.location.origin) return;
@@ -412,11 +339,6 @@
         window.addEventListener('message', this.messageHandler);
     },
     beforeUnmount() {
-        // Clean up sound listener
-        if (this.soundListener) {
-            this.soundListener();
-            this.soundListener = null;
-        }
         // Clean up event listener to prevent memory leaks
         if (this.messageHandler) {
             window.removeEventListener('message', this.messageHandler);
@@ -462,39 +384,7 @@
     resize: none;
   }
 
-  .sound-selection {
-    display: flex;
-    align-items: flex-start;
-  }
-
-  .sound-display {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-  }
-
-  .sound-display .sound-icon {
-    flex-shrink: 0;
-  }
-
-  .sound-display .sound-name {
-    flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .sound-display .browse-icon {
-    flex-shrink: 0;
-  }
-
-  .sound-selection :deep(.v-select) {
-    flex: 1;
-  }
-
-  .sound-control-row :deep(.v-text-field),
-  .sound-control-row :deep(.v-slider) {
+  .sound-control-row :deep(.v-text-field) {
     flex: 1;
   }
 
@@ -510,10 +400,6 @@
 
   .sound-control-icon {
     flex-shrink: 0;
-  }
-
-  :deep(.v-slider) {
-    margin-inline: 0;
   }
 
   /* Editor Container with Expand Button */

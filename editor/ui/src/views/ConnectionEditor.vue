@@ -32,21 +32,11 @@
 
         <div class="field-group">
           <PropertyLabel>Sound Effect</PropertyLabel>
-          <div class="sound-selection">
-            <div class="sound-display" @click="showSoundPicker = true">
-              <span class="sound-name">{{ local.sound_effect || 'No sound selected' }}</span>
-              <v-icon size="small">mdi-folder-open</v-icon>
-            </div>
-            <v-btn icon size="small" @click="toggleSound" :disabled="!local.sound_effect">
-              <v-icon size="small">{{ isPlaying ? 'mdi-stop' : 'mdi-play' }}</v-icon>
-            </v-btn>
-          </div>
-
-          <SoundSelectDialog
-            v-model="showSoundPicker"
-            :files="soundFiles"
-            :currentValue="local.sound_effect"
-            @select="onSoundSelected"
+          <SoundSelector
+            :modelValue="local.sound_effect"
+            :volume="local.sound_effect_volume"
+            @update:modelValue="val => { local.sound_effect = val; onChange() }"
+            @update:volume="val => { local.sound_effect_volume = val; onChange() }"
           />
 
           <div class="sound-controls" v-if="local.sound_effect">
@@ -63,17 +53,6 @@
                 @input="onChange"
               />
               <v-icon class="sound-control-icon">mdi-clock</v-icon>
-            </div>
-            <div class="sound-control-row">
-              <v-slider
-                v-model="local.sound_effect_volume"
-                :min="1"
-                :max="100"
-                :step="1"
-                hide-details
-                @end="onChange"
-              />
-              <v-icon class="sound-control-icon">mdi-volume-high</v-icon>
             </div>
           </div>
         </div>
@@ -133,14 +112,14 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import SoundManager from '@/utils/SoundManager'
-import SoundSelectDialog from '@/components/SoundSelectDialog.vue'
+import SoundSelector from '@/components/SoundSelector.vue'
 import DialogHeader from '@/components/DialogHeader.vue'
 import ThemedButton from '@/components/ThemedButton.vue'
 import PropertyLabel from '@/components/PropertyLabel.vue'
 
 export default {
   name: 'ConnectionEditor',
-  components: { SoundSelectDialog, DialogHeader, ThemedButton, PropertyLabel },
+  components: { SoundSelector, DialogHeader, ThemedButton, PropertyLabel },
   props: {
     modelValue: { type: Boolean, default: false },
     exit: { type: Object, default: null },
@@ -156,16 +135,11 @@ export default {
       local: this.makeEmpty(),
       conditionsText: '',
       actionsText: '',
-      showSoundPicker: false,
-      isPlaying: false,
-      removeSoundListener: null,
       isInitializing: false
     }
   },
   computed: {
-    ...mapGetters('sounds', ['files']),
     ...mapGetters('model', ['allStates', 'getConnection']),
-    soundFiles() { return this.files },
     dialogOpen: {
       get() { return this.modelValue },
       set(v) { this.$emit('update:modelValue', v) }
@@ -230,10 +204,8 @@ export default {
     }
   },
   mounted() {
-    this.removeSoundListener = SoundManager.addListener((p) => { this.isPlaying = p })
   },
   beforeUnmount() {
-    if (typeof this.removeSoundListener === 'function') this.removeSoundListener()
     SoundManager.stopCurrentSound()
   },
   methods: {
@@ -291,21 +263,6 @@ export default {
       this.local.actions = this.actionsText?.split('\n') ?? []
       this.onChange()
     },
-    onSoundSelected(soundPath) {
-      this.local.sound_effect = soundPath
-      this.onChange()
-    },
-    toggleSound() {
-      if (this.isPlaying) {
-        SoundManager.stopCurrentSound()
-      } else if (this.local.sound_effect) {
-        SoundManager.playSound(
-          this.local.sound_effect,
-          this.local.sound_effect_volume || 100,
-          this.local.sound_effect_duration || null
-        )
-      }
-    },
     close() {
       SoundManager.stopCurrentSound()
       this.dialogOpen = false
@@ -350,19 +307,6 @@ export default {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.85rem;
 }
-.sound-selection { display: flex; align-items: center; gap: 6px; }
-.sound-display {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  border: 1px solid rgba(127, 127, 127, 0.3);
-  border-radius: 4px;
-  cursor: pointer;
-}
-.sound-display:hover { background: rgba(127, 127, 127, 0.08); }
-.sound-name { flex: 1; font-size: 0.85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .sound-controls { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
 .sound-control-row { display: flex; align-items: center; gap: 8px; }
 .sound-control-icon { flex-shrink: 0; }

@@ -5,6 +5,7 @@ const THEMES = [
   { id: 'dark', label: 'Dark Fantasy' },
   { id: 'tavern', label: 'Fantasy Tavern' },
   { id: 'elegant', label: 'Elegant' },
+  { id: 'studio', label: 'Studio' },
 ];
 
 export default {

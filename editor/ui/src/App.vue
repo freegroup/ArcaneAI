@@ -190,12 +190,6 @@
           </v-list-item>
         </v-list-group>
 
-        <!-- ============ HELP (disabled placeholder) ============ -->
-        <v-list-item
-          :title="isCompact ? undefined : 'Help'"
-          class="nav-drawer__item nav-drawer__help-disabled"
-          disabled
-        />
       </v-list>
     </v-navigation-drawer>
 

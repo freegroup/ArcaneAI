@@ -1,0 +1,55 @@
+/*
+ * Elegant Theme — Inputs & Controls
+ */
+[data-theme="studio"] input[type="text"],
+[data-theme="studio"] input[type="number"],
+[data-theme="studio"] input[type="email"],
+[data-theme="studio"] textarea,
+[data-theme="studio"] select {
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--color-bg-1);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  color: var(--color-text-1);
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  transition: all 0.2s ease;
+  outline: none;
+  line-height: 1.4;
+}
+
+[data-theme="studio"] input:hover,
+[data-theme="studio"] textarea:hover,
+[data-theme="studio"] select:hover {
+  background: var(--color-bg-2);
+  border-color: var(--color-border-highlight);
+}
+
+[data-theme="studio"] input:focus,
+[data-theme="studio"] textarea:focus,
+[data-theme="studio"] select:focus {
+  border-color: var(--color-accent-1);
+  box-shadow: 0 0 0 3px rgba(108, 138, 255, 0.15);
+}
+
+/* Vuetify v-text-field — fix label overlap & alignment */
+[data-theme="studio"] .v-field .v-label {
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+[data-theme="studio"] .v-field .v-label--floating {
+  transform: translateY(-8px) scale(0.75);
+  color: var(--color-accent-2);
+}
+
+[data-theme="studio"] .v-field .v-field__input {
+  padding-top: 20px;
+  padding-inline-start: 16px;
+  font-size: 14px;
+}
+
+[data-theme="studio"] .v-text-field__suffix {
+  padding-inline-start: 8px;
+}

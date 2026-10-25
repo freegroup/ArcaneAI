@@ -12,48 +12,26 @@
           />
         </div>
 
-        <!-- Ambient Sound Selection with Finder Dialog -->
+        <!-- Ambient Sound Selection -->
         <div class="field-group">
           <PropertyLabel :helpTitle="helpTexts.ambientSound.title" :helpText="helpTexts.ambientSound.text">Ambient Sound</PropertyLabel>
-          <div class="sound-selection">
-          <div class="sound-display" @click="showSoundPicker = true">
-            <v-icon size="small" class="sound-icon">mdi-music-note</v-icon>
-            <span class="sound-name">{{ jsonData.userData.ambient_sound || 'No sound selected' }}</span>
-            <v-icon size="small" class="browse-icon">mdi-folder-open</v-icon>
-          </div>
-          
-            <v-btn icon size="small" @click="toggleSound" :disabled="!jsonData.userData.ambient_sound">
-              <v-icon size="small">{{ isPlaying ? 'mdi-stop' : 'mdi-play' }}</v-icon>
-            </v-btn>
-          </div>
-
-          <!-- Sound Picker Dialog -->
-          <SoundSelectDialog
-          v-model="showSoundPicker"
-          :files="soundFiles"
-          :currentValue="jsonData.userData.ambient_sound"
-            @select="onSoundSelected"
+          <SoundSelector
+            v-if="jsonData.userData"
+            :modelValue="jsonData.userData.ambient_sound"
+            :volume="jsonData.userData.ambient_sound_volume"
+            @update:modelValue="onSoundSelected"
+            @update:volume="onVolumeChange"
           />
-          <div>
-            <v-slider
-              v-if="jsonData.userData"
-              v-model="jsonData.userData.ambient_sound_volume"
-              :min="1"
-              :max="100"
-              :step="1"
-              append-icon="mdi-volume-high"
-            />
-          </div>
         </div>
         
         <div class="property-view__section">
-          <PropertyLabel v-if="jsonData.userData" :helpTitle="helpTexts.sceneDescription.title" :helpText="helpTexts.sceneDescription.text">Scene Description</PropertyLabel>
+          <PropertyLabel v-if="jsonData.userData" :helpTitle="helpTexts.sceneDescription.title" :helpText="helpTexts.sceneDescription.text">Atmospheric Room Description</PropertyLabel>
           <div class="editor-container" v-if="jsonData.userData">
             <Codemirror
                 class="code-editor"
                 v-model:value="jsonData.userData.system_prompt"
                 :options="cmOptions"
-                placeholder="test placeholder"
+                placeholder="Describe this room vividly – what does the player see, hear, smell? What can they touch or interact with? The richer the description, the more immersive the Game Engine's responses."
                 @change="onDataChange"
             />
             <ExpandButton @click="showJinjaEditor = true" />
@@ -72,10 +50,10 @@
   
 <script>
   import SoundManager from '@/utils/SoundManager'
-  import { mapGetters, mapActions } from 'vuex';
+  import SoundSelector from '@/components/SoundSelector.vue';
+  import { mapActions } from 'vuex';
   import { MessageTypes, ShapeTypes } from '../../public/shared/SharedConstants.js';
   import JinjaEditorDialog from '@/components/JinjaEditorDialog.vue';
-  import SoundSelectDialog from '@/components/SoundSelectDialog.vue';
   import PropertyLabel from '@/components/PropertyLabel.vue';
   import ExpandButton from '@/components/ExpandButton.vue';
 
@@ -88,7 +66,7 @@
 
   export default {
     name: 'PropertyView',
-    components: { Codemirror, JinjaEditorDialog, SoundSelectDialog, PropertyLabel, ExpandButton },
+    components: { Codemirror, JinjaEditorDialog, SoundSelector, PropertyLabel, ExpandButton },
     props: {
         draw2dFrame: {
             type: Object,
@@ -108,14 +86,12 @@
         isInitializing: false,
         cmOptions: {
           mode: "jinja2",
-          lineNumbers: false, 
-          lineWrapping: true, 
+          lineNumbers: false,
+          lineWrapping: true,
           theme: "material-darker",
           styleActiveLine: false,
         },
-        isPlaying: false,
         showJinjaEditor: false,
-        showSoundPicker: false,
         helpTexts: {
           stateName: {
             title: 'Room Name',
@@ -157,7 +133,7 @@
 <p>Choose sounds that support the mood you want players to feel.</p>`
           },
           sceneDescription: {
-            title: 'Scene Description',
+            title: 'Atmospheric Room Description',
             text: `<p>Describe this location vividly for the game engine. A rich description helps the AI create immersive, authentic responses.</p>
 
 <p><strong>Include sensory details:</strong></p>
@@ -179,10 +155,6 @@
       };
     },
     computed: {
-      ...mapGetters('sounds', ['files']),
-      soundFiles() {
-        return this.files;
-      },
     },
     watch: {
       "jsonData.userData.ambient_sound"() {
@@ -193,7 +165,7 @@
       },
       "jsonData.userData.ambient_sound_volume"() {
         if (!this.isInitializing) {
-          this.onVolumeChange();
+          this.onDataChange();
         }
       },
     },
@@ -213,34 +185,20 @@
         this.updateState(data);
       },
 
-      onVolumeChange() {
-        if(this.jsonData?.userData){
-          const volume = this.jsonData.userData.ambient_sound_volume || 100;
-          SoundManager.setVolume(volume);
-          this.onDataLoad();
-          if (!this.isInitializing) {
-            var data = JSON.parse(JSON.stringify( this.jsonData ));
-            this.updateState(data);
-          }
-        }
+      onSoundSelected(soundPath) {
+        this.jsonData.userData.ambient_sound = soundPath;
+        this.onDataChange();
       },
 
-      toggleSound() {
-        if (this.isPlaying) {
-          SoundManager.stopCurrentSound();
-        } else if (this.jsonData.userData.ambient_sound) {
-          const volume = this.jsonData.userData.ambient_sound_volume || 100;
-          SoundManager.playSound(this.jsonData.userData.ambient_sound, volume);
+      onVolumeChange(volume) {
+        if (this.jsonData?.userData) {
+          this.jsonData.userData.ambient_sound_volume = volume;
+          this.onDataChange();
         }
       },
 
       updateSystemPrompt(newText) {
         this.jsonData.userData.system_prompt = newText;
-        this.onDataChange();
-      },
-
-      onSoundSelected(soundPath) {
-        this.jsonData.userData.ambient_sound = soundPath;
         this.onDataChange();
       },
 
@@ -259,10 +217,6 @@
     },
 
     mounted() {
-        this.soundListener = SoundManager.addListener((isPlaying) => {
-          this.isPlaying = isPlaying;
-        });
-
         this.messageHandler = (event) => {
             if (event.origin !== window.location.origin) return;
             const message = event.data;
@@ -281,7 +235,6 @@
                 SoundManager.stopCurrentSound()
                 this.jsonData = {}
             }
-            // Handle focus request from canvas (e.g., after adding new element)
             else if (message.type === MessageTypes.C2V_FOCUS_PROPERTY) {
                 this.focusField(message.field);
             }
@@ -289,10 +242,6 @@
         window.addEventListener('message', this.messageHandler);
     },
     beforeUnmount() {
-        if (this.soundListener) {
-            this.soundListener();
-            this.soundListener = null;
-        }
         if (this.messageHandler) {
             window.removeEventListener('message', this.messageHandler);
             this.messageHandler = null;

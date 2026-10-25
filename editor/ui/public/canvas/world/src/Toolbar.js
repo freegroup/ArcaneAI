@@ -55,18 +55,13 @@ Toolbar = Class.extend({
 		this.addButton.addEventListener('click', () => {
             let x = (this.view.getScrollLeft() + 100) * this.view.getZoom();
             let y = (this.view.getScrollTop() + 100) * this.view.getZoom();
-        
-            var newState = new StateShape({name:"NewState"});
+
+            var newState = new StateShape({name:"NewRoom"});
             var command = new draw2d.command.CommandAdd(this.view, newState, x, y);
 			this.view.getCommandStack().execute(command);
-			
-			// Select the newly added state after command execution completes
-			// Use setTimeout to ensure the figure is fully added to the canvas
+
 			setTimeout(() => {
 				this.view.setCurrentSelection(newState);
-				
-				// Send message to Vue to focus the name property field
-				// Additional delay to ensure selection event is processed first
 				setTimeout(() => {
 					window.parent.postMessage({
 						type: MessageTypes.C2V_FOCUS_PROPERTY,
@@ -74,6 +69,19 @@ Toolbar = Class.extend({
 					}, '*');
 				}, 50);
 			}, 0);
+		});
+
+		// Test Button — opens room picker to start a test session
+		this.testButton = this.createButton('▶ Test');
+		this.html.appendChild(this.testButton);
+		this.testButton.title = 'Test game from a room';
+		this.testButton.addEventListener('click', () => {
+			const selected = this.view.getPrimarySelection();
+			const selectedRoom = (selected && selected.NAME === 'StateShape') ? selected.getName() : null;
+			window.parent.postMessage({
+				type: MessageTypes.C2V_CHAT_FROM_HERE,
+				stateName: selectedRoom
+			}, '*');
 		});
     },
 
@@ -100,12 +108,12 @@ Toolbar = Class.extend({
      * @param {Object} event
      * @param {draw2d.Figure} event.figure
 	 */
-	onSelectCallback: function(emitter, event)
+	onSelectCallback: function(emitter)
     {
 		this.deleteButton.disabled = false;
 	},
-	
-	onUnselectCallback: function(emitter, event)
+
+	onUnselectCallback: function(emitter)
     {
 		this.deleteButton.disabled = true;
 	},

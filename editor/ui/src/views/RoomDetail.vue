@@ -23,6 +23,7 @@
                 <span class="room-header__map-link-label">{{ v.label }}</span>
               </router-link>
             </span>
+            <button class="room-header__test-btn" @click="showChatDialog = true" title="Test game from this room">▶ Test</button>
           </div>
         </div>
 
@@ -92,6 +93,8 @@
           title="Room Description"
           :helpText="helpContent"
         />
+
+        <ChatDialog v-model="showChatDialog" :stateName="room.name" />
       </div>
 
       <RoomSidebar
@@ -126,6 +129,8 @@ import AIAssistHelpText from '../components/AIAssistHelpText.vue'
 import AIAssistLoading from '../components/AIAssistLoading.vue'
 import AIAssistInput from '../components/AIAssistInput.vue'
 
+import ChatDialog from '../components/ChatDialog.vue'
+
 import Codemirror from 'codemirror-editor-vue3'
 import 'codemirror/addon/display/placeholder.js'
 import 'codemirror/mode/jinja2/jinja2.js'
@@ -139,7 +144,8 @@ export default {
   components: {
     RoomSidebar, Codemirror,
     ExtendedHelpDialog, HelpButton, ThemedButton,
-    AIAssistLabel, AIAssistHelpText, AIAssistLoading, AIAssistInput
+    AIAssistLabel, AIAssistHelpText, AIAssistLoading, AIAssistInput,
+    ChatDialog
   },
   props: {
     gameName: { type: String, required: true },
@@ -161,6 +167,7 @@ export default {
       },
 
       showHelp: false,
+      showChatDialog: false,
       helpContent: `
 <p>The <strong>Room Description</strong> is what the player "sees" when entering the room.</p>
 
@@ -415,6 +422,25 @@ export default {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.room-header__test-btn {
+  margin-left: 4px;
+  padding: 2px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border: 1px solid rgba(127, 127, 127, 0.3);
+  border-radius: 4px;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.15s, background 0.15s;
+}
+.room-header__test-btn:hover {
+  opacity: 1;
+  background: rgba(127, 127, 127, 0.1);
 }
 
 .room-header__badge {

@@ -15,38 +15,14 @@
 
     <div class="room-sidebar__content property-view" v-show="!collapsed">
 
-      <!-- Ambient Sound (same pattern as StateProperty.vue) -->
+      <!-- Ambient Sound -->
       <section class="room-sidebar__section">
         <PropertyLabel>Ambient Sound</PropertyLabel>
-        <div class="sound-selection">
-          <div class="sound-display" @click="showSoundPicker = true">
-            <v-icon size="small" class="sound-icon">mdi-music-note</v-icon>
-            <span class="sound-name">{{ ambientSound || 'No sound selected' }}</span>
-            <v-icon size="small" class="browse-icon">mdi-folder-open</v-icon>
-          </div>
-          <v-btn icon size="small" @click="toggleSound" :disabled="!ambientSound">
-            <v-icon size="small">{{ isPlaying ? 'mdi-stop' : 'mdi-play' }}</v-icon>
-          </v-btn>
-        </div>
-
-        <SoundSelectDialog
-          v-model="showSoundPicker"
-          :files="soundFiles"
-          :currentValue="ambientSound"
-          @select="onSoundSelected"
-        />
-
-        <v-slider
-          v-if="ambientSound"
-          :model-value="ambientVolume ?? 100"
-          @update:model-value="onVolumeChange"
-          :min="1"
-          :max="100"
-          :step="1"
-          append-icon="mdi-volume-high"
-          density="compact"
-          hide-details
-          class="room-sidebar__slider"
+        <SoundSelector
+          :modelValue="ambientSound"
+          :volume="ambientVolume ?? 100"
+          @update:modelValue="onSoundSelected"
+          @update:volume="onVolumeChange"
         />
       </section>
 
@@ -104,16 +80,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import SoundManager from '@/utils/SoundManager'
-import SoundSelectDialog from '@/components/SoundSelectDialog.vue'
+import SoundSelector from '@/components/SoundSelector.vue'
 import PropertyLabel from '@/components/PropertyLabel.vue'
 import RoomActionEditor from './RoomActionEditor.vue'
 import ConnectionEditor from './ConnectionEditor.vue'
 
 export default {
   name: 'RoomSidebar',
-  components: { SoundSelectDialog, PropertyLabel, RoomActionEditor, ConnectionEditor },
+  components: { PropertyLabel, SoundSelector, RoomActionEditor, ConnectionEditor },
   props: {
     gameName: { type: String, default: '' },
     sourceId: { type: String, default: null },
@@ -127,9 +101,6 @@ export default {
   data() {
     return {
       collapsed: false,
-      showSoundPicker: false,
-      isPlaying: false,
-      removeSoundListener: null,
       editorOpen: false,
       editingTrigger: null,
       connectionEditorOpen: false,
@@ -137,42 +108,18 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('sounds', ['files']),
-    soundFiles() {
-      return this.files
-    },
     sidebarWidth() {
       const w = this.$vuetify.display.width
       if (w < 1500) return Math.round(w / 4)
       return 360
     }
   },
-  mounted() {
-    this.removeSoundListener = SoundManager.addListener((isPlaying) => {
-      this.isPlaying = isPlaying
-    })
-  },
-  beforeUnmount() {
-    if (typeof this.removeSoundListener === 'function') {
-      this.removeSoundListener()
-    }
-    SoundManager.stopCurrentSound()
-  },
   methods: {
     onSoundSelected(soundPath) {
       this.$emit('update:ambient-sound', soundPath)
     },
     onVolumeChange(value) {
-      SoundManager.setVolume(value)
       this.$emit('update:ambient-volume', value)
-    },
-    toggleSound() {
-      if (this.isPlaying) {
-        SoundManager.stopCurrentSound()
-      } else if (this.ambientSound) {
-        const volume = this.ambientVolume ?? 100
-        SoundManager.playSound(this.ambientSound, volume)
-      }
     },
     editTrigger(t) {
       this.editingTrigger = t
@@ -224,39 +171,7 @@ export default {
   opacity: 0.75;
 }
 
-/* Sound Picker — same pattern as StateProperty.vue */
-.sound-selection {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.sound-display {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  border: 1px solid rgba(127, 127, 127, 0.3);
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-.sound-display:hover {
-  background: rgba(127, 127, 127, 0.08);
-}
-.sound-name {
-  flex: 1;
-  font-size: 0.85rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.sound-icon, .browse-icon {
-  opacity: 0.6;
-}
-.room-sidebar__slider {
-  margin-top: 8px;
-}
+
 
 .room-sidebar__muted {
   opacity: 0.6;

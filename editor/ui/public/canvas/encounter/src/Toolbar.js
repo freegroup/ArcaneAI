@@ -56,7 +56,7 @@ Toolbar = Class.extend({
             let x = (this.view.getScrollLeft() + 100) * this.view.getZoom();
             let y = (this.view.getScrollTop() + 100) * this.view.getZoom();
         
-            var newState = new StateShape({name:"NewState"});
+            var newState = new StateShape({name:"NewRoom"});
             var command = new draw2d.command.CommandAdd(this.view, newState, x, y);
 			this.view.getCommandStack().execute(command);
 			
@@ -85,6 +85,19 @@ Toolbar = Class.extend({
 				data: {}
 			}, '*');
 		});
+
+		// Test Button — opens room picker to start a test session
+		this.testButton = this.createButton('▶ Test');
+		this.html.appendChild(this.testButton);
+		this.testButton.title = 'Test game from a room';
+		this.testButton.addEventListener('click', () => {
+			const selected = this.view.getPrimarySelection();
+			const selectedRoom = (selected && selected.NAME === 'StateShape') ? selected.getName() : null;
+			window.parent.postMessage({
+				type: MessageTypes.C2V_CHAT_FROM_HERE,
+				stateName: selectedRoom
+			}, '*');
+		});
     },
 
 	/**
@@ -110,12 +123,12 @@ Toolbar = Class.extend({
      * @param {Object} event
      * @param {draw2d.Figure} event.figure
 	 */
-	onSelectCallback: function(emitter, event)
+	onSelectCallback: function(emitter)
     {
 		this.deleteButton.disabled = false;
 	},
-	
-	onUnselectCallback: function(emitter, event)
+
+	onUnselectCallback: function(emitter)
     {
 		this.deleteButton.disabled = true;
 	},

@@ -1,0 +1,67 @@
+/*
+ * Elegant Theme — Palette & Global Defaults
+ * Cool, refined colors with modern thin typography.
+ */
+[data-theme="studio"] {
+  --color-bg-1: #1c2030;
+  --color-bg-2: #232838;
+  --color-bg-3: #2a3045;
+  --color-accent-1: #7c9fff;
+  --color-accent-2: #5de0a0;
+  --color-accent-3: #a78bfa;
+  --color-text-1: #e8eaf0;
+  --color-text-2: #9ca3b0;
+  --color-text-muted: #5c6370;
+  --color-border: #323848;
+  --color-border-highlight: #424d62;
+  --color-success: #5de0a0;
+  --color-danger: #f06292;
+  --color-info: #64b5f6;
+  --color-accent-1-rgb: 124, 159, 255;
+  --color-accent-2-rgb: 93, 224, 160;
+  --color-danger-rgb: 240, 98, 146;
+  /* Global font */
+  --global-font-family: Verdana, 'Noto Sans', sans-serif;
+  --global-font-size: 16;
+}
+
+/* Base typography — set once, inherited everywhere */
+[data-theme="studio"],
+[data-theme="studio"] * {
+  font-family: Verdana, 'Noto Sans', 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Prevent Vuetify overlay container from blocking pointer events globally.
+   Only active overlays (open dialogs) should receive events. */
+[data-theme="studio"] .v-overlay-container {
+  pointer-events: none !important;
+}
+[data-theme="studio"] .v-overlay-container > .v-overlay--active {
+  pointer-events: auto !important;
+}
+[data-theme="studio"] .v-navigation-drawer__scrim {
+  pointer-events: none !important;
+}
+
+/* Text selection */
+[data-theme="studio"] ::selection {
+  background: rgba(124, 159, 255, 0.3);
+  color: var(--color-text-1);
+}
+
+[data-theme="studio"] ::-moz-selection {
+  background: rgba(124, 159, 255, 0.3);
+  color: var(--color-text-1);
+}
+
+/* Labels */
+[data-theme="studio"] label {
+  display: block;
+  margin: 0 0 6px 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-accent-2);
+  letter-spacing: 1.5px;
+}

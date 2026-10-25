@@ -25,6 +25,13 @@
     <!-- Import Room Dialog -->
     <ImportStateDialog v-model="showImportStateDialog" />
     
+    <!-- Room Picker Dialog -->
+    <RoomPickerDialog
+      v-model="showRoomPickerDialog"
+      :preselectedRoom="pendingTestRoom"
+      @select="onRoomPicked"
+    />
+
     <!-- Chat Dialog -->
     <ChatDialog v-model="showChatDialog" :stateName="chatDialogStateName" />
   </div>
@@ -38,6 +45,7 @@ import ConnectionTriggerProperty from './ConnectionTriggerProperty.vue';
 import EncounterPropertyView from './EncounterPropertyView.vue';
 import ImportStateDialog from '../components/ImportStateDialog.vue';
 import ChatDialog from '../components/ChatDialog.vue';
+import RoomPickerDialog from '../components/RoomPickerDialog.vue';
 import { MessageTypes } from '../../public/shared/SharedConstants.js';
 import ViewComposer from '../utils/ViewComposer.js';
 
@@ -48,7 +56,8 @@ export default {
     ConnectionTriggerProperty,
     EncounterPropertyView,
     ImportStateDialog,
-    ChatDialog
+    ChatDialog,
+    RoomPickerDialog
   },
   data() {
     return {
@@ -56,6 +65,8 @@ export default {
       canvasReady: false,
       isCanvasUpdate: false,
       showImportStateDialog: false,
+      showRoomPickerDialog: false,
+      pendingTestRoom: null,
       showChatDialog: false,
       chatDialogStateName: '',
       sidebarCollapsed: false
@@ -162,6 +173,11 @@ export default {
     ...mapActions('views', ['updateCurrentViewLayout', 'saveView', 'setCurrentView', 'loadEncounterView']),
     ...mapActions('encounters', ['setCurrentEncounter']),
     
+    onRoomPicked(roomName) {
+      this.chatDialogStateName = roomName;
+      this.showChatDialog = true;
+    },
+
     toggleSidebar() {
       this.sidebarCollapsed = !this.sidebarCollapsed;
       localStorage.setItem('sidebarCollapsed', JSON.stringify(this.sidebarCollapsed));
@@ -229,11 +245,11 @@ export default {
       }
     },
     
-    sendDocumentToCanvas(document, centerId = null) {
+    sendDocumentToCanvas(document, centerId) {
       window.postMessage({
         type: MessageTypes.V2C_SET_DOCUMENT,
         data: JSON.parse(JSON.stringify(document)),
-        center: centerId || undefined,
+        center: centerId,
         source: `vue:encounter:${this.viewId}`
       }, '*');
     },
@@ -278,8 +294,8 @@ export default {
           break;
 
         case MessageTypes.C2V_CHAT_FROM_HERE:
-          this.chatDialogStateName = message.stateName;
-          this.showChatDialog = true;
+          this.pendingTestRoom = message.stateName || null;
+          this.showRoomPickerDialog = true;
           break;
 
         case MessageTypes.C2V_OPEN_IMPORT_DIALOG:

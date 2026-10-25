@@ -104,13 +104,7 @@ StateShape = draw2d.shape.box.VBox.extend({
                         setTimeout(() => this.addTrigger("_new_").onDoubleClick(), 10);
                     }},
                     "sep1": {},
-                    "chatFromHere": { name: "Chat from here", icon: "fa-comments", callback: () => {
-                        window.parent.postMessage({
-                            type: MessageTypes.C2V_CHAT_FROM_HERE,
-                            stateName: this.getName()
-                        }, '*');
-                    }},
-                    "viewFromHere": { name: "View from Here...", icon: "fa-eye", callback: () => {
+                    "viewFromHere": { name: "Create Map from here", callback: () => {
                         this.createViewFromHere();
                     }},
                     "sep2": {},

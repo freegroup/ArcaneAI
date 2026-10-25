@@ -61,13 +61,16 @@ export default {
   },
   computed: {
     ...mapGetters('game', ['hasUnsavedChanges']),
+    ...mapGetters('settings', ['currentTheme']),
 
     isLargeScreen() {
       return this.$vuetify.display.mdAndUp;
     },
     headerHeight() {
       if (!this.isLargeScreen) return 48;
-      return this.showToolbar ? 128 : 72;
+      const tall = this.currentTheme === 'studio';
+      if (this.showToolbar) return tall ? 160 : 128;
+      return tall ? 96 : 72;
     },
   },
   methods: {
@@ -88,13 +91,16 @@ export default {
 
 .app-header .v-toolbar__content {
   height: 100% !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
 }
 
 .app-header__wrapper {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
+  min-height: 0;
 }
 
 .app-header__branding {

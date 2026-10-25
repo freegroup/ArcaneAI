@@ -1,0 +1,73 @@
+/*
+ * Studio Theme — App Header
+ * Branding + Toolbar as one unified block, clearly distinct from content.
+ */
+
+[data-theme="studio"] .app-header.v-toolbar {
+  background: linear-gradient(180deg, #1e5090 0%, #163c70 60%, #102e60 100%) !important;
+  border-bottom: 2px solid rgba(93, 224, 160, 0.6) !important;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.6) !important;
+}
+
+[data-theme="studio"] .app-header .v-toolbar__content {
+  padding: 0 !important;
+}
+
+[data-theme="studio"] .app-header__branding {
+  flex: 1;
+  padding: 0 24px;
+  gap: 24px;
+  border-bottom: none;
+  background: none;
+}
+
+[data-theme="studio"] .app-header__title {
+  gap: 8px;
+  margin: 0;
+}
+
+[data-theme="studio"] .app-header__title-main {
+  font-size: 32px;
+  font-weight: 200;
+  letter-spacing: 8px;
+  color: #e0ecff;
+  text-shadow: 0 0 20px rgba(150, 190, 255, 0.6);
+}
+
+[data-theme="studio"] .app-header__title-sub {
+  font-size: 32px;
+  font-weight: 300;
+  letter-spacing: 4px;
+  color: #5de0a0;
+  text-shadow: 0 0 16px rgba(93, 224, 160, 0.7);
+}
+
+[data-theme="studio"] .app-header__tagline {
+  font-size: 12px;
+  font-weight: 300;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(200, 220, 255, 0.55);
+  border-left: 2px solid rgba(93, 224, 160, 0.5);
+  padding-left: 16px;
+}
+
+[data-theme="studio"] .app-header__version {
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="studio"] .app-header__toolbar {
+  height: 56px;
+  padding: 0 12px;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="studio"] .app-header__unsaved {
+  color: #5de0a0;
+  font-weight: bold;
+}
+
+[data-theme="studio"] .app-header__wrapper {
+  height: 160px;
+}

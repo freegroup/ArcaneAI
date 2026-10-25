@@ -2,7 +2,8 @@
   <v-dialog v-model="dialogVisible" max-width="1100px" @click:outside="closeDialog">
     <v-card class="chat-dialog">
       <DialogHeader
-        :title="`Chat from: ${currentState || stateName}`"
+        :title="`Test: ${currentState || stateName}`"
+        subtitle="Test your game mechanics from this room. Modify inventory values on the left to simulate different game states."
         @close="closeDialog"
       />
 
@@ -340,6 +341,14 @@ export default {
 </script>
 
 <style scoped>
+.chat-subtitle {
+  padding: 4px 16px 8px;
+  font-size: 0.78rem;
+  opacity: 0.5;
+  font-style: italic;
+  border-bottom: 1px solid rgba(127,127,127,0.15);
+  background: var(--color-bg-1, #1a1a2e);
+}
 .chat-container {
   padding: 0 !important;
   display: flex;

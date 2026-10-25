@@ -1,0 +1,9 @@
+/*
+ * Elegant Theme — Toolbar (.app-toolbar)
+ */
+[data-theme="studio"] .app-toolbar {
+  background: var(--color-bg-2);
+  border-top: none;
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}

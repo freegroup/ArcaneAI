@@ -1,6 +1,9 @@
 <template>
   <div class="todo-manager">
-    <label>Todo List</label>
+    <PropertyLabel
+      helpTitle="Todo List"
+      helpText="<p>A personal task list for this map — only visible to you as the designer, never shown to the player.</p><p>Track what still needs to be written, which rooms are missing, or anything else you want to follow up on.</p>"
+    >Todo List</PropertyLabel>
     
     <!-- Add new todo -->
     <div class="todo-input-container">
@@ -77,13 +80,15 @@
 import { mapGetters } from 'vuex';
 import TodoEditDialog from './TodoEditDialog.vue';
 import ThemedActionButton from './ThemedActionButton.vue';
+import PropertyLabel from './PropertyLabel.vue';
 
 export default {
   name: 'TodoManager',
   
   components: {
     TodoEditDialog,
-    ThemedActionButton
+    ThemedActionButton,
+    PropertyLabel
   },
   
   data() {
