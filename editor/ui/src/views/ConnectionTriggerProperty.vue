@@ -80,6 +80,15 @@
           ></textarea>
         </div>
 
+        <div class="once-row">
+          <v-checkbox-btn
+            :modelValue="!!jsonData.userData?.once"
+            density="compact"
+            @update:modelValue="updateOnce"
+          />
+          <PropertyLabel :helpTitle="helpTexts.once.title" :helpText="helpTexts.once.text">Fire only once</PropertyLabel>
+        </div>
+
         <div class="field-group">
           <PropertyLabel :helpTitle="helpTexts.actions.title" :helpText="helpTexts.actions.text">Actions</PropertyLabel>
           <textarea
@@ -135,6 +144,7 @@
             sound_effect_volume: 100,
             sound_effect_duration: 2,
             description: '',
+            once: false,
           },
         },
         isInitializing: false, // Flag to prevent watchers from firing during initial data load
@@ -198,6 +208,10 @@
           onSuccess: {
             title: 'On Success',
             text: 'Text that the AI will use when this action succeeds. Describe the result of the action from the player\'s perspective. This will be included in the AI\'s response to create a cohesive narrative experience.'
+          },
+          once: {
+            title: "Fire only once",
+            text: "Once this action has been executed, it is never offered again (e.g. picking up a coin). The game keeps track of this internally. If room descriptions or other actions need to know about it, set your own inventory variable in Actions (e.g. <code>has_letter_coin = true</code>)."
           },
           conditions: {
             title: 'Conditions',
@@ -325,6 +339,11 @@
         this.jsonData.userData.system_prompt = newText;
         this.onDataChange();
       },
+
+      updateOnce(value) {
+        this.jsonData.userData = { ...this.jsonData.userData, once: !!value };
+        this.onDataChange();
+      },
     },
     watch: {
       // Watch jsonData for changes to update the text areas if jsonData changes
@@ -385,6 +404,7 @@
                   sound_effect_volume: 100,
                   sound_effect_duration: 2,
                   description: '',
+                  once: false,
                 }
               };
           }
@@ -477,5 +497,17 @@
   .field-group {
     display: flex;
     flex-direction: column;
+  }
+  .once-row {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-left: -8px; /* the checkbox button brings its own padding */
+  }
+  .once-row :deep(.v-selection-control) {
+    flex: 0 0 auto; /* Vuetify lets it grow and push the label to the right */
+  }
+  .once-row :deep(.label-with-help) {
+    margin-bottom: 0;
   }
 </style>

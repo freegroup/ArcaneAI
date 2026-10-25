@@ -40,6 +40,16 @@ var TriggerLabel = draw2d.shape.box.HBox.extend({
             visible:    false,
         });
 
+        // "1" icon — shown for "fire only once" actions
+        this.onceIcon = new OnceIcon({
+            width:      20,
+            height:     20,
+            color:      fontColor,
+            bgColor:    "none",
+            resizeable: false,
+            visible:    false,
+        });
+
         // Text label — carries the inline editor
         this.textLabel = new draw2d.shape.basic.Label({
             text:       txt,
@@ -49,13 +59,16 @@ var TriggerLabel = draw2d.shape.box.HBox.extend({
             fontColor:  fontColor,
             fontSize:   fontSize,
             fontFamily: fontFamily,
+            padding:    {left: 0, top: 0, right: 6, bottom: 0},
             editor:     new draw2d.ui.LabelEditor(),
             selectable: false,
             draggable:  false,
         });
 
-        this.add(this.lockIcon);
+        // Name first, then the markers
         this.add(this.textLabel);
+        this.add(this.lockIcon);
+        this.add(this.onceIcon);
 
         this.installEditPolicy(new draw2d.policy.figure.AntSelectionFeedbackPolicy({
             color:    getVar('--selection-color', '#e94560'),
@@ -73,6 +86,7 @@ var TriggerLabel = draw2d.shape.box.HBox.extend({
         const hasConditions = this.getUserData()?.conditions?.length > 0;
         this.attr("dasharray", hasConditions ? "- " : null);
         this.lockIcon.setVisible(hasConditions);
+        this.onceIcon.setVisible(!!this.getUserData()?.once);
     },
 
     // ── Getters / Setters ─────────────────────────────────────────────────────
@@ -117,6 +131,9 @@ var TriggerLabel = draw2d.shape.box.HBox.extend({
     getActions: function()    { return this.getUserData().actions; },
     setActions: function(v)   { this.getUserData().actions = v; },
 
+    getOnce: function()       { return !!this.getUserData().once; },
+    setOnce: function(v)      { this.getUserData().once = !!v; this.updateStyle(); },
+
     getPersistentAttributes: function()
     {
         const memento = this._super();
@@ -128,6 +145,7 @@ var TriggerLabel = draw2d.shape.box.HBox.extend({
         memento.system_prompt    = this.getSystemPrompt();
         memento.conditions       = this.getConditions();
         memento.actions          = this.getActions();
+        memento.once             = this.getOnce();
         return memento;
     },
 
@@ -143,6 +161,7 @@ var TriggerLabel = draw2d.shape.box.HBox.extend({
         if (memento.system_prompt !== undefined)         this.setSystemPrompt(memento.system_prompt);
         if (Array.isArray(memento.conditions))           this.setConditions(memento.conditions);
         if (Array.isArray(memento.actions))              this.setActions(memento.actions);
+        if (memento.once !== undefined)                  this.setOnce(memento.once);
         this.updateStyle();
         return this;
     },

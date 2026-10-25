@@ -240,7 +240,8 @@ export default {
         sound_effect_volume: triggerData.userData?.sound_effect_volume,
         system_prompt: triggerData.userData?.system_prompt,
         conditions: triggerData.userData?.conditions || [],
-        actions: triggerData.userData?.actions || []
+        actions: triggerData.userData?.actions || [],
+        once: !!triggerData.userData?.once
       }
       
       // Set flag and commit using proper mutation

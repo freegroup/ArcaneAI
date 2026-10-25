@@ -88,6 +88,16 @@
         </div>
 
         <div class="field-group">
+          <v-checkbox
+            v-model="local.once"
+            label="Fire only once (never offered again after it ran)"
+            density="compact"
+            hide-details
+            @update:modelValue="onChange"
+          />
+        </div>
+
+        <div class="field-group">
           <PropertyLabel>Actions (Effects)</PropertyLabel>
           <textarea
             v-model="actionsText"
@@ -192,7 +202,8 @@ export default {
             sound_effect_volume: ud.sound_effect_volume ?? 100,
             sound_effect_duration: ud.sound_effect_duration ?? 2,
             conditions: Array.isArray(ud.conditions) ? [...ud.conditions] : [],
-            actions: Array.isArray(ud.actions) ? [...ud.actions] : []
+            actions: Array.isArray(ud.actions) ? [...ud.actions] : [],
+            once: !!ud.once
           }
           this.conditionsText = this.local.conditions.join('\n')
           this.actionsText = this.local.actions.join('\n')
@@ -215,7 +226,7 @@ export default {
         id: null, name: '', sourceId: null, targetId: null,
         description: '', system_prompt: '',
         sound_effect: '', sound_effect_volume: 100, sound_effect_duration: 2,
-        conditions: [], actions: []
+        conditions: [], actions: [], once: false
       }
     },
     onNameInput(event) {
@@ -248,7 +259,8 @@ export default {
           sound_effect_volume: this.local.sound_effect_volume,
           sound_effect_duration: this.local.sound_effect_duration,
           conditions: this.local.conditions,
-          actions: this.local.actions
+          actions: this.local.actions,
+          once: this.local.once
         }
       })
     },

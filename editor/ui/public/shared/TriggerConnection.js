@@ -72,8 +72,21 @@ var TriggerConnection= draw2d.Connection.extend({
           draggable:  false,
       });
 
-      this.label.add(this.lockIcon);
+      // "1" icon — shown for "fire only once" actions
+      this.onceIcon = new OnceIcon({
+          width:      20,
+          height:     20,
+          color:      getVar('--connection-label-font', '#3f3f34'),
+          bgColor:    "none",
+          stroke:     0,
+          resizeable: false,
+          visible:    false,
+      });
+
+      // Name first, then the markers
       this.label.add(this.textLabel);
+      this.label.add(this.lockIcon);
+      this.label.add(this.onceIcon);
 
       // add the new decoration to the connection with a position locator.
       //
@@ -89,6 +102,7 @@ var TriggerConnection= draw2d.Connection.extend({
         const hasConditions = this.attr("userData")?.conditions?.length > 0;
         this.attr("dasharray", hasConditions ? "- " : null);
         this.lockIcon.setVisible(hasConditions);
+        this.onceIcon.setVisible(!!this.attr("userData")?.once);
     },
 
     /**

@@ -290,7 +290,8 @@ StateShape = draw2d.shape.box.VBox.extend({
                     sound_effect_volume:e.figure.getSoundEffectVolume(),
                     system_prompt: e.figure.getSystemPrompt(),
                     conditions: e.figure.getConditions(),
-                    actions: e.figure.getActions()
+                    actions: e.figure.getActions(),
+                    once: e.figure.getOnce()
                 });
             }
         });
@@ -401,6 +402,9 @@ StateShape = draw2d.shape.box.VBox.extend({
          if(typeof memento.trigger !== "undefined"){
              $.each(memento.trigger, (i,e) => {
                  var trigger =this.addTrigger(e.name ?? "undefined");
+                 // Keep the model's id: the property views find the trigger in the
+                 // model store by it (a fresh id per load breaks every edit)
+                 if (e.id) trigger.setId(e.id)
                  trigger.setConditions(e.conditions ?? [])
                  trigger.setActions(e.actions ?? [])
                  trigger.setDescription(e.description ?? "")
@@ -408,6 +412,7 @@ StateShape = draw2d.shape.box.VBox.extend({
                  trigger.setSoundEffectDuration(e.sound_effect_duration ?? 2)
                  trigger.setSoundEffectVolume(e.sound_effect_volume ?? 100)
                  trigger.setSystemPrompt(e.system_prompt ?? "")
+                 trigger.setOnce(e.once ?? false)
              });
          }
 
