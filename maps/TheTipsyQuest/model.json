@@ -12,13 +12,13 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "7bdc0b19-8830-e388-82bc-7821909080c3",
+          "id": "2c42c4d3-7b70-332d-fbb2-b2c17cffd117",
           "name": "untersuche_den_raum",
-          "description": "Du kannst den Raum untersuchen un ihn mal Beschreiben.",
+          "description": "Du kannst den Raum untersuchen und ihn mal beschreiben.",
           "sound_effect": "effect_tuer_aufschliessen.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
-          "system_prompt": "Die ist etwas in der Ecke aufgefallen was man sich ja mal genauer ansehen könnte. Wenn man klug genug ist.",
+          "system_prompt": "Dir ist etwas in der Ecke aufgefallen was man sich ja mal genauer ansehen könnte. Wenn man klug genug ist.",
           "conditions": [],
           "actions": [
             "discovered_kalter_raum = true"
@@ -30,7 +30,7 @@
       "type": "StateShape",
       "id": "3253ff2a-a920-09d5-f033-ca759a778e19",
       "userData": {
-        "system_prompt": "Ein Raum oder Ort, der wie ein Friedhof der Träume wirkt. Der Boden besteht aus alten, schiefen Holzplanken, die unter den Schuhen kleben, als hätten sie längst die Hoffnung aufgegeben, jemals wieder sauber zu sein. Ein schwacher, rauchiger Geruch liegt in der Luft, die abgestanden und müde wirkt. Es ist, als hätten hunderte von Träumen und Hoffnungen hier ihr Ende gefunden und wären dann vergessen worden.\n\n{% if has_rat %}\nAnmerkung: Irgendwie richt es hier nach toter Ratte....muste es ein dieses Tier in die Tasche zu stecken...echt jetzt...\n{% endif %}\n\nIn der staubigen Ecke des Raumes steht ein seltsames Gerät, das aussieht, als hätten ein Uhrmacher und ein Wahrsager ein feuchtfröhliches Wochenende gehabt. Es ist eine Mischung aus Standuhr, Einarmiger Bandit und einem Hauch von 'Was zur Hölle ist das?'. Auffällig ist der breite Schlitz in der Front, der förmlich danach schreit: 'Füttere mich! Aber bitte nur mit kleinen, runden Scheiben. Eine Münzen vielleicht? \n{% if coins <1 %}\nNatürlich hast du gerade keine Münze zur Hand. Warum auch? Wäre ja zu einfach gewesen diese irgendwo aufzusammeln!\n{% endif %}\n\nDie Stimmung im Raum ist bedrückend – oder besser gesagt: Es gibt keine Stimmung. Keine Freude, keine Angst, nichts. Alles ist wie von einem Bann belegt, der jeglichen Antrieb und Frohsinn raubt. Selbst der schwache Lichtschein, der durch das Fenster dringt, scheint keine Energie mit sich zu bringen. Die Tische und Stühle sind krumm und verlassen, als hätten sie den Kampf gegen die Zeit längst aufgegeben. An der Wand hängt etwas, das vielleicht eine alte Karte war – die Buchstaben längst unleserlich und bedeutungslos, wie die Geschichten, die hier längst begraben liegen.\n\nEs gibt ein Gefühl von Gefahr in diesem Raum, eine latente Bedrohung, die hinter jedem Schatten lauert. Es ist ein Ort, der einen verschluckt, wenn man es zulässt. Vielleicht ein Raum, der einen am Ende sogar töten könnte – aber ohne dass er sich auch nur die Mühe machen müsste, es aktiv zu tun. Ein gefährlicher Ort, der nicht durch scharfe Klingen oder böse Magie tötet, sondern durch das langsame Auslöschen jeder Idee, jedes Traumes und jeder Sehnsucht.\n\nMan sollte diesen Ort besser verlassen, sich aufmachen, neue Welten zu erkunden, Abenteuer zu erleben, die das Herz höher schlagen lassen. Und doch… irgendetwas lässt einen innehalten. Die muffige Stille hat etwas Vertrautes, das sanfte Knarren der alten Dielen klingt wie eine Einladung zum Bleiben. Vielleicht sollte man sich einfach setzen, für einen Moment verweilen. Vielleicht für eine Weile. Oder für immer. Denn eigentlich ist es doch ganz in Ordnung hier, oder? Keine Entscheidungen, keine Erwartungen, kein Stress. Lass uns einfach hier bleiben…\n\n{% if discovered_cigarettes  and not has_cigarettes %}\nUnter der langen Tafel liegt ein kleines Päckchen mit komischen wiessen Röllhen darin mit einer seltsamen Aufschrift. In den Röllchen befinden sich klein geschnittene, vergilbte Blätter, sorgfältig in ein weißes Papier eingerollt – ein Bündel, das offenbar viel Wert auf Tradition legt, besonders wenn diese Tradition mit einem Hauch von Selbstzerstörung zu tun hat. Die Warnung auf der Verpackung verkündet in einem fast prophetischen Ton, dass der Konsum dieser Blätter den Tod bringen könnte – früher oder später, vielleicht auch mit einem breiten Grinsen auf den Lippen.\n\nEs ist ein merkwürdiges Ritual, das diese Blätter begleiten – als wäre es eine Art stille Übereinkunft mit dem Schicksal, bei jedem Zug ein wenig mehr zu riskieren. Ein Bündel für die Abenteurer des Alltags, die sich sagen: \"Ein bisschen Gefahr schadet nie... jedenfalls nicht sofort.\"\n{% endif %}\n\n{% if waechter_away %}\nDie zweiteilige Klappe aus dunklem, schwerem Holz ist in die Wand eingelassen, und ihre Flügel wirken wie geöffnete Krallen, die einen unheimlich rufen, als würden sie darauf warten, sich um den nächsten Unvorsichtigen zu schließen. Ihre Oberfläche ist mit abstrakten Maserungen überzogen, die beinahe lebendig erscheinen und im schwachen Licht der Gasse zu pulsieren scheinen. Es ist, als hätte die Tür selbst eine Art Hunger, eine tiefe Sehnsucht, endlich wieder jemanden durchzulassen – und dabei ist es unmöglich, nicht den leisen Ruf zu spüren, der einen dazu bringt, die Flügel zu öffnen und einen Schritt hindurchzusetzen.\n\nDer Spalt zwischen den beiden hölzernen Flügeln ist schmal, doch ein warmes Glimmen scheint aus der Dunkelheit dahinter zu strahlen, wie ein Versprechen auf etwas Verlockendes, etwas Verbotenes. Es ist schwer, sich dieser unheimlichen Anziehungskraft zu entziehen – die Klappe wirkt fast lebendig, als ob sie ihre Arme ausstrecken würde, bereit, jeden hineinzuziehen, der nur lange genug zögert. Es scheint, als könnten die Finger den Griff der Tür fast schon selbst spüren, das Holz lockt, und der Gedanke, diese Schwelle zu überschreiten, wächst mit jeder Sekunde.\n{% else %}\n\nIn dem Raum ist eine massiven Tür mit dem Zugang zu einer ...keine Ahnung. Es dampft jedenfalls durch die Türe. Dort  steht eine Gestalt, die auf den ersten Blick wie eine lebende Mauer wirkt – unüberwindbar und ganz und gar nicht einladend. Es handelt sich um einen großen, kräftigen Wächter, gekleidet in einen weißlich-grauen Kittel, der seine besten Tage längst hinter sich hat. Der Stoff ist schmuddelig, ein verwaschenes Grau, durchzogen von dunklen Flecken und mit einer Patina aus altem Schleim und Unrat, die ihm das Aussehen eines nie endenden Missgeschicks verleihen. Seine Mütze, die einst wohl stolz wie eine Krone auf seinem Haupt thronte, hängt schief, eine verblichene Erinnerung an bessere Tage – zumindest, wenn man daran glauben möchte.\n\nSeine Augen blicken missmutig in die Ferne, während seine Hand, fast schon mechanisch, zwischen Nase und Hüfte pendelt, auf der ewigen Suche nach etwas, das er offenbar nicht bereit ist zu teilen. Seine Fingernägel, gelblich verfärbt, kratzen gelegentlich gedankenverloren über seine Bartstoppeln, während er abwechselnd seufzt und nervös von einem Bein auf das andere tritt.\n\nDieser Wächter vor der Hexenküche wirkt wie eine unüberwindbare Barriere, ein Wesen von schleichender Gereiztheit und Unruhe. Immer wieder nestelt er an seinen Taschen herum, als ob er auf der Suche nach einem Schatz sei, der gerade nicht da ist. Seine ruhelosen Hände sind wie im permanenten Zwist mit sich selbst – unfähig, stillzuhalten, während sein Blick immer wieder in die Ferne schweift, um im nächsten Moment an seinen leeren Fingern hängen zu bleiben, die sich sehnsüchtig um etwas krümmen wollen, das nicht greifbar ist.\n{% endif %}\n\n{% if door_closed_gelbe_hoehle %}\nEine zweite Tür im Raum steht, schief in ihren Angeln, als hätte sie schon unzählige Stürme überstanden – oder nur schlecht montiert. Auf dem verwitterten Holz prangt in verblassten, krakeligen Buchstaben die Aufschrift: „Zur goldenen Höhle – Quell der Erleichterung.“ Der Rahmen wirkt morsch, die Verriegelung kaum der Rede wert, als wolle die Tür selbst darauf hinweisen, dass sie kein ernsthaftes Hindernis ist… oder vielleicht eine Falle. Ein kleiner Tritt würde helfen sie zu öffnen.\n{% else%}\nDie zweite Tür im Raum hängt schief, brutal eingetreten von jemandem, der Kunstwerke offenbar für Hindernisse hält – jemand, dessen Spuren du vielleicht schon in anderen Räumen gesehen hast. Die Inschrift „Zur goldenen Höhle – Quell der Erleichterung“ prangt noch immer wie ein sarkastischer Nachruf auf die einstige Meisterarbeit eines ehrwürdigen Türenmachers.\n{% endif %}\n\n\n",
+        "system_prompt": "Ein Raum oder Ort, der wie ein Friedhof der Träume wirkt. Der Boden besteht aus alten, schiefen Holzplanken, die unter den Schuhen kleben, als hätten sie längst die Hoffnung aufgegeben, jemals wieder sauber zu sein. Ein schwacher, rauchiger Geruch liegt in der Luft, die abgestanden und müde wirkt. Es ist, als hätten hunderte von Träumen und Hoffnungen hier ihr Ende gefunden und wären dann vergessen worden.\n\n{% if has_rat %}\nAnmerkung: Irgendwie riecht es hier nach toter Ratte....musste es sein, dieses Tier in die Tasche zu stecken...echt jetzt...\n{% endif %}\n\nIn der staubigen Ecke des Raumes steht ein seltsames Gerät, das aussieht, als hätten ein Uhrmacher und ein Wahrsager ein feuchtfröhliches Wochenende gehabt. Es ist eine Mischung aus Standuhr, Einarmiger Bandit und einem Hauch von 'Was zur Hölle ist das?'. Auffällig ist der breite Schlitz in der Front, der förmlich danach schreit: 'Füttere mich! Aber bitte nur mit kleinen, runden Scheiben. Eine Münze vielleicht? \n{% if coins <1 %}\nNatürlich hast du gerade keine Münze zur Hand. Warum auch? Wäre ja zu einfach gewesen diese irgendwo aufzusammeln!\n{% endif %}\n\nDie Stimmung im Raum ist bedrückend – oder besser gesagt: Es gibt keine Stimmung. Keine Freude, keine Angst, nichts. Alles ist wie von einem Bann belegt, der jeglichen Antrieb und Frohsinn raubt. Selbst der schwache Lichtschein, der durch das Fenster dringt, scheint keine Energie mit sich zu bringen. Die Tische und Stühle sind krumm und verlassen, als hätten sie den Kampf gegen die Zeit längst aufgegeben. An der Wand hängt etwas, das vielleicht eine alte Karte war – die Buchstaben längst unleserlich und bedeutungslos, wie die Geschichten, die hier längst begraben liegen.\n\nEs gibt ein Gefühl von Gefahr in diesem Raum, eine latente Bedrohung, die hinter jedem Schatten lauert. Es ist ein Ort, der einen verschluckt, wenn man es zulässt. Vielleicht ein Raum, der einen am Ende sogar töten könnte – aber ohne dass er sich auch nur die Mühe machen müsste, es aktiv zu tun. Ein gefährlicher Ort, der nicht durch scharfe Klingen oder böse Magie tötet, sondern durch das langsame Auslöschen jeder Idee, jedes Traumes und jeder Sehnsucht.\n\nMan sollte diesen Ort besser verlassen, sich aufmachen, neue Welten zu erkunden, Abenteuer zu erleben, die das Herz höher schlagen lassen. Und doch… irgendetwas lässt einen innehalten. Die muffige Stille hat etwas Vertrautes, das sanfte Knarren der alten Dielen klingt wie eine Einladung zum Bleiben. Vielleicht sollte man sich einfach setzen, für einen Moment verweilen. Vielleicht für eine Weile. Oder für immer. Denn eigentlich ist es doch ganz in Ordnung hier, oder? Keine Entscheidungen, keine Erwartungen, kein Stress. Lass uns einfach hier bleiben…\n\n{% if discovered_cigarettes  and not has_cigarettes %}\nUnter der langen Tafel liegt ein kleines Päckchen mit komischen weißen Röllchen darin mit einer seltsamen Aufschrift. In den Röllchen befinden sich klein geschnittene, vergilbte Blätter, sorgfältig in ein weißes Papier eingerollt – ein Bündel, das offenbar viel Wert auf Tradition legt, besonders wenn diese Tradition mit einem Hauch von Selbstzerstörung zu tun hat. Die Warnung auf der Verpackung verkündet in einem fast prophetischen Ton, dass der Konsum dieser Blätter den Tod bringen könnte – früher oder später, vielleicht auch mit einem breiten Grinsen auf den Lippen.\n\nEs ist ein merkwürdiges Ritual, das diese Blätter begleiten – als wäre es eine Art stille Übereinkunft mit dem Schicksal, bei jedem Zug ein wenig mehr zu riskieren. Ein Bündel für die Abenteurer des Alltags, die sich sagen: \"Ein bisschen Gefahr schadet nie... jedenfalls nicht sofort.\"\n{% endif %}\n\n{% if waechter_away %}\nDie zweiteilige Klappe aus dunklem, schwerem Holz ist in die Wand eingelassen, und ihre Flügel wirken wie geöffnete Krallen, die einen unheimlich rufen, als würden sie darauf warten, sich um den nächsten Unvorsichtigen zu schließen. Ihre Oberfläche ist mit abstrakten Maserungen überzogen, die beinahe lebendig erscheinen und im schwachen Licht der Gasse zu pulsieren scheinen. Es ist, als hätte die Tür selbst eine Art Hunger, eine tiefe Sehnsucht, endlich wieder jemanden durchzulassen – und dabei ist es unmöglich, nicht den leisen Ruf zu spüren, der einen dazu bringt, die Flügel zu öffnen und einen Schritt hindurchzusetzen.\n\nDer Spalt zwischen den beiden hölzernen Flügeln ist schmal, doch ein warmes Glimmen scheint aus der Dunkelheit dahinter zu strahlen, wie ein Versprechen auf etwas Verlockendes, etwas Verbotenes. Es ist schwer, sich dieser unheimlichen Anziehungskraft zu entziehen – die Klappe wirkt fast lebendig, als ob sie ihre Arme ausstrecken würde, bereit, jeden hineinzuziehen, der nur lange genug zögert. Es scheint, als könnten die Finger den Griff der Tür fast schon selbst spüren, das Holz lockt, und der Gedanke, diese Schwelle zu überschreiten, wächst mit jeder Sekunde.\n{% else %}\n\nIn dem Raum ist eine massive Tür mit dem Zugang zu einer ...keine Ahnung. Es dampft jedenfalls durch die Türe. Dort steht eine Gestalt, die auf den ersten Blick wie eine lebende Mauer wirkt – unüberwindbar und ganz und gar nicht einladend. Es handelt sich um einen großen, kräftigen Wächter, gekleidet in einen weißlich-grauen Kittel, der seine besten Tage längst hinter sich hat. Der Stoff ist schmuddelig, ein verwaschenes Grau, durchzogen von dunklen Flecken und mit einer Patina aus altem Schleim und Unrat, die ihm das Aussehen eines nie endenden Missgeschicks verleihen. Seine Mütze, die einst wohl stolz wie eine Krone auf seinem Haupt thronte, hängt schief, eine verblichene Erinnerung an bessere Tage – zumindest, wenn man daran glauben möchte.\n\nSeine Augen blicken missmutig in die Ferne, während seine Hand, fast schon mechanisch, zwischen Nase und Hüfte pendelt, auf der ewigen Suche nach etwas, das er offenbar nicht bereit ist zu teilen. Seine Fingernägel, gelblich verfärbt, kratzen gelegentlich gedankenverloren über seine Bartstoppeln, während er abwechselnd seufzt und nervös von einem Bein auf das andere tritt.\n\nDieser Wächter vor der Hexenküche wirkt wie eine unüberwindbare Barriere, ein Wesen von schleichender Gereiztheit und Unruhe. Immer wieder nestelt er an seinen Taschen herum, als ob er auf der Suche nach einem Schatz sei, der gerade nicht da ist. Seine ruhelosen Hände sind wie im permanenten Zwist mit sich selbst – unfähig, stillzuhalten, während sein Blick immer wieder in die Ferne schweift, um im nächsten Moment an seinen leeren Fingern hängen zu bleiben, die sich sehnsüchtig um etwas krümmen wollen, das nicht greifbar ist.\n{% endif %}\n\n{% if door_closed_gelbe_hoehle %}\nEine zweite Tür im Raum steht, schief in ihren Angeln, als hätte sie schon unzählige Stürme überstanden – oder nur schlecht montiert. Auf dem verwitterten Holz prangt in verblassten, krakeligen Buchstaben die Aufschrift: „Zur goldenen Höhle – Quell der Erleichterung.“ Der Rahmen wirkt morsch, die Verriegelung kaum der Rede wert, als wolle die Tür selbst darauf hinweisen, dass sie kein ernsthaftes Hindernis ist… oder vielleicht eine Falle. Ein kleiner Tritt würde helfen sie zu öffnen.\n{% else%}\nDie zweite Tür im Raum hängt schief, brutal eingetreten von jemandem, der Kunstwerke offenbar für Hindernisse hält – jemand, dessen Spuren du vielleicht schon in anderen Räumen gesehen hast. Die Inschrift „Zur goldenen Höhle – Quell der Erleichterung“ prangt noch immer wie ein sarkastischer Nachruf auf die einstige Meisterarbeit eines ehrwürdigen Türenmachers.\n{% endif %}\n\n\n",
         "ambient_sound": "ambient_sehr_leichter_wind.wav",
         "ambient_sound_volume": 100
       },
@@ -38,13 +38,13 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "dfc6b644-4c32-66e3-2ee0-3d9652206cdd",
+          "id": "8de72eca-159c-1fb5-c1e0-e8e94fab7fd4",
           "name": "untersuche_den_raum",
-          "description": "Du kannst den Raum untersuchen und durchsuchen und vielleicht findest Du Dinge die Du gebrauchen kannst.  Du siehst ein paar Dinge",
+          "description": "Du kannst den Raum untersuchen und durchsuchen und vielleicht findest Du Dinge die Du gebrauchen kannst. Du siehst ein paar Dinge",
           "sound_effect": "laufen_teppich.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
-          "system_prompt": "Du hast den Raum durchsucht und hast nun viele Dinge gesehen wie in der Raumbeschreibung aufgeführt... ohne endlich mal was zum trinken. Die Luft ist hier super trocken und ein kühles Bier wäre jetzt echt ein Ding von einem anderen Stern. Oh - ich schweife ab. Es ist ein seltsames kleines Packet unter der langen Tafel.",
+          "system_prompt": "Du hast den Raum durchsucht und hast nun viele Dinge gesehen wie in der Raumbeschreibung aufgeführt... ohne endlich mal was zum Trinken. Die Luft ist hier super trocken und ein kühles Bier wäre jetzt echt ein Ding von einem anderen Stern. Oh - ich schweife ab. Es ist ein seltsames kleines Paket unter der langen Tafel.",
           "conditions": [],
           "actions": [
             "discovered_friedhof_der_traeume = true",
@@ -52,13 +52,13 @@
           ]
         },
         {
-          "id": "e5909b50-bf14-207e-6e6a-1504a7253bab",
-          "name": "nehme_das_packet",
-          "description": "Du nimmst das weisse Packet mit den seltsamen Röllchen, welches unter der langen Tafel liegt, an dich.",
+          "id": "8b3014ad-74d8-a48f-ffba-4e8427997a4e",
+          "name": "nimm_das_paket",
+          "description": "Du nimmst das weiße Paket mit den seltsamen Röllchen, welches unter der langen Tafel liegt, an dich.",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
-          "system_prompt": "Du hast das seltsam anmutende Packet genommen und bist nun bereits es dem Wächter zu geben. Eventuell gibt er ja dann die Tür frei.",
+          "system_prompt": "Du hast das seltsam anmutende Paket genommen und bist nun bereit, es dem Wächter zu geben. Eventuell gibt er ja dann die Tür frei.",
           "conditions": [
             "has_cigaretts==false",
             "waechter_away == false"
@@ -68,13 +68,13 @@
           ]
         },
         {
-          "id": "4ed5a4b6-2582-58b0-5b48-73cc6f1dbd43",
-          "name": "gebe_packet_dem_waechter",
-          "description": "Du gibst den Wächter das seltsame Packet",
+          "id": "b2d7b6ea-0730-2d08-d618-d0a45eec1f7f",
+          "name": "gib_das_paket_dem_waechter",
+          "description": "Du gibst dem Wächter das seltsame Paket",
           "sound_effect": "effect_mann_streckt_sich.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
-          "system_prompt": "Der Wächter hat das Packet genommen und macht sich schlurpend vom Acker. Er wart nicht mehr gesehen. Eine verrückte Sache.....",
+          "system_prompt": "Der Wächter hat das Paket genommen und macht sich schlurfend vom Acker. Er ward nicht mehr gesehen. Eine verrückte Sache.....",
           "conditions": [
             "waechter_away==false",
             "has_cigaretts==true"
@@ -85,9 +85,9 @@
           ]
         },
         {
-          "id": "8cd09d38-abcf-87c6-b012-2386298fb9a6",
+          "id": "8c708d17-4665-0496-46fe-5417b0292a7e",
           "name": "rede_mit_waechter",
-          "description": "Di sprichts den Wächter an und fragt mal was er so treibt...egal...du redets einfach mit ihm",
+          "description": "Du sprichst den Wächter an und fragst mal was er so treibt...egal...du redest einfach mit ihm",
           "sound_effect": "effect_gaehnen.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
@@ -98,13 +98,13 @@
           "actions": []
         },
         {
-          "id": "8419c71a-d88c-c143-0cdc-5239e515f274",
-          "name": "werfe_muenze_ein",
-          "description": "Du hast eine Münze und kannst diese Münze in den spielautomaten einwerfen.",
+          "id": "43d289d9-64ba-75d2-c9f4-56d6e711309f",
+          "name": "wirf_die_muenze_ein",
+          "description": "Du hast eine Münze und kannst diese Münze in den Spielautomaten einwerfen.",
           "sound_effect": "song_traurig_01.mp3",
           "sound_effect_duration": 0,
           "sound_effect_volume": 100,
-          "system_prompt": "Der Spielautomat rappelt und rattert und spiel fröhlich eine Meldie.",
+          "system_prompt": "Der Spielautomat rappelt und rattert und spielt fröhlich eine Melodie.",
           "conditions": [
             "coins>0"
           ],
@@ -113,9 +113,9 @@
           ]
         },
         {
-          "id": "f207e3ee-c5a1-7429-6864-e3ac469fc1cf",
+          "id": "04d1a9b7-bad5-169f-4a4e-73d8f355d4ee",
           "name": "oeffne_tuer_mit_gewalt",
-          "description": "Du öffnest die Tür zu \"Gelben Höhle\" mit Gewalt. Entweder eintreten, rennen, dagegen schlagen. Jede art von Gewalt öffnet die Tür.",
+          "description": "Du öffnest die Tür zur \"Gelben Höhle\" mit Gewalt. Entweder eintreten, rennen, dagegen schlagen. Jede Art von Gewalt öffnet die Tür.",
           "sound_effect": "aktion_etwas_im_raum_umwerfen_dose.mp3",
           "sound_effect_duration": 0,
           "sound_effect_volume": 100,
@@ -141,10 +141,10 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "80275a29-923d-8574-c178-de8c2d505099",
-          "name": "schau_aus_dem_Fenster",
-          "description": "Du kannst aus dem Fenster sehen und siehst....tata.....den Briefkasten und ein wenig Wald. Es ist die Stelle an der du vorher draussen da stands.",
-          "sound_effect": "",
+          "id": "193fcaef-de85-156b-5a3b-d85e3a6a79a6",
+          "name": "schau_aus_dem_fenster",
+          "description": "Du kannst aus dem Fenster sehen und siehst....tata.....den Briefkasten und ein wenig Wald. Es ist die Stelle an der du vorher draußen da standst.",
+          "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
           "system_prompt": "Du siehst aus dem Fenster und konntest den Briefkasten sehen. Welch Überraschung. Ansonsten ist nichts zu erkennen was Dir irgendwie helfen kann. Nur der verdammte Briefkasten. Warum sehe ich denn immer nur wieder.....",
@@ -152,10 +152,10 @@
           "actions": []
         },
         {
-          "id": "1e2eb4d3-b2f9-f02c-8286-156c0ff54bee",
+          "id": "58046a24-2f1a-cdab-7b5a-9e3472b204f1",
           "name": "untersuche_den_raum",
           "description": "Du kannst den Raum genauer untersuchen und mitteilen wie dieser aussieht",
-          "sound_effect": "",
+          "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
           "system_prompt": "Du hast den Raum genau untersucht.",
@@ -165,13 +165,13 @@
           ]
         },
         {
-          "id": "1b45488c-9269-f361-236f-06d6f2281019",
-          "name": "nehme_karotte",
-          "description": "Du nimmst, die angesabberten, Karotten.",
+          "id": "f308de68-78d0-42d3-071f-eb7a6897ee99",
+          "name": "nimm_die_karotten",
+          "description": "Du nimmst die angesabberten Karotten.",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": "",
           "sound_effect_volume": 100,
-          "system_prompt": "Du hast die ekeligen Karotten in der Hand und weist nicht so recht was damit tun...",
+          "system_prompt": "Du hast die ekeligen Karotten in der Hand und weißt nicht so recht was damit tun...",
           "conditions": [
             "discovered_hexenkueche==true"
           ],
@@ -180,13 +180,13 @@
           ]
         },
         {
-          "id": "6808759a-6fdf-578e-b7f0-3d2638dfffb4",
-          "name": "gebe_die_karotten",
+          "id": "06b06c56-bb8f-b3f9-f81c-cd8909ff3e42",
+          "name": "gib_die_karotten",
           "description": "Du wirfst die Karotten dem \"Wesen\" oder dem Hund \"Kerberos\" vor die Schnauze die er dann isst.",
           "sound_effect": "eating-crispy-cookies.wav",
           "sound_effect_duration": 5,
           "sound_effect_volume": 100,
-          "system_prompt": "Das Wesen \"Kerberos\" trotted, fast schon schnurrend, mit den Bündel Karotten im Maul davon. Na sowas? Ein vegetarischer Höllenhund...ganz schön schräg. Der Weg in den kühlen Raum ist frei.",
+          "system_prompt": "Das Wesen \"Kerberos\" trottet, fast schon schnurrend, mit dem Bündel Karotten im Maul davon. Na sowas? Ein vegetarischer Höllenhund...ganz schön schräg. Der Weg in den kühlen Raum ist frei.",
           "conditions": [
             "dog_away==false",
             "has_carrot==true"
@@ -201,10 +201,8 @@
     "eb5b6e6b-5ae0-772a-12d3-670e58816128": {
       "type": "StateShape",
       "id": "eb5b6e6b-5ae0-772a-12d3-670e58816128",
-      "x": 1599,
-      "y": 1993,
       "userData": {
-        "system_prompt": "Du stehst vor einem alten, verwitterten Haus, dessen weiße Fassade von Wind und Zeit gezeichnet ist. Einsam und verborgen thront es im Herzen des Waldes, umgeben von hohen Bäumen, die die Außenwelt in schwere Schatten hüllen. Die massiven Holztüren wirken wie Wächter, verschlossen seit Ewigkeiten; kein Laut dringt durch ihre Ritzen. Ein leises Flüstern scheint in der Stille zu schweben, als hütete das Haus Geheimnisse, die es nur dem geduldigsten Suchenden offenbart.\n\n{% if window_is_open %}\nNeben der Tür starrt ein Fenster still in die Leere. Die Scheiben sind kalt, doch da es offen steht, gewährt es erstmals einen Blick auf das, was sich dahinter verbirgt. Es ist weit geöffnet und lädt beinahe dazu ein, ins Innere zu klettern.\n{% else %}\nNeben der Tür starrt ein Fenster still in die Leere. Die Scheiben sind kalt und undurchdringlich; nichts verrät, was dahinter liegt. Das Fenster ist fest verschlossen und müsste erst untersucht werden, ob es sich öffnen lässt.\n{% if discovered_window %}\nDoch vielleicht lässt sich das Fenster ohne Gewalt öffnen und gibt eine verborgene Passage zu jenen Geheimnissen frei, die das Haus so beharrlich hütet.\n{% endif%}\n\n{% endif %}\n\n{% if not has_wood %}\nNeben dem Treppenabsatz liegt ein Stock, fast schon ein massiver Knüppel – ideal, sollte mir jemand in die Quere kommen. Oder man sich durch den Djungel kämpfen muß. Egal - ein Prügel dient einem immer gute Dienste.\n{% endif %}\n\nEin Stück weiter wölbt ein mächtiger Baum seine knorrigen Äste wie schützende Arme über den Boden. Seine Wurzeln greifen tief in die Erde, als hüteten auch sie die Geheimnisse dieses Ortes. Doch er birgt nichts als Stille und weist keine weiteren Wege.\n\nAm Pfadrand knarrt ein alter, rostiger Briefkasten einsam im Wind. Vielleicht birgt er den ersten Hinweis auf das Rätsel dieses Hauses.\n\nErste wenn du die Tür oder das Fenster genauer untersuchst, fällt dir ein Schild an der Wand auf – offenbar ein Türschild:\n\n\"Zum Trügerischen Licht\"\n„Wo Seelen flackern und Schatten wandern. Ein Ort, an dem die Gesichter vergessener Geschichten erscheinen, wo jeder ein Held sein kann, bis der Morgen graut. Hier findest du Kameradschaft – oder zumindest jemanden, der deinen letzten Groschen nimmt. Das Licht mag trügerisch sein, doch es leuchtet denen, die im Dunkeln tappen. Wo Versprechen gemacht werden, um wieder zu verblassen, und Träume auf ein Glas passen, ehe sie in der Dämmerung ertrinken. Willkommen, Wanderer, im Sammelsurium gebrochener Wünsche und lauter Lügen. Ein Friedhof der Träume, wo du deine Sorgen begraben, aber niemals wirklich fliehen kannst.“",
+        "system_prompt": "Du stehst vor einem alten, verwitterten Haus, dessen weiße Fassade von Wind und Zeit gezeichnet ist. Einsam und verborgen thront es im Herzen des Waldes, umgeben von hohen Bäumen, die die Außenwelt in schwere Schatten hüllen. Die massiven Holztüren wirken wie Wächter, verschlossen seit Ewigkeiten; kein Laut dringt durch ihre Ritzen. Ein leises Flüstern scheint in der Stille zu schweben, als hütete das Haus Geheimnisse, die es nur dem geduldigsten Suchenden offenbart.\n\n{% if window_is_open %}\nNeben der Tür starrt ein Fenster still in die Leere. Die Scheiben sind kalt, doch da es offen steht, gewährt es erstmals einen Blick auf das, was sich dahinter verbirgt. Es ist weit geöffnet und lädt beinahe dazu ein, ins Innere zu klettern.\n{% else %}\nNeben der Tür starrt ein Fenster still in die Leere. Die Scheiben sind kalt und undurchdringlich; nichts verrät, was dahinter liegt. Das Fenster ist fest verschlossen und müsste erst untersucht werden, ob es sich öffnen lässt.\n{% if discovered_window %}\nDoch vielleicht lässt sich das Fenster ohne Gewalt öffnen und gibt eine verborgene Passage zu jenen Geheimnissen frei, die das Haus so beharrlich hütet.\n{% endif%}\n\n{% endif %}\n\n{% if not has_wood %}\nNeben dem Treppenabsatz liegt ein Stock, fast schon ein massiver Knüppel – ideal, sollte mir jemand in die Quere kommen. Oder man sich durch den Dschungel kämpfen muss. Egal - ein Prügel dient einem immer gute Dienste.\n{% endif %}\n\nEin Stück weiter wölbt ein mächtiger Baum seine knorrigen Äste wie schützende Arme über den Boden. Seine Wurzeln greifen tief in die Erde, als hüteten auch sie die Geheimnisse dieses Ortes. Doch er birgt nichts als Stille und weist keine weiteren Wege.\n\nAm Pfadrand knarrt ein alter, rostiger Briefkasten einsam im Wind. Vielleicht birgt er den ersten Hinweis auf das Rätsel dieses Hauses.\n\nErst wenn du die Tür oder das Fenster genauer untersuchst, fällt dir ein Schild an der Wand auf – offenbar ein Türschild:\n\n\"Zum Trügerischen Licht\"\n„Wo Seelen flackern und Schatten wandern. Ein Ort, an dem die Gesichter vergessener Geschichten erscheinen, wo jeder ein Held sein kann, bis der Morgen graut. Hier findest du Kameradschaft – oder zumindest jemanden, der deinen letzten Groschen nimmt. Das Licht mag trügerisch sein, doch es leuchtet denen, die im Dunkeln tappen. Wo Versprechen gemacht werden, um wieder zu verblassen, und Träume auf ein Glas passen, ehe sie in der Dämmerung ertrinken. Willkommen, Wanderer, im Sammelsurium gebrochener Wünsche und lauter Lügen. Ein Friedhof der Träume, wo du deine Sorgen begraben, aber niemals wirklich fliehen kannst.“",
         "ambient_sound": "wald_mit_voegel.mp3",
         "ambient_sound_volume": 9
       },
@@ -212,10 +210,10 @@
       "stateType": "START",
       "trigger": [
         {
-          "id": "f580b939-8a09-7539-fcc1-2c42cef6be01",
+          "id": "cb50272f-5ecc-1216-2c75-8c21d4e649e8",
           "name": "untersuche_das_fenster",
-          "description": "Du kannst das Fenster untersuchen und beschreibst, dass man es öffnen könnte. Es fällt dir ein Türschild auf was in der nähe angebracht ist.",
-          "sound_effect": "mixkit-air-woosh-1489.wav",
+          "description": "Du kannst das Fenster untersuchen und beschreibst, dass man es öffnen könnte. Es fällt dir ein Türschild auf was in der Nähe angebracht ist.",
+          "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
           "system_prompt": "Es ist nun klar, dass man das Fenster öffnen kann.",
@@ -225,7 +223,7 @@
           ]
         },
         {
-          "id": "bf7ac988-7e70-081f-3dc9-8376da861835",
+          "id": "2ab14be5-3373-122b-9b83-4d6885a8296d",
           "name": "oeffne_das_fenster",
           "description": "Du öffnest das Fenster indem du es nach oben schiebst.",
           "sound_effect": "effect_schiebetuer_oeffnen.wav",
@@ -240,10 +238,10 @@
           ]
         },
         {
-          "id": "dedac0d3-7cc4-b2bf-b761-2d83e4e646ac",
+          "id": "3c4d258f-5091-3ba3-cfa8-de13f1e49e26",
           "name": "untersuche_das_haus",
-          "description": "Man kann das Haus hier nach seinem Zustand untersuchen oder mal nachsehen ob es Türen, Fenster hat in die man in das Haus gelingen könnte. Es fällt dir aber ein Türschild  auf",
-          "sound_effect": "",
+          "description": "Man kann das Haus hier nach seinem Zustand untersuchen oder mal nachsehen ob es Türen, Fenster hat in die man in das Haus gelangen könnte. Es fällt dir aber ein Türschild auf",
+          "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
           "system_prompt": "Du hast Dir das Haus angesehen und die Tür und das Fenster sind dir aufgefallen. Ob man irgendwie in das Haus kommt? Auch ist am Haus irgendwie ein Türschild. Mal lesen?",
@@ -251,10 +249,10 @@
           "actions": []
         },
         {
-          "id": "b2e8c3ca-c106-a3ac-3ef0-e631fa2e3fc8",
+          "id": "2a6f72a2-cce4-6ce3-a2c3-0b3003a191db",
           "name": "untersuche_die_tuer",
-          "description": "Die kannst die Tür untersuchen und festellen, dass diese unüberwindbar ist. Kein reinkommen auf irgendeine Weise. Es fällt die aber ein Türschild auf",
-          "sound_effect": "",
+          "description": "Du kannst die Tür untersuchen und feststellen, dass diese unüberwindbar ist. Kein Reinkommen auf irgendeine Weise. Es fällt dir aber ein Türschild auf",
+          "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
           "system_prompt": "",
@@ -262,13 +260,13 @@
           "actions": []
         },
         {
-          "id": "a5710b97-051e-4eb5-0001-98a287451161",
-          "name": "nehme_stock",
-          "description": "Ein Stock, der in der nähe liegt kann genommen werden",
+          "id": "6a601c22-09a9-9192-108f-372b352bdd75",
+          "name": "nimm_den_stock",
+          "description": "Ein Stock, der in der Nähe liegt kann genommen werden",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
-          "system_prompt": "Du hast den stock in deine Tasche gepackt. Mal sehen für was der gut ist",
+          "system_prompt": "Du hast den Stock in deine Tasche gepackt. Mal sehen für was der gut ist",
           "conditions": [
             "has_wood==false"
           ],
@@ -290,34 +288,34 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "a7814810-48de-92a2-25d5-8c2f72493b1a",
-          "name": "nehme_den_brief",
+          "id": "a4b0c2b6-55e0-9a7a-9377-75d2284ddf2a",
+          "name": "nimm_den_brief",
           "description": "Nehme den Brief der aus dem Briefkasten herausschaut.",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
-          "system_prompt": "Der Brief enthält folgenden Inhalt und kann nach Aufforderung vorgelesen werden. Keinen Inhalt bezüglich diese Briefes erfinden. Nur dieser Inhalt ist jedesmal nach Aufforderung wortgetreu vorzulesen:\n----------\nHey du,\n\nmanche Pflichten vergisst man leicht, besonders nach einem ordentlichen Zaubertrank, der einen die Welt von oben sehen lässt. Aber wir erinnern uns noch gut an die Nacht – an die Jungfrau, die zur Geschichte wurde, an die goldenen Versprechen und die gebrochenen Schwüre.\n\nDer Tag ist gekommen, um den Tribut einzufordern. Der Kreis schließt sich, und du weißt, dass jeder Tropfen seinen Preis hat. Denk nicht, dass das „Trügerische Licht“ dich vergessen hat. Es flüstert bereits, dass es Zeit ist, zu zahlen – oder es gibt andere Wege, wie du deine Pflicht erfüllst.\n\nKomm und bring mit, was du versprochen hast, bevor „Max der Geduldige“ seine Geduld endgültig verliert.",
+          "system_prompt": "Der Brief enthält folgenden Inhalt und kann nach Aufforderung vorgelesen werden. Keinen Inhalt bezüglich dieses Briefes erfinden. Nur dieser Inhalt ist jedes Mal nach Aufforderung wortgetreu vorzulesen:\n----------\nHey du,\n\nmanche Pflichten vergisst man leicht, besonders nach einem ordentlichen Zaubertrank, der einen die Welt von oben sehen lässt. Aber wir erinnern uns noch gut an die Nacht – an die Jungfrau, die zur Geschichte wurde, an die goldenen Versprechen und die gebrochenen Schwüre.\n\nDer Tag ist gekommen, um den Tribut einzufordern. Der Kreis schließt sich, und du weißt, dass jeder Tropfen seinen Preis hat. Denk nicht, dass das „Trügerische Licht“ dich vergessen hat. Es flüstert bereits, dass es Zeit ist, zu zahlen – oder es gibt andere Wege, wie du deine Pflicht erfüllst.\n\nKomm und bring mit, was du versprochen hast, bevor „Max der Geduldige“ seine Geduld endgültig verliert.",
           "conditions": [],
           "actions": [
             "has_letter = true"
           ]
         },
         {
-          "id": "87fcd903-ffd2-3523-4406-65f76e68bbc2",
-          "name": "lese_den_brief_vor",
-          "description": "Lese den Brief Wortgetreu vor, nahdem du ihn genommen hast",
-          "sound_effect": "",
+          "id": "ee3a1e1e-c71c-d6a6-b85b-3b8f990b04b2",
+          "name": "lies_den_brief_vor",
+          "description": "Lese den Brief wortgetreu vor, nachdem du ihn genommen hast",
+          "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
-          "system_prompt": "\nDu liest den brief nur vor, wenn du aufgefordert wirst:\n\n---Inhalt---\nHey du,\n\nmanche Pflichten vergisst man leicht, besonders nach einem ordentlichen Zaubertrank, der einen die Welt von oben sehen lässt. Aber wir erinnern uns noch gut an die Nacht – an die Jungfrau, die zur Geschichte wurde, an die goldenen Versprechen und die gebrochenen Schwüre.\n\nDer Tag ist gekommen, um den Tribut einzufordern. Der Kreis schließt sich, und du weißt, dass jeder Tropfen seinen Preis hat. Denk nicht, dass das „Trügerische Licht“ dich vergessen hat. Es flüstert bereits, dass es Zeit ist, zu zahlen – oder es gibt andere Wege, wie du deine Pflicht erfüllst.\n\nKomm und bring mit, was du versprochen hast, bevor „Max der Geduldige“ seine Geduld endgültig verliert.",
+          "system_prompt": "\nDu liest den Brief nur vor, wenn du aufgefordert wirst:\n\n---Inhalt---\nHey du,\n\nmanche Pflichten vergisst man leicht, besonders nach einem ordentlichen Zaubertrank, der einen die Welt von oben sehen lässt. Aber wir erinnern uns noch gut an die Nacht – an die Jungfrau, die zur Geschichte wurde, an die goldenen Versprechen und die gebrochenen Schwüre.\n\nDer Tag ist gekommen, um den Tribut einzufordern. Der Kreis schließt sich, und du weißt, dass jeder Tropfen seinen Preis hat. Denk nicht, dass das „Trügerische Licht“ dich vergessen hat. Es flüstert bereits, dass es Zeit ist, zu zahlen – oder es gibt andere Wege, wie du deine Pflicht erfüllst.\n\nKomm und bring mit, was du versprochen hast, bevor „Max der Geduldige“ seine Geduld endgültig verliert.",
           "conditions": [
             "has_letter== true"
           ],
           "actions": []
         },
         {
-          "id": "f6ce5622-1fbe-a453-361d-4a7bac917ccc",
-          "name": "nehme_ratte",
+          "id": "730460b0-42e4-ce84-7573-99558550c38e",
+          "name": "nimm_die_ratte",
           "description": "Du steckst unter Ekel die Ratte in deine Tasche",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
@@ -331,8 +329,8 @@
           ]
         },
         {
-          "id": "4a804e24-fb4d-34cc-946b-26be6ff4424b",
-          "name": "nehme_muenze",
+          "id": "483c7cba-02ad-4064-5cfc-344c4a398db0",
+          "name": "nimm_die_muenze",
           "description": "Auf dem Boden liegt eine Münze die du nehmen kannst",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
@@ -352,7 +350,7 @@
       "type": "StateShape",
       "id": "cfccb209-f6d1-b920-3474-6d1f9595c98b",
       "userData": {
-        "system_prompt": "Vor dem Mystischen Haus ragt ein uralter Baum empor, ein knorriger Riese, der auf seltsame Weise Magie ausstrahlt. Seine Rinde schimmert im Zwielicht, als ob sie Geschichten vieler Jahrhunderte in sich trägt, und hier und da scheint sie in einem sanften Goldton zu funkeln – fast so, als wäre sie von einer unsichtbaren, geheimnisvollen Kraft getränkt. Man sagt, dieser Baum habe schon vielen Herren gedient, doch die Art und Weise bleibt  ein Geheimnis, das nur die Stille der Nacht kennt. Er steht da wie ein Wächter, schweigend, aber voller Erinnerungen an jene, die unter seinen Zweigen Schutz suchten oder etwas suchten, das die Dunkelheit verbergen sollte.\n\nDie Äste winden sich wie Finger in die Luft, und der Baum selbst strahlt eine seltsame, beinahe einladende Autorität aus – als wolle er den Spieler testen: Wage es, die Äste zu erklimmen. \n\nEr ist einfach da – stark, standhaft und unerschütterlich. Eine Säule der Natur, die dir das Gefühl gibt, dass er dich tragen könnte, so wie damals, als du ein Kind warst. Doch auch wenn der Baum ein Symbol für Stärke und Geheimnis ist, verbirgt er keine verborgenen Pfade oder versteckte Schätze.\n\nEin Baum, nichts weiter. Ein stiller Zeuge und zugleich ein unbezwingbarer Riese, dessen wahre Bedeutung in seiner bloßen Existenz liegt.\n",
+        "system_prompt": "Vor dem Mystischen Haus ragt ein uralter Baum empor, ein knorriger Riese, der auf seltsame Weise Magie ausstrahlt. Seine Rinde schimmert im Zwielicht, als ob sie Geschichten vieler Jahrhunderte in sich trägt, und hier und da scheint sie in einem sanften Goldton zu funkeln – fast so, als wäre sie von einer unsichtbaren, geheimnisvollen Kraft getränkt. Man sagt, dieser Baum habe schon vielen Herren gedient, doch die Art und Weise bleibt ein Geheimnis, das nur die Stille der Nacht kennt. Er steht da wie ein Wächter, schweigend, aber voller Erinnerungen an jene, die unter seinen Zweigen Schutz suchten oder etwas suchten, das die Dunkelheit verbergen sollte.\n\nDie Äste winden sich wie Finger in die Luft, und der Baum selbst strahlt eine seltsame, beinahe einladende Autorität aus – als wolle er den Spieler testen: Wage es, die Äste zu erklimmen. \n\nEr ist einfach da – stark, standhaft und unerschütterlich. Eine Säule der Natur, die dir das Gefühl gibt, dass er dich tragen könnte, so wie damals, als du ein Kind warst. Doch auch wenn der Baum ein Symbol für Stärke und Geheimnis ist, verbirgt er keine verborgenen Pfade oder versteckte Schätze.\n\nEin Baum, nichts weiter. Ein stiller Zeuge und zugleich ein unbezwingbarer Riese, dessen wahre Bedeutung in seiner bloßen Existenz liegt.\n",
         "ambient_sound": "wald_mit_voegel.mp3",
         "ambient_sound_volume": 100
       },
@@ -360,7 +358,7 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "4ff42a7c-a071-cdb4-cab6-f05378e2b289",
+          "id": "870e0ee5-ef45-e9fc-ad67-a38ec3cdd012",
           "name": "faelle_den_baum",
           "description": "Das Fällen des Baumes, oder umsägen, ist keine gute Idee. Du wirst es versuchen, aber es funktioniert niemals. Du wolltest doch tatsächlich diesen wunderschönen Baum für dein Spielvergnügen fällen. Alter – und das in diesen Zeiten! Schon mal was von Nachhaltigkeit gehört?",
           "sound_effect": "effect_erstaunte_frau.wav",
@@ -384,26 +382,26 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "99f4c3d4-51f8-24ce-0b67-69ea9373d41c",
+          "id": "44ff281d-3133-bede-0527-cb2c22b854d0",
           "name": "untersuche_den_ort",
           "description": "Du kannst den Ort untersuchen und versuchen ob hier interessante Dinge zu finden sind",
-          "sound_effect": "",
+          "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
-          "system_prompt": "Die siehst hier auf dem Boden ein goldenes Ei in einem goldene Wasser liegen...uaää.",
+          "system_prompt": "Du siehst hier auf dem Boden ein goldenes Ei in einem goldenen Wasser liegen...uaää.",
           "conditions": [],
           "actions": [
             "discovered_north=true"
           ]
         },
         {
-          "id": "6deaad33-5b95-7ab0-5886-80aa4f7277b0",
-          "name": "nehme_das_ei",
-          "description": "Du kannst das Goldene Ei aufnemen",
+          "id": "c101bc60-6163-b95d-ef7b-73bc9b2ba0f5",
+          "name": "nimm_das_ei",
+          "description": "Du kannst das Goldene Ei aufnehmen",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
-          "system_prompt": "Du hast das Ei aufgenommen...aber warum riecht es den hier so streng. komisch . Nicht war?",
+          "system_prompt": "Du hast das Ei aufgenommen...aber warum riecht es denn hier so streng. Komisch. Nicht wahr?",
           "conditions": [
             "discovered_north==true"
           ],
@@ -436,9 +434,9 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "1bff2c66-adc1-a0ca-876a-40a1302b4a24",
+          "id": "74689a1e-ca58-6ffb-f6b6-8f9cb80b61d8",
           "name": "untersuche_die_hosen",
-          "description": "Die Unterhosen auf der Wäschelene Untersuchen. Das Untersuchen der Hosen wird allerdings keine neuen Erkenntnisse oder iInformationen bringen. Ausser, dass diese Hosen so ihre \"Spuren\" haben",
+          "description": "Die Unterhosen auf der Wäscheleine untersuchen. Das Untersuchen der Hosen wird allerdings keine neuen Erkenntnisse oder Informationen bringen. Außer, dass diese Hosen so ihre \"Spuren\" haben",
           "sound_effect": "reaktion_bouaaaa.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
@@ -484,8 +482,8 @@
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "ec1df51e-a829-3952-ada7-9668d520d9d0",
-          "name": "nehme_das_ei",
+          "id": "4a58de54-b809-7039-76e3-b26ce0dd3d5e",
+          "name": "nimm_das_ei",
           "description": "Du kannst das Goldene Ei, welches in einem Nest liegt, nehmen.",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
@@ -501,31 +499,29 @@
     "1d3009ee-f6ad-5244-329b-2ff2248e69b5": {
       "type": "StateShape",
       "id": "1d3009ee-f6ad-5244-329b-2ff2248e69b5",
-      "x": 3434,
-      "y": 1386,
       "userData": {
-        "system_prompt": "Ein Raum, dessen Zweck sich nur schwer ergründen lässt – eine Kammer der vergessenen Geheimnisse, die einst vielleicht von großer Bedeutung war. Die Luft ist schwer, durchzogen von einem bitteren, undefinierbaren Hauch, als ob die Geschichte des Ortes in jeder Faser der Atmosphäre steckt. Entlang der Wände befinden sich kleine Kammern, jede für sich abgeschirmt, mit engen, niedrigen Eingängen, die ein Gefühl von Einsamkeit und Isolation vermitteln. Ein goldener Schein strahlt von den Becken innerhalb dieser Kammern aus – große, mit einer schillernden Flüssigkeit gefüllte Becken, die in einem endlosen Kreislauf vor sich hin plätschern.\n\n{% if discovered_beer_bottle and not has_beer_bottle%}\nIn einer der Kammern steht eine lerre Flasche und strahl dich ganz offensichtlich an. Aber was soll ich nur mit einer leeren Flasche? eine volle Flasche, kühl und freundlich, das wäre ene Sache.\n{% endif %}\n\n{% if has_full_bottle %}\nDu stehst hier in diesem \"Goldenen Raum\" mit einer warm dampfenden \"Goldenen Flasche\" in deiner rechten Hand. Du hast diese eben gefüllt...gold hast du dir anders vorgetellt. Nun gut.\n{% endif %}\n\nDie Becken sind seltsam verziert, ihr Gold überzogen von einem schmierigen Glanz, der den Anschein von Eleganz durch etwas Grobes und Zerstörerisches überlagert. In der Flüssigkeit glitzern kleine Steine, als wären sie Überreste eines alten Rituals oder eine Art Tribut, deren wahre Natur längst verloren gegangen ist. Die Flüssigkeit scheint sich ewig im Kreis zu bewegen, ohne dass ein Ursprung oder ein Ende erkennbar wäre.\n\nDie Wände des Raumes sind mit abblätternder Tapete bedeckt, darunter ein verblasstes, einst prächtiges Muster, das von vergangenen Zeiten zeugt. Zeiten, in denen dieser Ort vielleicht ein anderer war – vielleicht ein Ort des Vergnügens und der Freude, ein Raum für geheime Begegnungen, für Lachen und Frivolitäten. Ein Ort, der einst von Leben und Leidenschaft erfüllt war, jetzt aber verlassen und von der Zeit gezeichnet ist. Das Licht flackert, Lampen hängen locker von der Decke, als wollten sie sich jeden Moment verabschieden.\n\nEin zerbrochener Spiegel hängt an einer der Wände, seine Oberfläche in viele Scherben zersplittert. Wer hineinblickt, sieht nicht nur sich selbst, sondern auch flüchtige, verzerrte Schatten – Erinnerungen an Bewegungen und Gestalten aus einer anderen Zeit. Man könnte schwören, für einen Moment das Echo von Stimmen zu hören, gedämpftes Lachen, das Flüstern von heimlichen Liebenden, die die Einsamkeit der kleinen Kammern gesucht haben. Oder vielleicht ist es nur das Spiel der Reflexionen, ein Trick des zerbrochenen Spiegels, der mit den Gedanken spielt.\n\nDie Kälte des Raumes ist unverkennbar. Ein unnatürliches Frösteln zieht durch die Luft, das nicht so recht zum Rest des Raumes passen will – eine Kälte, die zu den goldenen Becken gehört, als wollten sie ihren unheimlichen Glanz bewahren. Die kleinen Kammern wirken wie Relikte einer vergangenen Welt, ein Ort, an dem etwas zurückgelassen wurde, das besser nie entdeckt worden wäre. Das sanfte Plätschern der Flüssigkeit und das Flackern des Lichts verleihen dem Raum eine melancholische und leicht beklemmende Atmosphäre – ein Ort, der zwar einst schöner gewesen sein mag, aber nun nur noch von Erinnerungen an eine verlorene Zeit zeugt.",
+        "system_prompt": "Ein Raum, dessen Zweck sich nur schwer ergründen lässt – eine Kammer der vergessenen Geheimnisse, die einst vielleicht von großer Bedeutung war. Die Luft ist schwer, durchzogen von einem bitteren, undefinierbaren Hauch, als ob die Geschichte des Ortes in jeder Faser der Atmosphäre steckt. Entlang der Wände befinden sich kleine Kammern, jede für sich abgeschirmt, mit engen, niedrigen Eingängen, die ein Gefühl von Einsamkeit und Isolation vermitteln. Ein goldener Schein strahlt von den Becken innerhalb dieser Kammern aus – große, mit einer schillernden Flüssigkeit gefüllte Becken, die in einem endlosen Kreislauf vor sich hin plätschern.\n\n{% if discovered_beer_bottle and not has_beer_bottle%}\nIn einer der Kammern steht eine leere Flasche und strahlt dich ganz offensichtlich an. Aber was soll ich nur mit einer leeren Flasche? eine volle Flasche, kühl und freundlich, das wäre eine Sache.\n{% endif %}\n\n{% if has_full_bottle %}\nDu stehst hier in diesem \"Goldenen Raum\" mit einer warm dampfenden \"Goldenen Flasche\" in deiner rechten Hand. Du hast diese eben gefüllt...Gold hast du dir anders vorgestellt. Nun gut.\n{% endif %}\n\nDie Becken sind seltsam verziert, ihr Gold überzogen von einem schmierigen Glanz, der den Anschein von Eleganz durch etwas Grobes und Zerstörerisches überlagert. In der Flüssigkeit glitzern kleine Steine, als wären sie Überreste eines alten Rituals oder eine Art Tribut, deren wahre Natur längst verloren gegangen ist. Die Flüssigkeit scheint sich ewig im Kreis zu bewegen, ohne dass ein Ursprung oder ein Ende erkennbar wäre.\n\nDie Wände des Raumes sind mit abblätternder Tapete bedeckt, darunter ein verblasstes, einst prächtiges Muster, das von vergangenen Zeiten zeugt. Zeiten, in denen dieser Ort vielleicht ein anderer war – vielleicht ein Ort des Vergnügens und der Freude, ein Raum für geheime Begegnungen, für Lachen und Frivolitäten. Ein Ort, der einst von Leben und Leidenschaft erfüllt war, jetzt aber verlassen und von der Zeit gezeichnet ist. Das Licht flackert, Lampen hängen locker von der Decke, als wollten sie sich jeden Moment verabschieden.\n\nEin zerbrochener Spiegel hängt an einer der Wände, seine Oberfläche in viele Scherben zersplittert. Wer hineinblickt, sieht nicht nur sich selbst, sondern auch flüchtige, verzerrte Schatten – Erinnerungen an Bewegungen und Gestalten aus einer anderen Zeit. Man könnte schwören, für einen Moment das Echo von Stimmen zu hören, gedämpftes Lachen, das Flüstern von heimlichen Liebenden, die die Einsamkeit der kleinen Kammern gesucht haben. Oder vielleicht ist es nur das Spiel der Reflexionen, ein Trick des zerbrochenen Spiegels, der mit den Gedanken spielt.\n\nDie Kälte des Raumes ist unverkennbar. Ein unnatürliches Frösteln zieht durch die Luft, das nicht so recht zum Rest des Raumes passen will – eine Kälte, die zu den goldenen Becken gehört, als wollten sie ihren unheimlichen Glanz bewahren. Die kleinen Kammern wirken wie Relikte einer vergangenen Welt, ein Ort, an dem etwas zurückgelassen wurde, das besser nie entdeckt worden wäre. Das sanfte Plätschern der Flüssigkeit und das Flackern des Lichts verleihen dem Raum eine melancholische und leicht beklemmende Atmosphäre – ein Ort, der zwar einst schöner gewesen sein mag, aber nun nur noch von Erinnerungen an eine verlorene Zeit zeugt.",
         "ambient_sound_volume": 100
       },
       "name": "GelbeHoelle",
       "stateType": "NORMAL",
       "trigger": [
         {
-          "id": "25666da1-8f97-1e1d-2d81-5b8d3d12d806",
+          "id": "ed28677f-60f9-dcb7-c930-a8eb70ac1c2d",
           "name": "durchsuche_die_kammern",
-          "description": "Du durchsuchst die Kammern nach etwas brauchbaren.",
-          "sound_effect": "",
+          "description": "Du durchsuchst die Kammern nach etwas Brauchbarem.",
+          "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 2,
           "sound_effect_volume": 100,
-          "system_prompt": "Du hast die Kammern durchsucht und nur eine leere Flasche entdeckt. Aber aus irgendeinem Grund überkommt dich ein Schauer und ein Gefühlt des ekel. Warum nur? Hat sich der Raum verändert.",
+          "system_prompt": "Du hast die Kammern durchsucht und nur eine leere Flasche entdeckt. Aber aus irgendeinem Grund überkommt dich ein Schauer und ein Gefühl des Ekels. Warum nur? Hat sich der Raum verändert.",
           "conditions": [],
           "actions": [
             "discovered_beer_bottle = true"
           ]
         },
         {
-          "id": "a89f5407-848c-32d2-a12a-d9b0a09f0c85",
-          "name": "nehme_die_flasche",
+          "id": "97e5ae88-6bc8-cb0b-a5ce-336b345818b3",
+          "name": "nimm_die_flasche",
           "description": "Du nimmst eine Flasche aus einer der Kammern.",
           "sound_effect": "effect_retrogame.wav",
           "sound_effect_duration": 3,
@@ -540,13 +536,13 @@
           ]
         },
         {
-          "id": "c917d21d-04db-f4d1-47e7-2b2d71c8e02b",
+          "id": "ee77f5ab-0eb5-6e85-8960-3cecc40b9915",
           "name": "pinkel_in_die_flasche",
-          "description": "Du pinkelst in die Flasche und machst die fast voll.",
+          "description": "Du pinkelst in die Flasche und machst sie fast voll.",
           "sound_effect": "effect-sink-with-water.wav",
           "sound_effect_duration": 0,
           "sound_effect_volume": 52,
-          "system_prompt": "Nachdem du in die Flasche gepinkelt hast hällst du nun eine warme goldene Flasche in der Hand. Na lecker. Wie wäre es mit einer kalten Flasche?",
+          "system_prompt": "Nachdem du in die Flasche gepinkelt hast hältst du nun eine warme goldene Flasche in der Hand. Na lecker. Wie wäre es mit einer kalten Flasche?",
           "conditions": [
             "has_full_bottle==false"
           ],
@@ -575,7 +571,7 @@
       "userData": {
         "sound_effect": "effect_tuer_aufschliessen.wav",
         "description": "Du kannst hier in den nächsten Raum gehen. Die Tür scheint weit offen zu sein und du kannst einfach durchgehen.",
-        "system_prompt": "Da stehst Du nun. In einem Raum voller Alchemi. mmmh nun gut.",
+        "system_prompt": "Da stehst Du nun. In einem Raum voller Alchemie. mmmh nun gut.",
         "sound_effect_volume": 100,
         "conditions": [
           "dog_away == true"
@@ -600,7 +596,7 @@
       "type": "TriggerConnection",
       "id": "989418ec-97b6-5deb-cc9e-6efb728e7abe",
       "userData": {
-        "system_prompt": "Du bist nun wieder in der Hexenküche angelangt. Man bist du froh da wieder draussen zu sein. Bevor man noch selber an so einem Hacken endet.",
+        "system_prompt": "Du bist nun wieder in der Hexenküche angelangt. Mann bist du froh da wieder draußen zu sein. Bevor man noch selber an so einem Haken endet.",
         "conditions": [],
         "description": "Man geht zurück in die Hexenküche",
         "sound_effect": "laufen_teppich.wav",
@@ -628,8 +624,8 @@
       "id": "12f3a85f-bc79-8e2d-9005-111a3883aac3",
       "userData": {
         "sound_effect_volume": 100,
-        "description": "Du kannst vom Baum runter klettern udn beschwerst Dich über den Ekel und das es nicht nett von mir war dich da klettern zu lassen",
-        "system_prompt": "Du stehst wieder unten am Baum und du must sagen, dass es ohne mich Dir besser ging. Jedenfalls geruchstechnisch. Nun gut. Freundschaft hat seinen Preis....",
+        "description": "Du kannst vom Baum runter klettern und beschwerst Dich über den Ekel und dass es nicht nett von mir war dich da klettern zu lassen",
+        "system_prompt": "Du stehst wieder unten am Baum und du musst sagen, dass es ohne mich Dir besser ging. Jedenfalls geruchstechnisch. Nun gut. Freundschaft hat seinen Preis....",
         "sound_effect": "global/nature/tree/branch_texture_1.wav",
         "sound_effect_duration": 2
       },
@@ -719,7 +715,7 @@
       "type": "TriggerConnection",
       "id": "76f41d6a-946a-3200-c3d2-e5b1eef9b407",
       "userData": {
-        "system_prompt": "Du steht nun wieder vor dem Haus",
+        "system_prompt": "Du stehst nun wieder vor dem Haus",
         "description": "Man geht zurück zu dem Haus.",
         "sound_effect": "laufen_hofweg.wav",
         "sound_effect_volume": 100,
@@ -791,8 +787,8 @@
       "id": "4a6d99d1-7f2a-45f1-8cb6-08361b91f524",
       "userData": {
         "sound_effect": "laufen_waldweg.wav",
-        "description": "Du kannst vom Breifkasten zum Baum gehen. Auf dem direkten Weg.",
-        "system_prompt": "Es ist ein kurzer Weg vom Breifkasten zum Baum...der nächste mögliche weg ist nur noch zum Haus.",
+        "description": "Du kannst vom Briefkasten zum Baum gehen. Auf dem direkten Weg.",
+        "system_prompt": "Es ist ein kurzer Weg vom Briefkasten zum Baum...der nächste mögliche Weg ist nur noch zum Haus.",
         "sound_effect_volume": 100,
         "sound_effect_duration": 2
       },
@@ -813,7 +809,7 @@
       "type": "TriggerConnection",
       "id": "875305f0-234e-8b9a-974e-011ac3557b6d",
       "userData": {
-        "description": "Du gehst zum Briefkasten. Aber nur hingehen. Du must erst den Briefkasten explizit öffnen.\n",
+        "description": "Du gehst zum Briefkasten. Aber nur hingehen. Du musst erst den Briefkasten explizit öffnen.\n",
         "system_prompt": "Du gehst zum Briefkasten und hast die Möglichkeit ihn zu untersuchen\n",
         "sound_effect_volume": 50,
         "sound_effect": "laufen_waldweg.wav",
@@ -837,8 +833,8 @@
       "id": "3e0e41f4-b25f-5856-12e9-6bb64e938ac1",
       "userData": {
         "sound_effect": "effect_falling_stuff.wav",
-        "description": "Du kannst aus den Fenster wird raus vor das Haus gehen. Du wärst dann wieder ausserhalb des Hauses.",
-        "system_prompt": "Du stehst nun wieder vor dem Haus und überlegst Dir was als nächstest passieren soll. Briefkasten, Baum? Das sind dein. Optionen....man hab ich eine Durscht :-)",
+        "description": "Du kannst aus dem Fenster wieder raus vor das Haus gehen. Du wärst dann wieder außerhalb des Hauses.",
+        "system_prompt": "Du stehst nun wieder vor dem Haus und überlegst Dir was als Nächstes passieren soll. Briefkasten, Baum? Das sind deine Optionen....Mann, hab ich einen Durst :-)",
         "sound_effect_volume": 100,
         "sound_effect_duration": 2
       },
@@ -860,12 +856,13 @@
       "id": "5d2d261a-8d3f-90db-42ce-9bcc48d3d53a",
       "userData": {
         "sound_effect_volume": 100,
-        "sound_effect_duration": 2
+        "sound_effect_duration": 2,
+        "sound_effect": "map/ambient_creepy_sound.wav"
       },
       "source": {
         "node": "1d3009ee-f6ad-5244-329b-2ff2248e69b5",
         "port": "output0",
-        "name": "GelbeHoehle"
+        "name": "GelbeHoelle"
       },
       "target": {
         "node": "3253ff2a-a920-09d5-f033-ca759a778e19",
@@ -881,9 +878,9 @@
       "userData": {
         "sound_effect_volume": 100,
         "description": "Du springst auf das Dach des Hauses",
-        "system_prompt": "Du bist nun auf dem Speicher des Hauses gelandet und plötzlich eingebrochen. Du bist nnun auf den staubigen DAchboden gelandet und must dich erstmal orientieren wie es hier so aussieht...verrückte SAche passieren hier. Ich werde sprtlich. Echt verrückt",
+        "system_prompt": "Du bist nun auf dem Speicher des Hauses gelandet und plötzlich eingebrochen. Du bist nun auf dem staubigen Dachboden gelandet und musst dich erstmal orientieren wie es hier so aussieht...verrückte Sachen passieren hier. Ich werde sportlich. Echt verrückt",
         "conditions": [],
-        "sound_effect": "schrei_mann_fallen.wav",
+        "sound_effect": "map/ambient_sehr_leichter_wind.wav",
         "sound_effect_duration": 2
       },
       "source": {
@@ -900,9 +897,20 @@
       "name": "springe_auf_haus"
     },
     "6a094983-14b3-e9bb-0d08-efe98b2300c3": {
-      "id": "6a094983-14b3-e9bb-0d08-efe98b2300c3",
-      "name": "gehe_in_die_gelbe_hoelle",
       "type": "TriggerConnection",
+      "id": "6a094983-14b3-e9bb-0d08-efe98b2300c3",
+      "userData": {
+        "sound_effect_volume": 100,
+        "sound_effect": "global/movement/footsteps/frozen_field.wav",
+        "sound_effect_duration": 8,
+        "conditions": [
+          "door_closed_gelbe_hoehle == false"
+        ],
+        "description": "Du gehst durch die mit Gewalt geöffnete Tür in die \"Gelbe Hölle\" hinein",
+        "system_prompt": "Du stehst nun in der sogenannten \"Gelben Hölle\"...super...(ironisch)",
+        "actions": []
+      },
+      "dasharray": "- ",
       "source": {
         "node": "3253ff2a-a920-09d5-f033-ca759a778e19",
         "port": "output0",
@@ -912,19 +920,9 @@
         "node": "1d3009ee-f6ad-5244-329b-2ff2248e69b5",
         "port": "input0",
         "decoration": "draw2d.decoration.connection.ArrowDecorator",
-        "name": "GelbeHoehle"
+        "name": "GelbeHoelle"
       },
-      "userData": {
-        "sound_effect_volume": 100,
-        "sound_effect": "laufen_strasse_stadt.wav",
-        "sound_effect_duration": 3,
-        "conditions": [
-          "door_closed_gelbe_hoehle == false"
-        ],
-        "description": "Du gehst durch die mit Gewalt geöffnete Tür in die \"Gelbe Hölle\" hinein",
-        "system_prompt": "Du stehst nun in der sogenannten \"Gelben Hölle\"...super...(ironisch)",
-        "actions": []
-      }
+      "name": "gehe_in_die_gelbe_hoelle"
     },
     "4e4bdaaa-07eb-986e-80f4-8a7deed9560d": {
       "type": "TriggerConnection",
@@ -933,7 +931,7 @@
         "sound_effect_volume": 100,
         "sound_effect": "laufen_kiesweg.wav",
         "description": "Du kannst wieder zurück zu dem Haus gehen.\nDu gehst zum Haus.\nGehe zurück.\nzum Haus.",
-        "system_prompt": "Du bist wieder an der vorderseite des Hauses angelangt.",
+        "system_prompt": "Du bist wieder an der Vorderseite des Hauses angelangt.",
         "sound_effect_duration": 2
       },
       "source": {
@@ -955,7 +953,7 @@
       "userData": {
         "sound_effect_volume": 100,
         "sound_effect": "laufen_kiesweg.wav",
-        "description": "Du gehst nach sueden und bist an dem südlichen Teil des Hauses",
+        "description": "Du gehst nach Süden und bist an dem südlichen Teil des Hauses",
         "sound_effect_duration": 2
       },
       "source": {
@@ -978,9 +976,9 @@
         "conditions": [
           "window_is_open == true"
         ],
-        "system_prompt": "Du bist durch das Fenster geklettert und befindest Dich nun in dem ersten Raum. Es scheint eine Art von...nun ja...frag mich,... zu sein. Du rüttelst und schüttelst Dich damit der staub von der Kleidung fällt.\n",
+        "system_prompt": "Du bist durch das Fenster geklettert und befindest Dich nun in dem ersten Raum. Es scheint eine Art von...nun ja...frag mich,... zu sein. Du rüttelst und schüttelst Dich damit der Staub von der Kleidung fällt.\n",
         "sound_effect": "effect_falling_stuff.wav",
-        "description": "Du kletterst durch das Fenster in das Haus hinein und kommst somit von Aussen in das Haus hinein. Es ist der Weg von Aussen in das Haus zu kommen und kann dann ausgeführt werden wenn jemand in das Haus kommen will.",
+        "description": "Du kletterst durch das Fenster in das Haus hinein und kommst somit von außen in das Haus hinein. Es ist der Weg von außen in das Haus zu kommen und kann dann ausgeführt werden wenn jemand in das Haus kommen will.",
         "sound_effect_volume": 59,
         "sound_effect_duration": 3
       },
@@ -996,14 +994,14 @@
         "decoration": "draw2d.decoration.connection.ArrowDecorator",
         "name": "FriedhofDerTraeume"
       },
-      "name": "klettere_fenster"
+      "name": "klettere_durch_das_fenster"
     },
     "82879efc-9d51-2cfd-bdf4-2f5464e74f5e": {
       "type": "TriggerConnection",
       "id": "82879efc-9d51-2cfd-bdf4-2f5464e74f5e",
       "userData": {
         "description": "Du kannst wieder zurück zu dem Haus gehen.\nDu gehst zum Haus.\nGehe zurück.\nzum Haus.",
-        "system_prompt": "Gott Sei Dank. Wenigstens trockene Füsse und wieder an der Vorderseite des Hauses.",
+        "system_prompt": "Gott sei Dank. Wenigstens trockene Füße und wieder an der Vorderseite des Hauses.",
         "sound_effect_volume": 100,
         "sound_effect": "laufen_matschiger_weg.wav",
         "sound_effect_duration": 2
@@ -1026,7 +1024,7 @@
       "id": "b68949af-1072-9888-69d9-01aed8be6517",
       "userData": {
         "system_prompt": "Du bist am Briefkasten und hast die Möglichkeit diesen weiter zu untersuchen\n",
-        "description": "Du hast die Möglichkeit zum Briefkasten zu gehen. Aber nur hingehen. Du must erst den Briefkasten explizit öffnen.",
+        "description": "Du hast die Möglichkeit zum Briefkasten zu gehen. Aber nur hingehen. Du musst erst den Briefkasten explizit öffnen.",
         "sound_effect": "laufen_hofweg.wav",
         "sound_effect_volume": 100,
         "sound_effect_duration": 2
@@ -1094,8 +1092,8 @@
       "type": "TriggerConnection",
       "id": "55365bdf-2879-ecbb-c521-66caa64ec8ad",
       "userData": {
-        "description": "Du gehst an die Nördliche Seite des Hauses. Es ist eine Art um das Haus herum zu gehen. Ein wenig jedenfalls.",
-        "system_prompt": "Du stehst nun an der nördlichen Seite des Hauses. Super (ironie). Hier ist ausser Moos nix los. Nass und feucht ist der Boden. äääh. Darf ich wieder in das Trockene...bitte bitte",
+        "description": "Du gehst an die nördliche Seite des Hauses. Es ist eine Art um das Haus herum zu gehen. Ein wenig jedenfalls.",
+        "system_prompt": "Du stehst nun an der nördlichen Seite des Hauses. Super (Ironie). Hier ist außer Moos nix los. Nass und feucht ist der Boden. äääh. Darf ich wieder in das Trockene...bitte bitte",
         "sound_effect_volume": 100,
         "sound_effect": "laufen_matschiger_weg.wav",
         "sound_effect_duration": 2
@@ -1164,7 +1162,7 @@
       "userData": {
         "sound_effect": "laufen_teppich.wav",
         "sound_effect_volume": 100,
-        "description": "Di kannst in den oberen Stock die Treppe hoch gehen.",
+        "description": "Du kannst in den oberen Stock die Treppe hoch gehen.",
         "system_prompt": "Du bist nun auf dem Dachboden",
         "sound_effect_duration": 2
       },
@@ -1186,8 +1184,8 @@
       "id": "5ac0136d-7bdb-1076-7770-c9dc55f75537",
       "userData": {
         "sound_effect": "laufen_teppich.wav",
-        "description": "Du kannst von der Halle wieder in die Bibiliothek laufen",
-        "system_prompt": "Du bist nun wieder in der Bibliothek. Hurra....aber halt. Da war ich doch schon. egal. Untersuche den Raum doch nochmal gründlicher....z.b. auf dem Boden unter dem Teppich! Es scheint, dass es hier eine Bodenklappe geben könnte. Einfach mal einen Blick von einem anderen Winkel hat geholfen.",
+        "description": "Du kannst von der Halle wieder in die Bibliothek laufen",
+        "system_prompt": "Du bist nun wieder in der Bibliothek. Hurra....aber halt. Da war ich doch schon. egal. Untersuche den Raum doch nochmal gründlicher....z. B. auf dem Boden unter dem Teppich! Es scheint, dass es hier eine Bodenklappe geben könnte. Einfach mal einen Blick von einem anderen Winkel hat geholfen.",
         "actions": [
           "bodenklappe_gefunden = true"
         ],
@@ -1214,7 +1212,7 @@
         "conditions": [
           "waechter_away == true"
         ],
-        "system_prompt": "Du bist von dem ersten raum in den nächsten Raum gegangen und stehst nun in der \"Hexenküche\"",
+        "system_prompt": "Du bist von dem ersten Raum in den nächsten Raum gegangen und stehst nun in der \"Hexenküche\"",
         "description": "Du gehst durch die Tür und kommst dann in die Hexenküche",
         "sound_effect": null,
         "sound_effect_volume": 100,
@@ -1240,7 +1238,7 @@
       "userData": {
         "sound_effect": "laufen_teppich.wav",
         "description": "Du kannst in den unteren Stock gelangen indem du die Treppe runter gehst.",
-        "system_prompt": "Da stehst Du nun. In einem Raum voller Alchemi oder Hexenküche. mmmh nun gut.",
+        "system_prompt": "Da stehst Du nun. In einem Raum voller Alchemie oder Hexenküche. mmmh nun gut.",
         "sound_effect_volume": 100,
         "sound_effect_duration": 2
       },
